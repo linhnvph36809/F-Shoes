@@ -1,12 +1,15 @@
-import './App.css'
-import { DatePicker } from 'antd'
+import { BrowserRouter } from 'react-router-dom';
+import './assets/styles/style.scss';
+import Routes from './routes';
 
 function App() {
-  return (
-    <>
-    <DatePicker />
-    </>
-  )
+    return (
+        <>
+            <BrowserRouter>
+                <Routes />
+            </BrowserRouter>
+        </>
+    );
 }
 
-export default App
+export default App;
