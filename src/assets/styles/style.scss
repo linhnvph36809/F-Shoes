@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import './variable';
+
+html {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 62.5%;
+    line-height: 1.4;
+}
+
+.bg-primary {
+    background-color: $--color-primary;
+}
+
+.color-primary {
+    color: $--color-primary;
+}
+
+.bg-gray {
+    background-color: $--color-gray;
+}
+
+.color-gray {
+    color: $--color-gray;
+}
+
+.color-brown {
+    color: $--color-brown;
+}
+
+.bg-brown {
+    background-color: $--color-brown;
+}
+
+.color-whitesmoke {
+    color: $--color-whitesmoke;
+}
+
+.bg-whitesmoke {
+    background-color: $--color-whitesmoke;
+}
+
+.text-16px {
+    font-size: $--text-base;
+}
+
+.text-15px {
+    font-size: 1.5rem;
+}
+
+.text-20px {
+    font-size: $--text-xl;
+}
+
+.text-24px {
+    font-size: $--text-2xl;
+}
+
+.text-28px {
+    font-size: $--text-3xl;
+}
+
+.text-28px {
+    font-size: $--text-4xl;
+}
+
+.text-40px {
+    font-size: $--text-5xl;
+}
+
+.text-48px {
+    font-size: $--text-6xl;
+}
+
+.text-72px {
+    font-size: $--text-7xl;
+}
+
+.flex-row-center {
+    display: flex;
+    align-items: center;
+}
+
+:where(.css-dev-only-do-not-override-11lehqq).ant-input-outlined:focus,
+:where(.css-dev-only-do-not-override-11lehqq).ant-input-outlined:focus-within {
+    box-shadow: none;
+}
+
+.hover-opacity:hover {
+    opacity: 0.5;
+    transition: all 0.3s ease-in-out;
+}
+
+.is-fixed {
+    animation: is-fixed 0.3s forwards linear;
+}
+
+.transition-global {
+    transition: all 0.3s linear;
+}
+
+@keyframes is-fixed {
+    from {
+        position: fixed;
+        top: -100px;
+    }
+    to {
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+    }
+}
+.sticky-heading {
+    position: sticky;
+    top: 0;
+    background-color: white; /* Ensure background color to cover content behind */
+    padding: 10px 0;
+    z-index: 1000; /* Ensure it stays above other content */
+    border-bottom: 1px solid #ddd; /* Optional: adds a border for visual separation */
+}
+
+// Bodder fiter
+.custom-collapse .ant-collapse-item {
+    border-bottom: none;
+}
+
+.custom-collapse > .ant-collapse-item:last-child {
+    border-bottom: none;
+}
+
+.custom-collapse .ant-collapse-header {
+    border: none;
+}
+
+.custom-collapse .ant-collapse-content {
+    border-top: none;
+}
+
+// Thanh trượt
+.filter-container {
+    height: calc(100vh - 150px); /* Adjust the height to fit the available space */
+    overflow-y: auto; /* Add vertical scrolling */
+    padding-right: 10px; /* Add some padding to avoid cutting off the scrollbar */
+    margin-right: -10px; /* Adjust margin to align content properly */
+}
