@@ -32,7 +32,7 @@ const HomePage = () => {
                                 </div>
                             </a>
                             <div>
-                                <h3 className="text-20px font-medium color-primary py-7">For Leading With Style</h3>
+                                <h3 className="text-20px font-medium color-primary py-7"> Leading With Style</h3>
                                 <a href="#" className="text-[1.3rem] font-medium color-primary">
                                     Explore
                                 </a>
