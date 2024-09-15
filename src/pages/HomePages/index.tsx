@@ -9,10 +9,12 @@ const HomePage = () => {
         <>
             <section className="container">
                 <div>
+                 
                     <img
                         src="https://static.nike.com/a/images/f_auto/dpr_1.3,cs_srgb/h_1719,c_limit/cde1c26f-aaf1-4449-912e-e5f0debb75d8/nike-just-do-it.png"
                         alt=""
                     />
+                       <h1>asdasdsadasdasdasd</h1>
                 </div>
                 <Outstanding
                     title="EXTRA-ORDINARY"
