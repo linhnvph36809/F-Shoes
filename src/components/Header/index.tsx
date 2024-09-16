@@ -1,5 +1,5 @@
 import { Input } from 'antd';
-import { Heart, Search, ShoppingBag } from 'lucide-react';
+import { Heart, Menu, Search, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const Header = () => {
@@ -65,7 +65,7 @@ const Header = () => {
                 <div
                     className={`${
                         scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
-                    } w-full bg-white transition-all duration-300 ease-linear`}
+                    } bg-white transition-all duration-300 ease-linear`}
                 >
                     <div className="container flex-row-center justify-between">
                         <div>
@@ -85,7 +85,7 @@ const Header = () => {
                             </svg>
                         </div>
                         <nav>
-                            <ul className="flex-row-center gap-x-10">
+                            <ul className="sm:hidden md:flex md:items-center gap-x-10">
                                 <li>
                                     <a
                                         href="#"
@@ -136,8 +136,8 @@ const Header = () => {
                                 </li>
                             </ul>
                         </nav>
-                        <div className="flex-row-center gap-x-6">
-                            <form action="">
+                        <div className="flex-row-center sm:gap-x-3 md:gap-x-6">
+                            <form action="" className="sm:hidden md:block">
                                 <Input
                                     placeholder="Search"
                                     className="w-[180px] h-[36px] rounded-[100px] bg-whitesmoke 
@@ -152,11 +152,17 @@ const Header = () => {
                                     }
                                 />
                             </form>
-                            <div className="w-[36px] h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
+                            <div className="sm:w-[28px] md:hidden md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
+                                <Search className="color-primary w-[24px]" />
+                            </div>
+                            <div className="sm:w-[28px] md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
                                 <Heart className="color-primary w-[24px]" />
                             </div>
-                            <div className="w-[36px] h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
+                            <div className="sm:w-[28px] md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
                                 <ShoppingBag className="color-primary w-[24px]" />
+                            </div>
+                            <div className="sm:w-[28px] md:hidden md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
+                                <Menu className="color-primary w-[24px]" />
                             </div>
                         </div>
                     </div>
