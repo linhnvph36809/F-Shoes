@@ -1,5 +1,8 @@
 import LayoutClient from '../components/Layouts/LayoutClient';
 import HomePage from '../pages/HomePages';
+import Detail from '../pages/Details';
+import CategoryPage from '../pages/CategoryPages';
+import Cart from '../pages/Cart';
 
 const routerClient = {
     path: '',
@@ -8,6 +11,22 @@ const routerClient = {
         {
             path: '',
             element: <HomePage />,
+        },
+        {
+            path: '/detail',
+            element: <Detail />,
+        },
+        {
+            path: '/category',
+            element: <CategoryPage />,
+        },
+        {
+            path: '/detail',
+            element: <Detail />,
+        },
+        {
+            path: '/cart',
+            element: <Cart />,
         },
     ],
 };

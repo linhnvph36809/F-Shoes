@@ -2,7 +2,7 @@ import { SwiperSlide } from 'swiper/react';
 import ClassicsSpotlight from './ClassicsSpotlight';
 import Heading from './components/Heading';
 import Outstanding from './components/Outstanding';
-import SlidesScroll from './components/SlidesScroll';
+import SlidesScroll from '../../components/SlidesScroll';
 
 const HomePage = () => {
     return (
@@ -263,7 +263,9 @@ const HomePage = () => {
                         description="Ground your look in earthy tones inspired by outdoor courts.
                         Details like knits, ripcords, and cargo pockets add rich texture to your fit."
                     />
-                    <Heading title="Member Benefits" />
+                    <div className="mt-20">
+                        <Heading title="Member Benefits" />
+                    </div>
                     <SlidesScroll className="pb-12">
                         <SwiperSlide>
                             <div className="relative">
@@ -351,8 +353,8 @@ const HomePage = () => {
                         </SwiperSlide>
                     </SlidesScroll>
                 </div>
-                <div className="w-[900px] mx-auto mt-5">
-                    <div className="grid md:grid-cols-4">
+                <div className="xl:w-[900px] mx-auto mt-5">
+                    <div className="grid md:grid-cols-4 sm:grid-cols-2 sm:gap-10 justify-items-center">
                         <div>
                             <h4 className="color-primary mb-4 font-medium text-20px">Icons</h4>
                             <ul>
