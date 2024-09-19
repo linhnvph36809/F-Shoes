@@ -1,5 +1,5 @@
 import CartItem from './components';
-import Summary from './components/BoxSummary'; 
+import Summary from './components/BoxSummary';
 import Heading from '../HomePages/components/Heading';
 import SlidesScroll from '../../components/SlidesScroll';
 import { SwiperSlide } from 'swiper/react';
@@ -22,7 +22,6 @@ const Cart = () => {
     return (
         <div className="container">
             <div className="container mx-auto" style={{ width: '1100px' }}>
-                <h1>Hello Long chó</h1>
                 <div className="flex gap-10">
                     <div style={{ width: '733px' }}>
                         <h2 className="text-[24px] font-bold m-6">Bag</h2>
