@@ -87,6 +87,12 @@ html {
     box-shadow: none;
 }
 
+:where(.css-dev-only-do-not-override-11lehqq).ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+    background-color: $--color-primary;
+    border-color: $--color-primary;
+    color: $--color-whitesmoke;
+}
+
 .hover-opacity:hover {
     opacity: 0.5;
     transition: all 0.3s ease-in-out;

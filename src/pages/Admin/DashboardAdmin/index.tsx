@@ -1,6 +1,5 @@
-import React from 'react';
 import { Content } from 'antd/es/layout/layout';
-import { Card, Col, Row } from 'antd'; // Import thêm các thành phần của Ant Design
+import { Card, Col, Row } from 'antd';
 
 const AdminDashboard = () => {
     return (

@@ -1,7 +1,7 @@
 import CartItem from './components';
 import Summary from './components/BoxSummary';
 import Heading from '../HomePages/components/Heading';
-import SlidesScroll from '../../components/SlidesScroll';
+import SlidesScroll from '../../../components/SlidesScroll';
 import { SwiperSlide } from 'swiper/react';
 
 const Cart = () => {

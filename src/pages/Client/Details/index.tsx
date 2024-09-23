@@ -1,7 +1,7 @@
 import { ChevronDown, Heart, Star } from 'lucide-react';
 import SlidesImage from './SlidesImage';
 import { SwiperSlide } from 'swiper/react';
-import SlidesScroll from '../../components/SlidesScroll';
+import SlidesScroll from '../../../components/SlidesScroll';
 import Heading from '../HomePages/components/Heading';
 
 const Detail = () => {

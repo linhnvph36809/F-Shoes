@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import { Layout, Input, Avatar, Space, Badge } from 'antd';
 // Import component AdminDashboard
-import AdminDashboard from './../../../../pages/DashboardAdmin/index';
+import AdminDashboard from '../../../../pages/Admin/DashboardAdmin/index';
 import { Outlet } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
