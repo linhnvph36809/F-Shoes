@@ -1,5 +1,5 @@
 import LayoutAdmin from '../components/Layouts/LayoutAdmin';
-import AdminDashboard from '../pages/DashboardAdmin';
+import AdminDashboard from '../pages/Admin/DashboardAdmin';
 
 const routerAdmin = [
     {
@@ -11,7 +11,7 @@ const routerAdmin = [
                 element: <AdminDashboard />,
             },
         ],
-    },
-];
+    }
+]
 
 export default routerAdmin;

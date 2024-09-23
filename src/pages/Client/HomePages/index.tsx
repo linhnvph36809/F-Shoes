@@ -2,7 +2,7 @@ import { SwiperSlide } from 'swiper/react';
 import ClassicsSpotlight from './ClassicsSpotlight';
 import Heading from './components/Heading';
 import Outstanding from './components/Outstanding';
-import SlidesScroll from '../../components/SlidesScroll';
+import SlidesScroll from '../../../components/SlidesScroll';
 
 const HomePage = () => {
     return (

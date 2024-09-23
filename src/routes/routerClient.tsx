@@ -1,34 +1,60 @@
 import LayoutClient from '../components/Layouts/LayoutClient';
-import HomePage from '../pages/HomePages';
-import Detail from '../pages/Details';
-import CategoryPage from '../pages/CategoryPages';
-import Cart from '../pages/Cart';
+import HomePage from '../pages/Client/HomePages';
+import Detail from '../pages/Client/Details';
+import CategoryPage from '../pages/Client/CategoryPages';
+import Cart from '../pages/Client/Cart';
+import LayoutAuthentication from '../pages/Client/Authtication';
+import CheckEmail from '../pages/Client/Authtication/CheckEmail';
+import Password from '../pages/Client/Authtication/Password';
+import Register from '../pages/Client/Authtication/Register';
 
-const routerClient = {
-    path: '',
-    element: <LayoutClient />,
-    children: [
-        {
-            path: '',
-            element: <HomePage />,
-        },
-        {
-            path: '/detail',
-            element: <Detail />,
-        },
-        {
-            path: '/category',
-            element: <CategoryPage />,
-        },
-        {
-            path: '/detail',
-            element: <Detail />,
-        },
-        {
-            path: '/cart',
-            element: <Cart />,
-        },
-    ],
-};
+const routerClient = [
+    {
+        path: '',
+        element: <LayoutClient />,
+        children: [
+            {
+                path: '',
+                element: <HomePage />,
+            },
+            {
+                path: '/detail',
+                element: <Detail />,
+            },
+            {
+                path: '/category',
+                element: <CategoryPage />,
+            },
+            {
+                path: '/detail',
+                element: <Detail />,
+            },
+            {
+                path: '/cart',
+                element: <Cart />,
+            }
+        ],
+    },
+    {
+        path: '/authentication',
+        element: <LayoutAuthentication />,
+        children: [
+            {
+                path: '',
+                element: <CheckEmail />
+            },
+            {
+                path: 'password',
+                element: <Password />
+            },
+            {
+                path: 'register',
+                element: <Register />
+            }
+        ]
+
+    },
+]
+
 
 export default routerClient;
