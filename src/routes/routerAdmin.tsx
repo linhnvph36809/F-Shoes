@@ -1,4 +1,6 @@
 import LayoutAdmin from '../components/Layouts/LayoutAdmin';
+import ListCategory from '../pages/Admin/Category';
+import UpdateCategory from '../pages/Admin/Category/update';
 import AdminDashboard from '../pages/Admin/DashboardAdmin';
 
 const routerAdmin = [
@@ -10,6 +12,14 @@ const routerAdmin = [
                 path: '', // /admin
                 element: <AdminDashboard />,
             },
+            {
+                path: 'list-category',
+                element: <ListCategory />,
+            },
+            {
+                path: 'update-category/:id',
+                element: <UpdateCategory />
+            }
         ],
     }
 ]

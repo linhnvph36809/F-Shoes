@@ -1,13 +1,13 @@
 import { Content } from 'antd/es/layout/layout';
 import { Card, Col, Row } from 'antd';
+import Heading from '../components/Heading';
 
 const AdminDashboard = () => {
     return (
-        <Content className="p-8 bg-gray-50">
-            {/* My Cards */}
+        <Content className="bg-gray-50">
             <section className="mb-5">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-20px font-semibold mb-10">My Cards</h2>
+                    <Heading>Dashboard</Heading>
                     <a href="#" className="text-blue-500">
                         See All
                     </a>
