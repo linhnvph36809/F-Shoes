@@ -1,6 +1,6 @@
 import LayoutAdmin from '../components/Layouts/LayoutAdmin';
 import ListCategory from '../pages/Admin/Category';
-import UpdateCategory from '../pages/Admin/Category/update';
+import UpdateCategory from '../pages/Admin/Category/Update';
 import AdminDashboard from '../pages/Admin/DashboardAdmin';
 
 const routerAdmin = [
@@ -18,10 +18,10 @@ const routerAdmin = [
             },
             {
                 path: 'update-category/:id',
-                element: <UpdateCategory />
-            }
+                element: <UpdateCategory />,
+            },
         ],
-    }
-]
+    },
+];
 
 export default routerAdmin;

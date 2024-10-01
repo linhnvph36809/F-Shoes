@@ -7,6 +7,8 @@ import LayoutAuthentication from '../pages/Client/Authtication';
 import CheckEmail from '../pages/Client/Authtication/CheckEmail';
 import Password from '../pages/Client/Authtication/Password';
 import Register from '../pages/Client/Authtication/Register';
+import ProfilePage from '../pages/Client/Account/Profile';
+import Inbox from '../pages/Client/Account/Inbox';
 
 const routerClient = [
     {
@@ -32,7 +34,11 @@ const routerClient = [
             {
                 path: '/cart',
                 element: <Cart />,
-            }
+            },
+            {
+                path: '/profile',
+                element: <ProfilePage />,
+            },
         ],
     },
     {
@@ -41,20 +47,18 @@ const routerClient = [
         children: [
             {
                 path: '',
-                element: <CheckEmail />
+                element: <CheckEmail />,
             },
             {
                 path: 'password',
-                element: <Password />
+                element: <Password />,
             },
             {
                 path: 'register',
-                element: <Register />
-            }
-        ]
-
+                element: <Register />,
+            },
+        ],
     },
-]
-
+];
 
 export default routerClient;
