@@ -8,7 +8,6 @@ import CheckEmail from '../pages/Client/Authtication/CheckEmail';
 import Password from '../pages/Client/Authtication/Password';
 import Register from '../pages/Client/Authtication/Register';
 import ProfilePage from '../pages/Client/Account/Profile';
-import Inbox from '../pages/Client/Account/Inbox';
 
 const routerClient = [
     {

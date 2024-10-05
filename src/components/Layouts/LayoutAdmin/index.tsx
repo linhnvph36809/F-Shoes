@@ -39,9 +39,9 @@ const LayoutAdmin: React.FC = () => {
                     theme={{
                         components: {
                             Menu: {
-                                itemSelectedColor: '#fff',
-                                itemActiveBg: '#111111',
-                                itemSelectedBg: '#111111',
+                                itemSelectedColor: '#111111',
+                                itemActiveBg: '#ccc',
+                                itemSelectedBg: '#ccc',
                             },
                         },
                     }}
@@ -77,7 +77,7 @@ const LayoutAdmin: React.FC = () => {
                         </button>
                     </div>
                 </Header>
-                <Content className="my-4 p-10 h-[100vh] bg-white">
+                <Content className="my-4 p-10 bg-white">
                     <Outlet />
                 </Content>
             </Layout>

@@ -1,5 +1,5 @@
 import { MenuProps } from 'antd';
-import { Box, Folder, Grid2X2, House, Plus } from 'lucide-react';
+import { Box, Folder, Grid2X2, House, Plus, Tag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const items: MenuProps['items'] = [
@@ -29,20 +29,29 @@ export const items: MenuProps['items'] = [
             {
                 key: '31',
                 label: (
-                    <a href="#" className="text-[14px]">
+                    <Link to="list-product" className="text-[14px]">
                         List Product
-                    </a>
+                    </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
             },
             {
                 key: '32',
                 label: (
-                    <a href="#" className="text-[14px]">
+                    <Link to="add-product" className="text-[14px]">
                         Add Product
-                    </a>
+                    </Link>
                 ),
                 icon: <Plus className="w-[16px]" />,
+            },
+            {
+                key: '33',
+                label: (
+                    <Link to="add-attribute" className="text-[14px]">
+                        Attribute
+                    </Link>
+                ),
+                icon: <Tag className="w-[16px]" />,
             },
         ],
     },

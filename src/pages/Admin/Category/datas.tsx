@@ -1,82 +1,129 @@
-import { Space, TableProps, Tag } from 'antd';
+import { Button, Form, Select, TableProps } from 'antd';
+import { ReactNode } from 'react';
+
+import InputPrimary from '../../../components/Input';
+import ButtonComponent from '../components/Button/ButtonSubmit';
+import ButtonEdit from '../components/Button/ButtonEdit';
 
 export interface DataType {
     key: string;
-    name: string;
-    age: number;
-    address: string;
-    tags: string[];
+    id: string;
+    categoryName: string | ReactNode;
+    categoryParent: number;
+    createdAt: string;
 }
 
 export const columns: TableProps<DataType>['columns'] = [
     {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-        render: (text) => <a>{text}</a>,
+        title: 'ID',
+        dataIndex: 'id',
+        key: 'id',
+        render: (text, _, index) => {
+            if (index === 0) {
+                return {
+                    children: (
+                        <div className="text-center">
+                            <Form>
+                                <div className="flex justify-center gap-x-5">
+                                    <InputPrimary placeholder="Category Name" margin='mb-0' />
+                                    <Select
+                                        defaultValue="lucy"
+                                        className="w-full sm:h-[45px] md:h-[56px] border-1 border-[#111111] mb-5"
+                                        options={[
+                                            { value: 'jack', label: 'Jack' },
+                                            { value: 'lucy', label: 'Lucy' },
+                                            { value: 'Yiminghe', label: 'yiminghe' },
+                                        ]}
+                                    />
+                                    <ButtonComponent>Submit</ButtonComponent>
+                                </div>
+                            </Form>
+                        </div>
+                    ),
+                    props: {
+                        colSpan: 5,
+                    },
+                };
+            }
+            return text;
+        },
     },
     {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
+        title: 'Category Name',
+        dataIndex: 'categoryName',
+        key: 'categoryName',
+        render: (text, _, index) => {
+            if (index === 0) {
+                return {
+                    props: {
+                        colSpan: 0,
+                    },
+                };
+            }
+            return text;
+        },
     },
     {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
+        title: 'Category Parent',
+        dataIndex: 'categoryParent',
+        key: 'categoryParent',
+        render: (text, _, index) => {
+            if (index === 0) {
+                return {
+                    props: {
+                        colSpan: 0,
+                    },
+                };
+            }
+            return text;
+        },
     },
     {
-        title: 'Tags',
-        key: 'tags',
-        dataIndex: 'tags',
-        render: (_, { tags }) => (
-            <>
-                {tags.map((tag) => {
-                    let color = tag.length > 5 ? 'geekblue' : 'green';
-                    if (tag === 'loser') {
-                        color = 'volcano';
-                    }
-                    return (
-                        <Tag color={color} key={tag}>
-                            {tag.toUpperCase()}
-                        </Tag>
-                    );
-                })}
-            </>
-        ),
+        title: 'Created At',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+        render: (text, _, index) => {
+            if (index === 0) {
+                return {
+                    props: {
+                        colSpan: 0,
+                    },
+                };
+            }
+            return text;
+        },
     },
     {
-        title: 'Action',
-        key: 'action',
-        render: (_, record) => (
-            <Space size="middle">
-                <a>Invite {record.name}</a>
-                <a>Delete</a>
-            </Space>
-        ),
+        title: '',
+        dataIndex: 'id',
+        key: 'id',
+        render: (__, _, index) => {
+            if (index === 0) {
+                return {
+                    children: '',
+                    props: {
+                        colSpan: 0,
+                    },
+                };
+            }
+            return <ButtonEdit>Edit</ButtonEdit>;
+        },
     },
 ];
 
 export const data: DataType[] = [
     {
         key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
+        id: '0',
+        categoryName: <h1>123</h1>,
+        categoryParent: 32,
+        createdAt: '2024',
     },
     {
         key: '2',
-        name: 'Jim Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
-    },
-    {
-        key: '3',
-        name: 'Joe Black',
-        age: 32,
-        address: 'Sydney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
+        id: '1',
+        categoryName: <h1>123</h1>,
+        categoryParent: 32,
+        createdAt: '2024',
     },
 ];
