@@ -23,28 +23,8 @@ const routerAdmin = [
             },
             {
                 path: 'update-category/:id',
-                element: <UpdateCategory />,
-            },
-            {
-                path: 'list-product',
-                element: <ListProduct />,
-            },
-            {
-                path: 'add-product',
-                element: <AddProduct />,
-            },
-            {
-                path: 'update-product/:slug',
-                element: <UpdateProduct />,
-            },
-            {
-                path: 'add-attribute',
-                element: <Attribute />,
-            },
-            {
-                path: 'add-variant',
-                element: <AddVariant />,
-            },
+                element: <UpdateCategory />
+            }
         ],
     },
 ];
