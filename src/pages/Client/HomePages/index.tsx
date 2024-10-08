@@ -7,7 +7,7 @@ import useProduct from '../../../hooks/useProduct.tsx';
 
 const HomePage = () => {
     const {thisWeekProducts,productsBySport} = useProduct();
-
+    console.log(productsBySport,'shop by sports');
 
     return (
         <>

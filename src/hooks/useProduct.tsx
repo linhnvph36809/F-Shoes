@@ -81,7 +81,7 @@ const useProduct = () => {
     const getProductsBySport = async () => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('get', 'api/best-selling/products');
+            const { data } = await tokenManagerInstance('get', 'api/shop-by-sports/products');
             setProductsBySport(data.products);
 
         } catch (error) {
