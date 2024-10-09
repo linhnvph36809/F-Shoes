@@ -1,4 +1,4 @@
-import { Button, Form, Select, TableProps } from 'antd';
+import { Form, Select, TableProps } from 'antd';
 import { ReactNode } from 'react';
 
 import InputPrimary from '../../../components/Input';
@@ -25,7 +25,7 @@ export const columns: TableProps<DataType>['columns'] = [
                         <div className="text-center">
                             <Form>
                                 <div className="flex justify-center gap-x-5">
-                                    <InputPrimary placeholder="Category Name" margin='mb-0' />
+                                    <InputPrimary placeholder="Category Name" margin="mb-0" />
                                     <Select
                                         defaultValue="lucy"
                                         className="w-full sm:h-[45px] md:h-[56px] border-1 border-[#111111] mb-5"

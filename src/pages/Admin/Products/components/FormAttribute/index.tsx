@@ -4,26 +4,34 @@ import { Plus, X } from 'lucide-react';
 import InputPrimary from '../../../../../components/Input';
 import ButtonPrimary from '../../../../../components/Button';
 
-const FormAttribute = ({ handleAddVariant }: { handleAddVariant: any }) => {
+const FormAttribute = ({ postAttribute, setVariantId }: { postAttribute: any; setVariantId: any }) => {
     const [form] = Form.useForm();
 
-    const onFinish = ({ inputs }: any) => {
-        const newValues = inputs.map((input: any) => input.values);
-        handleAddVariant((preVariant: any) => {
-            const updatedVariants = [...preVariant, ...newValues];
-            return updatedVariants;
-        });
+    const handleAddSubmit = (name: string, remove: any) => {
+        form.validateFields([['inputs', name]])
+            .then((values) => {
+                postAttribute({
+                    attribute: values.inputs[name].attribute,
+                    values: values.inputs[name].values,
+                }).then((variant: any) => {
+                    setVariantId((preId: number[]) => [...preId, variant[0].id]);
+                    remove(name);
+                });
+            })
+            .catch((info) => {
+                console.log('Validate Failed:', info);
+            });
     };
 
     return (
-        <Form form={form} name="form-attribute" onFinish={onFinish} autoComplete="off">
+        <Form form={form} name="form-attribute" autoComplete="off">
             <Form.List name="inputs" initialValue={[]}>
                 {(fields, { add, remove }) => (
                     <>
                         {fields.map(({ key, name, fieldKey, ...restField }: any) => (
                             <div key={key} className="bg-gray-100 p-8 rounded-[12px] mb-10 relative">
                                 <Form.Item
-                                    required={false}
+                                    required={true}
                                     {...restField}
                                     name={[name, 'attribute']}
                                     fieldKey={[fieldKey, 'attribute']}
@@ -44,9 +52,9 @@ const FormAttribute = ({ handleAddVariant }: { handleAddVariant: any }) => {
                                                     }: any) => (
                                                         <div key={valueKey} className="flex-row-center relative">
                                                             <Form.Item
-                                                                required={false}
+                                                                required={true}
                                                                 {...valueRestField}
-                                                                name={valueName} // Không cần thêm 'value'
+                                                                name={valueName}
                                                                 fieldKey={valueFieldKey}
                                                                 className="w-full"
                                                             >
@@ -80,12 +88,25 @@ const FormAttribute = ({ handleAddVariant }: { handleAddVariant: any }) => {
                                     )}
                                 </Form.List>
 
-                                <div
-                                    className="absolute flex-row-center rounded-full
-                                    justify-center w-10 bg-primary -top-6 -right-5 hover:opacity-70 cursor-pointer"
-                                >
+                                <div className="absolute flex-row-center rounded-full justify-center w-10 bg-primary -top-6 -right-5 hover:opacity-70 cursor-pointer">
                                     <X className="w-7 text-white" onClick={() => remove(name)} />
                                 </div>
+
+                                <Form.Item>
+                                    <div className="text-end">
+                                        <ButtonPrimary
+                                            type="default"
+                                            htmlType="button"
+                                            onClick={() => {
+                                                handleAddSubmit(name, remove);
+                                            }}
+                                            width="w-[100px]"
+                                            height="h-[50px]"
+                                        >
+                                            Save
+                                        </ButtonPrimary>
+                                    </div>
+                                </Form.Item>
                             </div>
                         ))}
                         <Form.Item className="w-[150px]">
@@ -101,13 +122,6 @@ const FormAttribute = ({ handleAddVariant }: { handleAddVariant: any }) => {
                     </>
                 )}
             </Form.List>
-            <Form.Item>
-                <div className="text-end">
-                    <ButtonPrimary type="default" htmlType="submit" width="w-[100px]" height="h-[50px]">
-                        Save
-                    </ButtonPrimary>
-                </div>
-            </Form.Item>
         </Form>
     );
 };

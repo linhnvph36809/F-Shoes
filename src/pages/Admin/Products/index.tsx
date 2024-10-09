@@ -23,7 +23,7 @@ const ListProduct = () => {
         render: (slug: string | number, values: IProduct) => {
             return (
                 <div className="flex-row-center gap-x-3">
-                    <Link to={`/admin/update-product/${slug}`}>
+                    <Link to={`/admin/add-variant/${slug}`}>
                         <ButtonEdit>
                             <CopyPlus />
                         </ButtonEdit>

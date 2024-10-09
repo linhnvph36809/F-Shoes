@@ -42,7 +42,7 @@ const routerAdmin = [
                 element: <Attribute />,
             },
             {
-                path: 'add-variant',
+                path: 'add-variant/:slug',
                 element: <AddVariant />,
             },
         ],
