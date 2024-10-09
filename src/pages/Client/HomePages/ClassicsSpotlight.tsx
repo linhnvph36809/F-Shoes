@@ -5,8 +5,12 @@ import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 
 import { FreeMode } from 'swiper/modules';
+import useProduct from '../../../hooks/useProduct.tsx';
+
 
 export default function ClassicsSpotlight() {
+    const {bestSellingProducts } = useProduct();
+    console.log(bestSellingProducts);
     return (
         <>
             <Swiper
@@ -35,62 +39,22 @@ export default function ClassicsSpotlight() {
                 }}
                 className="classicsSpotlight"
             >
-                <SwiperSlide>
-                    <img
-                        src="https://static.nike.com/a/images/f_auto/dpr_0.8,cs_srgb/w_2279,c_limit/59a78130-6d08-4bb7-ad13-0d4f8d03e620/nike-just-do-it.png"
-                        alt=""
-                        className="w-[500px]"
-                    />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img
-                        src="https://static.nike.com/a/images/f_auto/dpr_0.8,cs_srgb/w_2279,c_limit/59a78130-6d08-4bb7-ad13-0d4f8d03e620/nike-just-do-it.png"
-                        alt=""
-                        className="w-[500px]"
-                    />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img
-                        src="https://static.nike.com/a/images/f_auto/dpr_0.8,cs_srgb/w_2279,c_limit/59a78130-6d08-4bb7-ad13-0d4f8d03e620/nike-just-do-it.png"
-                        alt=""
-                        className="w-[500px]"
-                    />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img
-                        src="https://static.nike.com/a/images/f_auto/dpr_0.8,cs_srgb/w_2279,c_limit/59a78130-6d08-4bb7-ad13-0d4f8d03e620/nike-just-do-it.png"
-                        alt=""
-                        className="w-[500px]"
-                    />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img
-                        src="https://static.nike.com/a/images/f_auto/dpr_0.8,cs_srgb/w_2279,c_limit/59a78130-6d08-4bb7-ad13-0d4f8d03e620/nike-just-do-it.png"
-                        alt=""
-                        className="w-[500px]"
-                    />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img
-                        src="https://static.nike.com/a/images/f_auto/dpr_0.8,cs_srgb/w_2279,c_limit/59a78130-6d08-4bb7-ad13-0d4f8d03e620/nike-just-do-it.png"
-                        alt=""
-                        className="w-[500px]"
-                    />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img
-                        src="https://static.nike.com/a/images/f_auto/dpr_0.8,cs_srgb/w_2279,c_limit/59a78130-6d08-4bb7-ad13-0d4f8d03e620/nike-just-do-it.png"
-                        alt=""
-                        className="w-[500px]"
-                    />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img
-                        src="https://static.nike.com/a/images/f_auto/dpr_0.8,cs_srgb/w_2279,c_limit/59a78130-6d08-4bb7-ad13-0d4f8d03e620/nike-just-do-it.png"
-                        alt=""
-                        className="w-[500px]"
-                    />
-                </SwiperSlide>
+                {bestSellingProducts.map((item) => (
+                    <SwiperSlide>
+                        <img
+                            src={item.image_url}
+                            alt=""
+                            className="w-[500px]"
+                        />
+
+                    </SwiperSlide>
+                ))}
+
+
+
+
+
+
             </Swiper>
         </>
     );
