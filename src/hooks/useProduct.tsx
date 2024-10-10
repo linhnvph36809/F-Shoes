@@ -13,6 +13,7 @@ const useProduct = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     // -------------
+    const [productDetails, setproductDetails] = useState<IProduct | undefined>();
     const [thisWeekProducts, setThisWeekProducts] = useState<IProduct[]>([]);
     const [bestSellingProducts, setBestSellingProducts] = useState<IProduct[]>([]);
     const [productsBySport, setProductsBySport] = useState<IProduct[]>([]);
@@ -48,6 +49,17 @@ const useProduct = () => {
             setLoading(true);
             const { data } = await tokenManagerInstance('get', `${API_PRODUCT}/${id}?include=categories,images`);
             setProduct(data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    const getDetailProduct = async ()=> {
+        try {
+            setLoading(true);
+            const { data } = await tokenManagerInstance('get', `${API_PRODUCT}/detail/${id}`);
+            setproductDetails(data);
         } catch (error) {
             console.log(error);
         } finally {
@@ -131,12 +143,14 @@ const useProduct = () => {
         getThisWeekProducts();
         getBestSellingProducts();
         getProductsBySport();
-        if (id) getOneProduct();
+
+        if (id) {getOneProduct();getDetailProduct();}
     }, [id]);
 
     return {
         product,
         products,
+        productDetails,
         thisWeekProducts,
         bestSellingProducts,
         productsBySport,

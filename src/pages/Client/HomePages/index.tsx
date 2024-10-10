@@ -4,10 +4,13 @@ import Heading from './components/Heading';
 import Outstanding from './components/Outstanding';
 import SlidesScroll from '../../../components/SlidesScroll';
 import useProduct from '../../../hooks/useProduct.tsx';
+import SkeletonComponent from "../../Admin/components/Skeleton";
+import {Link} from "react-router-dom";
+
 
 const HomePage = () => {
-    const {thisWeekProducts,productsBySport} = useProduct();
-    console.log(productsBySport,'shop by sports');
+    const {loading,thisWeekProducts,productsBySport} = useProduct();
+
 
     return (
         <>
@@ -80,7 +83,9 @@ const HomePage = () => {
                     <div>
                         <Heading title="Trending This Week" />
                         <SlidesScroll className="slidesProducts pb-20">
-                            {thisWeekProducts.map((item) => (
+                            { loading ? (
+                                    <SkeletonComponent />
+                                ) :  thisWeekProducts.map((item) => (
                                 <SwiperSlide key={item.id}>
                                     <div>
                                         <a href="">
@@ -94,8 +99,8 @@ const HomePage = () => {
                                                 <h3 className="text-15px color-primary font-medium pt-4">
                                                     {item.name}
                                                 </h3>
-                                                <h5 className="text-[#707072] text-15px">{item.categories.length > 0 ? item.categories.map((cat,index) => {
-                                                    if(index == 2) console.log('?');
+                                                <h5 className="text-[#707072] text-15px">{item?.categories ? item?.categories.map((cat,index) => {
+                                                    if(index == 2) return;
                                                     return ' '+cat?.name;
                                                 }) : 'Hot'}</h5>
                                                 <h3 className="text-15px color-primary font-medium mt-3">{ Math.floor(item.price).toLocaleString('vi-VN')} ₫</h3>
@@ -119,21 +124,23 @@ const HomePage = () => {
                 <div>
                     <Heading title="Shop By Sport" />
                     <SlidesScroll className="slidesShopBySport pb-12 mb-20">
-                        {
-                            productsBySport.map(item => (
-                                <SwiperSlide>
+                        {loading ? (
+                                <SkeletonComponent />
+                            ) :
+                            productsBySport.map((item,index) => (
+                                <SwiperSlide key={index}>
                                     <div className="relative">
                                         <img
                                             src={item.image_url}
                                             alt=""
                                         />
-                                        <button
+                                        <Link to={`detail/${item.slug}`}
                                             className="absolute left-[8%] bottom-[10%] px-6 py-2
                                 bg-white rounded-[30px] color-primary text-[12px] font-semibold
                                 hover:bg-[#cacacb]"
                                         >
                                             Running
-                                        </button>
+                                        </Link>
                                     </div>
                                 </SwiperSlide>
                             ))

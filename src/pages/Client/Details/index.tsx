@@ -3,8 +3,12 @@ import SlidesImage from './SlidesImage';
 import { SwiperSlide } from 'swiper/react';
 import SlidesScroll from '../../../components/SlidesScroll';
 import Heading from '../HomePages/components/Heading';
+import {useParams} from "react-router-dom";
+import useProduct from "../../../hooks/useProduct.tsx";
 
 const Detail = () => {
+    const {productDetails} = useProduct();
+    console.log(productDetails,'product');
     return (
         <>
             <section className="container">
@@ -245,63 +249,8 @@ const Detail = () => {
                                     </a>
                                 </div>
                             </SwiperSlide>
-                            <SwiperSlide>
-                                <div>
-                                    <a href="">
-                                        <div>
-                                            <img
-                                                src="https://static.nike.com/a/images/q_auto:eco/t_product_v1/f_auto/dpr_0.8/h_599,c_limit/f9adcbc4-2bd2-4756-a6fe-db4e2be7f671/giannis-freak-6-ep-basketball-shoes-ThjqbM.png"
-                                                alt=""
-                                            />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-15px color-primary font-medium pt-4">
-                                                Giannis Freak 6 (Team Bank) EP
-                                            </h3>
-                                            <h5 className="text-[#707072] text-15px">Basketball Shoes</h5>
-                                            <h3 className="text-15px color-primary font-medium mt-3">3,829,000₫</h3>
-                                        </div>
-                                    </a>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div>
-                                    <a href="">
-                                        <div>
-                                            <img
-                                                src="https://static.nike.com/a/images/q_auto:eco/t_product_v1/f_auto/dpr_0.8/h_599,c_limit/f9adcbc4-2bd2-4756-a6fe-db4e2be7f671/giannis-freak-6-ep-basketball-shoes-ThjqbM.png"
-                                                alt=""
-                                            />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-15px color-primary font-medium pt-4">
-                                                Giannis Freak 6 (Team Bank) EP
-                                            </h3>
-                                            <h5 className="text-[#707072] text-15px">Basketball Shoes</h5>
-                                            <h3 className="text-15px color-primary font-medium mt-3">3,829,000₫</h3>
-                                        </div>
-                                    </a>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div>
-                                    <a href="">
-                                        <div>
-                                            <img
-                                                src="https://static.nike.com/a/images/q_auto:eco/t_product_v1/f_auto/dpr_0.8/h_599,c_limit/f9adcbc4-2bd2-4756-a6fe-db4e2be7f671/giannis-freak-6-ep-basketball-shoes-ThjqbM.png"
-                                                alt=""
-                                            />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-15px color-primary font-medium pt-4">
-                                                Giannis Freak 6 (Team Bank) EP
-                                            </h3>
-                                            <h5 className="text-[#707072] text-15px">Basketball Shoes</h5>
-                                            <h3 className="text-15px color-primary font-medium mt-3">3,829,000₫</h3>
-                                        </div>
-                                    </a>
-                                </div>
-                            </SwiperSlide>
+
+
                         </SlidesScroll>
                     </div>
                 </div>

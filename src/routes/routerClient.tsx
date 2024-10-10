@@ -19,7 +19,7 @@ const routerClient = [
                 element: <HomePage />,
             },
             {
-                path: '/detail',
+                path: '/detail/:slug',
                 element: <Detail />,
             },
             {

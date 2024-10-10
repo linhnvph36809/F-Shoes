@@ -20,7 +20,7 @@ const useCategory = () => {
     //     id = slug.substring(index + 1);
     // }
 
-    console.log(categories);
+
     const getAllCategory = async () => {
         try {
             setLoading(true);
@@ -36,7 +36,7 @@ const useCategory = () => {
     const getMainCategory = async () => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('get', 'api/main/categories');
+            const { data } = await tokenManagerInstance('get', 'api/main/categories?include=children');
             setMainCategoires(data.categories.data);
         } catch (error) {
             console.log(error);
