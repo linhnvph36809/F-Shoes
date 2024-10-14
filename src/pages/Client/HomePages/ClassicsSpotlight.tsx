@@ -7,6 +7,7 @@ import 'swiper/css/pagination';
 import { FreeMode } from 'swiper/modules';
 import useProduct from '../../../hooks/useProduct.tsx';
 import SkeletonComponent from "../../Admin/components/Skeleton";
+import {Link} from "react-router-dom";
 
 
 export default function ClassicsSpotlight() {
@@ -44,18 +45,16 @@ export default function ClassicsSpotlight() {
                     <SkeletonComponent />
                 ) : bestSellingProducts.map(item => (
                     <SwiperSlide key={item.id}>
-                        <img
-                            src={item.image_url}
-                            alt=""
-                            className="w-[500px]"
-                        />
+                        <Link to={`detail/${item.slug}`}>
+                            <img
+                                src={item.image_url}
+                                alt=""
+                                className="w-[500px]"
+                            />
+                        </Link>
 
                     </SwiperSlide>
                 ))}
-
-
-
-
 
 
             </Swiper>

@@ -11,7 +11,6 @@ import {Link} from "react-router-dom";
 const HomePage = () => {
     const {loading,thisWeekProducts,productsBySport} = useProduct();
 
-
     return (
         <>
             <section className="container">
@@ -88,7 +87,7 @@ const HomePage = () => {
                                 ) :  thisWeekProducts.map((item) => (
                                 <SwiperSlide key={item.id}>
                                     <div>
-                                        <a href="">
+                                        <Link to={`detail/${item.slug}`}>
                                             <div>
                                                 <img
                                                     src={item.image_url}
@@ -99,13 +98,19 @@ const HomePage = () => {
                                                 <h3 className="text-15px color-primary font-medium pt-4">
                                                     {item.name}
                                                 </h3>
-                                                <h5 className="text-[#707072] text-15px">{item?.categories ? item?.categories.map((cat,index) => {
-                                                    if(index == 2) return;
-                                                    return ' '+cat?.name;
-                                                }) : 'Hot'}</h5>
-                                                <h3 className="text-15px color-primary font-medium mt-3">{ Math.floor(item.price).toLocaleString('vi-VN')} ₫</h3>
+                                                <h5 className="text-[#707072] text-15px">{item?.categories ? item?.categories.map((cat, index, array) => {
+
+                                                    if (array.length < 2) {
+                                                        return ' ' + cat?.name;
+                                                    } else {
+                                                        if (index == 2) return;
+                                                        if (index == 1) return ' ' + cat?.name;
+                                                        return ' ' + cat?.name+',';
+                                                    }
+                                                }) : ' '}</h5>
+                                                <h3 className="text-15px color-primary font-medium mt-3">{ item.price} ₫</h3>
                                             </div>
-                                        </a>
+                                        </Link>
                                     </div>
                                 </SwiperSlide>
                             ))}

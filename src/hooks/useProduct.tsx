@@ -13,7 +13,7 @@ const useProduct = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     // -------------
-    const [productDetails, setproductDetails] = useState<IProduct | undefined>();
+    const [productDetails, setproductDetails] = useState<any>();
     const [thisWeekProducts, setThisWeekProducts] = useState<IProduct[]>([]);
     const [bestSellingProducts, setBestSellingProducts] = useState<IProduct[]>([]);
     const [productsBySport, setProductsBySport] = useState<IProduct[]>([]);
