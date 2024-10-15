@@ -11,7 +11,7 @@ const Detail = () => {
     const {productDetails, loading} = useProduct();
     const {slug} = useParams();
     const navigate = useNavigate();
-
+    console.log(productDetails);
     if(productDetails){
         if (slug !== productDetails?.slug) navigate('/');
     }

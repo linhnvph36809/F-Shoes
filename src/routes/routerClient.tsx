@@ -27,10 +27,6 @@ const routerClient = [
                 element: <CategoryPage />,
             },
             {
-                path: '/detail',
-                element: <Detail />,
-            },
-            {
                 path: '/cart',
                 element: <Cart />,
             },
