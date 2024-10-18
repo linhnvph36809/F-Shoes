@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import useCategory from '../../../hooks/useCategory';
 import { ICategory } from '../../../interfaces/ICategory';
 import Heading from '../components/Heading';
-import SkeletonComponent from '../components/LoadingCenter';
+// import SkeletonComponent from '../components/LoadingCenter';
 import FormCategory from './components/Form';
 
 const UpdateCategory = () => {
