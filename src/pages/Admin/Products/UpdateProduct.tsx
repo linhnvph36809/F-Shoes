@@ -14,6 +14,8 @@ const UpdateProduct = () => {
         images: [],
     });
 
+    console.log(images);
+
     const { loading, product, postProduct } = useProduct();
 
     const onFinish = useCallback(

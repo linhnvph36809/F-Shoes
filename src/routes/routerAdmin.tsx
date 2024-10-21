@@ -7,6 +7,7 @@ import Attribute from '../pages/Admin/Products/Attribute';
 import UpdateProduct from '../pages/Admin/Products/UpdateProduct';
 import AddProduct from '../pages/Admin/Products/AddProduct';
 import AddVariant from '../pages/Admin/Products/AddVariant';
+import UpdateVariant from '../pages/Admin/Products/UpdateVariant';
 
 const routerAdmin = [
     {
@@ -44,6 +45,10 @@ const routerAdmin = [
             {
                 path: 'add-variant/:slug',
                 element: <AddVariant />,
+            },
+            {
+                path: 'update-variant/:slug',
+                element: <UpdateVariant />,
             },
         ],
     },
