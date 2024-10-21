@@ -1,5 +1,5 @@
 import { MenuProps } from 'antd';
-import { Box, Folder, Grid2X2, House, Plus, Tag } from 'lucide-react';
+import { Box, Folder, Grid2X2, House, ListOrdered, Plus, ScanBarcode, Tag, TicketPercent,  } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const items: MenuProps['items'] = [
@@ -20,6 +20,83 @@ export const items: MenuProps['items'] = [
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
             },
+        ],
+    },
+    {
+        icon: <ListOrdered  className="w-[18px]" />,
+        label: 'Oder',
+        children: [
+            {
+                key: '21',
+                label: (
+                    <Link to="orderlist" className="text-[14px]">
+                        Order List
+                    </Link>
+                ),
+                icon: <Grid2X2 className="w-[16px]" />,
+            },
+            {
+                key: '21',
+                label: (
+                    <Link to="orderadd" className="text-[14px]">
+                        Add Order
+                    </Link>
+                ),
+                icon: <Plus className="w-[16px]" />,
+            },
+            {
+                key: '21',
+                label: (
+                    <Link to="orderdetail" className="text-[14px]">
+                        Order Detials
+                    </Link>
+                ),
+                icon: <ScanBarcode  className="w-[16px]" />,
+            },
+            
+        ],
+    },
+    {
+        icon: <TicketPercent className="w-[18px]"/>,
+        label: 'Discount',
+        children: [
+            
+            {
+                key: '21',
+                label: (
+                    <Link to="listcount" className="text-[14px]">
+                        List Count
+                    </Link>
+                ),
+                icon: <Grid2X2 className="w-[16px]" />,
+            },
+            {
+                key: '21',
+                label: (
+                    <Link to="addcount" className="text-[14px]">
+                        Add Count
+                    </Link>
+                ),
+                icon: <Plus className="w-[16px]" />,
+            },
+            {
+                key: '21',
+                label: (
+                    <Link to="listsale" className="text-[14px]">
+                        List Sale
+                    </Link>
+                ),
+                icon: <Grid2X2 className="w-[16px]" />,
+            },
+            {
+                key: '21',
+                label: (
+                    <Link to="addsale" className="text-[14px]">
+                        Add Sale
+                    </Link>
+                ),
+                icon: <Plus className="w-[16px]" />,
+            }
         ],
     },
     {
