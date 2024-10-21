@@ -8,8 +8,9 @@ import 'swiper/css/thumbs';
 import { Navigation, Thumbs } from 'swiper/modules';
 import { Image } from 'antd';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import {IImage} from "../../../interfaces/IImage.ts";
 
-export default function SlidesImage() {
+export default function SlidesImage({images} : { images: IImage[] }) {
     const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
     return (
@@ -27,42 +28,17 @@ export default function SlidesImage() {
                     modules={[Navigation, Thumbs]}
                     className="slidesImageChildren md:w-[80px] sm:w-[40px]"
                 >
-                    <SwiperSlide>
-                        <img
-                            src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/2aa26621-d74e-4242-a879-3a8583d923b3/WMNS+AIR+MAX+90+NN.png"
-                            className="rounded	 hover:cursor-pointer"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img
-                            src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/80bc90db-df6d-4f96-a9f4-401c5749a169/WMNS+AIR+MAX+90+NN.png"
-                            className="rounded	 hover:cursor-pointer"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img
-                            src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/1a20f4f6-a444-41e9-acad-f0196598899b/WMNS+AIR+MAX+90+NN.png"
-                            className="rounded hover:cursor-pointer"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img
-                            src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/a34cde44-715a-43b7-9d46-6e2150a83cec/WMNS+AIR+MAX+90+NN.png"
-                            className="rounded hover:cursor-pointer"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img
-                            src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/cdbad85e-b793-4645-9a68-cdcef8ec41d5/WMNS+AIR+MAX+90+NN.png"
-                            className="rounded hover:cursor-pointer"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img
-                            src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/93e0bf9b-6bbc-4417-a43f-d020459de1d1/WMNS+AIR+MAX+90+NN.png"
-                            className="rounded hover:cursor-pointer"
-                        />
-                    </SwiperSlide>
+                    {images ? images?.map((item:IImage) => {
+                       return  <SwiperSlide key={item.id}>
+                            <img
+                                src={item.url}
+                                className="rounded hover:cursor-pointer"
+                            />
+                        </SwiperSlide>
+                    }) : ''}
+
+
+
                 </Swiper>
                 <Swiper
                     navigation={{
@@ -74,42 +50,16 @@ export default function SlidesImage() {
                     modules={[Navigation, Thumbs]}
                     className="slidesImage w-full flex-1 rounded-xl"
                 >
-                    <SwiperSlide>
-                        <Image
-                            className="rounded-xl hover:cursor-pointer"
-                            src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/2aa26621-d74e-4242-a879-3a8583d923b3/WMNS+AIR+MAX+90+NN.png"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <Image
-                            className="rounded-xl hover:cursor-pointer"
-                            src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/80bc90db-df6d-4f96-a9f4-401c5749a169/WMNS+AIR+MAX+90+NN.png"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <Image
-                            className="rounded-xl hover:cursor-pointer"
-                            src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/1a20f4f6-a444-41e9-acad-f0196598899b/WMNS+AIR+MAX+90+NN.png"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <Image
-                            className="rounded-xl hover:cursor-pointer"
-                            src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/a34cde44-715a-43b7-9d46-6e2150a83cec/WMNS+AIR+MAX+90+NN.png"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <Image
-                            className="rounded-xl hover:cursor-pointer"
-                            src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/cdbad85e-b793-4645-9a68-cdcef8ec41d5/WMNS+AIR+MAX+90+NN.png"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <Image
-                            className="rounded-xl hover:cursor-pointer"
-                            src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/93e0bf9b-6bbc-4417-a43f-d020459de1d1/WMNS+AIR+MAX+90+NN.png"
-                        />
-                    </SwiperSlide>
+                    {images ? images?.map((item:IImage) => {
+                        return   <SwiperSlide key={item.url}>
+                            <Image
+                                className="rounded-xl hover:cursor-pointer"
+                                src={item.url}
+                            />
+                        </SwiperSlide>
+                    }) : ''}
+
+
                 </Swiper>
                 <div className="absolute right-8 bottom-8 z-10 flex-row-center gap-x-4">
                     <div

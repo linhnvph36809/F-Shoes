@@ -1,17 +1,25 @@
 import { Input } from 'antd';
 import { Heart, Menu, Search, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import useCategory from "../../hooks/useCategory.tsx";
+import HeaderCategory from "./HeaderCategory.tsx";
+import SkeletonComponent from "../../pages/Admin/components/Skeleton";
+
 
 const Header = () => {
     const [showMenu, setShowMenu] = useState<boolean>(false);
-
+    const [headCates,setHeadCates] = useState([]);
     const [scrollPosition, setScrollPosition] = useState<{ isFixed: boolean; position: number }>({
         isFixed: false,
         position: 0,
     });
 
+    const {loading,mainCategories} = useCategory();
+
+
     const handleScroll = () => {
         const position = window.scrollY;
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         position < scrollPosition.position && position != 0
             ? setScrollPosition({ isFixed: true, position })
             : setScrollPosition({ isFixed: false, position });
@@ -93,7 +101,7 @@ const Header = () => {
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
                                         onMouseLeave={() => setShowMenu(false)}
-                                        onMouseEnter={() => setShowMenu(true)}
+                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(mainCategories[0].children)}}
                                     >
                                         New & Featured
                                     </a>
@@ -105,7 +113,7 @@ const Header = () => {
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
                                         onMouseLeave={() => setShowMenu(false)}
-                                        onMouseEnter={() => setShowMenu(true)}
+                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(mainCategories[1].children)}}
                                     >
                                         Men
                                     </a>
@@ -117,7 +125,7 @@ const Header = () => {
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
                                         onMouseLeave={() => setShowMenu(false)}
-                                        onMouseEnter={() => setShowMenu(true)}
+                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(mainCategories[2].children)}}
                                     >
                                         Women
                                     </a>
@@ -129,7 +137,7 @@ const Header = () => {
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
                                         onMouseLeave={() => setShowMenu(false)}
-                                        onMouseEnter={() => setShowMenu(true)}
+                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(mainCategories[3].children)}}
                                     >
                                         Kids
                                     </a>
@@ -173,128 +181,15 @@ const Header = () => {
                                 showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
                             } `}
                             onMouseLeave={() => setShowMenu(false)}
-                            onMouseEnter={() => setShowMenu(true)}
+                            onMouseEnter={() => {setShowMenu(true);setHeadCates(headCates)}}
                         >
-                            <div>
-                                <h4 className="color-primary mb-5 font-semibold text-[1.5rem]">New & Featured</h4>
-                                <ul>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 className="color-primary mb-5 font-semibold text-[1.5rem]">New & Featured</h4>
-                                <ul>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 className="color-primary mb-5 font-semibold text-[1.5rem]">New & Featured</h4>
-                                <ul>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 className="color-primary mb-5 font-semibold text-[1.5rem]">New & Featured</h4>
-                                <ul>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+
+                            {loading ? (
+                                <SkeletonComponent />
+                            ) : (
+                                <HeaderCategory categories={headCates}/>
+                            )}
+
                         </div>
                     </div>
                 </div>
