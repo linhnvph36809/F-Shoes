@@ -12,6 +12,7 @@ import { combine } from './datas';
 import ButtonPrimary from '../../../../components/Button';
 import { IImage } from '../../../../interfaces/IImage';
 import ModalImage from '../AddProduct/ModalImage';
+import useVariant from '../../../../hooks/useVariant';
 
 const AddVariant = () => {
     const [form] = Form.useForm();
@@ -19,7 +20,8 @@ const AddVariant = () => {
     const [variantsChanges, setVariantsChanges] = useState<IAttribute[]>([]);
     const [variantId, setVariantId] = useState<number[]>([]);
     const [listAttribute, setListAttribute] = useState<any>([]);
-    const { loading, attributes, postAttribute, postVariant } = useAttribute();
+    const { loading, attributeByIds, postAttribute } = useAttribute();
+    const { postVariant } = useVariant();
     const [imagesVariants, setImagesVariants] = useState<any>({});
 
     const [images, setImages] = useState<{
@@ -38,7 +40,7 @@ const AddVariant = () => {
                 images: imagesVariants[i],
             }));
             value.variations = result;
-            postVariant(value)
+            postVariant(value);
         },
         [listAttribute, imagesVariants],
     );
@@ -52,7 +54,7 @@ const AddVariant = () => {
 
     const handleChangeItem = useCallback(
         (values: number[], id: number) => {
-            const attribute = attributes.find((attribute) => attribute.id === id);
+            const attribute = attributeByIds.find((attribute) => attribute.id === id);
             const newValues = attribute?.values.filter((value) => values.includes(+value.id));
             const newAttribute = { ...attribute, values: newValues } as IAttribute;
 
@@ -77,13 +79,13 @@ const AddVariant = () => {
                 setVariantsChanges(newVariantsChanges as []);
             }
         },
-        [attributes, variantsChanges],
+        [attributeByIds, variantsChanges],
     );
 
     useEffect(() => {
-        const newAttributes = attributes.filter((attribute) => variantId.includes(+attribute.id));
+        const newAttributes = attributeByIds.filter((attribute) => variantId.includes(+attribute.id));
         setVariants(newAttributes);
-    }, [variantId, attributes]);
+    }, [variantId, attributeByIds]);
 
     useEffect(() => {
         const formatVariantsChanges = variantsChanges.reduce((acc: any, variantsChange: any) => {
@@ -122,7 +124,7 @@ const AddVariant = () => {
                                     onChange={handleChange}
                                     optionFilterProp="name"
                                     fieldNames={{ label: 'name', value: 'id' }}
-                                    options={attributes}
+                                    options={attributeByIds}
                                     value={variantId}
                                 />
                             </ConfigProvider>

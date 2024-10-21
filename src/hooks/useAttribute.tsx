@@ -1,18 +1,14 @@
 import { useEffect, useState } from 'react';
 
 import { tokenManagerInstance } from '../api';
-import { useNavigate, useParams } from 'react-router-dom';
-import { IAttribute } from '../interfaces/IAttribute';
-import { PATH_LIST_PRODUCT } from '../constants';
+import { useParams } from 'react-router-dom';
 
 const API_ATTRIBUTE_GET = '/api/get/attribute/values/product/';
 const API_ATTRIBUTE_ADD = '/api/add/attribute/values/product/';
 
 const useAttribute = () => {
-    const [attributes, setAttributes] = useState<IAttribute[]>([]);
-    const [variantById, setVariantById] = useState<any>();
+    const [attributeByIds, setAttributeByIds] = useState<any>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const navigate = useNavigate();
     const { slug } = useParams();
 
     let id: string | number | undefined;
@@ -22,11 +18,11 @@ const useAttribute = () => {
         id = slug.substring(index + 1);
     }
 
-    const getAllAttributes = async () => {
+    const getAttributesById = async () => {
         try {
             setLoading(true);
             const { data } = await tokenManagerInstance('get', API_ATTRIBUTE_GET + id);
-            setAttributes(data);
+            setAttributeByIds(data);
         } catch (error) {
             console.log(error);
         } finally {
@@ -34,11 +30,11 @@ const useAttribute = () => {
         }
     };
 
-    const getVariantById = async () => {
+    const getAllAttributes = async () => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('get', `/api/product/${id}}/variation`);
-            setVariantById(data.data);
+            const { data } = await tokenManagerInstance('get', '/api/attribute?include=values');
+            setAttributeByIds(data);
         } catch (error) {
             console.log(error);
         } finally {
@@ -46,11 +42,10 @@ const useAttribute = () => {
         }
     };
 
-    const postAttribute = async (attribute: { attribute: string; values: string[] }) => {
+    const getValueAttributeById = async (id: string | number) => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('post', API_ATTRIBUTE_ADD + id, attribute);
-            getAllAttributes();
+            const { data } = await tokenManagerInstance('get', `/api/attribute/${id}/value`);            
             return data;
         } catch (error) {
             console.log(error);
@@ -59,11 +54,13 @@ const useAttribute = () => {
         }
     };
 
-    const postVariant = async (value: any) => {
+    
+    const putValueAttribute = async (attribute: { attribute: string; values: string[] }) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('post', `/api/product/${id}}/variation`, value);
-            navigate(PATH_LIST_PRODUCT);
+            const { data } = await tokenManagerInstance('put', API_ATTRIBUTE_ADD + id, attribute);
+            getAttributesById();
+            return data;
         } catch (error) {
             console.log(error);
         } finally {
@@ -71,11 +68,25 @@ const useAttribute = () => {
         }
     };
 
-    const putVariant = async (value: any, idVariant: string | number) => {
+
+    const postAttribute = async (attribute: { attribute: string; values: string[] }) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('put', `/api/product/${id}}/variation/${idVariant}`, value);
-            getVariantById();
+            const { data } = await tokenManagerInstance('post', API_ATTRIBUTE_ADD + id, attribute);
+            getAttributesById();
+            return data;
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const postAttributeName = async (attributeName: { name: string }) => {
+        try {
+            setLoading(true);
+            await tokenManagerInstance('post', `/api/attribute`, attributeName);
+            getAllAttributes();
         } catch (error) {
             console.log(error);
         } finally {
@@ -85,16 +96,15 @@ const useAttribute = () => {
 
     useEffect(() => {
         getAllAttributes();
-        if (id) getVariantById();
-    }, [id]);
+        if (id) getAttributesById();
+    }, []);
 
     return {
-        attributes,
-        variantById,
+        attributeByIds,
         loading,
         postAttribute,
-        putVariant,
-        postVariant,
+        postAttributeName,
+        getValueAttributeById,
     };
 };
 

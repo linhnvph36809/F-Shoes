@@ -1,7 +1,7 @@
 import { Collapse, ConfigProvider, Form, Select } from 'antd';
 import { useEffect, useState } from 'react';
 
-import useAttribute from '../../../../hooks/useAttribute';
+import useVariant from '../../../../hooks/useVariant';
 import Heading from '../../components/Heading';
 import SkeletonComponent from '../../components/Skeleton';
 import ButtonPrimary from '../../../../components/Button';
@@ -11,7 +11,7 @@ import { IImage } from '../../../../interfaces/IImage';
 
 const UpdateVariant = () => {
     const [form] = Form.useForm();
-    const { loading, variantById, putVariant } = useAttribute();
+    const { loading, variantByIds, putVariant } = useVariant();
     const [idVariant, setIdVariant] = useState([]);
     const [images, setImages] = useState<{
         isShow: boolean;
@@ -23,16 +23,16 @@ const UpdateVariant = () => {
     const [imagesVariants, setImagesVariants] = useState<any>({});
 
     useEffect(() => {
-        setIdVariant(variantById?.ownAttributes?.map((attribute: any) => attribute.id));
-    }, [variantById]);
+        setIdVariant(variantByIds?.ownAttributes?.map((attribute: any) => attribute.id));
+    }, [variantByIds]);
 
     const onFinish = (values: any, i: number, id: string | number) => {
-        const variantIds = variantById.variations[i].values.map((value: any) => value.id);
+        const variantIds = variantByIds.variations[i].values.map((value: any) => value.id);
         const newValues = {
             ...values,
             status: true,
             values: variantIds,
-            images: imagesVariants[i] || variantById.variations[i].images.map((image: any) => image.id),
+            images: imagesVariants[i] || variantByIds.variations[i].images.map((image: any) => image.id),
         };
 
         putVariant(newValues, id);
@@ -63,12 +63,12 @@ const UpdateVariant = () => {
                                     placeholder="Please select"
                                     optionFilterProp="name"
                                     fieldNames={{ label: 'name', value: 'id' }}
-                                    options={variantById?.ownAttributes}
+                                    options={variantByIds?.ownAttributes}
                                     value={idVariant}
                                 />
                             </ConfigProvider>
                             <div>
-                                {variantById?.ownAttributes?.map((variant: any) => (
+                                {variantByIds?.ownAttributes?.map((variant: any) => (
                                     <div className="p-5 bg-gray-200 rounded-lg mb-10 relative" key={variant.id}>
                                         <h3 className="color-primary text-16px font-medium mb-5">{variant.name}</h3>
                                         <div>
@@ -98,7 +98,7 @@ const UpdateVariant = () => {
                             </div>
                         </div>
                         <div>
-                            {variantById?.variations.map((variation: any, i: number) => (
+                            {variantByIds?.variations.map((variation: any, i: number) => (
                                 <Form
                                     form={form}
                                     onFinish={(value: any) => onFinish(value, i, variation.id)}
