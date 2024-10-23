@@ -3,13 +3,14 @@ import ClassicsSpotlight from './ClassicsSpotlight';
 import Heading from './components/Heading';
 import Outstanding from './components/Outstanding';
 import SlidesScroll from '../../../components/SlidesScroll';
-import useProduct from '../../../hooks/useProduct.tsx';
+
 import SkeletonComponent from "../../Admin/components/Skeleton";
 import {Link} from "react-router-dom";
+import useHome from "../../../hooks/page/useHome.tsx";
 
 
 const HomePage = () => {
-    const {loading,thisWeekProducts,productsBySport} = useProduct();
+    const {loading,thisWeekProducts,productsBySport} = useHome();
 
     return (
         <>
