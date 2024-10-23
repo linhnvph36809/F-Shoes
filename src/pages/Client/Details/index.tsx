@@ -4,37 +4,37 @@ import {SwiperSlide} from 'swiper/react';
 import SlidesScroll from '../../../components/SlidesScroll';
 import Heading from '../HomePages/components/Heading';
 import {useNavigate, useParams} from "react-router-dom";
-import useProduct from "../../../hooks/useProduct.tsx";
 import SkeletonComponent from "../../Admin/components/Skeleton";
+import useProductDetail from "../../../hooks/page/useDetail.tsx";
 
 const Detail = () => {
-    const {productDetails, loading} = useProduct();
+    const {product, loading} = useProductDetail();
     const {slug} = useParams();
     const navigate = useNavigate();
-    console.log(productDetails);
-    if(productDetails){
-        if (slug !== productDetails?.slug) navigate('/');
+    console.log(product);
+    if(product){
+        if (slug !== product?.slug) navigate('/');
     }
-    // console.log(productDetails, 'product');
+
 
     return (
         <>
             {loading ? <SkeletonComponent/> : <section className="container">
                 <div className="w-10/12 mx-auto flex py-20 gap-x-12">
                     <div className="w-7/12">
-                        {productDetails?.images && productDetails?.images?.length > 0 ? (<SlidesImage images={productDetails?.images}/>) : (
+                        {product?.images && product?.images?.length > 0 ? (<SlidesImage images={product?.images}/>) : (
                             <img
-                                src={productDetails?.image_url}
+                                src={product?.image_url}
                                 className="rounded hover:cursor-pointer"
                             />)}
                     </div>
                     <div className="flex-1">
                         <p className="text-[#d33918] text-16px font-medium">Sustainable Materials</p>
                         <h1 className="color-primary font-medium text-24px leading-normal">
-                            {productDetails?.name}
+                            {product?.name}
                         </h1>
 
-                        <h4 className="color-primary font-medium text-16px">{productDetails?.categories ? productDetails?.categories.map((cat, index, array) => {
+                        <h4 className="color-primary font-medium text-16px">{product?.categories ? product?.categories.map((cat, index, array) => {
 
                             if (array.length < 2) {
                                 return ' ' + cat?.name;
@@ -44,7 +44,7 @@ const Detail = () => {
                                 return ' ' + cat?.name+',';
                             }
                         }) : ' '}</h4>
-                        <h3 className="color-primary font-medium text-20px my-10">{productDetails?.price} ₫</h3>
+                        <h3 className="color-primary font-medium text-20px my-10">{product?.price} ₫</h3>
                         {/*<div className="grid md:grid-cols-6 gap-5 mb-10">*/}
                         {/*    <div>*/}
                         {/*        <img*/}
@@ -55,7 +55,7 @@ const Detail = () => {
                         {/*    </div>*/}
                         {/*</div>*/}
                         {
-                            productDetails?.attributes ? productDetails.attributes.map((item:any) => {
+                            product?.attributes ? product.attributes.map((item:any) => {
                                 return <div key={item?.id}>
                                     <div className="flex-row-center justify-between pb-5">
                                         <p className="text-16px font-medium color-primary">Select {item.name}</p>
@@ -107,7 +107,7 @@ const Detail = () => {
                             {/*        Country/Region of Origin: Indonesia, Vietnam*/}
                             {/*    </li>*/}
                             {/*</ul>*/}
-                            {productDetails?.short_description}
+                            {product?.short_description}
                             <p className="color-primary text-16px font-medium underline">View Product Details</p>
                             <ul>
                                 <li className="py-10 border-b">
@@ -191,7 +191,7 @@ const Detail = () => {
                     <div>
                         <Heading title="YOU MIGHT ALSO LIKE"/>
                         <SlidesScroll className="slidesProducts pb-20">
-                            {productDetails?.suggestedProduct ? productDetails?.suggestedProduct?.map((item:any) => (
+                            {product?.suggestedProduct ? product?.suggestedProduct?.map((item:any) => (
                                 <SwiperSlide key={item.id}>
                                     <div>
                                         <a href={`${item.slug}`}>
