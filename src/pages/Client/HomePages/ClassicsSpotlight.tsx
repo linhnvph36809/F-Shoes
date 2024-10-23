@@ -6,11 +6,13 @@ import 'swiper/css/pagination';
 
 import { FreeMode } from 'swiper/modules';
 import useProduct from '../../../hooks/useProduct.tsx';
+import SkeletonComponent from "../../Admin/components/Skeleton";
+import {Link} from "react-router-dom";
 
 
 export default function ClassicsSpotlight() {
-    const {bestSellingProducts } = useProduct();
-    console.log(bestSellingProducts);
+    const {loading,bestSellingProducts } = useProduct();
+
     return (
         <>
             <Swiper
@@ -39,20 +41,20 @@ export default function ClassicsSpotlight() {
                 }}
                 className="classicsSpotlight"
             >
-                {bestSellingProducts.map((item) => (
-                    <SwiperSlide>
-                        <img
-                            src={item.image_url}
-                            alt=""
-                            className="w-[500px]"
-                        />
+                {loading ? (
+                    <SkeletonComponent />
+                ) : bestSellingProducts.map(item => (
+                    <SwiperSlide key={item.id}>
+                        <Link to={`detail/${item.slug}`}>
+                            <img
+                                src={item.image_url}
+                                alt=""
+                                className="w-[500px]"
+                            />
+                        </Link>
 
                     </SwiperSlide>
                 ))}
-
-
-
-
 
 
             </Swiper>

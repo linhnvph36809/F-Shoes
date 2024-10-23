@@ -19,16 +19,12 @@ const routerClient = [
                 element: <HomePage />,
             },
             {
-                path: '/detail',
+                path: '/detail/:slug',
                 element: <Detail />,
             },
             {
                 path: '/category',
                 element: <CategoryPage />,
-            },
-            {
-                path: '/detail',
-                element: <Detail />,
             },
             {
                 path: '/cart',

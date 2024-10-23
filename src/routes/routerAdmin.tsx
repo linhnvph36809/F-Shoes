@@ -7,6 +7,15 @@ import Attribute from '../pages/Admin/Products/Attribute';
 import UpdateProduct from '../pages/Admin/Products/UpdateProduct';
 import AddProduct from '../pages/Admin/Products/AddProduct';
 import AddVariant from '../pages/Admin/Products/AddVariant';
+import Discounts from '../pages/Admin/Discount';
+import DiscountList from '../pages/Admin/Discount/ListCount';
+import AddCount from '../pages/Admin/Discount/AddCount';
+import AddSale from '../pages/Admin/Discount/AddSale';
+import ListSale from '../pages/Admin/Discount/ListSale';
+import OrderList from '../pages/Admin/Oder/Order List';
+import OrderDetail from '../pages/Admin/Oder/Order Detail';
+import Addorder from '../pages/Admin/Oder/AddOrder';
+
 
 const routerAdmin = [
     {
@@ -42,9 +51,43 @@ const routerAdmin = [
                 element: <Attribute />,
             },
             {
-                path: 'add-variant/:slug',
+                path: 'add-variant',
                 element: <AddVariant />,
             },
+            {
+                path: 'discount',
+                element: <Discounts/>,
+            },
+            {
+                path: 'listsale',
+                element: <ListSale/>,
+            },
+            {
+                path: 'listcount',
+                element: <DiscountList/>,
+            },
+            {
+                path: 'addcount',
+                element: <AddCount/>,
+            },
+            {
+                path: 'addsale',
+                element: <AddSale/>,
+            },
+            {
+                path: 'orderlist',
+                element: <OrderList/>,
+            },
+            {
+                path: 'orderdetail',
+                element: <OrderDetail/>,
+            },
+            {
+                path: 'orderadd',
+                element: <Addorder/>,
+            },
+           
+
         ],
     },
 ];
