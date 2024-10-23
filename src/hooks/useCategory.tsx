@@ -20,11 +20,11 @@ const useCategory = () => {
     //     id = slug.substring(index + 1);
     // }
 
-    console.log(categories);
+    // console.log(categories);
     const getAllCategory = async () => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('get', API_CATEGORY + '?include=parents');
+            const { data } = await tokenManagerInstance('get', API_CATEGORY + '?include=parents,products');
             setCategories(data.categories.data);
         } catch (error) {
             console.log(error);
@@ -90,6 +90,7 @@ const useCategory = () => {
         categories,
         loading,
         mainCategories,
+        // getOneCategory,
         getAllCategory,
         deleteCategory,
         postCategory,

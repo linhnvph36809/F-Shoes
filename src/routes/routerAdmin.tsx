@@ -22,7 +22,7 @@ const routerAdmin = [
                 element: <ListCategory />,
             },
             {
-                path: 'update-category/:slug',
+                path: 'update-category/:id',
                 element: <UpdateCategory />,
             },
             {
