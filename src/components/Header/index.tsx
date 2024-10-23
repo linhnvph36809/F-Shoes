@@ -1,10 +1,10 @@
 import { Input } from 'antd';
 import { Heart, Menu, Search, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import useCategory from "../../hooks/useCategory.tsx";
 import HeaderCategory from "./HeaderCategory.tsx";
 import SkeletonComponent from "../../pages/Admin/components/Skeleton";
-
+import { tokenManagerInstance } from '../../api';
+import {ICategory} from "../../interfaces/ICategory.ts";
 
 const Header = () => {
     const [showMenu, setShowMenu] = useState<boolean>(false);
@@ -13,10 +13,24 @@ const Header = () => {
         isFixed: false,
         position: 0,
     });
+    const [loading, setLoading] = useState<boolean>(false);
+    const [headCategories, setHeadCategories] = useState<ICategory[][]>([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const { data } = await tokenManagerInstance('get', 'api/main/categories?include=children');
+                setHeadCategories(data.categories.data);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, []);
 
-    const {loading,mainCategories} = useCategory();
-
-
+    const categories = headCategories ? headCategories : [[]];
     const handleScroll = () => {
         const position = window.scrollY;
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -101,7 +115,7 @@ const Header = () => {
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
                                         onMouseLeave={() => setShowMenu(false)}
-                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(mainCategories[0].children)}}
+                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(categories[0]?.children)}}
                                     >
                                         New & Featured
                                     </a>
@@ -113,7 +127,7 @@ const Header = () => {
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
                                         onMouseLeave={() => setShowMenu(false)}
-                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(mainCategories[1].children)}}
+                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(categories[1]?.children)}}
                                     >
                                         Men
                                     </a>
@@ -125,7 +139,7 @@ const Header = () => {
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
                                         onMouseLeave={() => setShowMenu(false)}
-                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(mainCategories[2].children)}}
+                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(categories[2]?.children)}}
                                     >
                                         Women
                                     </a>
@@ -137,7 +151,7 @@ const Header = () => {
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
                                         onMouseLeave={() => setShowMenu(false)}
-                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(mainCategories[3].children)}}
+                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(categories[3]?.children)}}
                                     >
                                         Kids
                                     </a>
