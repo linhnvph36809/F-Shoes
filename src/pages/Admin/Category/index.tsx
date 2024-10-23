@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import { SquarePen, Trash2 } from 'lucide-react';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import useCategory from '../../../hooks/useCategory';
@@ -15,20 +15,35 @@ import { columns } from './datas';
 const ListCategory = () => {
     const { loading, deleteCategory, categories, mainCategories, postCategory, getAllCategory } = useCategory();
 
+    // State for search input
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [filteredCategories, setFilteredCategories] = useState<ICategory[]>(categories);
+
+    // Effect to filter categories based on search term
+    useEffect(() => {
+        const filtered = categories.filter((category) =>
+            category.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+        setFilteredCategories(filtered);
+    }, [searchTerm, categories]); // Update when search term or categories change
+
     // DELETE CATEGORY
     const handleDeleteCategory = (id: string | number) => {
-        if (confirm('Are you sure you want to delete this category?')) deleteCategory(id);
-        message.success('Category delete successfully!');
-        getAllCategory();
+        if (confirm('Are you sure you want to delete this category?')) {
+            deleteCategory(id);
+            message.success('Category deleted successfully!');
+            getAllCategory();
+        }
     };
 
     // ADD CATEGORY
     const handleSubmit = useCallback(async (newCategory: ICategory) => {
         await postCategory(newCategory);
-        message.success('Category add successfully!');
-        // getAllCategory();
+        message.success('Category added successfully!');
+        // getAllCategory(); // Uncomment if you want to refresh the category list after adding
     }, []);
 
+    // Tạo một cột đầu tiên để chứa form và ô tìm kiếm
     const columMain = {
         title: 'ID',
         dataIndex: 'id',
@@ -37,12 +52,26 @@ const ListCategory = () => {
             if (index === 0) {
                 return {
                     children: (
-                        <div className="text-center">
-                            <FormCategory onFinish={handleSubmit} mainCategories={mainCategories} />
+                        <div className="">
+                            {/* Form thêm danh mục */}
+                            <div className="flex">
+                                <FormCategory
+                                    onFinish={handleSubmit}
+                                    mainCategories={mainCategories}
+                                    className="w-full"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Search by category name"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-[250px] h-[50px] border-2 border-[#111111] px-2 rounded-lg"
+                                />
+                            </div>
                         </div>
                     ),
                     props: {
-                        colSpan: 8,
+                        colSpan: 4, // Gộp các cột để form và ô tìm kiếm chiếm trọn hàng đầu tiên
                     },
                 };
             }
@@ -50,17 +79,16 @@ const ListCategory = () => {
         },
     };
 
+    // Cột xóa danh mục
     const columnDelete = {
         title: '',
-        dataIndex: 'slug',
+        dataIndex: 'id',
         key: '8',
-
-        render: (slug: string | number, values: ICategory, index: number) => {
-            // Kiểm tra nếu không phải hàng đầu tiên thì hiển thị các nút
+        render: (id: string | number, values: ICategory, index: number) => {
             if (index !== 0) {
                 return (
                     <div className="flex-row-center gap-x-5">
-                        <Link to={`/admin/update-category/${slug}`}>
+                        <Link to={`/admin/update-category/${values.id}`}>
                             <ButtonEdit>
                                 <SquarePen />
                             </ButtonEdit>
@@ -71,8 +99,7 @@ const ListCategory = () => {
                     </div>
                 );
             } else {
-                // Nếu là hàng đầu tiên, không hiển thị gì
-                return null;
+                return null; // Không hiển thị các nút trong hàng đầu tiên
             }
         },
     };
@@ -85,7 +112,11 @@ const ListCategory = () => {
                 <section>
                     <Heading>List Category</Heading>
                     <div>
-                        <TableAdmin columns={[columMain, ...columns, columnDelete]} datas={categories} />
+                        {/* Bảng với form và ô tìm kiếm ở hàng đầu tiên */}
+                        <TableAdmin
+                            columns={[columMain, ...columns, columnDelete]}
+                            datas={[{}, ...filteredCategories]}
+                        />
                     </div>
                 </section>
             )}

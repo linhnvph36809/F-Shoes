@@ -38,7 +38,7 @@ const FormCategory = ({ onFinish, mainCategories, initialValues }: any) => {
                 <Form.Item
                     name="parent"
                     rules={[{ required: true, message: 'Please select a parent category' }]}
-                    className="mb-0 flex-1"
+                    className="mb-0 flex-1 w-[250px] h-[50px]"
                 >
                     <Select
                         mode="multiple"
@@ -49,7 +49,7 @@ const FormCategory = ({ onFinish, mainCategories, initialValues }: any) => {
                     />
                 </Form.Item>
 
-                <Form.Item className="mb-0">
+                <Form.Item className="mb-0 mr-10">
                     <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
                         Submit
                     </ButtonPrimary>

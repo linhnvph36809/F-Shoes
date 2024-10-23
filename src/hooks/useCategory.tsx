@@ -9,6 +9,7 @@ const API_CATEGORY = '/api/category';
 const useCategory = () => {
     const [categories, setCategories] = useState<ICategory[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [mainCategories, setMainCategoires] = useState<ICategory[]>([]);
     const navigate = useNavigate();
     // const { slug } = useParams();
 
@@ -19,11 +20,10 @@ const useCategory = () => {
     //     id = slug.substring(index + 1);
     // }
 
-
     const getAllCategory = async () => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('get', API_CATEGORY + '?include=parents');
+            const { data } = await tokenManagerInstance('get', API_CATEGORY + '?include=parents,products');
             setCategories(data.categories.data);
         } catch (error) {
             console.log(error);
@@ -32,7 +32,17 @@ const useCategory = () => {
         }
     };
 
-
+    const getMainCategory = async () => {
+        try {
+            setLoading(true);
+            const { data } = await tokenManagerInstance('get', 'api/main/categories?include=children');
+            setMainCategoires(data.categories.data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const deleteCategory = async (id?: string | number) => {
         try {
@@ -72,11 +82,14 @@ const useCategory = () => {
 
     useEffect(() => {
         getAllCategory();
+        getMainCategory();
     }, []);
 
     return {
         categories,
         loading,
+        mainCategories,
+        // getOneCategory,
         getAllCategory,
         deleteCategory,
         postCategory,
