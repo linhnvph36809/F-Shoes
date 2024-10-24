@@ -6,35 +6,48 @@ import Heading from '../HomePages/components/Heading';
 import {useNavigate, useParams} from "react-router-dom";
 import SkeletonComponent from "../../Admin/components/Skeleton";
 import useProductDetail from "../../../hooks/page/useDetail.tsx";
+import Price from "./Price.tsx";
+import {IImage} from "../../../interfaces/IImage.ts";
+import {formatPrice} from "../../../utils";
 
 const Detail = () => {
     const {product, loading} = useProductDetail();
     const {slug} = useParams();
     const navigate = useNavigate();
-    console.log(product);
     if(product){
         if (slug !== product?.slug) navigate('/');
+    }
+    const productD = product;
+    let variationD;
+    let imagesD:IImage[];
+
+    //to test component replace if(variationD) below into => if(product && product?.variations)
+    if(variationD){
+        variationD = product.variations[0];
+        imagesD = product.variations[0]?.images;
+    }else{
+        imagesD = product?.images;
     }
 
 
     return (
         <>
-            {loading ? <SkeletonComponent/> : <section className="container">
+            {loading ? <div className="p-8"> <SkeletonComponent /> </div> : <section className="container">
                 <div className="w-10/12 mx-auto flex py-20 gap-x-12">
                     <div className="w-7/12">
-                        {product?.images && product?.images?.length > 0 ? (<SlidesImage images={product?.images}/>) : (
+                        {imagesD && imagesD?.length > 0 ? (<SlidesImage images={imagesD}/>) : (
                             <img
-                                src={product?.image_url}
+                                src={productD?.image_url}
                                 className="rounded hover:cursor-pointer"
                             />)}
                     </div>
                     <div className="flex-1">
                         <p className="text-[#d33918] text-16px font-medium">Sustainable Materials</p>
                         <h1 className="color-primary font-medium text-24px leading-normal">
-                            {product?.name}
+                            {productD?.name}
                         </h1>
 
-                        <h4 className="color-primary font-medium text-16px">{product?.categories ? product?.categories.map((cat, index, array) => {
+                        <h4 className="color-primary font-medium text-16px">{productD?.categories ? productD?.categories.map((cat, index, array) => {
 
                             if (array.length < 2) {
                                 return ' ' + cat?.name;
@@ -44,7 +57,8 @@ const Detail = () => {
                                 return ' ' + cat?.name+',';
                             }
                         }) : ' '}</h4>
-                        <h3 className="color-primary font-medium text-20px my-10">{product?.price} ₫</h3>
+                        <Price product={productD} variation={variationD}/>
+
                         {/*<div className="grid md:grid-cols-6 gap-5 mb-10">*/}
                         {/*    <div>*/}
                         {/*        <img*/}
@@ -55,7 +69,7 @@ const Detail = () => {
                         {/*    </div>*/}
                         {/*</div>*/}
                         {
-                            product?.attributes ? product.attributes.map((item:any) => {
+                            productD?.attributes ? productD.attributes.map((item:any) => {
                                 return <div key={item?.id}>
                                     <div className="flex-row-center justify-between pb-5">
                                         <p className="text-16px font-medium color-primary">Select {item.name}</p>
@@ -107,7 +121,7 @@ const Detail = () => {
                             {/*        Country/Region of Origin: Indonesia, Vietnam*/}
                             {/*    </li>*/}
                             {/*</ul>*/}
-                            {product?.short_description}
+                            {productD?.short_description}
                             <p className="color-primary text-16px font-medium underline">View Product Details</p>
                             <ul>
                                 <li className="py-10 border-b">
@@ -179,6 +193,7 @@ const Detail = () => {
                                                     These sandals are so cute. They're very light and airy can't be worn
                                                     in the water but I haven't tried it myself
                                                 </p>
+
                                             </div>
                                         </div>
                                     </div>
@@ -191,7 +206,7 @@ const Detail = () => {
                     <div>
                         <Heading title="YOU MIGHT ALSO LIKE"/>
                         <SlidesScroll className="slidesProducts pb-20">
-                            {product?.suggestedProduct ? product?.suggestedProduct?.map((item:any) => (
+                            {productD?.suggestedProduct ? productD?.suggestedProduct?.map((item:any) => (
                                 <SwiperSlide key={item.id}>
                                     <div>
                                         <a href={`${item.slug}`}>
@@ -215,7 +230,7 @@ const Detail = () => {
                                                         return ' ' + cat?.name+',';
                                                     }
                                                 }) : ' '}</h5>
-                                                <h3 className="text-15px color-primary font-medium mt-3">{item.price} ₫</h3>
+                                                <h3 className="text-15px color-primary font-medium mt-3">{formatPrice(item.price)} ₫</h3>
                                             </div>
                                         </a>
                                     </div>
