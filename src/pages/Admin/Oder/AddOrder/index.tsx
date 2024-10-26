@@ -64,7 +64,7 @@ const Addorder = () => {
           {/* Select Biến thể */}
           <Form.Item label="Chọn Biến thể" style={{ fontSize: '18px' }} name="variant">
             <Select placeholder="Chọn biến thể">
-              {selectedProduct.variants.map((variant, index) => (
+              {selectedProduct.variants.map((variant: string, index: undefined) => (
                 <Option key={index} value={variant}>
                   {variant}
                 </Option>
@@ -75,7 +75,7 @@ const Addorder = () => {
           {/* Select Màu sắc */}
           <Form.Item label="Chọn Màu sắc"  name="color">
             <Select placeholder="Chọn màu sắc">
-              {selectedProduct.colors.map((color, index) => (
+              {selectedProduct.colors.map((color: string, index: undefined) => (
                 <Option key={index} value={color}>
                   {color}
                 </Option>

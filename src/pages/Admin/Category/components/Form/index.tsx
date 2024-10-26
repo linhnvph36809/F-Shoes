@@ -26,7 +26,7 @@ const FormCategory = ({ onFinish, mainCategories, initialValues }: any) => {
 
     return (
         <Form onFinish={handleFinish} form={form} initialValues={initialValues}>
-            <div className="flex justify-between gap-x-5">
+            <div className="flex justify-between gap-x-5 bg-black text-white placeholder-gray-400">
                 <Form.Item
                     name="name"
                     rules={[{ required: true, message: 'Please enter category name' }]}
@@ -38,7 +38,7 @@ const FormCategory = ({ onFinish, mainCategories, initialValues }: any) => {
                 <Form.Item
                     name="parent"
                     rules={[{ required: true, message: 'Please select a parent category' }]}
-                    className="mb-0 flex-1"
+                    className="mb-0 flex-1 "
                 >
                     <Select
                         mode="multiple"
