@@ -19,7 +19,6 @@ const useProduct = () => {
     const [productsBySport, setProductsBySport] = useState<IProduct[]>([]);
     // -------------
 
-
     const navigate = useNavigate();
     const { slug } = useParams();
 
@@ -35,7 +34,7 @@ const useProduct = () => {
             setLoading(true);
             const {
                 data: { data },
-            } = await tokenManagerInstance('get', API_PRODUCT + '?include=images');
+            } = await tokenManagerInstance('get', API_PRODUCT + '?include=images,variations');
             setProducts(data);
         } catch (error) {
             console.log(error);
@@ -55,7 +54,7 @@ const useProduct = () => {
             setLoading(false);
         }
     };
-    const getDetailProduct = async ()=> {
+    const getDetailProduct = async () => {
         try {
             setLoading(true);
             const { data } = await tokenManagerInstance('get', `${API_PRODUCT}/detail/${id}`);
@@ -71,37 +70,34 @@ const useProduct = () => {
             setLoading(true);
             const { data } = await tokenManagerInstance('get', 'api/trend/this-week/products?include=categories');
             setThisWeekProducts(data.products);
-
         } catch (error) {
             console.log(error);
         } finally {
             setLoading(false);
         }
-    }
+    };
     const getBestSellingProducts = async () => {
         try {
             setLoading(true);
             const { data } = await tokenManagerInstance('get', 'api/best-selling/products');
             setBestSellingProducts(data.products);
-
         } catch (error) {
             console.log(error);
         } finally {
             setLoading(false);
         }
-    }
+    };
     const getProductsBySport = async () => {
         try {
             setLoading(true);
             const { data } = await tokenManagerInstance('get', 'api/shop-by-sports/products');
             setProductsBySport(data.products);
-
         } catch (error) {
             console.log(error);
         } finally {
             setLoading(false);
         }
-    }
+    };
     const deleteProduct = async (id?: string | number) => {
         try {
             setLoading(true);
@@ -144,7 +140,10 @@ const useProduct = () => {
         getBestSellingProducts();
         getProductsBySport();
 
-        if (id) {getOneProduct();getDetailProduct();}
+        if (id) {
+            getOneProduct();
+            getDetailProduct();
+        }
     }, [id]);
 
     return {

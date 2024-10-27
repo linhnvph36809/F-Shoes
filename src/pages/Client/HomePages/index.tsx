@@ -4,12 +4,11 @@ import Heading from './components/Heading';
 import Outstanding from './components/Outstanding';
 import SlidesScroll from '../../../components/SlidesScroll';
 import useProduct from '../../../hooks/useProduct.tsx';
-import SkeletonComponent from "../../Admin/components/Skeleton";
-import {Link} from "react-router-dom";
-
+import SkeletonComponent from '../../Admin/components/Skeleton';
+import { Link } from 'react-router-dom';
 
 const HomePage = () => {
-    const {loading,thisWeekProducts,productsBySport} = useProduct();
+    const { loading, thisWeekProducts, productsBySport } = useProduct();
 
     return (
         <>
@@ -82,39 +81,42 @@ const HomePage = () => {
                     <div>
                         <Heading title="Trending This Week" />
                         <SlidesScroll className="slidesProducts pb-20">
-                            { loading ? (
-                                    <SkeletonComponent />
-                                ) :  thisWeekProducts.map((item) => (
-                                <SwiperSlide key={item.id}>
-                                    <div>
-                                        <Link to={`detail/${item.slug}`}>
-                                            <div>
-                                                <img
-                                                    src={item.image_url}
-                                                    alt=""
-                                                />
-                                            </div>
-                                            <div>
-                                                <h3 className="text-15px color-primary font-medium pt-4">
-                                                    {item.name}
-                                                </h3>
-                                                <h5 className="text-[#707072] text-15px">{item?.categories ? item?.categories.map((cat, index, array) => {
-
-                                                    if (array.length < 2) {
-                                                        return ' ' + cat?.name;
-                                                    } else {
-                                                        if (index == 2) return;
-                                                        if (index == 1) return ' ' + cat?.name;
-                                                        return ' ' + cat?.name+',';
-                                                    }
-                                                }) : ' '}</h5>
-                                                <h3 className="text-15px color-primary font-medium mt-3">{ item.price} ₫</h3>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                </SwiperSlide>
-                            ))}
-
+                            {loading ? (
+                                <SkeletonComponent />
+                            ) : (
+                                thisWeekProducts.map((item) => (
+                                    <SwiperSlide key={item.id}>
+                                        <div>
+                                            <Link to={`detail/${item.slug}`}>
+                                                <div>
+                                                    <img src={item.image_url} alt="" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-15px color-primary font-medium pt-4">
+                                                        {item.name}
+                                                    </h3>
+                                                    <h5 className="text-[#707072] text-15px">
+                                                        {item?.categories
+                                                            ? item?.categories.map((cat, index, array) => {
+                                                                  if (array.length < 2) {
+                                                                      return ' ' + cat?.name;
+                                                                  } else {
+                                                                      if (index == 2) return;
+                                                                      if (index == 1) return ' ' + cat?.name;
+                                                                      return ' ' + cat?.name + ',';
+                                                                  }
+                                                              })
+                                                            : ' '}
+                                                    </h5>
+                                                    <h3 className="text-15px color-primary font-medium mt-3">
+                                                        {item.price} ₫
+                                                    </h3>
+                                                </div>
+                                            </Link>
+                                        </div>
+                                    </SwiperSlide>
+                                ))
+                            )}
                         </SlidesScroll>
                     </div>
                 </div>
@@ -130,16 +132,14 @@ const HomePage = () => {
                     <Heading title="Shop By Sport" />
                     <SlidesScroll className="slidesShopBySport pb-12 mb-20">
                         {loading ? (
-                                <SkeletonComponent />
-                            ) :
-                            productsBySport.map((item,index) => (
+                            <SkeletonComponent />
+                        ) : (
+                            productsBySport.map((item, index) => (
                                 <SwiperSlide key={index}>
                                     <div className="relative">
-                                        <img
-                                            src={item.image_url}
-                                            alt=""
-                                        />
-                                        <Link to={`detail/${item.slug}`}
+                                        <img src={item.image_url} alt="" />
+                                        <Link
+                                            to={`detail/${item.slug}`}
                                             className="absolute left-[8%] bottom-[10%] px-6 py-2
                                 bg-white rounded-[30px] color-primary text-[12px] font-semibold
                                 hover:bg-[#cacacb]"
@@ -149,8 +149,7 @@ const HomePage = () => {
                                     </div>
                                 </SwiperSlide>
                             ))
-                        }
-
+                        )}
                     </SlidesScroll>
                 </div>
                 <div>

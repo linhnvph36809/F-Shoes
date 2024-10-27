@@ -14,9 +14,8 @@ import AddCount from '../pages/Admin/Discount/AddCount';
 import AddSale from '../pages/Admin/Discount/AddSale';
 import ListSale from '../pages/Admin/Discount/ListSale';
 import OrderList from '../pages/Admin/Oder/Order List';
-import OrderDetail from '../pages/Admin/Oder/Order Detail';
 import Addorder from '../pages/Admin/Oder/AddOrder';
-
+import UpdateOrder from '../pages/Admin/Oder/UpdateOrder';
 
 const routerAdmin = [
     {
@@ -52,7 +51,7 @@ const routerAdmin = [
                 element: <Attribute />,
             },
             {
-                path: 'add-variant',
+                path: 'add-variant/:slug',
                 element: <AddVariant />,
             },
             {
@@ -84,15 +83,13 @@ const routerAdmin = [
                 element: <OrderList />,
             },
             {
-                path: 'orderdetail',
-                element: <OrderDetail />,
-            },
-            {
                 path: 'orderadd',
                 element: <Addorder />,
             },
-
-
+            {
+                path: 'orderupdate/:id',
+                element: <UpdateOrder />,
+            },
         ],
     },
 ];

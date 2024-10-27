@@ -1,5 +1,5 @@
 import { MenuProps } from 'antd';
-import { Box, Folder, Grid2X2, House, ListOrdered, Plus, ScanBarcode, Tag, TicketPercent,  } from 'lucide-react';
+import { Box, Folder, Grid2X2, House, ListOrdered, Plus, ScanBarcode, Tag, TicketPercent } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const items: MenuProps['items'] = [
@@ -23,11 +23,11 @@ export const items: MenuProps['items'] = [
         ],
     },
     {
-        icon: <ListOrdered  className="w-[18px]" />,
+        icon: <ListOrdered className="w-[18px]" />,
         label: 'Oder',
         children: [
             {
-                key: '21',
+                key: '22',
                 label: (
                     <Link to="orderlist" className="text-[14px]">
                         Order List
@@ -36,7 +36,7 @@ export const items: MenuProps['items'] = [
                 icon: <Grid2X2 className="w-[16px]" />,
             },
             {
-                key: '21',
+                key: '23',
                 label: (
                     <Link to="orderadd" className="text-[14px]">
                         Add Order
@@ -45,24 +45,22 @@ export const items: MenuProps['items'] = [
                 icon: <Plus className="w-[16px]" />,
             },
             {
-                key: '21',
+                key: '24',
                 label: (
                     <Link to="orderdetail" className="text-[14px]">
                         Order Detials
                     </Link>
                 ),
-                icon: <ScanBarcode  className="w-[16px]" />,
+                icon: <ScanBarcode className="w-[16px]" />,
             },
-            
         ],
     },
     {
-        icon: <TicketPercent className="w-[18px]"/>,
+        icon: <TicketPercent className="w-[18px]" />,
         label: 'Discount',
         children: [
-            
             {
-                key: '21',
+                key: '25',
                 label: (
                     <Link to="listcount" className="text-[14px]">
                         List Count
@@ -71,7 +69,7 @@ export const items: MenuProps['items'] = [
                 icon: <Grid2X2 className="w-[16px]" />,
             },
             {
-                key: '21',
+                key: '26',
                 label: (
                     <Link to="addcount" className="text-[14px]">
                         Add Count
@@ -80,7 +78,7 @@ export const items: MenuProps['items'] = [
                 icon: <Plus className="w-[16px]" />,
             },
             {
-                key: '21',
+                key: '27',
                 label: (
                     <Link to="listsale" className="text-[14px]">
                         List Sale
@@ -89,14 +87,14 @@ export const items: MenuProps['items'] = [
                 icon: <Grid2X2 className="w-[16px]" />,
             },
             {
-                key: '21',
+                key: '28',
                 label: (
                     <Link to="addsale" className="text-[14px]">
                         Add Sale
                     </Link>
                 ),
                 icon: <Plus className="w-[16px]" />,
-            }
+            },
         ],
     },
     {

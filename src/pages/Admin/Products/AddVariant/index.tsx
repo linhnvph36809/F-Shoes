@@ -54,8 +54,8 @@ const AddVariant = () => {
 
     const handleChangeItem = useCallback(
         (values: number[], id: number) => {
-            const attribute = attributeByIds.find((attribute) => attribute.id === id);
-            const newValues = attribute?.values.filter((value) => values.includes(+value.id));
+            const attribute = attributeByIds.find((attribute: any) => attribute.id === id);
+            const newValues = attribute?.values.filter((value: any) => values.includes(+value.id));
             const newAttribute = { ...attribute, values: newValues } as IAttribute;
 
             if (variantsChanges.length == 0) {
@@ -83,7 +83,7 @@ const AddVariant = () => {
     );
 
     useEffect(() => {
-        const newAttributes = attributeByIds.filter((attribute) => variantId.includes(+attribute.id));
+        const newAttributes = attributeByIds.filter((attribute: any) => variantId.includes(+attribute.id));
         setVariants(newAttributes);
     }, [variantId, attributeByIds]);
 
