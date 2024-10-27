@@ -4,42 +4,55 @@ import { SwiperSlide } from 'swiper/react';
 import SlidesScroll from '../../../components/SlidesScroll';
 import Heading from '../HomePages/components/Heading';
 import { useNavigate, useParams } from 'react-router-dom';
-import useProduct from '../../../hooks/useProduct.tsx';
 import SkeletonComponent from '../../Admin/components/Skeleton';
+import useProductDetail from '../../../hooks/page/useDetail.tsx';
+import Price from './Price.tsx';
+import { IImage } from '../../../interfaces/IImage.ts';
+import { formatPrice } from '../../../utils';
 
 const Detail = () => {
-    const { productDetails, loading } = useProduct();
+    const { product, loading } = useProductDetail();
     const { slug } = useParams();
     const navigate = useNavigate();
-    console.log(productDetails);
-    if (productDetails) {
-        if (slug !== productDetails?.slug) navigate('/');
+    if (product) {
+        if (slug !== product?.slug) navigate('/');
     }
-    // console.log(productDetails, 'product');
+    const productD = product;
+    let variationD;
+    let imagesD: IImage[];
+
+    //to test component replace if(variationD) below into => if(product && product?.variations)
+    if (variationD) {
+        variationD = product.variations[0];
+        imagesD = product.variations[0]?.images;
+    } else {
+        imagesD = product?.images;
+    }
 
     return (
         <>
             {loading ? (
-                <SkeletonComponent />
+                <div className="p-8">
+                    {' '}
+                    <SkeletonComponent />{' '}
+                </div>
             ) : (
                 <section className="container">
                     <div className="w-10/12 mx-auto flex py-20 gap-x-12">
                         <div className="w-7/12">
-                            {productDetails?.images && productDetails?.images?.length > 0 ? (
-                                <SlidesImage images={productDetails?.images} />
+                            {imagesD && imagesD?.length > 0 ? (
+                                <SlidesImage images={imagesD} />
                             ) : (
-                                <img src={productDetails?.image_url} className="rounded hover:cursor-pointer" />
+                                <img src={productD?.image_url} className="rounded hover:cursor-pointer" />
                             )}
                         </div>
                         <div className="flex-1">
                             <p className="text-[#d33918] text-16px font-medium">Sustainable Materials</p>
-                            <h1 className="color-primary font-medium text-24px leading-normal">
-                                {productDetails?.name}
-                            </h1>
+                            <h1 className="color-primary font-medium text-24px leading-normal">{productD?.name}</h1>
 
                             <h4 className="color-primary font-medium text-16px">
-                                {productDetails?.categories
-                                    ? productDetails?.categories.map((cat: any, index: any, array: any) => {
+                                {productD?.categories
+                                    ? productD?.categories.map((cat: any, index: number, array: any) => {
                                           if (array.length < 2) {
                                               return ' ' + cat?.name;
                                           } else {
@@ -50,7 +63,8 @@ const Detail = () => {
                                       })
                                     : ' '}
                             </h4>
-                            <h3 className="color-primary font-medium text-20px my-10">{productDetails?.price} ₫</h3>
+                            <Price product={productD} variation={variationD} />
+
                             {/*<div className="grid md:grid-cols-6 gap-5 mb-10">*/}
                             {/*    <div>*/}
                             {/*        <img*/}
@@ -60,8 +74,8 @@ const Detail = () => {
                             {/*        />*/}
                             {/*    </div>*/}
                             {/*</div>*/}
-                            {productDetails?.attributes
-                                ? productDetails.attributes.map((item: any) => {
+                            {productD?.attributes
+                                ? productD.attributes.map((item: any) => {
                                       return (
                                           <div key={item?.id}>
                                               <div className="flex-row-center justify-between pb-5">
@@ -118,7 +132,7 @@ const Detail = () => {
                                 {/*        Country/Region of Origin: Indonesia, Vietnam*/}
                                 {/*    </li>*/}
                                 {/*</ul>*/}
-                                {productDetails?.short_description}
+                                {productD?.short_description}
                                 <p className="color-primary text-16px font-medium underline">View Product Details</p>
                                 <ul>
                                     <li className="py-10 border-b">
@@ -205,8 +219,8 @@ const Detail = () => {
                         <div>
                             <Heading title="YOU MIGHT ALSO LIKE" />
                             <SlidesScroll className="slidesProducts pb-20">
-                                {productDetails?.suggestedProduct
-                                    ? productDetails?.suggestedProduct?.map((item: any) => (
+                                {productD?.suggestedProduct
+                                    ? productD?.suggestedProduct?.map((item: any) => (
                                           <SwiperSlide key={item.id}>
                                               <div>
                                                   <a href={`${item.slug}`}>
@@ -220,7 +234,7 @@ const Detail = () => {
                                                           <h5 className="text-[#707072] text-15px">
                                                               {item?.categories
                                                                   ? item?.categories.map(
-                                                                        (cat: any, index: number, array: any) => {
+                                                                        (cat: any, index: any, array: any) => {
                                                                             if (array.length < 2) {
                                                                                 return ' ' + cat?.name;
                                                                             } else {
@@ -233,7 +247,7 @@ const Detail = () => {
                                                                   : ' '}
                                                           </h5>
                                                           <h3 className="text-15px color-primary font-medium mt-3">
-                                                              {item.price} ₫
+                                                              {formatPrice(item.price)} ₫
                                                           </h3>
                                                       </div>
                                                   </a>
