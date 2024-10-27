@@ -1,29 +1,18 @@
 import { Collapse, ConfigProvider, Form, Select } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import useAttribute from '../../../../hooks/useAttribute';
-import { IAttribute } from '../../../../interfaces/IAttribute';
-
-import Heading from '../../components/Heading';
-import FormAttribute from '../components/FormAttribute';
-import SkeletonComponent from '../../components/Skeleton';
-import InputPrimary from '../../../../components/Input';
-import { combine } from './datas';
-import ButtonPrimary from '../../../../components/Button';
-import { IImage } from '../../../../interfaces/IImage';
-import ModalImage from '../AddProduct/ModalImage';
 import useVariant from '../../../../hooks/useVariant';
+import Heading from '../../components/Heading';
+import SkeletonComponent from '../../components/Skeleton';
+import ButtonPrimary from '../../../../components/Button';
+import ModalImage from '../AddProduct/ModalImage';
+import InputPrimary from '../../../../components/Input';
+import { IImage } from '../../../../interfaces/IImage';
 
-const AddVariant = () => {
+const UpdateVariant = () => {
     const [form] = Form.useForm();
-    const [variants, setVariants] = useState<IAttribute[]>([]);
-    const [variantsChanges, setVariantsChanges] = useState<IAttribute[]>([]);
-    const [variantId, setVariantId] = useState<number[]>([]);
-    const [listAttribute, setListAttribute] = useState<any>([]);
-    const { loading, attributeByIds, postAttribute } = useAttribute();
-    const { postVariant } = useVariant();
-    const [imagesVariants, setImagesVariants] = useState<any>({});
-
+    const { loading, variantByIds, putVariant } = useVariant();
+    const [idVariant, setIdVariant] = useState([]);
     const [images, setImages] = useState<{
         isShow: boolean;
         images: IImage[];
@@ -31,72 +20,23 @@ const AddVariant = () => {
         isShow: false,
         images: [],
     });
-
-    const onFinish = useCallback(
-        (value: any) => {
-            const result = value.variations.map((variant: any, i: number) => ({
-                ...variant,
-                values: listAttribute[i].ids,
-                images: imagesVariants[i],
-            }));
-            value.variations = result;
-            postVariant(value);
-        },
-        [listAttribute, imagesVariants],
-    );
-
-    const handleChange = useCallback((listId: number[]) => {
-        setVariantId([...listId]);
-        setVariantsChanges((preVariantChanges) =>
-            preVariantChanges.filter((preVariantChange) => listId.includes(+preVariantChange.id)),
-        );
-    }, []);
-
-    const handleChangeItem = useCallback(
-        (values: number[], id: number) => {
-            const attribute = attributeByIds.find((attribute: any) => attribute.id === id);
-            const newValues = attribute?.values.filter((value: any) => values.includes(+value.id));
-            const newAttribute = { ...attribute, values: newValues } as IAttribute;
-
-            if (variantsChanges.length == 0) {
-                setVariantsChanges([newAttribute]);
-            } else {
-                let isPush = true;
-                const newVariantsChanges = variantsChanges.map((variantsChange) => {
-                    if (variantsChange.id == id) {
-                        isPush = false;
-                        return {
-                            ...variantsChange,
-                            values: newValues,
-                        };
-                    }
-                    return variantsChange;
-                });
-
-                if (isPush) {
-                    newVariantsChanges.push(newAttribute);
-                }
-                setVariantsChanges(newVariantsChanges as []);
-            }
-        },
-        [attributeByIds, variantsChanges],
-    );
+    const [imagesVariants, setImagesVariants] = useState<any>({});
 
     useEffect(() => {
-        const newAttributes = attributeByIds.filter((attribute: any) => variantId.includes(+attribute.id));
-        setVariants(newAttributes);
-    }, [variantId, attributeByIds]);
+        setIdVariant(variantByIds?.ownAttributes?.map((attribute: any) => attribute.id));
+    }, [variantByIds]);
 
-    useEffect(() => {
-        const formatVariantsChanges = variantsChanges.reduce((acc: any, variantsChange: any) => {
-            if (variantsChange.values.length > 0) {
-                acc.push(variantsChange.values);
-            }
-            return acc;
-        }, []);
+    const onFinish = (values: any, i: number, id: string | number) => {
+        const variantIds = variantByIds.variations[i].values.map((value: any) => value.id);
+        const newValues = {
+            ...values,
+            status: true,
+            values: variantIds,
+            images: imagesVariants[i] || variantByIds.variations[i].images.map((image: any) => image.id),
+        };
 
-        setListAttribute(combine(formatVariantsChanges));
-    }, [variantsChanges]);
+        putVariant(newValues, id);
+    };
 
     return (
         <>
@@ -104,7 +44,7 @@ const AddVariant = () => {
                 <SkeletonComponent />
             ) : (
                 <section>
-                    <Heading>Add Variant</Heading>
+                    <Heading>Update Variant</Heading>
                     <div className="grid grid-cols-2 gap-x-10">
                         <div>
                             <ConfigProvider
@@ -121,15 +61,14 @@ const AddVariant = () => {
                                     allowClear
                                     className="text-20px font-medium w-full sm:h-[45px] md:h-[56px] border-1 border-[#111111] mb-5"
                                     placeholder="Please select"
-                                    onChange={handleChange}
                                     optionFilterProp="name"
                                     fieldNames={{ label: 'name', value: 'id' }}
-                                    options={attributeByIds}
-                                    value={variantId}
+                                    options={variantByIds?.ownAttributes}
+                                    value={idVariant}
                                 />
                             </ConfigProvider>
                             <div>
-                                {variants.map((variant) => (
+                                {variantByIds?.ownAttributes?.map((variant: any) => (
                                     <div className="p-5 bg-gray-200 rounded-lg mb-10 relative" key={variant.id}>
                                         <h3 className="color-primary text-16px font-medium mb-5">{variant.name}</h3>
                                         <div>
@@ -147,52 +86,69 @@ const AddVariant = () => {
                                                     allowClear
                                                     className="text-20px font-medium w-full sm:h-[35px] md:h-[40px] border-1 border-[#111111] mb-5"
                                                     placeholder="Please select"
-                                                    optionFilterProp="value"
+                                                    optionFilterProp="name"
                                                     fieldNames={{ label: 'value', value: 'id' }}
                                                     options={variant.values}
-                                                    onChange={(value) => handleChangeItem(value, +variant.id)}
+                                                    value={variant.values}
                                                 />
                                             </ConfigProvider>
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                            <div className="mt-10">
-                                <h5 className="text-20px font-medium mb-3">Add variant</h5>
-                                <FormAttribute postAttribute={postAttribute} setVariantId={setVariantId} />
-                            </div>
                         </div>
                         <div>
-                            <Form onFinish={onFinish} form={form} name="form-attribute" autoComplete="off">
-                                {listAttribute.map((attribute: any, i: number) => (
-                                    <div key={i}>
-                                        <ConfigProvider
-                                            theme={{
-                                                token: {
-                                                    borderRadiusLG: 8,
-                                                    colorBorder: '#111111',
-                                                },
-                                            }}
-                                        >
-                                            <Collapse
-                                                className="mb-5 text-16px font-medium"
-                                                expandIconPosition="end"
-                                                items={[
-                                                    {
-                                                        key: '1',
-                                                        label: (
-                                                            <div className="flex-row-center justify-center bg-primary rounded-lg text-white h-[32px]">
-                                                                {attribute.values.join('-')}
-                                                            </div>
-                                                        ),
-                                                        children: (
+                            {variantByIds?.variations.map((variation: any, i: number) => (
+                                <Form
+                                    form={form}
+                                    onFinish={(value: any) => onFinish(value, i, variation.id)}
+                                    name={`form-attribute-${i}`}
+                                    autoComplete="off"
+                                    key={i}
+                                    initialValues={{
+                                        price: variation.price,
+                                        sku: variation.sku,
+                                        stock_qty: variation.stock_qty,
+                                    }}
+                                >
+                                    <ConfigProvider
+                                        theme={{
+                                            token: {
+                                                borderRadiusLG: 8,
+                                                colorBorder: '#111111',
+                                            },
+                                        }}
+                                    >
+                                        <Collapse
+                                            className="mb-5 text-16px font-medium"
+                                            expandIconPosition="end"
+                                            items={[
+                                                {
+                                                    key: '1',
+                                                    label: (
+                                                        <div className="flex-row-center justify-center bg-primary rounded-lg text-white h-[32px]">
+                                                            {variation.values
+                                                                .map((value: any) => value.value)
+                                                                .join('-')}
+                                                        </div>
+                                                    ),
+                                                    children: (
+                                                        <>
                                                             <div className="grid grid-cols-2 gap-x-10">
                                                                 <Form.Item
-                                                                    name={['variations', i, 'price']}
+                                                                    name="price"
                                                                     rules={[
                                                                         {
                                                                             required: true,
                                                                             message: 'Please enter price',
+                                                                        },
+                                                                        {
+                                                                            validator: (_, value) =>
+                                                                                !value || value > 0
+                                                                                    ? Promise.resolve()
+                                                                                    : Promise.reject(
+                                                                                        'Price must be greater than 0',
+                                                                                    ),
                                                                         },
                                                                     ]}
                                                                 >
@@ -204,7 +160,7 @@ const AddVariant = () => {
                                                                     />
                                                                 </Form.Item>
                                                                 <Form.Item
-                                                                    name={['variations', i, 'sku']}
+                                                                    name="sku"
                                                                     rules={[
                                                                         {
                                                                             required: true,
@@ -220,11 +176,19 @@ const AddVariant = () => {
                                                                     />
                                                                 </Form.Item>
                                                                 <Form.Item
-                                                                    name={['variations', i, 'stock_qty']}
+                                                                    name="stock_qty"
                                                                     rules={[
                                                                         {
                                                                             required: true,
-                                                                            message: 'Please enter stock_qty',
+                                                                            message: 'Please enter quantity',
+                                                                        },
+                                                                        {
+                                                                            validator: (_, value) =>
+                                                                                !value || value > 0
+                                                                                    ? Promise.resolve()
+                                                                                    : Promise.reject(
+                                                                                        'Quantity must be greater than 0',
+                                                                                    ),
                                                                         },
                                                                     ]}
                                                                 >
@@ -237,28 +201,39 @@ const AddVariant = () => {
                                                                 </Form.Item>
                                                                 <ModalImage
                                                                     indexVariant={i}
-                                                                    setImagesVariants={setImagesVariants}
                                                                     images={images}
                                                                     handleSetImages={setImages}
+                                                                    setImagesVariants={setImagesVariants}
                                                                 />
                                                             </div>
-                                                        ),
-                                                    },
-                                                ]}
-                                            />
-                                        </ConfigProvider>
-                                    </div>
-                                ))}
-                                {listAttribute.length ? (
-                                    <div className="text-end mt-10">
-                                        <ButtonPrimary width="w-[100px]" height="h-[50px]" htmlType="submit">
-                                            Submit
-                                        </ButtonPrimary>
-                                    </div>
-                                ) : (
-                                    ''
-                                )}
-                            </Form>
+                                                            <div className="grid grid-cols-6 gap-x-8">
+                                                                {variation.images.map((image: IImage) => (
+                                                                    <div key={image.id}>
+                                                                        <img
+                                                                            src={image.url}
+                                                                            alt=""
+                                                                            className="border"
+                                                                        />
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                            <div className="text-end">
+                                                                <ButtonPrimary
+                                                                    width="w-[100px]"
+                                                                    height="h-[50px]"
+                                                                    htmlType="submit"
+                                                                >
+                                                                    Submit
+                                                                </ButtonPrimary>
+                                                            </div>
+                                                        </>
+                                                    ),
+                                                },
+                                            ]}
+                                        />
+                                    </ConfigProvider>
+                                </Form>
+                            ))}
                         </div>
                     </div>
                 </section>
@@ -267,4 +242,4 @@ const AddVariant = () => {
     );
 };
 
-export default AddVariant;
+export default UpdateVariant;

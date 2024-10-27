@@ -1,4 +1,4 @@
-type Variant = {
+export type Variant = {
     id: string | number;
     value: string;
 };
