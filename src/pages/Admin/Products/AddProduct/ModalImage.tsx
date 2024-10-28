@@ -3,7 +3,7 @@ import { Button, Modal } from 'antd';
 import UploadImage from './UploadImage';
 import { IImage } from '../../../../interfaces/IImage';
 
-const ModalImage = ({ images, handleSetImages }: any) => {
+const ModalImage = ({ images, handleSetImages, indexVariant, setImagesVariants }: any) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const showModal = () => {
@@ -16,6 +16,13 @@ const ModalImage = ({ images, handleSetImages }: any) => {
             ...prev,
             isShow: true,
         }));
+
+        if (indexVariant || indexVariant == 0) {
+            setImagesVariants((preImage: any) => ({
+                ...preImage,
+                [indexVariant]: images.images.map((image: any) => image.id),
+            }));
+        }
     };
 
     const handleCancel = () => {
@@ -25,6 +32,13 @@ const ModalImage = ({ images, handleSetImages }: any) => {
             isShow: false,
             images: [],
         }));
+
+        if (indexVariant || indexVariant == 0) {
+            setImagesVariants((preImage: any) => {
+                delete preImage[indexVariant];
+                return preImage;
+            });
+        }
     };
 
     const handleCheckboxChange = (image: IImage) => {

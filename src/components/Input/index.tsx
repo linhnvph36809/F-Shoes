@@ -8,14 +8,7 @@ const InputPrimary = ({
     margin = 'sm:mb-6 md:mb-10',
     textSize = 'sm:text-[15px] md:text-[18px]',
     ...props
-}: {
-    placeholder: string;
-    width?: string;
-    type?: string;
-    textSize?: string;
-    height?: string;
-    margin?: string;
-}) => {
+}: any) => {
     return (
         <Input
             placeholder={placeholder}

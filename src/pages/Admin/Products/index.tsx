@@ -11,6 +11,7 @@ import SkeletonComponent from '../components/Skeleton';
 
 const ListProduct = () => {
     const { loading, deleteProduct, products } = useProduct();
+    console.log(products);
 
     const handleDeleteProduct = (id: string | number) => {
         if (confirm('Are you sure you want to delete this product')) deleteProduct(id);

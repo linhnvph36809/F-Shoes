@@ -28,7 +28,7 @@ const useProduct = () => {
             setLoading(true);
             const {
                 data: { data },
-            } = await tokenManagerInstance('get', API_PRODUCT + '?include=images');
+            } = await tokenManagerInstance('get', API_PRODUCT + '?include=images,variations');
             setProducts(data);
         } catch (error) {
             console.log(error);

@@ -1,42 +1,31 @@
-import ButtonEdit from "../../components/Button/ButtonEdit";
 
 export const columnsAttribute = [
     {
         title: 'ID',
         dataIndex: 'id',
-        key: 'id',
+        key: '1',
     },
     {
         title: 'Attribute Name',
-        dataIndex: 'attributeName',
-        key: 'attributeName',
+        dataIndex: 'name',
+        key: '2',
     },
     {
         title: 'Attribute Value',
-        dataIndex: 'attributeValue',
-        key: 'attributeValue',
+        dataIndex: 'values',
+        key: '3',
+        render: (values: any) => {
+            return (
+                <div>
+                    {values.length ? values.map((value: any) => <div key={value.id}>{value.value}</div>) : 'null'}
+                </div>
+            );
+        },
     },
     {
         title: 'Created at',
-        dataIndex: 'createdAt',
-        key: 'createdAt',
+        dataIndex: 'created_at',
+        key: '4',
     },
-    {
-        title: '',
-        dataIndex: 'id',
-        key: 'id',
-        render: () => {
-            return <ButtonEdit>Edit</ButtonEdit>
-        },
-    },
-];
 
-export const dataSourceAttribute = [
-    {
-        key: '1',
-        id: '1',
-        attributeName: 'Nmae',
-        attributeValue: '1231',
-        createdAt: '2024',
-    },
 ];
