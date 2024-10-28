@@ -11,14 +11,6 @@ const useCategory = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [mainCategories, setMainCategoires] = useState<ICategory[]>([]);
     const navigate = useNavigate();
-    // const { slug } = useParams();
-
-    // let id: string | number | undefined;
-
-    // if (slug) {
-    //     const index = slug.lastIndexOf('.');
-    //     id = slug.substring(index + 1);
-    // }
 
     const getAllCategory = async () => {
         try {
@@ -79,6 +71,38 @@ const useCategory = () => {
             setLoading(false);
         }
     };
+    // Hàm sử lý
+    const addProductsToCategory = async (id: any, selectedProducts: string[], allProducts: any[]) => {
+        try {
+            // Filter the products to add
+            const productsToAdd = allProducts.filter((product) => selectedProducts.includes(String(product.id)));
+
+            if (productsToAdd.length === 0) {
+                throw new Error('No products selected to add.');
+            }
+            const apiUrl = `${API_CATEGORY}/${id}/products?include=products`;
+            console.log('API URL:', apiUrl);
+            const payload = { products: productsToAdd.map((product) => product.id) };
+            console.log('Payload:', payload);
+            const { status } = await tokenManagerInstance('post', apiUrl, payload);
+            if (status === 200 || status === 201) {
+                return {
+                    success: true,
+                    addedProducts: productsToAdd,
+                };
+            } else {
+                throw new Error('Failed to add products.');
+            }
+        } catch (error: any) {
+            // Improved error handling
+            if (error.response) {
+                console.error('API Error:', error.response.data);
+            } else {
+                console.error('Error adding products:', error);
+            }
+            throw error;
+        }
+    };
 
     useEffect(() => {
         getAllCategory();
@@ -89,11 +113,11 @@ const useCategory = () => {
         categories,
         loading,
         mainCategories,
-        // getOneCategory,
         getAllCategory,
         deleteCategory,
         postCategory,
         putCategory,
+        addProductsToCategory, // Expose the new function
     };
 };
 

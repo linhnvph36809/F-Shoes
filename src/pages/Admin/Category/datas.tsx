@@ -46,21 +46,21 @@ export const columns: any['columns'] = [
         },
     },
 
-    {
-        title: 'Created At',
-        dataIndex: 'created_at',
-        key: 'created_at',
-        render: (text: any, _: any, index: any) => {
-            if (index === 0) {
-                return {
-                    props: {
-                        colSpan: 0,
-                    },
-                };
-            }
-            return text;
-        },
-    },
+    // {
+    //     title: 'Created At',
+    //     dataIndex: 'created_at',
+    //     key: 'created_at',
+    //     render: (text: any, _: any, index: any) => {
+    //         if (index === 0) {
+    //             return {
+    //                 props: {
+    //                     colSpan: 0,
+    //                 },
+    //             };
+    //         }
+    //         return text;
+    //     },
+    // },
 ];
 
 export const data: DataType[] = [
