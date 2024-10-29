@@ -7,17 +7,15 @@ import Attribute from '../pages/Admin/Products/Attribute';
 import UpdateProduct from '../pages/Admin/Products/UpdateProduct';
 import AddProduct from '../pages/Admin/Products/AddProduct';
 import AddVariant from '../pages/Admin/Products/AddVariant';
+import UpdateVariant from '../pages/Admin/Products/UpdateVariant';
 import Discounts from '../pages/Admin/Discount';
 import DiscountList from '../pages/Admin/Discount/ListCount';
 import AddCount from '../pages/Admin/Discount/AddCount';
 import AddSale from '../pages/Admin/Discount/AddSale';
 import ListSale from '../pages/Admin/Discount/ListSale';
 import OrderList from '../pages/Admin/Oder/Order List';
-import OrderDetail from '../pages/Admin/Oder/Order Detail';
 import Addorder from '../pages/Admin/Oder/AddOrder';
-import ListGroups from '../pages/Admin/Groups/listgroup';
-import ListUser from '../pages/Admin/User/ListUser';
-
+import UpdateOrder from '../pages/Admin/Oder/UpdateOrder';
 
 const routerAdmin = [
     {
@@ -53,51 +51,45 @@ const routerAdmin = [
                 element: <Attribute />,
             },
             {
-                path: 'add-variant',
+                path: 'add-variant/:slug',
                 element: <AddVariant />,
             },
             {
+                path: 'update-variant/:slug',
+                element: <UpdateVariant />,
+            },
+            {
                 path: 'discount',
-                element: <Discounts/>,
+                element: <Discounts />,
             },
             {
                 path: 'listsale',
-                element: <ListSale/>,
+                element: <ListSale />,
             },
             {
                 path: 'listcount',
-                element: <DiscountList/>,
+                element: <DiscountList />,
             },
             {
                 path: 'addcount',
-                element: <AddCount/>,
+                element: <AddCount />,
             },
             {
                 path: 'addsale',
-                element: <AddSale/>,
+                element: <AddSale />,
             },
             {
                 path: 'orderlist',
-                element: <OrderList/>,
-            },
-            {
-                path: 'orderdetail',
-                element: <OrderDetail/>,
+                element: <OrderList />,
             },
             {
                 path: 'orderadd',
-                element: <Addorder/>,
+                element: <Addorder />,
             },
             {
-                path: 'listgroup',
-                element: <ListGroups/>,
+                path: 'orderupdate/:id',
+                element: <UpdateOrder />,
             },
-            {
-                path: 'listuser',
-                element: <ListUser/>,
-            },
-           
-
         ],
     },
 ];

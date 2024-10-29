@@ -1,6 +1,18 @@
-import { Outlet } from 'react-router-dom';
+import useAuth from '../../../hooks/useAuth';
+import CheckEmail from './CheckEmail';
+import Password from './Password';
+import Register from './Register';
 
 const LayoutAuthentication = () => {
+    const { loading, user, page, postCheckEmail, login, register } = useAuth();
+
+    let Content = <CheckEmail loading={loading} handleCheckEmail={postCheckEmail} />;
+
+    if (page == 'login') {
+        Content = <Password handleLogin={login} email={user} loading={loading} />;
+    } else if (page == 'register') {
+        Content = <Register handleRegister={register} email={user} loading={loading} />;
+    }
 
     return (
         <section>
@@ -21,9 +33,7 @@ const LayoutAuthentication = () => {
                         />
                     </svg>
                 </div>
-                <main>
-                    <Outlet />
-                </main>
+                <main>{Content}</main>
             </div>
         </section>
     );

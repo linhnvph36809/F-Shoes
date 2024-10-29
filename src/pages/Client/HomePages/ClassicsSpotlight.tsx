@@ -5,13 +5,13 @@ import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 
 import { FreeMode } from 'swiper/modules';
-import useProduct from '../../../hooks/useProduct.tsx';
 import SkeletonComponent from "../../Admin/components/Skeleton";
 import {Link} from "react-router-dom";
+import useHome from "../../../hooks/page/useHome.tsx";
 
 
 export default function ClassicsSpotlight() {
-    const {loading,bestSellingProducts } = useProduct();
+    const {loading,bestSellingProducts } = useHome();
 
     return (
         <>

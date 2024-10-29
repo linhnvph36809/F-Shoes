@@ -44,20 +44,6 @@ const routerClient = [
     {
         path: '/authentication',
         element: <LayoutAuthentication />,
-        children: [
-            {
-                path: '',
-                element: <CheckEmail />,
-            },
-            {
-                path: 'password',
-                element: <Password />,
-            },
-            {
-                path: 'register',
-                element: <Register />,
-            },
-        ],
     },
 ];
 

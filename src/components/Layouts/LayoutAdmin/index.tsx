@@ -77,7 +77,7 @@ const LayoutAdmin: React.FC = () => {
                         </button>
                     </div>
                 </Header>
-                <Content className="my-4 p-10 bg-white">
+                <Content className="my-4 p-10 bg-white min-h-[1000px]">
                     <Outlet />
                 </Content>
             </Layout>

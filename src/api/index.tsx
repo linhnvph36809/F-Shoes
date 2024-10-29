@@ -7,7 +7,7 @@ const tokenManager = new TokenManager({
         return token ? token : '';
     },
     getRefreshToken: async () => {
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = localStorage.getItem('refreshToken1');
         return refreshToken ? refreshToken : '';
     },
     onInvalidRefreshToken: () => {
@@ -16,7 +16,7 @@ const tokenManager = new TokenManager({
     },
 
     executeRefreshToken: async () => {
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = localStorage.getItem('refreshToken1');
 
         if (!refreshToken) {
             return {
@@ -53,7 +53,7 @@ export const axiosInstant = axios.create({
 });
 
 export const tokenManagerInstance = async (
-    method: 'get' | 'post' | 'put' | 'delete',
+    method: 'get' | 'post' | 'put' | 'delete' | 'patch',
     suffixUrl: string,
     configs: any = {},
 ) => {
