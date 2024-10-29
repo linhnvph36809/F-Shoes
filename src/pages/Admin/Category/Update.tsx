@@ -1,7 +1,6 @@
 import { message, Select } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-
 import useCategory from '../../../hooks/useCategory';
 import { ICategory } from '../../../interfaces/ICategory';
 import Heading from '../components/Heading';
@@ -16,36 +15,41 @@ import useProduct from '../../../hooks/useProduct';
 import ButtonPrimary from '../../../components/Button';
 
 const UpdateCategory = () => {
-    const { id } = useParams<{ id: string }>(); // Get id from URL
-    const { categories, mainCategories, loading, putCategory } = useCategory();
+    const { id } = useParams<{ id: string }>();
+    const { categories, mainCategories, loading, putCategory, addProductsToCategory } = useCategory();
     const [initialValues, setInitialValues] = useState<ICategory | null>(null);
     const [categoryId, setCategoryId] = useState<string | number | null>(null);
-    const [products, setProducts] = useState<any[]>([]); // Sản phẩm trong danh mục
-    const [selectedProducts, setSelectedProducts] = useState<string[]>([]); // Danh sách sản phẩm được chọn
-    const { deleteProduct, products: allProducts } = useProduct(); // Lấy danh sách tất cả sản phẩm
+    const [products, setProducts] = useState<any[]>([]);
+    const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+    const { deleteProduct, products: allProducts } = useProduct();
 
     const handleDeleteProduct = (id: string | number) => {
         if (confirm('Are you sure you want to delete this product')) deleteProduct(id);
     };
 
-    const handleAddProducts = () => {
-        const productsToAdd = allProducts.filter((product) => selectedProducts.includes(String(product.id)));
-        setProducts((prevProducts) => [
-            ...prevProducts,
-            ...productsToAdd.filter(
-                (product) => !prevProducts.some((p) => p.id === product.id), // Tránh thêm sản phẩm trùng lặp
-            ),
-        ]);
-        setSelectedProducts([]); // Reset lại sau khi thêm
+    const handleAddProducts = async () => {
+        try {
+            const result = await addProductsToCategory(id, selectedProducts, allProducts);
+            if (result.success) {
+                setProducts((prevProducts) => [
+                    ...prevProducts,
+                    ...result.addedProducts.filter((product) => !prevProducts.some((p) => p.id === product.id)),
+                ]);
+                message.success('Products added successfully!');
+            }
+        } catch (error) {
+            message.error('Failed to add products. Please try again.');
+        } finally {
+            setSelectedProducts([]);
+        }
     };
 
     useEffect(() => {
-        if (id) {
+        if (id && categories.length > 0) {
             const categoryToUpdate = categories.find((category) => String(category.id) === id);
             if (categoryToUpdate) {
                 setInitialValues(categoryToUpdate);
                 setCategoryId(categoryToUpdate.id);
-
                 if (categoryToUpdate.products) {
                     setProducts(categoryToUpdate.products);
                 }
@@ -62,7 +66,7 @@ const UpdateCategory = () => {
                     await putCategory({
                         ...updatedCategory,
                         id: categoryId,
-                        products, // Cập nhật danh sách sản phẩm mới
+                        products,
                     });
                     message.success('Category updated successfully!');
                 }
@@ -112,7 +116,6 @@ const UpdateCategory = () => {
                         initialValues={initialValues}
                     />
                     <section>
-                        {/* Ô chọn sản phẩm */}
                         <div className="my-4">
                             <Select
                                 mode="multiple"
@@ -136,7 +139,6 @@ const UpdateCategory = () => {
                                 Add Products
                             </ButtonPrimary>
                         </div>
-                        {/* Bảng hiển thị sản phẩm đã chọn */}
                         <div>
                             <TableAdmin
                                 scroll={{ x: 'max-content' }}
