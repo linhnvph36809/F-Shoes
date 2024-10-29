@@ -15,6 +15,8 @@ import ListSale from '../pages/Admin/Discount/ListSale';
 import OrderList from '../pages/Admin/Oder/Order List';
 import OrderDetail from '../pages/Admin/Oder/Order Detail';
 import Addorder from '../pages/Admin/Oder/AddOrder';
+import ListGroups from '../pages/Admin/Groups/listgroup';
+import ListUser from '../pages/Admin/User/ListUser';
 
 
 const routerAdmin = [
@@ -85,6 +87,14 @@ const routerAdmin = [
             {
                 path: 'orderadd',
                 element: <Addorder/>,
+            },
+            {
+                path: 'listgroup',
+                element: <ListGroups/>,
+            },
+            {
+                path: 'listuser',
+                element: <ListUser/>,
             },
            
 
