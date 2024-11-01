@@ -3,13 +3,19 @@ import Title from './components/Title';
 import InputPrimary from '../../../components/Input';
 import ButtonComponent from './components/Button';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
+import { useContextGlobal } from '../../../contexts';
 
 const Password = ({ handleLogin, email, loading }: any) => {
-    const onFinish = (values: { password: string }) => {
-        handleLogin({
+    const { setUser } = useContextGlobal();
+
+    const onFinish = async (values: { password: string }) => {
+        const res = await handleLogin({
             ...email,
             ...values,
         });
+        if (res?.user) {
+            setUser(res?.user);
+        }
     };
 
     return (

@@ -4,11 +4,11 @@ import Detail from '../pages/Client/Details';
 import CategoryPage from '../pages/Client/CategoryPages';
 import Cart from '../pages/Client/Cart';
 import LayoutAuthentication from '../pages/Client/Authtication';
-import CheckEmail from '../pages/Client/Authtication/CheckEmail';
-import Password from '../pages/Client/Authtication/Password';
-import Register from '../pages/Client/Authtication/Register';
 import ProfilePage from '../pages/Client/Account/Profile';
 import Order from '../pages/Client/Order';
+import PrivateRoute from '../components/PrivateRoute';
+import path from 'path';
+import OrderComplete from '../pages/Client/OrderComplete';
 
 const routerClient = [
     {
@@ -29,7 +29,11 @@ const routerClient = [
             },
             {
                 path: '/cart',
-                element: <Cart />,
+                element: (
+                    <PrivateRoute>
+                        <Cart />
+                    </PrivateRoute>
+                ),
             },
             {
                 path: '/profile',
@@ -37,7 +41,15 @@ const routerClient = [
             },
             {
                 path: '/order',
-                element: <Order />,
+                element: (
+                    <PrivateRoute>
+                        <Order />
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: '/order-complete',
+                element: <OrderComplete />,
             },
         ],
     },

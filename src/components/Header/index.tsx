@@ -1,20 +1,28 @@
 import { Input } from 'antd';
+import { Link } from 'react-router-dom';
 import { Heart, Menu, Search, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import HeaderCategory from "./HeaderCategory.tsx";
-import SkeletonComponent from "../../pages/Admin/components/Skeleton";
+
+import HeaderCategory from './HeaderCategory.tsx';
+import SkeletonComponent from '../../pages/Admin/components/Skeleton';
 import { tokenManagerInstance } from '../../api';
-import {ICategory} from "../../interfaces/ICategory.ts";
+import { ICategory } from '../../interfaces/ICategory.ts';
+import useCookiesConfig from '../../hooks/useCookiesConfig.tsx';
+import { COOKIE_USER } from '../../constants/index.ts';
 
 const Header = () => {
     const [showMenu, setShowMenu] = useState<boolean>(false);
-    const [headCates,setHeadCates] = useState([]);
+    const [headCates, setHeadCates] = useState([]);
     const [scrollPosition, setScrollPosition] = useState<{ isFixed: boolean; position: number }>({
         isFixed: false,
         position: 0,
     });
     const [loading, setLoading] = useState<boolean>(false);
     const [headCategories, setHeadCategories] = useState<ICategory[][]>([]);
+    const { cookies } = useCookiesConfig(COOKIE_USER);
+
+    const userName = cookies?.userName;
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -26,11 +34,11 @@ const Header = () => {
             } finally {
                 setLoading(false);
             }
-        }
+        };
         fetchData();
     }, []);
 
-    const categories = headCategories ? headCategories : [[]];
+    const categories = headCategories ? headCategories : ([[]] as any);
     const handleScroll = () => {
         const position = window.scrollY;
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -77,9 +85,21 @@ const Header = () => {
                             </li>
                             <li className="color-primary font-medium">|</li>
                             <li>
-                                <a href="#" className="text-[11px] color-primary font-medium hover:opacity-70">
-                                    Sign In
-                                </a>
+                                {userName ? (
+                                    <Link
+                                        to="/profile"
+                                        className="text-[11px] color-primary font-medium hover:opacity-70"
+                                    >
+                                        {userName}
+                                    </Link>
+                                ) : (
+                                    <Link
+                                        to="/authentication"
+                                        className="text-[11px] color-primary font-medium hover:opacity-70"
+                                    >
+                                        Sign In
+                                    </Link>
+                                )}
                             </li>
                         </ul>
                     </div>
@@ -91,20 +111,22 @@ const Header = () => {
                 >
                     <div className="container flex-row-center justify-between">
                         <div>
-                            <svg
-                                width={59}
-                                height={22}
-                                viewBox="0 0 59 22"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                    d="M58.9262 0.772461L15.8854 19.0298C12.302 20.5502 9.28743 21.3087 6.85813 21.3087C4.12475 21.3087 2.13358 20.3442 0.910756 18.4184C-0.674992 15.9335 0.0181595 11.9381 2.73845 7.72033C4.35363 5.25506 6.40692 2.99251 8.40791 0.828045C7.93709 1.59313 3.78145 8.5083 8.32617 11.7648C9.22531 12.4187 10.5037 12.7391 12.0764 12.7391C13.3384 12.7391 14.7869 12.5332 16.3792 12.1179L58.9262 0.772461Z"
-                                    fill="#111111"
-                                />
-                            </svg>
+                            <Link to="/">
+                                <svg
+                                    width={59}
+                                    height={22}
+                                    viewBox="0 0 59 22"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                        d="M58.9262 0.772461L15.8854 19.0298C12.302 20.5502 9.28743 21.3087 6.85813 21.3087C4.12475 21.3087 2.13358 20.3442 0.910756 18.4184C-0.674992 15.9335 0.0181595 11.9381 2.73845 7.72033C4.35363 5.25506 6.40692 2.99251 8.40791 0.828045C7.93709 1.59313 3.78145 8.5083 8.32617 11.7648C9.22531 12.4187 10.5037 12.7391 12.0764 12.7391C13.3384 12.7391 14.7869 12.5332 16.3792 12.1179L58.9262 0.772461Z"
+                                        fill="#111111"
+                                    />
+                                </svg>
+                            </Link>
                         </div>
                         <nav>
                             <ul className="sm:hidden md:flex md:items-center gap-x-10">
@@ -115,7 +137,10 @@ const Header = () => {
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
                                         onMouseLeave={() => setShowMenu(false)}
-                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(categories[0]?.children)}}
+                                        onMouseEnter={() => {
+                                            setShowMenu(true);
+                                            setHeadCates(categories[0]?.children);
+                                        }}
                                     >
                                         New & Featured
                                     </a>
@@ -127,7 +152,10 @@ const Header = () => {
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
                                         onMouseLeave={() => setShowMenu(false)}
-                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(categories[1]?.children)}}
+                                        onMouseEnter={() => {
+                                            setShowMenu(true);
+                                            setHeadCates(categories[1]?.children);
+                                        }}
                                     >
                                         Men
                                     </a>
@@ -139,7 +167,10 @@ const Header = () => {
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
                                         onMouseLeave={() => setShowMenu(false)}
-                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(categories[2]?.children)}}
+                                        onMouseEnter={() => {
+                                            setShowMenu(true);
+                                            setHeadCates(categories[2]?.children);
+                                        }}
                                     >
                                         Women
                                     </a>
@@ -151,7 +182,10 @@ const Header = () => {
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
                                         onMouseLeave={() => setShowMenu(false)}
-                                        onMouseEnter={() => {setShowMenu(true);setHeadCates(categories[3]?.children)}}
+                                        onMouseEnter={() => {
+                                            setShowMenu(true);
+                                            setHeadCates(categories[3]?.children);
+                                        }}
                                     >
                                         Kids
                                     </a>
@@ -181,7 +215,9 @@ const Header = () => {
                                 <Heart className="color-primary w-[24px]" />
                             </div>
                             <div className="sm:w-[28px] md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
-                                <ShoppingBag className="color-primary w-[24px]" />
+                                <Link to="/cart">
+                                    <ShoppingBag className="color-primary w-[24px]" />
+                                </Link>
                             </div>
                             <div className="sm:w-[28px] md:hidden md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
                                 <Menu className="color-primary w-[24px]" />
@@ -195,15 +231,12 @@ const Header = () => {
                                 showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
                             } `}
                             onMouseLeave={() => setShowMenu(false)}
-                            onMouseEnter={() => {setShowMenu(true);setHeadCates(headCates)}}
+                            onMouseEnter={() => {
+                                setShowMenu(true);
+                                setHeadCates(headCates);
+                            }}
                         >
-
-                            {loading ? (
-                                <SkeletonComponent />
-                            ) : (
-                                <HeaderCategory categories={headCates}/>
-                            )}
-
+                            {loading ? <SkeletonComponent /> : <HeaderCategory categories={headCates} />}
                         </div>
                     </div>
                 </div>
