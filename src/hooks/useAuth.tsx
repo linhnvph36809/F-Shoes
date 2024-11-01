@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import { tokenManagerInstance } from '../api';
 import { useNavigate } from 'react-router-dom';
+import useCookiesConfig from './useCookiesConfig';
+import { COOKIE_USER } from '../constants';
 
 const API_CHECK_EMAIL = '/api/check/email';
 
@@ -9,6 +11,8 @@ const useAuth = () => {
     const [page, setPage] = useState<string>('');
     const [user, setUser] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const { handleSetCookie } = useCookiesConfig(COOKIE_USER);
+
     const navigate = useNavigate();
 
     const postCheckEmail = async (email: string) => {
@@ -36,10 +40,14 @@ const useAuth = () => {
             if (data?.access_token && data?.refresh_token) {
                 localStorage.setItem('accessToken', data.access_token);
                 localStorage.setItem('refreshToken', data.refresh_token);
-                navigate('/');
+                handleSetCookie('userName', data.user.name, new Date(Date.now() + 20 * 60 * 1000));
+                handleSetCookie('userId', data.user.id, new Date(Date.now() + 20 * 60 * 1000));
             }
+            navigate('/');
+            return data;
         } catch (error) {
             alert('account or password is incorrect');
+            return null;
         } finally {
             setLoading(false);
         }
@@ -52,10 +60,14 @@ const useAuth = () => {
             if (data?.access_token && data?.refresh_token) {
                 localStorage.setItem('accessToken', data.access_token);
                 localStorage.setItem('refreshToken', data.refresh_token);
+                handleSetCookie('userName', data.user.name, new Date(Date.now() + 20 * 60 * 1000));
+                handleSetCookie('userId', data.user.id, new Date(Date.now() + 20 * 60 * 1000));
                 navigate('/');
             }
+            return data;
         } catch (error) {
             console.log(error);
+            return null;
         } finally {
             setLoading(false);
         }

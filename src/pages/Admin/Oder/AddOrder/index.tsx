@@ -1,6 +1,6 @@
 import { Form, Input, Select, Radio } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import Heading from '../../components/Heading';
 import ButtonComponent from '../../../Client/Authtication/components/Button';
@@ -83,9 +83,8 @@ const Addorder = () => {
             tax_amount: null,
             amount_collected: value.amount_collected,
             receiver_full_name: value.receiver_full_name,
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
-                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-            } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+                } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: null,
@@ -111,7 +110,7 @@ const Addorder = () => {
         setWardCode(code);
     };
 
-    const handleShippingChange = (id: string | number) => {
+    const handleShippingChange = (_: string | number) => {
         if (districtId && wardCode) {
             const values = {
                 service_type_id: 2,
@@ -306,11 +305,7 @@ const Addorder = () => {
                     />
                 </Form.Item>
 
-                <Form.Item
-                    label="Address"
-                    name="address"
-                    rules={[{ required: true, message: 'Please enter an address' }]}
-                >
+                <Form.Item label="Address" name="address" rules={[{ required: true, message: 'Please enter address' }]}>
                     <TextArea placeholder="Enter address" />
                 </Form.Item>
 

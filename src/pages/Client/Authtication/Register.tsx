@@ -3,10 +3,13 @@ import Title from './components/Title';
 import InputPrimary from '../../../components/Input';
 import ButtonComponent from './components/Button';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
+import { useContextGlobal } from '../../../contexts';
 
 const Register = ({ handleRegister, email, loading }: any) => {
-    const onFinish = (values: any) => {
-        handleRegister({
+    const { setUser } = useContextGlobal();
+
+    const onFinish = async (values: any) => {
+        const res = await handleRegister({
             name: values.name,
             ...email,
             password: values.password,
@@ -16,6 +19,9 @@ const Register = ({ handleRegister, email, loading }: any) => {
                 birth_date: `${values.year}-${values.month}-${values.day}`,
             },
         });
+        if (res?.user) {
+            setUser(res?.user);
+        }
     };
 
     return (
@@ -124,7 +130,7 @@ const Register = ({ handleRegister, email, loading }: any) => {
                     </p>
 
                     <div className="flex justify-end">
-                    <ButtonComponent htmlType="submit">{loading ? <LoadingSmall /> : 'Register'}</ButtonComponent>
+                        <ButtonComponent htmlType="submit">{loading ? <LoadingSmall /> : 'Register'}</ButtonComponent>
                     </div>
                 </Form>
             </div>

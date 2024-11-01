@@ -5,7 +5,6 @@ import Register from './Register';
 
 const LayoutAuthentication = () => {
     const { loading, user, page, postCheckEmail, login, register } = useAuth();
-
     let Content = <CheckEmail loading={loading} handleCheckEmail={postCheckEmail} />;
 
     if (page == 'login') {
