@@ -4,9 +4,7 @@ import Detail from '../pages/Client/Details';
 import CategoryPage from '../pages/Client/CategoryPages';
 import Cart from '../pages/Client/Cart';
 import LayoutAuthentication from '../pages/Client/Authtication';
-import CheckEmail from '../pages/Client/Authtication/CheckEmail';
-import Password from '../pages/Client/Authtication/Password';
-import Register from '../pages/Client/Authtication/Register';
+
 import ProfilePage from '../pages/Client/Account/Profile';
 
 const routerClient = [
@@ -23,7 +21,7 @@ const routerClient = [
                 element: <Detail />,
             },
             {
-                path: '/category',
+                path: '/category/:slug?',
                 element: <CategoryPage />,
             },
             {

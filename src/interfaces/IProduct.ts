@@ -6,6 +6,7 @@ export interface IProduct {
     slug: string;
     name: string;
     price: number;
+    sale_price: number;
     image_url: string;
     description: string;
     short_description: string;
