@@ -9,6 +9,7 @@ import Password from '../pages/Client/Authtication/Password';
 import Register from '../pages/Client/Authtication/Register';
 import ProfilePage from '../pages/Client/Account/Profile';
 import Order from '../pages/Client/Order';
+import OrderComplete from '../pages/Client/OrderComplete';
 
 const routerClient = [
     {
@@ -38,6 +39,10 @@ const routerClient = [
             {
                 path: '/order',
                 element: <Order />,
+            },
+            {
+                path: '/order-complete',
+                element: <OrderComplete />,
             },
         ],
     },
