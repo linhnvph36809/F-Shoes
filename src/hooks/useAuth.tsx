@@ -53,6 +53,26 @@ const useAuth = () => {
         }
     };
 
+    const loginAdmin = async (user: { email: string; password: string }) => {
+        try {
+            setLoading(true);
+            const { data } = await tokenManagerInstance('post', `/api/login`, user);
+            if (data?.access_token && data?.refresh_token) {
+                localStorage.setItem('accessToken', data.access_token);
+                localStorage.setItem('refreshToken', data.refresh_token);
+                handleSetCookie('adminName', data.user.name, new Date(Date.now() + 20 * 60 * 1000));
+                handleSetCookie('adminId', data.user.id, new Date(Date.now() + 20 * 60 * 1000));
+            }
+            navigate('/admin');
+            return data;
+        } catch (error) {
+            alert('account or password is incorrect');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const register = async (user: any) => {
         try {
             setLoading(true);
@@ -79,6 +99,7 @@ const useAuth = () => {
         loading,
         postCheckEmail,
         login,
+        loginAdmin,
         register,
     };
 };
