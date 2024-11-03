@@ -42,6 +42,7 @@ const useAuth = () => {
                 localStorage.setItem('refreshToken', data.refresh_token);
                 handleSetCookie('userName', data.user.name, new Date(Date.now() + 20 * 60 * 1000));
                 handleSetCookie('userId', data.user.id, new Date(Date.now() + 20 * 60 * 1000));
+
             }
             navigate('/');
             return data;
