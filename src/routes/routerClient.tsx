@@ -7,7 +7,6 @@ import LayoutAuthentication from '../pages/Client/Authtication';
 import ProfilePage from '../pages/Client/Account/Profile';
 import Order from '../pages/Client/Order';
 import PrivateRoute from '../components/PrivateRoute';
-import path from 'path';
 import OrderComplete from '../pages/Client/OrderComplete';
 
 const routerClient = [
@@ -24,7 +23,7 @@ const routerClient = [
                 element: <Detail />,
             },
             {
-                path: '/category',
+                path: '/category/:slug?',
                 element: <CategoryPage />,
             },
             {
@@ -37,7 +36,11 @@ const routerClient = [
             },
             {
                 path: '/profile',
-                element: <ProfilePage />,
+                element: (
+                    <PrivateRoute>
+                        <ProfilePage />
+                    </PrivateRoute>
+                ),
             },
             {
                 path: '/order',

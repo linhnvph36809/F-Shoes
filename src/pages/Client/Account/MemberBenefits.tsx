@@ -9,7 +9,7 @@ const MemberBenefits = () => {
         <div className="my-20">
             <div>
                 {/* Centered Heading */}
-                <h2 className="text-[24px] font-semibold mb-8">Member Benefits</h2>
+                <h2 className="text-[24px] font-semibold mb-8">Member Benefits (Coming Soon)</h2>
 
                 {/* Slider Component */}
                 <Swiper
@@ -24,7 +24,7 @@ const MemberBenefits = () => {
                     {/* First Slide */}
                     <SwiperSlide>
                         <div className="max-w-[350px] ">
-                            <a href="#">
+                            <a href="">
                                 <div>
                                     <img
                                         className="max-w-[350px] max-h-[250px] object-cover"
@@ -42,7 +42,7 @@ const MemberBenefits = () => {
                     {/* Second Slide */}
                     <SwiperSlide>
                         <div className="max-w-[350px] mx-auto">
-                            <a href="#">
+                            <a href="">
                                 <div>
                                     <img
                                         className="max-w-[350px] max-h-[250px] object-cover"
@@ -62,7 +62,7 @@ const MemberBenefits = () => {
                     {/* Third Slide */}
                     <SwiperSlide>
                         <div className="max-w-[350px] mx-auto">
-                            <a href="#">
+                            <a href="">
                                 <div>
                                     <img
                                         className="max-w-[350px] max-h-[250px] object-cover"
@@ -80,7 +80,7 @@ const MemberBenefits = () => {
                     {/* Fourth Slide */}
                     <SwiperSlide>
                         <div className="max-w-[350px] mx-auto">
-                            <a href="#">
+                            <a href="">
                                 <div>
                                     <img
                                         className="max-w-[350px] max-h-[250px] object-cover"
@@ -100,16 +100,16 @@ const MemberBenefits = () => {
                     {/* Fifth Slide */}
                     <SwiperSlide>
                         <div className="max-w-[350px] mx-auto">
-                            <a href="#">
+                            <a href="">
                                 <div>
                                     <img
                                         className="max-w-[350px] max-h-[250px] object-cover"
                                         src="https://static.nike.com/a/images/w_1920,c_limit/mb8zpthvbkhnfympqhht/member-home-carousel.jpg"
-                                        alt="Nike Events"
+                                        alt="Fshoes Events"
                                     />
                                 </div>
                                 <div className="text-left">
-                                    <h3 className="text-[16px] text-black font-medium pt-4">Nike Events</h3>
+                                    <h3 className="text-[16px] text-black font-medium pt-4">Fshoes Events</h3>
                                 </div>
                             </a>
                         </div>
