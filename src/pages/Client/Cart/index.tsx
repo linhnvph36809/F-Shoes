@@ -1,23 +1,44 @@
+import { useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+
+import { useContextGlobal } from '../../../contexts';
 import CartItem from './components';
 import Summary from './components/BoxSummary';
 import Heading from '../HomePages/components/Heading';
 import SlidesScroll from '../../../components/SlidesScroll';
 import { SwiperSlide } from 'swiper/react';
+import useCart from '../../../hooks/useCart';
+import LoadingBlock from '../../../components/Loading/LoadingBlock';
 
 const Cart = () => {
-    const product = {
-        image: 'https://static.nike.com/a/images/t_PDP_1728_v1/w_592,f_auto,q_auto:eco,b_rgb:f5f5f5/29bcefdd-ff30-466f-abfb-c4e2759910de/free-rn-nn-road-running-shoes-jt4vDT.png',
-        name: 'Nike Free RN NN',
-        description: "Women's Road Running Shoes",
-        color: 'Light Silver/Jade Horizon',
-        size: '36',
-        quantity: '1',
-        price: '2,929,000₫',
+    const { loading, carts, getAllCart, deleteCart } = useCart();
+    const { user } = useContextGlobal();
+
+    const handleDeleteCart = (id: string | number) => {
+        deleteCart(id);
+        handeGetAllCart();
     };
 
-    const subtotal = '2,929,000₫';
-    const delivery = '250,000₫';
-    const total = '3,179,000₫';
+    const handeGetAllCart = () => {
+        if (user?.id) {
+            getAllCart(user.id);
+        }
+    };
+
+    useEffect(() => {
+        handeGetAllCart();
+    }, [user]);
+
+    const handleTotalPrice = useMemo(() => {
+        return carts.reduce((sum, curr) => {
+            if (curr?.product?.price) {
+                return sum + curr.product.price * curr.quantity;
+            } else if (curr?.product_variation?.price) {
+                return sum + curr.product_variation.price * curr.quantity;
+            }
+            return sum;
+        }, 0);
+    }, [carts, user]);
 
     return (
         <div className="container">
@@ -25,11 +46,20 @@ const Cart = () => {
                 <div className="flex gap-10">
                     <div style={{ width: '733px' }}>
                         <h2 className="text-[24px] font-bold m-6">Bag</h2>
-                        <CartItem product={product} />
+                        <div className="relative min-h-[500px]">
+                            {carts?.map((cart: any) => (
+                                <CartItem
+                                    product={cart}
+                                    handleDeleteCart={handleDeleteCart}
+                                    handeGetAllCart={handeGetAllCart}
+                                />
+                            ))}
+                            {loading && <LoadingBlock />}
+                        </div>
                     </div>
 
                     <div style={{ width: '350px' }}>
-                        <Summary subtotal={subtotal} delivery={delivery} total={total} />
+                        <Summary total={handleTotalPrice} />
                     </div>
                 </div>
 
@@ -41,9 +71,9 @@ const Cart = () => {
                             Join us
                         </a>{' '}
                         or{' '}
-                        <a href="#" className="text-blue-500">
+                        <Link to="/authentication" className="text-blue-500">
                             Sign in
-                        </a>
+                        </Link>
                     </p>
                 </div>
             </div>

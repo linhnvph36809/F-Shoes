@@ -1,41 +1,97 @@
+import { Radio, Spin } from 'antd';
+import { useEffect, useState } from 'react';
 import { ChevronDown, Heart, Star } from 'lucide-react';
-import SlidesImage from './SlidesImage';
+import { useNavigate, useParams } from 'react-router-dom';
 import { SwiperSlide } from 'swiper/react';
+import { LoadingOutlined } from '@ant-design/icons';
+
+import SlidesImage from './SlidesImage';
 import SlidesScroll from '../../../components/SlidesScroll';
 import Heading from '../HomePages/components/Heading';
-import { useNavigate, useParams } from 'react-router-dom';
-import SkeletonComponent from '../../Admin/components/Skeleton';
 import useProductDetail from '../../../hooks/page/useDetail.tsx';
 import Price from './Price.tsx';
 import { IImage } from '../../../interfaces/IImage.ts';
 import { formatPrice } from '../../../utils';
+import useCart from '../../../hooks/useCart.tsx';
+import { useContextGlobal } from '../../../contexts/index.tsx';
+import LoadingSmall from '../../../components/Loading/LoadingSmall.tsx';
+import LoadingPage from '../../../components/Loading/LoadingPage.tsx';
+import useWishlist from '../../../hooks/useWishlist.tsx';
 
 const Detail = () => {
-    const { product, loading } = useProductDetail();
+    const { products, loading } = useProductDetail();
     const { slug } = useParams();
+    const { user } = useContextGlobal();
+    const [idVariants, setIdVariants] = useState<number[]>([]);
+    const [variant, setVariant] = useState<any>();
+    const { loading: loadingAddCart, postCart } = useCart();
+    const { loading: loadingWishlist, postWishlist } = useWishlist();
     const navigate = useNavigate();
-    if (product) {
-        if (slug !== product?.slug) navigate('/');
+
+    if (products) {
+        if (slug !== products?.slug) navigate('/');
     }
-    const productD = product;
+    const productD = products;
     let variationD;
     let imagesD: IImage[];
 
     //to test component replace if(variationD) below into => if(product && product?.variations)
     if (variationD) {
-        variationD = product.variations[0];
-        imagesD = product.variations[0]?.images;
+        variationD = products.variations[0];
+        imagesD = products.variations[0]?.images;
     } else {
-        imagesD = product?.images;
+        imagesD = products?.images;
     }
 
+    const onChange = (e: any, index: number) => {
+        const id = e.target.value;
+        setIdVariants((preIds: number[]) => {
+            preIds[index] = id;
+            return [...preIds];
+        });
+    };
+
+    const handleAddCart = () => {
+        let datas;
+        if (productD.variations.length) {
+            datas = {
+                user_id: user.id,
+                product_id: null,
+                quantity: 1,
+                product_variation_id: variant?.id,
+            };
+        } else {
+            datas = {
+                user_id: user.id,
+                product_id: productD.id,
+                quantity: 1,
+                product_variation_id: null,
+            };
+        }
+        postCart(datas);
+    };
+
+    useEffect(() => {
+        if (idVariants.length == products?.attributes.length) {
+            const results = products?.variations.find((variation: any) => {
+                const newValues = variation.values.filter((value: any, _: number, values: any) => {
+                    if (idVariants.length <= 1) {
+                        return idVariants.includes(value.id);
+                    } else {
+                        return idVariants.every((id) => values.some((item: any) => item.id === id));
+                    }
+                });
+                if (newValues.length) {
+                    return variation;
+                }
+            });
+            setVariant(results);
+        }
+    }, [idVariants, products]);
     return (
         <>
             {loading ? (
-                <div className="p-8">
-                    {' '}
-                    <SkeletonComponent />{' '}
-                </div>
+                <LoadingPage />
             ) : (
                 <section className="container">
                     <div className="w-10/12 mx-auto flex py-20 gap-x-12">
@@ -63,7 +119,7 @@ const Detail = () => {
                                       })
                                     : ' '}
                             </h4>
-                            <Price product={productD} variation={variationD} />
+                            <Price product={variant || productD} variation={variationD} />
 
                             {/*<div className="grid md:grid-cols-6 gap-5 mb-10">*/}
                             {/*    <div>*/}
@@ -75,48 +131,70 @@ const Detail = () => {
                             {/*    </div>*/}
                             {/*</div>*/}
                             {productD?.attributes
-                                ? productD.attributes.map((item: any) => {
+                                ? productD.attributes.map((item: any, index: number) => {
                                       return (
-                                          <div key={item?.id}>
+                                          <div key={item?.id} className="mb-6">
                                               <div className="flex-row-center justify-between pb-5">
                                                   <p className="text-16px font-medium color-primary">
                                                       Select {item.name}
                                                   </p>
-                                                  {/*<p className="text-16px font-medium color-gray">*/}
-                                                  {/*    <a href="">Size Guide</a>*/}
-                                                  {/*</p>*/}
                                               </div>
-                                              <div className="grid md:grid-cols-5 gap-5">
-                                                  {item?.values.map((value: any) => (
-                                                      <div
-                                                          key={value.id}
-                                                          className="h-[46px] flex-row-center justify-center p-2 border border-[#e5e5e5]
-                                    text-16px color-priamry font-medium hover rounded-lg hover:border-[#111111] transition-global
-                                    hover:cursor-pointer"
-                                                      >
-                                                          {' '}
-                                                          {/*{value.id}*/}
-                                                          {value.value}
-                                                      </div>
-                                                  ))}
-                                              </div>
+                                              <Radio.Group onChange={(e) => onChange(e, index)}>
+                                                  <div className="grid md:grid-cols-5 gap-5">
+                                                      {item?.values.map((value: any, index: number) => (
+                                                          <Radio.Button
+                                                              key={index}
+                                                              className="font-medium h-[45px]"
+                                                              value={value.id}
+                                                          >
+                                                              {value.value}
+                                                          </Radio.Button>
+                                                      ))}
+                                                  </div>
+                                              </Radio.Group>
                                           </div>
                                       );
                                   })
                                 : ''}
+                            {variant?.stock_qty ? (
+                                <p className="text-16px font-medium text-red-500">Quantity : {variant?.stock_qty}</p>
+                            ) : (
+                                ''
+                            )}
                             <div className="my-20">
                                 <button
-                                    className="bg-primary text-16px font-medium h-[58px] text-white
-                                rounded-[30px] w-full hover-opacity transition-global"
+                                    onClick={handleAddCart}
+                                    className={`${
+                                        productD?.variations?.length == 0 || (variant && variant?.stock_qty)
+                                            ? 'bg-primary'
+                                            : 'bg-gray-200'
+                                    }       text-16px font-medium h-[58px] text-white
+                                            rounded-[30px] w-full hover-opacity transition-global`}
                                 >
-                                    Add to Bag
+                                    {loadingAddCart ? <LoadingSmall /> : 'Add to Bag'}
                                 </button>
+
                                 <button
-                                    className="text-16px font-medium h-[58px] color-primary border
-                                hover:border-[#111111] rounded-[30px] w-full
-                                transition-global mt-5 flex-row-center justify-center gap-x-2"
+                                    onClick={() =>
+                                        postWishlist({
+                                            user_id: user?.id || null,
+                                            product_id: productD.id,
+                                        })
+                                    }
+                                    className="h-[58px] color-primary border
+                                    hover:border-[#111111] rounded-[30px] w-full
+                                    transition-global mt-5 flex-row-center justify-center gap-x-2"
                                 >
-                                    Favourite <Heart />
+                                    {loadingWishlist ? (
+                                        <Spin
+                                            indicator={<LoadingOutlined spin className="text-black" />}
+                                            size="default"
+                                        />
+                                    ) : (
+                                        <div className="flex gap-x-5 items-center text-16px font-medium">
+                                            <Heart /> Favourite
+                                        </div>
+                                    )}
                                 </button>
                             </div>
                             <div>
@@ -132,7 +210,7 @@ const Detail = () => {
                                 {/*        Country/Region of Origin: Indonesia, Vietnam*/}
                                 {/*    </li>*/}
                                 {/*</ul>*/}
-                                {productD?.short_description}
+                                <div className="text-[18px] mb-20">{productD?.short_description}</div>
                                 <p className="color-primary text-16px font-medium underline">View Product Details</p>
                                 <ul>
                                     <li className="py-10 border-b">

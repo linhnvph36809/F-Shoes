@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const TOKEN = '2081020d-8fac-11ef-866e-82ec7f121ab7';
 
-const use = () => {
+const useDelivery = () => {
     const [provinces, setProvinces] = useState<any>([]);
     const [districts, setDistricts] = useState<any>([]);
     const [wards, setWards] = useState<any>([]);
@@ -116,4 +116,4 @@ const use = () => {
     };
 };
 
-export default use;
+export default useDelivery;

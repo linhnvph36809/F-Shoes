@@ -25,7 +25,7 @@ const tokenManager = new TokenManager({
             };
         }
 
-        const response = await axiosInstant.post('/auth/refresh-token', {
+        const response = await axiosInstant.post('/api/auth/refresh/token', {
             refreshToken,
         });
         const { accessToken: accessTokenNew, refreshToken: refreshTokenNew } = response.data;
