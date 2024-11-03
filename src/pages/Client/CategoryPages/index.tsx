@@ -1,52 +1,74 @@
-import { DownOutlined, FilterOutlined } from '@ant-design/icons';
-import { Button, Col, Dropdown, Menu, Row } from 'antd';
+import { Button, Dropdown, Menu } from 'antd';
 import { useState } from 'react';
-import BoxProducts from './components/BoxProduct';
+import { DownOutlined, FilterOutlined } from '@ant-design/icons';
+
 import BoxFilter from './components/Fiter';
 import Heading from './components/Heading';
+import useProduct from '../../../hooks/useProduct';
+import ProductList from './Productslist';
+import ProductFilter from './ProductsFilters';
+import { useParams } from 'react-router-dom';
+
+type SortOption = 'lowToHigh' | 'highToLow' | 'newest';
 
 const CategoryPage = () => {
     const [filtersVisible, setFiltersVisible] = useState(true);
-
+    const [filters, setFilters] = useState([]);
+    const [sortOption, setSortOption] = useState<SortOption | null>(null);
+    // const { categories, getAllCategory } = useCategory();
+    const { products: rawProducts, loading: loadingProducts } = useProduct();
+    const { slug } = useParams();
+    if (slug) console.log(slug, 'slug');
+    else console.log(1, 'k co slug');
     const toggleFilters = () => {
         setFiltersVisible(!filtersVisible);
     };
 
+    const applySorting = (option: SortOption) => {
+        setSortOption(option);
+    };
+
     const sortMenu = (
         <Menu>
-            <Menu.Item key="1">Price: Low to High</Menu.Item>
-            <Menu.Item key="2">Price: High to Low</Menu.Item>
-            <Menu.Item key="3">Newest</Menu.Item>
+            <Menu.Item key="1" onClick={() => applySorting('lowToHigh')}>
+                Price: Low to High
+            </Menu.Item>
+            <Menu.Item key="2" onClick={() => applySorting('highToLow')}>
+                Price: High to Low
+            </Menu.Item>
+            <Menu.Item key="3" onClick={() => applySorting('newest')}>
+                Newest
+            </Menu.Item>
         </Menu>
     );
+    // useEffect(() => {
+    //     getAllCategory();
+    // }, []);
+
+    const handlerFilterChange = (newFilters: any) => {
+        setFilters((prev) => ({
+            ...prev,
+            ...newFilters,
+        }));
+    };
 
     return (
-        <div className="container">
-            {/* Page Heading */}
-            <div
-                className="sticky-heading"
-                style={{
-                    marginTop: '20px',
-                    marginBottom: '20px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                }}
-            >
+        <div className="container mx-auto py-6">
+            <div className="flex justify-between items-center mb-5">
                 <Heading title="New (500)" />
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="flex items-center space-x-4">
                     <Button icon={<FilterOutlined />} onClick={toggleFilters}>
                         {filtersVisible ? 'Hide Filters' : 'Show Filters'}
                     </Button>
                     <Dropdown overlay={sortMenu} trigger={['click']}>
-                        <Button style={{ marginLeft: '8px' }}>
+                        <Button>
                             Sort By <DownOutlined />
                         </Button>
                     </Dropdown>
                 </div>
             </div>
 
-            <div style={{ display: 'flex' }}>
+            <div className="flex">
                 {/* Left Sidebar - Filter Section */}
                 {filtersVisible && (
                     <div
@@ -61,59 +83,27 @@ const CategoryPage = () => {
                             overflowY: 'auto',
                         }}
                     >
-                        {[
-                            'Shoes',
-                            'Sports Bras',
-                            'Tops & T-Shirts',
-                            'Hoodies & Sweatshirts',
-                            'Jackets',
-                            'Trousers & Tights',
-                            'Shorts',
-                            'Jumpsuits & Rompers',
-                            'Skirts & Dresses',
-                            'Socks',
-                            'Accessories & Equipment',
-                        ].map((category, index) => (
+                        {/* {categories.map((category, index) => (
                             <a
                                 key={index}
                                 href="#"
-                                style={{
-                                    display: 'block',
-                                    fontSize: '16px',
-                                    margin: '10px 0',
-                                    fontWeight: 'bold',
-                                }}
+                                className="block text-16px font-bold my-2"
+                                onClick={() => navigate(`/category/${category.id}`)}
                             >
-                                {category}
+                                {category.name}
                             </a>
-                        ))}
-                        <div style={{ display: 'block', fontSize: '16px', marginRight: '20px' }}>
-                            <BoxFilter />
-                        </div>
-                        <div style={{ display: 'block', fontSize: '16px', marginRight: '20px' }}>
+                        ))} */}
+                        <ProductFilter filters={filters} onChange={handlerFilterChange} />
+
+                        <div className="mt-4">
                             <BoxFilter />
                         </div>
                     </div>
                 )}
 
-                {/* Right Content - Product Boxes */}
-                <div style={{ flex: 1, width: '1092px' }}>
-                    <Row gutter={[16, 16]}>
-                        {Array(100)
-                            .fill(0)
-                            .map((_, index) => (
-                                <Col span={8} key={index}>
-                                    <BoxProducts
-                                        imageUrl="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/7d93a817-f6c4-4df1-b596-f0498c3d24e8/NIKE+CORTEZ+TXT.png"
-                                        category="Just In"
-                                        productName="Nike Dunk Low Premium"
-                                        shoeType="Women's Shoes"
-                                        colorCount={1}
-                                        price="3,898,000"
-                                    />
-                                </Col>
-                            ))}
-                    </Row>
+                {/* Right Content - Product List */}
+                <div className="flex-1">
+                    <ProductList products={rawProducts} loading={loadingProducts} sortOption={sortOption} />
                 </div>
             </div>
         </div>

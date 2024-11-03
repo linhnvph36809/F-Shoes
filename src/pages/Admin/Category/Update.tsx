@@ -16,17 +16,34 @@ import ButtonPrimary from '../../../components/Button';
 
 const UpdateCategory = () => {
     const { id } = useParams<{ id: string }>();
-    const { categories, mainCategories, loading, putCategory, addProductsToCategory } = useCategory();
+    const { categories, mainCategories, loading, putCategory, addProductsToCategory, deleteProductFromCategory } =
+        useCategory();
     const [initialValues, setInitialValues] = useState<ICategory | null>(null);
     const [categoryId, setCategoryId] = useState<string | number | null>(null);
     const [products, setProducts] = useState<any[]>([]);
+
     const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
-    const { deleteProduct, products: allProducts } = useProduct();
+    const { products: allProducts } = useProduct();
 
-    const handleDeleteProduct = (id: string | number) => {
-        if (confirm('Are you sure you want to delete this product')) deleteProduct(id);
+    const handleDeleteProduct = async (productId: string | number) => {
+        if (confirm('Are you sure you want to delete this product?')) {
+            try {
+                const result = await deleteProductFromCategory(categoryId, [productId]);
+
+                if (result.success) {
+                    // Cập nhật danh sách sản phẩm ngay sau khi xóa thành công
+                    setProducts((prevProducts) =>
+                        prevProducts ? prevProducts.filter((product) => product.id !== productId) : [],
+                    );
+                    message.success(result.message);
+                } else {
+                    message.error(result.message);
+                }
+            } catch (error) {
+                message.error('Failed to delete product. Please try again.');
+            }
+        }
     };
-
     const handleAddProducts = async () => {
         try {
             const result = await addProductsToCategory(id, selectedProducts, allProducts);
