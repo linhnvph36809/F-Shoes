@@ -88,6 +88,7 @@ const Detail = () => {
             setVariant(results);
         }
     }, [idVariants, products]);
+    console.log(productD);
     return (
         <>
             {loading ? (

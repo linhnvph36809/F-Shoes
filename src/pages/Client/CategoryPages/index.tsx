@@ -1,56 +1,92 @@
 import { Button, Dropdown, Menu } from 'antd';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { DownOutlined, FilterOutlined } from '@ant-design/icons';
 
 import BoxFilter from './components/Fiter';
 import Heading from './components/Heading';
 import useProduct from '../../../hooks/useProduct';
 import ProductList from './Productslist';
-import ProductFilter from './ProductsFilters';
-import { useParams } from 'react-router-dom';
+import {Link, useParams, useSearchParams} from 'react-router-dom';
+import {IProduct} from "../../../interfaces/IProduct.ts";
+import FilterByCategory from "./components/Fiter/FilterByCategory.tsx";
+import {tokenManagerInstance} from "../../../api";
+import {ICategory} from "../../../interfaces/ICategory.ts";
+import useCategory from "../../../hooks/useCategory.tsx";
 
-type SortOption = 'lowToHigh' | 'highToLow' | 'newest';
+const sortKeysArray = [
+    {
+        key: "lowToHigh",
+        name: "Low To High",
+    },
+    {
+        key: "highToLow",
+        name: "High To Low ",
+    },
+    {
+        key: "newest",
+        name: "Newest",
+    }
+];
 
 const CategoryPage = () => {
     const [filtersVisible, setFiltersVisible] = useState(true);
-    const [filters, setFilters] = useState([]);
-    const [sortOption, setSortOption] = useState<SortOption | null>(null);
-    // const { categories, getAllCategory } = useCategory();
+
     const { products: rawProducts, loading: loadingProducts } = useProduct();
     const { slug } = useParams();
-    if (slug) console.log(slug, 'slug');
-    else console.log(1, 'k co slug');
+    const [searchParams] = useSearchParams();
+    const sortOption = searchParams.get("sort");
+    let listProducts:IProduct[]|[] = rawProducts;
+
+    const {categories } = useCategory();
+
+
+    const listCategories:ICategory[]|[] = categories;
+    const [productsByCategory, setProductsByCategory] = useState<IProduct[] | []>([]);
+
+    let id = '';
+    if (slug !== undefined){
+        const index = slug.lastIndexOf('.');
+        id = slug.substring(index + 1);
+    }
+    useEffect(() => {
+        const getProductByCategoryById = async (id: number | string) => {
+            try {
+                const { data } = await tokenManagerInstance('get', `api/products/category/${id}`);
+                setProductsByCategory(data.products);
+                console.log(data.products);
+            } catch (error) {
+                console.log(error);
+                return [];
+
+            }
+        };
+        getProductByCategoryById(id);
+    }, [id]);
+    if(productsByCategory && productsByCategory.length > 0){
+        listProducts = productsByCategory;
+    }
     const toggleFilters = () => {
         setFiltersVisible(!filtersVisible);
     };
 
-    const applySorting = (option: SortOption) => {
-        setSortOption(option);
-    };
+
 
     const sortMenu = (
         <Menu>
-            <Menu.Item key="1" onClick={() => applySorting('lowToHigh')}>
-                Price: Low to High
-            </Menu.Item>
-            <Menu.Item key="2" onClick={() => applySorting('highToLow')}>
-                Price: High to Low
-            </Menu.Item>
-            <Menu.Item key="3" onClick={() => applySorting('newest')}>
-                Newest
-            </Menu.Item>
+            {
+                sortKeysArray.map((item,index) => (
+                    <Menu.Item key={index} >
+                        <Link to={`?sort=${item.key}`}> Price: {item.name}</Link>
+                    </Menu.Item>
+                ))
+            }
+
+
         </Menu>
     );
-    // useEffect(() => {
-    //     getAllCategory();
-    // }, []);
 
-    const handlerFilterChange = (newFilters: any) => {
-        setFilters((prev) => ({
-            ...prev,
-            ...newFilters,
-        }));
-    };
+
+
 
     return (
         <div className="container mx-auto py-6">
@@ -93,8 +129,8 @@ const CategoryPage = () => {
                                 {category.name}
                             </a>
                         ))} */}
-                        <ProductFilter filters={filters} onChange={handlerFilterChange} />
 
+                        <FilterByCategory categories={listCategories}/>
                         <div className="mt-4">
                             <BoxFilter />
                         </div>
@@ -103,7 +139,12 @@ const CategoryPage = () => {
 
                 {/* Right Content - Product List */}
                 <div className="flex-1">
-                    <ProductList products={rawProducts} loading={loadingProducts} sortOption={sortOption} />
+                    {
+                        (slug && productsByCategory.length === 0) &&
+                        <p className="text-center text-xl my-4 font-bold text-gray-400">There are too few products in this
+                            category! Please check out products in other categories below.</p>
+                    }
+                    <ProductList products={listProducts} loading={loadingProducts} sortOption={sortOption}/>
                 </div>
             </div>
         </div>
