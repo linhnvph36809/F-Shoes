@@ -2,7 +2,7 @@ import { Button, Dropdown, Menu } from 'antd';
 import {useEffect, useState} from 'react';
 import { DownOutlined, FilterOutlined } from '@ant-design/icons';
 
-import BoxFilter from './components/Fiter';
+
 import Heading from './components/Heading';
 import useProduct from '../../../hooks/useProduct';
 import ProductList from './Productslist';
@@ -25,6 +25,10 @@ const sortKeysArray = [
     {
         key: "newest",
         name: "Newest",
+    },
+    {
+        key: "bestSelling",
+        name: "Best Selling",
     }
 ];
 
@@ -76,7 +80,7 @@ const CategoryPage = () => {
             {
                 sortKeysArray.map((item,index) => (
                     <Menu.Item key={index} >
-                        <Link to={`?sort=${item.key}`}> Price: {item.name}</Link>
+                        <Link to={`?sort=${item.key}`}> Sort by {item.name}</Link>
                     </Menu.Item>
                 ))
             }
