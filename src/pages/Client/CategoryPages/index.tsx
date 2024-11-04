@@ -91,7 +91,7 @@ const CategoryPage = () => {
     return (
         <div className="container mx-auto py-6">
             <div className="flex justify-between items-center mb-5">
-                <Heading title="New (500)" />
+                <Heading title="New" />
                 <div className="flex items-center space-x-4">
                     <Button icon={<FilterOutlined />} onClick={toggleFilters}>
                         {filtersVisible ? 'Hide Filters' : 'Show Filters'}
@@ -132,7 +132,7 @@ const CategoryPage = () => {
 
                         <FilterByCategory categories={listCategories}/>
                         <div className="mt-4">
-                            <BoxFilter />
+                            {/*<BoxFilter />*/}
                         </div>
                     </div>
                 )}
