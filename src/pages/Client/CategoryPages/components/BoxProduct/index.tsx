@@ -1,38 +1,39 @@
+import { ICategory } from '../../../../../interfaces/ICategory';
 
 const BoxProducts = ({
-    category,
+    categories,
     imageUrl,
     productName,
-    shoeType,
-    colorCount,
     price,
+    price_sale,
 }: {
-    category: string;
-    path?: string;
+    categories: any;
     imageUrl: string;
     productName: string;
-    shoeType: string;
-    colorCount: number;
-    price: string;
+    price: number;
+    price_sale: number;
 }) => {
     return (
-        <div className="product-box  ">
+        <div className="product-box">
             <div className="text-center mb-4">
-                <img src={imageUrl} alt={productName} className="w-full h-auto object-cover rounded-md mx-auto" />
+                <img src={imageUrl} alt={productName} className="w-full h-[390px] object-cover rounded-md mx-auto" />
             </div>
             <div className="text-left">
-                <p className="text-[18px] color-brown font-medium">{category}</p>
-                <p className="text-[18px] color-primary font-medium mb-2">{productName}</p>
-                <p className="text-[18px] color-gray font-medium mb-2">{shoeType}</p>
-                <p className="text-[18px] color-gray font-medium mb-2">{colorCount} Colors</p>
-                <p className="text-[18px] color-primary font-bold mb-4">{price} đ</p>
+                <p className="text-[18px] color-brown font-medium">{productName}</p>
+                <p className="text-[18px] color-gray font-medium mb-2">
+                    {categories.map((category: ICategory) => category.name).join(', ')}
+                </p>
+                <div className="mb-4">
+                    {price_sale ? (
+                        <>
+                            <span className="text-[18px] color-primary font-medium mr-2">{price_sale}đ</span>
+                            <span className="text-[14px] color-gray font-medium line-through mr-2">{price}đ</span>
+                        </>
+                    ) : (
+                        <span className="text-[18px] color-primary font">{price} đ</span>
+                    )}
+                </div>
             </div>
-            {/* <a
-                href={path}
-                className="block px-8 py-2 bg-primary text-white font-medium text-[15px] rounded-[30px] hover:opacity-60 mt-4"
-            >
-                Shop Now
-            </a> */}
         </div>
     );
 };

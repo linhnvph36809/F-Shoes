@@ -4,10 +4,11 @@ import { tokenManagerInstance } from '../api';
 import { PATH_LIST_CATEGORY } from '../constants';
 import { ICategory } from '../interfaces/ICategory';
 
-const API_CATEGORY = '/api/category';
+export const API_CATEGORY = '/api/category';
 
 const useCategory = () => {
     const [categories, setCategories] = useState<ICategory[]>([]);
+    const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [mainCategories, setMainCategoires] = useState<ICategory[]>([]);
     const navigate = useNavigate();
@@ -103,6 +104,39 @@ const useCategory = () => {
             throw error;
         }
     };
+    const deleteProductFromCategory = async (categoryId: any, productIds: (string | number)[]) => {
+        try {
+            setLoading(true);
+            const response = await tokenManagerInstance('delete', `${API_CATEGORY}/${categoryId}/products`, {
+                data: { products: productIds },
+            });
+
+            if (response.status === 200 || response.status === 204) {
+                console.log('Products deleted successfully:', response.data);
+                return { success: true, message: 'Products deleted successfully!' };
+            } else {
+                console.warn('Unexpected response status:', response.status);
+                return { success: false, message: 'Unexpected response status' };
+            }
+        } catch (error) {
+            console.error('Failed to delete products from category:', error);
+            return { success: false, message: 'Failed to delete products. Please try again.' };
+        } finally {
+            setLoading(false);
+        }
+    };
+    const getCategoryById = async (id: number | string) => {
+        try {
+            setLoading(true);
+            const { data } = await tokenManagerInstance('get', `${API_CATEGORY}/${id}`);
+            return data.category; // Assuming the response has a `category` field
+        } catch (error) {
+            console.error('Failed to fetch category:', error);
+            throw error;
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         getAllCategory();
@@ -111,13 +145,17 @@ const useCategory = () => {
 
     return {
         categories,
+        setProducts,
+        products,
         loading,
         mainCategories,
         getAllCategory,
+        deleteProductFromCategory,
         deleteCategory,
         postCategory,
         putCategory,
-        addProductsToCategory, // Expose the new function
+        getCategoryById,
+        addProductsToCategory,
     };
 };
 

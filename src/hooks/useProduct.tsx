@@ -12,7 +12,6 @@ const useProduct = () => {
     const [product, setProduct] = useState<IProduct | undefined>();
     const [loading, setLoading] = useState<boolean>(false);
 
-
     const navigate = useNavigate();
     const { slug } = useParams();
 
@@ -28,7 +27,7 @@ const useProduct = () => {
             setLoading(true);
             const {
                 data: { data },
-            } = await tokenManagerInstance('get', API_PRODUCT + '?include=images,variations');
+            } = await tokenManagerInstance('get', API_PRODUCT + '?include=images,categories,sale_price,variations');
             setProducts(data);
         } catch (error) {
             console.log(error);
@@ -48,8 +47,6 @@ const useProduct = () => {
             setLoading(false);
         }
     };
-
-
 
     const deleteProduct = async (id?: string | number) => {
         try {
@@ -90,8 +87,9 @@ const useProduct = () => {
     useEffect(() => {
         getAllProduct();
 
-
-        if (id) {getOneProduct();}
+        if (id) {
+            getOneProduct();
+        }
     }, [id]);
 
     return {
@@ -99,8 +97,10 @@ const useProduct = () => {
         products,
         loading,
         postProduct,
+        getAllProduct,
         putProduct,
         deleteProduct,
+        getOneProduct,
     };
 };
 

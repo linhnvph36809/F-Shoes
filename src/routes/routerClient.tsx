@@ -24,7 +24,7 @@ const routerClient = [
                 element: <Detail />,
             },
             {
-                path: '/category',
+                path: '/category/:slug?',
                 element: <CategoryPage />,
             },
             {
@@ -37,7 +37,11 @@ const routerClient = [
             },
             {
                 path: '/profile',
-                element: <ProfilePage />,
+                element: (
+                    <PrivateRoute>
+                        <ProfilePage />
+                    </PrivateRoute>
+                ),
             },
             {
                 path: '/order',
