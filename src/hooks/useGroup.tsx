@@ -1,63 +1,71 @@
 import { useEffect, useState } from 'react';
 import { message } from 'antd';
+
 import { tokenManagerInstance } from '../api';
-
-
-export interface IGroup {
-    id: string;
-    groupName: string;
-    permissions?: string;  
-    
-}
-
+import { IGroup } from '../interfaces/IGroup';
+import { useNavigate } from 'react-router-dom';
 
 const API_GROUP = '/api/groups';
 
 const useGroups = () => {
     const [groups, setGroups] = useState<IGroup[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     // Lấy tất cả các nhóm
     const getAllGroups = async () => {
         try {
-            setLoading(true);
-            const {
-                data: { data },
-            } = await tokenManagerInstance('get', API_GROUP);
+            const { data } = await tokenManagerInstance('get', API_GROUP);
             setGroups(data);
         } catch (error) {
             console.error(error);
-            message.error('Lỗi khi tải dữ liệu nhóm!');
-        } finally {
-            setLoading(false);
+        }
+    };
+
+    const getOneGroup = async (id: string | number) => {
+        try {
+            const { data } = await tokenManagerInstance('get', API_GROUP + `/${id}`);
+            return data;
+        } catch (error) {
+            console.error(error);
+            navigate('/admin/groups');
         }
     };
 
     // Xóa nhóm
     const deleteGroup = async (id: string | number) => {
         try {
-            setLoading(true);
-            await tokenManagerInstance('delete', `${API_GROUP}/${id}`); // Thêm '/' vào trước id
-            message.success('Xóa nhóm thành công!');
-            getAllGroups(); // Cập nhật lại danh sách nhóm sau khi xóa
+            setLoadingDelete(true);
+            tokenManagerInstance('delete', `${API_GROUP}/forceDelete/${id}`); // Thêm '/' vào trước id
+            getAllGroups();
         } catch (error) {
             console.error(error);
-            message.error('Lỗi khi xóa nhóm!');
+        } finally {
+            setLoadingDelete(false);
+        }
+    };
+
+    // Thêm nhóm mới
+    const postGroup = async (groupName: { group_name: string }) => {
+        try {
+            setLoading(true);
+            tokenManagerInstance('post', API_GROUP, groupName);
+            getAllGroups();
+        } catch (error) {
+            console.error(error);
         } finally {
             setLoading(false);
         }
     };
 
-    // Thêm nhóm mới
-    const postGroup = async (group: Omit<IGroup, 'key'>) => {
+    const patchGroup = async (id: string | number, group: { group_name: string; permissions: string }) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('post', API_GROUP, { group_name: group.groupName });
-            message.success('Thêm nhóm thành công!');
-            getAllGroups(); // Cập nhật lại danh sách nhóm sau khi thêm
+            await tokenManagerInstance('patch', API_GROUP + `/${id}`, group);
+            navigate('/admin/groups/');
         } catch (error) {
             console.error(error);
-            message.error('Lỗi khi thêm nhóm mới!');
         } finally {
             setLoading(false);
         }
@@ -85,9 +93,12 @@ const useGroups = () => {
     return {
         groups,
         loading,
+        loadingDelete,
         deleteGroup,
         postGroup,
-        updateGroup, 
+        updateGroup,
+        getOneGroup,
+        patchGroup,
     };
 };
 

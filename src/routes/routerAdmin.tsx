@@ -18,6 +18,8 @@ import Addorder from '../pages/Admin/Oder/AddOrder';
 import UpdateOrder from '../pages/Admin/Oder/UpdateOrder';
 import LoginAdmin from '../pages/Admin/Login';
 import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
+import ListGroups from '../pages/Admin/Groups/ListGroup';
+import Authorization from '../pages/Admin/Groups/Authorization';
 
 const routerAdmin = [
     {
@@ -96,6 +98,14 @@ const routerAdmin = [
                 path: 'orderupdate/:id',
                 element: <UpdateOrder />,
             },
+            {
+                path: 'groups',
+                element: <ListGroups />,
+            },
+            {
+                path: 'permissions/:id',
+                element: <Authorization />,
+            }
         ],
     },
     {

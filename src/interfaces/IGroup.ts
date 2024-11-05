@@ -1,6 +1,6 @@
-export interface IImage {
-    key: string;
-    groupName: string;
-    groupParent: string;
-    createdAt: string;
+export interface IGroup {
+    id?: string | number;
+    group_name: string;
+    permissions?: string;
+    deleted_at: string | null;
 }

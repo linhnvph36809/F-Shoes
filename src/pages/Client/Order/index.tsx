@@ -13,6 +13,7 @@ import LoadingSmall from '../../../components/Loading/LoadingSmall';
 import { formatPrice } from '../../../utils';
 import useOnlinePayment from '../../../hooks/useOnlinePayment';
 import LoadingPage from '../../../components/Loading/LoadingPage';
+import useCookiesConfig from '../../../hooks/useCookiesConfig';
 const { Title, Text } = Typography;
 
 const Order = () => {
@@ -21,11 +22,13 @@ const Order = () => {
     const { loading: loadingVoucher, voucher, postVoucher } = useVoucher();
     const { loading: loadingCheckOut, postVNPAY, postOrder } = useOnlinePayment();
     const { user } = useContextGlobal();
+    const { handleSetCookie } = useCookiesConfig('order');
 
     const [province, setProvince] = useState<any>('');
     const [districtId, setDistrictId] = useState<number | null>(null);
     const [wardCode, setWardCode] = useState<string | null>(null);
     const [code, setCode] = useState<string>('');
+    console.log(carts);
 
     const handleCityChange = (cityId: number) => {
         getAllDistrict(cityId);
@@ -103,10 +106,14 @@ const Order = () => {
                 : handleTotalPrice + fee.total
             : handleTotalPrice;
 
+        console.log(carts);
+
         const order_details = carts.map((cart: any) => {
             if (cart?.product_variation) {
                 return {
                     product_variation_id: cart.product_variation.id,
+                    product_image: cart?.product_variation?.product.image_url,
+                    product_name: cart?.product_variation?.name,
                     product_id: null,
                     quantity: cart.quantity,
                     price: +cart.product_variation.price,
@@ -115,6 +122,8 @@ const Order = () => {
             } else if (cart?.product) {
                 return {
                     product_variation_id: null,
+                    product_image: cart.product.image_url,
+                    product_name: cart.product.name,
                     product_id: cart.product.id,
                     quantity: cart.quantity,
                     price: +cart.product.price,
@@ -144,6 +153,12 @@ const Order = () => {
             order_details,
             amount_collected: value.payment_method !== 'cash on delivery' ? total_amount : 0,
         };
+
+        handleSetCookie(
+            'order',
+            { voucher_cost: (handleTotalPrice * voucher.discount) / 100, ...newValues },
+            new Date(Date.now() + 20 * 60 * 1000),
+        );
 
         if (value.payment_method == 'cash on delivery') {
             postOrder(newValues);
@@ -468,7 +483,7 @@ const Order = () => {
                                         <div>
                                             <Form.Item
                                                 name="payment_method"
-                                                className='mb-5'
+                                                className="mb-5"
                                                 rules={[
                                                     {
                                                         required: true,

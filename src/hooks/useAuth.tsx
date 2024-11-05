@@ -4,6 +4,7 @@ import { tokenManagerInstance } from '../api';
 import { useNavigate } from 'react-router-dom';
 import useCookiesConfig from './useCookiesConfig';
 import { COOKIE_USER } from '../constants';
+import { useContextGlobal } from '../contexts';
 
 const API_CHECK_EMAIL = '/api/check/email';
 
@@ -11,7 +12,8 @@ const useAuth = () => {
     const [page, setPage] = useState<string>('');
     const [user, setUser] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const { handleSetCookie } = useCookiesConfig(COOKIE_USER);
+    const { handleSetCookie, removeCookie } = useCookiesConfig(COOKIE_USER);
+    const { setUser: resetUser } = useContextGlobal();
 
     const navigate = useNavigate();
 
@@ -48,6 +50,22 @@ const useAuth = () => {
         } catch (error) {
             alert('account or password is incorrect');
             return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const logout = async (user?: { email: string; password: string }) => {
+        try {
+            setLoading(true);
+            // const { data } = await tokenManagerInstance('post', `/api/logout`, user);
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            removeCookie('userName');
+            removeCookie('userId');
+            navigate('/');
+        } catch (error) {
+            console.log(error);
         } finally {
             setLoading(false);
         }
@@ -101,6 +119,7 @@ const useAuth = () => {
         login,
         loginAdmin,
         register,
+        logout,
     };
 };
 
