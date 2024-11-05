@@ -1,61 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import useCategory from '../../../../../hooks/useCategory';
 import { ICategory } from '../../../../../interfaces/ICategory';
-
-interface FilterByCategoryProps {
-    onChange?: (categori: ICategory) => void;
+import {Link} from "react-router-dom";
+interface Props{
+    categories: ICategory[];
 }
 
-const FilterByCategory: React.FC<FilterByCategoryProps> = ({ onChange }) => {
-    const [categoryList, setCategoryList] = useState<ICategory[]>([]);
-    const { categories, getAllCategory, getCategoryById } = useCategory();
-    const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(null);
+const FilterByCategory:React.FC<Props>= ({categories}) => {
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const categori = await getAllCategory();
-                setCategoryList(categoryList);
-                console.log({ categori });
-            } catch (error) {
-                console.error('Failed to fetch categories:', error);
-            }
-        };
-        fetchCategories();
-    }, []);
+    if(!categories || categories.length === 0){
+        return (
+            <div>
+                <ul>
 
-    const handleCategoryClick = async (category: ICategory) => {
-        try {
-            const categoryDetails = await getCategoryById(category.id);
-            setSelectedCategory(categoryDetails);
-            if (onChange) onChange(categoryDetails);
-        } catch (error) {
-            console.error('Failed to fetch category details:', error);
-        }
-    };
+                </ul>
 
+            </div>
+        )
+    }
     return (
         <div>
             <ul>
                 {categories.map((category) => (
-                    <a
+                    <Link
                         key={category.id}
-                        href={`/category/${category.slug}`}
-                        onClick={() => handleCategoryClick(category)}
+                        to={`/category/${category.slug}`}
                         className="block text-20px font-medium my-2"
                     >
                         {category.name}
-                    </a>
+                    </Link>
                 ))}
             </ul>
-            {selectedCategory && (
-                <div>
-                    {/* <h2>Category Details:</h2>
-                    <p>ID: {selectedCategory.id}</p>
-                    <p>Name: {selectedCategory.name}</p> */}
-                    {/* Add more fields as necessary */}
-                </div>
-            )}
+
         </div>
     );
 };
