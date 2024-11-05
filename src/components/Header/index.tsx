@@ -1,6 +1,6 @@
-import { Input } from 'antd';
+import { Dropdown, Input, Menu } from 'antd';
 import { Link } from 'react-router-dom';
-import { Heart, Menu, Search, ShoppingBag } from 'lucide-react';
+import { Heart, Menu as MenuLucide, Search, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import HeaderCategory from './HeaderCategory.tsx';
@@ -9,6 +9,8 @@ import { tokenManagerInstance } from '../../api';
 import { ICategory } from '../../interfaces/ICategory.ts';
 import useCookiesConfig from '../../hooks/useCookiesConfig.tsx';
 import { COOKIE_USER } from '../../constants/index.ts';
+import useAuth from '../../hooks/useAuth.tsx';
+import { useContextGlobal } from '../../contexts/index.tsx';
 
 const Header = () => {
     const [showMenu, setShowMenu] = useState<boolean>(false);
@@ -19,7 +21,9 @@ const Header = () => {
     });
     const [loading, setLoading] = useState<boolean>(false);
     const [headCategories, setHeadCategories] = useState<ICategory[][]>([]);
-    const { cookies } = useCookiesConfig(COOKIE_USER);
+    const { logout } = useAuth();
+    const { cookies, removeCookie } = useCookiesConfig(COOKIE_USER);
+    const { setUser } = useContextGlobal();
 
     const userName = cookies?.userName;
 
@@ -86,12 +90,30 @@ const Header = () => {
                             <li className="color-primary font-medium">|</li>
                             <li>
                                 {userName ? (
-                                    <Link
-                                        to="/profile"
-                                        className="text-[11px] color-primary font-medium hover:opacity-70"
+                                    <Dropdown
+                                        className="hover:cursor-pointer"
+                                        overlay={
+                                            <Menu className="color-primary w-[80px] font-medium">
+                                                <Menu.Item key="1">
+                                                    <Link to="/profile">Profile</Link>
+                                                </Menu.Item>
+                                                <Menu.Item
+                                                    key="2"
+                                                    className="hover:cursor-pointer"
+                                                    onClick={async () => {
+                                                        logout();
+                                                    }}
+                                                >
+                                                    Logout
+                                                </Menu.Item>
+                                            </Menu>
+                                        }
+                                        trigger={['click']}
                                     >
-                                        {userName}
-                                    </Link>
+                                        <p className="text-[11px] color-primary font-medium hover:opacity-70">
+                                            {userName}
+                                        </p>
+                                    </Dropdown>
                                 ) : (
                                     <Link
                                         to="/authentication"
@@ -220,7 +242,7 @@ const Header = () => {
                                 </Link>
                             </div>
                             <div className="sm:w-[28px] md:hidden md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
-                                <Menu className="color-primary w-[24px]" />
+                                <MenuLucide className="color-primary w-[24px]" />
                             </div>
                         </div>
                     </div>

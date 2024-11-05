@@ -16,11 +16,19 @@ import ListSale from '../pages/Admin/Discount/ListSale';
 import OrderList from '../pages/Admin/Oder/Order List';
 import Addorder from '../pages/Admin/Oder/AddOrder';
 import UpdateOrder from '../pages/Admin/Oder/UpdateOrder';
+import LoginAdmin from '../pages/Admin/Login';
+import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
+import ListGroups from '../pages/Admin/Groups/ListGroup';
+import Authorization from '../pages/Admin/Groups/Authorization';
 
 const routerAdmin = [
     {
         path: '/admin', // Đường dẫn chính cho admin
-        element: <LayoutAdmin />, // Layout tổng thể cho phần admin
+        element: (
+            <PrivateRouteAdmin>
+                <LayoutAdmin />
+            </PrivateRouteAdmin>
+        ), // Layout tổng thể cho phần admin
         children: [
             {
                 path: '', // /admin
@@ -90,7 +98,19 @@ const routerAdmin = [
                 path: 'orderupdate/:id',
                 element: <UpdateOrder />,
             },
+            {
+                path: 'groups',
+                element: <ListGroups />,
+            },
+            {
+                path: 'permissions/:id',
+                element: <Authorization />,
+            }
         ],
+    },
+    {
+        path: 'login-admin',
+        element: <LoginAdmin />,
     },
 ];
 
