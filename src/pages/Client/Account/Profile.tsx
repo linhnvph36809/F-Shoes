@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Heading from './Heading';
 import { SwiperSlide } from 'swiper/react';
 import SlidesScroll from './../../../components/SlidesScroll/index';
@@ -15,9 +14,6 @@ const ProfilePage = () => {
     const { cookies } = useCookiesConfig(COOKIE_USER);
 
     const userName = cookies?.userName;
-    const [activeMenu, setActiveMenu] = useState('Profile');
-    //const [activeInterest, setActiveInterest] = useState('All');
-
 
     const {currentUser,favoriteProducts,loading} = useProfile();
 
@@ -41,19 +37,13 @@ const ProfilePage = () => {
     if(favoriteProducts){
         listFavoriteProducts = favoriteProducts;
     }
-    const handleMenuClick = (menu:any) => {
-        setActiveMenu(menu);
-    };
 
+    //const [activeInterest, setActiveInterest] = useState('All');
     // const handleInterestClick = (interest:any) => {
     //     setActiveInterest(interest);
     // };
 
-    const getMenuClass = (menu:any) => {
-        return activeMenu === menu
-            ? 'inline-block py-7 relative text-[16px] font-medium text-gray-500'
-            : 'inline-block py-7 relative text-[16px] font-medium color-primary after:transition-all after:duration-300 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px] after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu';
-    };
+
 
     // const getInterestButtonClass = (interest:any) => {
     //     return activeInterest === interest
@@ -62,42 +52,11 @@ const ProfilePage = () => {
     // };
 
     return (
-        <div className="min-h-screen bg-white flex flex-col items-center">
-            {/* Navbar */}
-            <nav className="w-full bg-white p-4 flex justify-center items-center">
-                <ul className="flex space-x-6 items-center">
-                    <li className={getMenuClass('Profile')}>
-                        <a href="#profile" onClick={() => handleMenuClick('Profile')}>
-                            Profile
-                        </a>
-                    </li>
-                    <li className={getMenuClass('Inbox')}>
-                        <a href="#inbox" onClick={() => handleMenuClick('Inbox')}>
-                            Inbox
-                        </a>
-                    </li>
-                    <li className={getMenuClass('Orders')}>
-                        <a href="#orders" onClick={() => handleMenuClick('Orders')}>
-                            Orders
-                        </a>
-                    </li>
-                    <li className={getMenuClass('Favourites')}>
-                        <a href="#favourites" onClick={() => handleMenuClick('Favourites')}>
-                            Favourites
-                        </a>
-                    </li>
-                    <li className={getMenuClass('Settings')}>
-                        <a href="#settings" onClick={() => handleMenuClick('Settings')}>
-                            Settings
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-
+        <>
             {/* Profile Info - Full Width */}
             <div className="bg-white w-full p-6 mt-0 rounded-lg shadow-md relative">
                 <div className="flex items-center">
-                    <div className="w-40 h-40 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="w-40 h-40 bg-gray-200 rounded-full ">
                         {' '}
                         {/* Thêm overflow-hidden */}
                         <img
@@ -207,7 +166,7 @@ const ProfilePage = () => {
                 {/* Member Benefits */}
                 <MemberBenefits />
             </div>
-        </div>
+        </>
     );
 };
 

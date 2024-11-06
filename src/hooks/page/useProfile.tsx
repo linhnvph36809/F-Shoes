@@ -22,7 +22,17 @@ const useProfile = () => {
             setLoading(false)
         }
     }
-
+    const changePassword = async(data:{password:string, newPassword:string}) => {
+        try {
+            setLoading(true);
+            await tokenManagerInstance('post', 'api/change-password',data);
+            alert('Add Wishlist Successfully')
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
     useEffect(() => {
         getCurrentUser();
     },[]);
@@ -30,7 +40,8 @@ const useProfile = () => {
     return {
         loading,
         currentUser,
-        favoriteProducts
+        favoriteProducts,
+        changePassword
     };
 };
 
