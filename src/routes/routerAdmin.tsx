@@ -16,6 +16,8 @@ import ListSale from '../pages/Admin/Discount/ListSale';
 import OrderList from '../pages/Admin/Oder/Order List';
 import Addorder from '../pages/Admin/Oder/AddOrder';
 import UpdateOrder from '../pages/Admin/Oder/UpdateOrder';
+import ListUser from '../pages/Admin/User/ListUser';
+import AddUser from '../pages/Admin/User/AddUser';
 
 const routerAdmin = [
     {
@@ -89,6 +91,14 @@ const routerAdmin = [
             {
                 path: 'orderupdate/:id',
                 element: <UpdateOrder />,
+            },
+            {
+                path: 'list-user',
+                element: <ListUser />,
+            },
+            {
+                path: 'add-user',
+                element: <AddUser />,
             },
         ],
     },
