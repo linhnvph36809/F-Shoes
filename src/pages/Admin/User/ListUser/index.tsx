@@ -3,11 +3,10 @@ import { Avatar, Card, Col, Row, Tag, Typography } from 'antd';
 import { SquarePen, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useUser from '../../../../hooks/useUser';
+import { IUser } from '../../../../interfaces/IUser';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import Heading from '../../components/Heading';
 import TableAdmin from '../../components/Table';
-import { ICategory } from '../../../../interfaces/ICategory';
-import { IUser } from '../../../../interfaces/IUser';
 
 const { Text } = Typography;
 

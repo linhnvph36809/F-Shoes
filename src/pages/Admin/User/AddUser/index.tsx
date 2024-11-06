@@ -1,9 +1,8 @@
 import { useCallback, useState } from 'react';
 
+import useProduct from '../../../../hooks/useProduct';
 import { IImage } from '../../../../interfaces/IImage';
 import Heading from '../../components/Heading';
-import useProduct from '../../../../hooks/useProduct';
-import FormUser from '../FormUser';
 import FormUsers from '../FormUser';
 
 const AddUser = () => {
