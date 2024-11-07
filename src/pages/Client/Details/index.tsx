@@ -1,6 +1,6 @@
 import { Radio, Spin } from 'antd';
 import { useEffect, useState } from 'react';
-import { ChevronDown, Heart, Star } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SwiperSlide } from 'swiper/react';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -17,6 +17,7 @@ import { useContextGlobal } from '../../../contexts/index.tsx';
 import LoadingSmall from '../../../components/Loading/LoadingSmall.tsx';
 import LoadingPage from '../../../components/Loading/LoadingPage.tsx';
 import useWishlist from '../../../hooks/useWishlist.tsx';
+import Reviews from './Reviews.tsx';
 
 const Detail = () => {
     const { products, loading } = useProductDetail();
@@ -211,84 +212,7 @@ const Detail = () => {
                                 {/*</ul>*/}
                                 <div className="text-[18px] mb-20">{productD?.short_description}</div>
                                 <p className="color-primary text-16px font-medium underline">View Product Details</p>
-                                <ul>
-                                    <li className="py-10 border-b">
-                                        <div
-                                            className="flex-row-center justify-between color-primary text-[18px]
-                                        font-medium"
-                                        >
-                                            Free Delivery and Returns <ChevronDown />
-                                        </div>
-                                        <div className="hidden">
-                                            <p className="color-primary text-16px my-8">
-                                                Your order of 5.000.000₫ or more gets free standard delivery.
-                                            </p>
-                                            <ul className="list-disc list-outside pl-10 my-8">
-                                                <li className="color-primary text-16px">
-                                                    Standard delivered 4-5 Business Days
-                                                </li>
-                                                <li className="color-primary text-16px">
-                                                    Express delivered 2-4 Business Days
-                                                </li>
-                                            </ul>
-                                            <p className="color-primary text-16px my-8">
-                                                Orders are processed and delivered Monday-Friday (excluding public
-                                                holidays)
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li className="py-10 border-b">
-                                        <div
-                                            className="flex-row-center justify-between color-primary text-[18px]
-                                        font-medium"
-                                        >
-                                            Reviews (112)
-                                            <div className="flex-row-center gap-x-4">
-                                                <span className="flex-row-center gap-x-1">
-                                                    <Star className="w-[16px]" />
-                                                    <Star className="w-[16px]" />
-                                                    <Star className="w-[16px]" />
-                                                    <Star className="w-[16px]" />
-                                                </span>
-                                                <ChevronDown />
-                                            </div>
-                                        </div>
-                                        <div className="">
-                                            <div className="my-8">
-                                                <div className="flex-row-center gap-x-6">
-                                                    <span className="flex gap-x-1">
-                                                        <Star className="w-[16px]" />
-                                                        <Star className="w-[16px]" />
-                                                        <Star className="w-[16px]" />
-                                                        <Star className="w-[16px]" />
-                                                    </span>
-                                                    <p className="color-primary text-16px">4.8 Stars</p>
-                                                </div>
-                                                <p className="color-primary text-16px font-medium underline mt-5">
-                                                    Write a Review
-                                                </p>
-                                                <div className="my-10">
-                                                    <p className="color-primary text-16px font-medium mb-3">Perfect</p>
-                                                    <div className="flex-row-center justify-between mb-5">
-                                                        <span className="flex gap-x-1">
-                                                            <Star className="w-[16px]" />
-                                                            <Star className="w-[16px]" />
-                                                            <Star className="w-[16px]" />
-                                                            <Star className="w-[16px]" />
-                                                        </span>
-                                                        <p className="text-16px color-gray">
-                                                            AnnaJ212608790 - 23 May 2024
-                                                        </p>
-                                                    </div>
-                                                    <p className="color-primary text-16px">
-                                                        These sandals are so cute. They're very light and airy can't be
-                                                        worn in the water but I haven't tried it myself
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                <Reviews productId={productD?.id} />
                             </div>
                         </div>
                     </div>
