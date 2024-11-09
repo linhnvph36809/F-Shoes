@@ -1,6 +1,8 @@
 import { MenuProps } from 'antd';
 import { Box, Folder, Grid2X2, House, ListOrdered, Plus, ScanBarcode, Tag, TicketPercent, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { BarChartOutlined } from '@ant-design/icons';
+
 
 export const items: MenuProps['items'] = [
     {
@@ -16,6 +18,22 @@ export const items: MenuProps['items'] = [
                 label: (
                     <Link to="list-category" className="text-[14px]">
                         List Category
+                    </Link>
+                ),
+                icon: <Grid2X2 className="w-[16px]" />,
+            },
+        ],
+    },
+
+    {
+        icon: <BarChartOutlined className="text-[14px]"/>,
+        label: 'Statistic',
+        children: [
+            {
+                key: '21',
+                label: (
+                    <Link to="statistic" className="text-[14px]">
+                        Statistic List
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -53,6 +71,7 @@ export const items: MenuProps['items'] = [
                 ),
                 icon: <ScanBarcode className="w-[16px]" />,
             },
+            
         ],
     },
     {
@@ -139,6 +158,21 @@ export const items: MenuProps['items'] = [
                 label: (
                     <Link to="groups" className="text-[14px]">
                         List Group
+                    </Link>
+                ),
+                icon: <Grid2X2 className="w-[16px]" />,
+            },
+        ],
+    },
+    {
+        icon: <Folder className="w-[18px]" />,
+        label: 'Media',
+        children: [
+            {
+                key: '21',
+                label: (
+                    <Link to="media" className="text-[14px]">
+                        List Media
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,

@@ -18,8 +18,11 @@ import Addorder from '../pages/Admin/Oder/AddOrder';
 import UpdateOrder from '../pages/Admin/Oder/UpdateOrder';
 import LoginAdmin from '../pages/Admin/Login';
 import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
-import ListGroups from '../pages/Admin/Groups/ListGroup';
+// import ListGroups from '../pages/Admin/Groups/ListGroup';
 import Authorization from '../pages/Admin/Groups/Authorization';
+import ListGroups from '../pages/Admin/Groups/listgroup';
+import Statistic from '../pages/Admin/Statistic/Statistic List';
+// import MediaLibrary from '../pages/Admin/Image/list-image';
 
 const routerAdmin = [
     {
@@ -105,7 +108,15 @@ const routerAdmin = [
             {
                 path: 'permissions/:id',
                 element: <Authorization />,
-            }
+            },
+            // {
+            //     path: 'media',
+            //     element: <MediaLibrary/>,
+            // },
+            {
+                path: 'statistic',
+                element: <Statistic/>,
+            },
         ],
     },
     {
