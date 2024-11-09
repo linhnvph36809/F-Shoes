@@ -54,7 +54,6 @@ const Statistic = () => {
         { type: 'Mobile', value: 45, color: '#60A5FA' },
         { type: 'Unknown', value: 12, color: '#0EA5E9' },
       ];
-    
       // Cấu hình biểu đồ tròn (Pie chart)
       const config = {
         appendPadding: 10,
@@ -72,7 +71,6 @@ const Statistic = () => {
         },
         interactions: [{ type: 'element-active' }],
       };
-    
       // Menu cho phần chọn thời gian
       const menuAnalytic = (
         <Menu>
@@ -80,7 +78,6 @@ const Statistic = () => {
           <Menu.Item key="2">Weekly</Menu.Item>
         </Menu>
       );
-    
       const dataDasboard = [
         {
           icon: <EyeOutlined />,
@@ -111,7 +108,6 @@ const Statistic = () => {
           positive: false,
         },
       ];
-      
   // Component thẻ chỉ số
   const DashboardCard = () => {
     return (
@@ -234,7 +230,6 @@ const Statistic = () => {
       { source: 'Vimeo', visitors: '1.5K', revenue: '$3,580', sales: 389, conversion: '2.5%', color: '#1AB7EA' },
       { source: 'Facebook', visitors: '1.2K', revenue: '$2,740', sales: 230, conversion: '1.9%', color: '#1877F2' },
     ];
-  
     return (
       <div className="bg-white p-4 rounded-lg shadow-md mb-4 w-full">
         <span className="text-black-600 font-semibold mr-2">Top Channels</span>
@@ -267,7 +262,6 @@ const Statistic = () => {
     );
   };
   // bảng Chat
-   
   const Chats = () => {
     const chatData = [
       { name: 'Devid Heilo', message: 'Hello, how are you?', time: '12 min', status: 'online', unread: 3 },
@@ -276,7 +270,6 @@ const Statistic = () => {
       { name: 'Henry Deco', message: 'Thank you so much!', time: 'Sun', status: 'online', unread: 2 },
       { name: 'Jubin Jack', message: 'I really love that!', time: 'Oct 23', status: 'offline', unread: 0 },
     ];
-  
     return (
       <div className="bg-white p-4 rounded-lg shadow-md w-full">
         <span className="text-black-600 font-semibold mr-2">Chats</span>
@@ -312,33 +305,33 @@ const Statistic = () => {
             <DashboardCard />
          </div>
     <div className="min-h-screen bg-gray-100 p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      
+
 
       <div className="col-span-1 md:col-span-2 lg:col-span-2 mt-4">
-      
+
         <RevenueChart />
       </div>
-      
+
       <div className="col-span-1 md:col-span-2 lg:col-span-2 mt-4">
-        
+
         <ProfitChart />
-        
+
       </div>
-      
+
       <div className="col-span-1 md:col-span-2 lg:col-span-2 mt-4">
-        
+
         <Analytics />
-        
+
       </div>
-       
+
       <div className="col-span-1 md:col-span-2 lg:col-span-2 mt-4">
-        
+
         <TopChannels />
         <Chats />
      </div>
-     
+
     </div>
-     
+
      </div>
   );
 };

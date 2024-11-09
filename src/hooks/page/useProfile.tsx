@@ -4,7 +4,9 @@ import {IProduct} from "../../interfaces/IProduct.ts";
 import {IUser} from "../../interfaces/IUser.ts";
 
 
+
 const useProfile = () => {
+
     const [loading, setLoading] = useState<boolean>(false);
     const [currentUser, setCurrentUser] = useState<IUser>();
     const [favoriteProducts, setFavoriteProducts] = useState<IProduct[]>([]);
@@ -30,7 +32,8 @@ const useProfile = () => {
     return {
         loading,
         currentUser,
-        favoriteProducts
+        favoriteProducts,
+
     };
 };
 

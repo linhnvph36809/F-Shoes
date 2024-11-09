@@ -2,15 +2,15 @@ import { useState } from 'react';
 
 import { tokenManagerInstance } from '../api';
 
-const API_WISHLIST = '/api/wishlist';
+const API_WISHLIST = 'api/user/add-favorite/product/';
 
 const useWishlist = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
-    const postWishlist = async (value: { user_id: string | number; product_id: any }) => {
+    const postWishlist = async (product_id:number) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('post', API_WISHLIST, value);
+            await tokenManagerInstance('post', API_WISHLIST+product_id);
             alert('Add Wishlist Successfully')
         } catch (error) {
             console.log(error);
