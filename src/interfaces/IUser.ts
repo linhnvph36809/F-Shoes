@@ -9,7 +9,12 @@ export interface IUser {
     email_verified_at: string;
     google_id: string;
     status: string;
-    profile: any;
+    profile: {
+        given_name:string,
+        family_name:string,
+        detail_address:string,
+        birth_date:any
+    };
     favoriteProducts: IProduct[];
     created_at: any;
 
