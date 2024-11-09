@@ -7,7 +7,8 @@ import LayoutAuthentication from '../pages/Client/Authtication';
 import ProfilePage from '../pages/Client/Account/Profile';
 import Order from '../pages/Client/Order';
 import PrivateRoute from '../components/PrivateRoute';
-import OrderComplete from '../pages/Client/OrderComplete';
+import OrderComplete from '../pages/Client/OrderComplete/OrderComplete';
+import OrderCashOnDelivery from '../pages/Client/OrderComplete/OrderCashOnDelivery';
 
 const routerClient = [
     {
@@ -36,7 +37,11 @@ const routerClient = [
             },
             {
                 path: '/profile',
-                element: <ProfilePage />,
+                element: (
+                    <PrivateRoute>
+                        <ProfilePage />
+                    </PrivateRoute>
+                ),
             },
             {
                 path: '/order',
@@ -49,6 +54,10 @@ const routerClient = [
             {
                 path: '/order-complete',
                 element: <OrderComplete />,
+            },
+            {
+                path: '/order-cash-on-delivery',
+                element: <OrderCashOnDelivery />,
             },
         ],
     },

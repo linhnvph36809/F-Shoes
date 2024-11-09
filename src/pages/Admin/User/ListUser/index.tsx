@@ -1,5 +1,5 @@
 import { UserOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col, Row, Tag, Typography } from 'antd';
+import { Avatar, Card, Col, message, Row, Tag, Typography } from 'antd';
 import { SquarePen, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useUser from '../../../../hooks/useUser';
@@ -14,9 +14,15 @@ const ListUser = () => {
     const { users, loading, deleteUser } = useUser();
 
     // Hàm xử lý xoá người dùng
-    const handleDeleteUser = (id: string | number) => {
+    const handleDeleteUser = async (id: string | number) => {
         if (window.confirm('Bạn có chắc chắn muốn xoá người dùng này không?')) {
-            deleteUser(id);
+            try {
+                await deleteUser(id); // Giả sử deleteUser trả về kết quả thành công hoặc lỗi
+
+                message.success('Xóa người dùng thành công!');
+            } catch (error) {
+                message.error('Đã xảy ra lỗi khi xóa người dùng. Vui lòng thử lại.');
+            }
         }
     };
 
@@ -26,9 +32,9 @@ const ListUser = () => {
             title: 'User',
             dataIndex: 'name',
             key: 'user',
-            render: (_: any, record: any) => (
+            render: (_: any, record: IUser) => (
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Avatar src={record.avatar} size={40} icon={<UserOutlined />} />
+                    <Avatar src={record.avatar_url} size={40} icon={<UserOutlined />} />
                     <div style={{ marginLeft: '10px' }}>
                         <Text strong>{record.name}</Text>
                         <br />
@@ -51,7 +57,7 @@ const ListUser = () => {
             key: 'actions',
             render: (_: any, values: IUser) => (
                 <div className="flex-row-center gap-x-5">
-                    <Link to={`/admin/update-category/${values.id}`}>
+                    <Link to={`/admin/update-user/${values.id}`}>
                         <ButtonEdit>
                             <SquarePen />
                         </ButtonEdit>

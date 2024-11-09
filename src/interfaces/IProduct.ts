@@ -12,6 +12,7 @@ export interface IProduct {
     short_description: string;
     status: boolean;
     stock_qty: number;
+    qty_sold: number;
     images: IImage[];
     categories?: ICategory[];
 }

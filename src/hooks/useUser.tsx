@@ -1,18 +1,23 @@
 import { useEffect, useState } from 'react';
 import { tokenManagerInstance } from '../api';
+import { IUser } from '../interfaces/IUser';
+import { useNavigate } from 'react-router-dom';
+import { PATH_LIST_USER } from '../constants';
 
 const API_USER = '/api/user';
 
 const useUser = () => {
-    const [users, setUsers] = useState<any[]>([]);
+    const [users, setUsers] = useState<IUser[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     // Function to fetch all users
     const getAllUser = async () => {
         try {
             setLoading(true);
             const { data } = await tokenManagerInstance('get', API_USER);
-            setUsers(data.users.data); // Assuming `users.data` contains the list of users
+            setUsers(data.users.data);
         } catch (error) {
             console.error(error);
         } finally {
@@ -20,13 +25,12 @@ const useUser = () => {
         }
     };
 
-    // Function to add a new user
-    const addUser = async (userData: any) => {
+    const addUser = async (userData: IUser) => {
         try {
             setLoading(true);
             const { data } = await tokenManagerInstance('post', API_USER, userData);
-            // Update the user list with the newly added user
-            setUsers((prevUsers) => [...prevUsers, data.user]); // Assuming API response returns the new user in `data.user`
+            navigate(PATH_LIST_USER);
+            setUsers((prevUsers) => [...prevUsers, data.user]);
         } catch (error) {
             console.error(error);
         } finally {
@@ -39,8 +43,26 @@ const useUser = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_USER}/${id}`);
-            // Update the user list after deletion
             setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Function to edit a user by ID
+    const editUser = async (id: any, userData: IUser) => {
+        try {
+            setLoading(true);
+            // Truyền userData vào lệnh PUT để cập nhật người dùng
+            const { data } = await tokenManagerInstance('put', `${API_USER}/${id}`, userData);
+
+            // Cập nhật danh sách người dùng
+            setUsers((prevUsers) => prevUsers.map((user) => (user.id === id ? { ...user, ...data.user } : user)));
+
+            // Điều hướng sau khi cập nhật thành công
+            navigate(PATH_LIST_USER);
         } catch (error) {
             console.error(error);
         } finally {
@@ -58,6 +80,7 @@ const useUser = () => {
         getAllUser,
         addUser,
         deleteUser,
+        editUser, // Return the editUser function to make it accessible in components
     };
 };
 

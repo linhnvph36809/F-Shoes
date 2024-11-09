@@ -1,5 +1,6 @@
 import React from 'react';
 import {ICategory} from "../../interfaces/ICategory.ts";
+import {Link} from "react-router-dom";
 
 
 interface IProps {
@@ -27,9 +28,9 @@ const HeaderCategory:React.FC<IProps> = ({categories}) => {
                 <ul>
                     {item.map(cat => (
                         <li key={cat.id}>
-                            <a href="#" className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
+                            <Link to={`category/${cat.slug}`}  className="inline-block text-[1.2rem] font-bold mb-4 color-gray">
                                 {cat.name}
-                            </a>
+                            </Link>
                         </li>
                     ))}
 

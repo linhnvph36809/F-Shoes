@@ -1,35 +1,31 @@
-import { useCallback, useState } from 'react';
-
-import useProduct from '../../../../hooks/useProduct';
-import { IImage } from '../../../../interfaces/IImage';
+import { message } from 'antd';
+import { useCallback } from 'react';
+import useUser from '../../../../hooks/useUser';
 import Heading from '../../components/Heading';
-import FormUsers from '../FormUser';
+import FormUser from '../FormUser';
 
 const AddUser = () => {
-    const { postProduct } = useProduct();
+    const { addUser } = useUser();
 
-    const [images, setImages] = useState<{
-        isShow: boolean;
-        images: IImage[];
-    }>({
-        isShow: false,
-        images: [],
-    });
-
-    const onFinish = useCallback(
+    const handleAddUser = useCallback(
         async (values: any) => {
-            postProduct(values);
+            try {
+                await addUser(values);
+                message.success('User added successfully');
+            } catch (error) {
+                message.error('Failed to add user');
+                console.error(error);
+            }
         },
-        [images],
+        [addUser],
     );
 
     return (
-        <>
-            <section>
-                <Heading>Add User</Heading>
-                <FormUsers setImages={setImages} images={images} onFinish={onFinish} />
-            </section>
-        </>
+        <section>
+            <Heading>Add User</Heading>
+            <FormUser onFinish={handleAddUser} />
+            {/* Include delete functionality where needed */}
+        </section>
     );
 };
 

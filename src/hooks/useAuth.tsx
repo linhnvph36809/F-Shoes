@@ -4,6 +4,7 @@ import { tokenManagerInstance } from '../api';
 import { useNavigate } from 'react-router-dom';
 import useCookiesConfig from './useCookiesConfig';
 import { COOKIE_USER } from '../constants';
+import { useContextGlobal } from '../contexts';
 
 const API_CHECK_EMAIL = '/api/check/email';
 
@@ -11,7 +12,8 @@ const useAuth = () => {
     const [page, setPage] = useState<string>('');
     const [user, setUser] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const { handleSetCookie } = useCookiesConfig(COOKIE_USER);
+    const { handleSetCookie, removeCookie } = useCookiesConfig(COOKIE_USER);
+    const { setUser: resetUser } = useContextGlobal();
 
     const navigate = useNavigate();
 
@@ -42,8 +44,45 @@ const useAuth = () => {
                 localStorage.setItem('refreshToken', data.refresh_token);
                 handleSetCookie('userName', data.user.name, new Date(Date.now() + 20 * 60 * 1000));
                 handleSetCookie('userId', data.user.id, new Date(Date.now() + 20 * 60 * 1000));
+
             }
             navigate('/');
+            return data;
+        } catch (error) {
+            alert('account or password is incorrect');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const logout = async (user?: { email: string; password: string }) => {
+        try {
+            setLoading(true);
+            // const { data } = await tokenManagerInstance('post', `/api/logout`, user);
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            removeCookie('userName');
+            removeCookie('userId');
+            navigate('/');
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loginAdmin = async (user: { email: string; password: string }) => {
+        try {
+            setLoading(true);
+            const { data } = await tokenManagerInstance('post', `/api/login`, user);
+            if (data?.access_token && data?.refresh_token) {
+                localStorage.setItem('accessToken', data.access_token);
+                localStorage.setItem('refreshToken', data.refresh_token);
+                handleSetCookie('adminName', data.user.name, new Date(Date.now() + 20 * 60 * 1000));
+                handleSetCookie('adminId', data.user.id, new Date(Date.now() + 20 * 60 * 1000));
+            }
+            navigate('/admin');
             return data;
         } catch (error) {
             alert('account or password is incorrect');
@@ -79,7 +118,9 @@ const useAuth = () => {
         loading,
         postCheckEmail,
         login,
+        loginAdmin,
         register,
+        logout,
     };
 };
 

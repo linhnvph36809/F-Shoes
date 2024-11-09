@@ -55,6 +55,7 @@ export const axiosInstant = axios.create({
 export const tokenManagerInstance = async (
     method: 'get' | 'post' | 'put' | 'delete' | 'patch',
     suffixUrl: string,
+    data: any = null,
     configs: any = {},
 ) => {
     const token = configs?.token || (await tokenManager.getToken());
@@ -66,5 +67,9 @@ export const tokenManagerInstance = async (
         },
     };
 
-    return axiosInstant[method](suffixUrl, updatedConfig);
+    if (['post', 'put', 'patch'].includes(method)) {
+        return axiosInstant[method](suffixUrl, data, updatedConfig);
+    } else {
+        return axiosInstant[method](suffixUrl, updatedConfig);
+    }
 };

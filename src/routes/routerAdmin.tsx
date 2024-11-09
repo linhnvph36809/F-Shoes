@@ -18,11 +18,20 @@ import Addorder from '../pages/Admin/Oder/AddOrder';
 import UpdateOrder from '../pages/Admin/Oder/UpdateOrder';
 import ListUser from '../pages/Admin/User/ListUser';
 import AddUser from '../pages/Admin/User/AddUser';
+import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
+import ListGroups from '../pages/Admin/Groups/listgroup';
+import Authorization from '../pages/Admin/Groups/Authorization';
+import LoginAdmin from '../pages/Admin/Login';
+import UpdateUser from '../pages/Admin/User/UpdateUser';
 
 const routerAdmin = [
     {
         path: '/admin', // Đường dẫn chính cho admin
-        element: <LayoutAdmin />, // Layout tổng thể cho phần admin
+        element: (
+            <PrivateRouteAdmin>
+                <LayoutAdmin />
+            </PrivateRouteAdmin>
+        ), // Layout tổng thể cho phần admin
         children: [
             {
                 path: '', // /admin
@@ -100,7 +109,23 @@ const routerAdmin = [
                 path: 'add-user',
                 element: <AddUser />,
             },
+            {
+                path: 'Update-user/:id',
+                element: <UpdateUser />,
+            },
+            {
+                path: 'groups',
+                element: <ListGroups />,
+            },
+            {
+                path: 'permissions/:id',
+                element: <Authorization />,
+            },
         ],
+    },
+    {
+        path: 'login-admin',
+        element: <LoginAdmin />,
     },
 ];
 
