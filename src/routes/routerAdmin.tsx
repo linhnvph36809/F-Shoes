@@ -1,27 +1,26 @@
 import LayoutAdmin from '../components/Layouts/LayoutAdmin';
+import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
 import ListCategory from '../pages/Admin/Category';
 import UpdateCategory from '../pages/Admin/Category/Update';
 import AdminDashboard from '../pages/Admin/DashboardAdmin';
-import ListProduct from '../pages/Admin/Products';
-import Attribute from '../pages/Admin/Products/Attribute';
-import UpdateProduct from '../pages/Admin/Products/UpdateProduct';
-import AddProduct from '../pages/Admin/Products/AddProduct';
-import AddVariant from '../pages/Admin/Products/AddVariant';
-import UpdateVariant from '../pages/Admin/Products/UpdateVariant';
 import Discounts from '../pages/Admin/Discount';
-import DiscountList from '../pages/Admin/Discount/ListCount';
 import AddCount from '../pages/Admin/Discount/AddCount';
 import AddSale from '../pages/Admin/Discount/AddSale';
+import DiscountList from '../pages/Admin/Discount/ListCount';
 import ListSale from '../pages/Admin/Discount/ListSale';
-import OrderList from '../pages/Admin/Oder/Order List';
-import Addorder from '../pages/Admin/Oder/AddOrder';
-import UpdateOrder from '../pages/Admin/Oder/UpdateOrder';
-import ListUser from '../pages/Admin/User/ListUser';
-import AddUser from '../pages/Admin/User/AddUser';
-import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
 import ListGroups from '../pages/Admin/Groups/listgroup';
-import Authorization from '../pages/Admin/Groups/Authorization';
 import LoginAdmin from '../pages/Admin/Login';
+import Addorder from '../pages/Admin/Oder/AddOrder';
+import OrderList from '../pages/Admin/Oder/Order List';
+import UpdateOrder from '../pages/Admin/Oder/UpdateOrder';
+import ListProduct from '../pages/Admin/Products';
+import AddProduct from '../pages/Admin/Products/AddProduct';
+import AddVariant from '../pages/Admin/Products/AddVariant';
+import Attribute from '../pages/Admin/Products/Attribute';
+import UpdateProduct from '../pages/Admin/Products/UpdateProduct';
+import UpdateVariant from '../pages/Admin/Products/UpdateVariant';
+import AddUser from '../pages/Admin/User/AddUser';
+import ListUser from '../pages/Admin/User/ListUser';
 import UpdateUser from '../pages/Admin/User/UpdateUser';
 
 const routerAdmin = [
@@ -119,7 +118,6 @@ const routerAdmin = [
             },
             {
                 path: 'permissions/:id',
-                element: <Authorization />,
             },
         ],
     },
