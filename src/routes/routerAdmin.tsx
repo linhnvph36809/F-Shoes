@@ -20,6 +20,10 @@ import LoginAdmin from '../pages/Admin/Login';
 import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
 import ListGroups from '../pages/Admin/Groups/ListGroup';
 import Authorization from '../pages/Admin/Groups/Authorization';
+import PermissionPage from '../components/Permissions/PermissionPage';
+import ListTopic from '../pages/Admin/Topics';
+import UpdateTopic from '../pages/Admin/Topics/UpdateTopic';
+import ListPost from '../pages/Admin/Posts';
 
 const routerAdmin = [
     {
@@ -100,12 +104,28 @@ const routerAdmin = [
             },
             {
                 path: 'groups',
-                element: <ListGroups />,
+                element: (
+                    <PermissionPage keyName="product" action="edit">
+                        <ListGroups />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'permissions/:id',
                 element: <Authorization />,
-            }
+            },
+            {
+                path: 'topic',
+                element: <ListTopic />,
+            },
+            {
+                path: 'topic/:id',
+                element: <UpdateTopic />,
+            },
+            {
+                path: 'posts',
+                element: <ListPost />,
+            },
         ],
     },
     {

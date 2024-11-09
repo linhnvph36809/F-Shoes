@@ -1,6 +1,20 @@
 import { MenuProps } from 'antd';
-import { Box, Folder, Grid2X2, House, ListOrdered, Plus, ScanBarcode, Tag, TicketPercent, Users } from 'lucide-react';
+import {
+    BookOpen,
+    Box,
+    File,
+    Folder,
+    Grid2X2,
+    House,
+    ListOrdered,
+    Plus,
+    ScanBarcode,
+    Tag,
+    TicketPercent,
+    Users,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { PERMISSION } from '../../../constants';
 
 export const items: MenuProps['items'] = [
     {
@@ -10,6 +24,7 @@ export const items: MenuProps['items'] = [
     {
         icon: <Folder className="w-[18px]" />,
         label: 'Category',
+        permissionName: PERMISSION.PERMISSION_CATEGORY,
         children: [
             {
                 key: '21',
@@ -100,6 +115,7 @@ export const items: MenuProps['items'] = [
     {
         icon: <Box className="w-[18px]" />,
         label: 'Product',
+        permissionName: PERMISSION.PERMISSION_PRODUCT,
         children: [
             {
                 key: '31',
@@ -145,9 +161,40 @@ export const items: MenuProps['items'] = [
             },
         ],
     },
+    {
+        icon: <File className="w-[18px]" />,
+        label: 'Topic',
+        children: [
+            {
+                key: '35',
+                label: (
+                    <Link to="topic" className="text-[14px]">
+                        List Topic
+                    </Link>
+                ),
+                icon: <Grid2X2 className="w-[16px]" />,
+            },
+        ],
+    },
+    {
+        icon: <BookOpen className="w-[18px]" />,
+        label: 'Post',
+        children: [
+            {
+                key: '36',
+                label: (
+                    <Link to="posts" className="text-[14px]">
+                        List Post
+                    </Link>
+                ),
+                icon: <Grid2X2 className="w-[16px]" />,
+            },
+        ],
+    },
 ].map((item: any, index) => ({
     key: String(index + 1),
     icon: item.icon,
     label: item.label,
     children: item.children,
+    permissionName: item.permissionName,
 }));
