@@ -89,7 +89,7 @@ const Detail = () => {
             setVariant(results);
         }
     }, [idVariants, products]);
-    console.log(productD);
+
     return (
         <>
             {loading ? (
@@ -178,11 +178,9 @@ const Detail = () => {
 
                                 <button
                                     onClick={() =>
-                                        postWishlist({
-                                            user_id: user?.id || null,
-                                            product_id: productD.id,
-                                        })
-                                    }
+                                        postWishlist(
+                                            productD.id,
+                                        )}
                                     className="h-[58px] color-primary border
                                     hover:border-[#111111] rounded-[30px] w-full
                                     transition-global mt-5 flex-row-center justify-center gap-x-2"

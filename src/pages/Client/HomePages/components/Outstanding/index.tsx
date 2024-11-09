@@ -2,7 +2,7 @@ const Outstanding = ({
     category,
     title,
     description,
-    path,
+    //path,
 }: {
     category: string;
     title: string;
@@ -17,7 +17,7 @@ const Outstanding = ({
                 <p className="md:text-[15px] sm:text-[13px] color-primary font-medium pb-12">{description}</p>
                 <div>
                     <a
-                        href={path}
+                        href="/category"
                         className="md:px-8 sm:px-5 py-2 bg-primary text-white font-medium
                         text-[15px] rounded-[30px] hover:opacity-60"
                     >

@@ -8,7 +8,8 @@ import ProfilePage from '../pages/Client/Account/Profile';
 import Order from '../pages/Client/Order';
 import PrivateRoute from '../components/PrivateRoute';
 import OrderComplete from '../pages/Client/OrderComplete/OrderComplete';
-import OrderCashOnDelivery from '../pages/Client/OrderComplete/OrderCashOnDelivery';
+import AccountSetting from "../pages/Client/Account/AccountSetting";
+import Layout from "../pages/Client/Account/Layout";
 
 const routerClient = [
     {
@@ -39,9 +40,19 @@ const routerClient = [
                 path: '/profile',
                 element: (
                     <PrivateRoute>
-                        <ProfilePage />
+                        <Layout />
                     </PrivateRoute>
                 ),
+                children:[
+                    {
+                        path: '',
+                        element: <ProfilePage />,
+                    },
+                    {
+                        path:'setting',
+                        element: <AccountSetting/>
+                    }
+                ]
             },
             {
                 path: '/order',
@@ -54,10 +65,6 @@ const routerClient = [
             {
                 path: '/order-complete',
                 element: <OrderComplete />,
-            },
-            {
-                path: '/order-cash-on-delivery',
-                element: <OrderCashOnDelivery />,
             },
         ],
     },
