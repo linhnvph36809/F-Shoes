@@ -28,6 +28,8 @@ import Statistic from '../pages/Admin/Statistic/Statistic List';
 import AddUser from '../pages/Admin/User/AddUser';
 import ListUser from '../pages/Admin/User/ListUser';
 import UpdateUser from '../pages/Admin/User/UpdateUser';
+import AddPost from '../pages/Admin/Posts/AddPost';
+import UpdatePost from '../pages/Admin/Posts/UpdatePost';
 
 const routerAdmin = [
     {
@@ -146,6 +148,15 @@ const routerAdmin = [
                 path: 'posts',
                 element: <ListPost />,
             },
+            {
+                path: 'add-posts',
+                element: <AddPost />,
+            },
+            {
+                path: 'update-posts/:id',
+                element: <UpdatePost />,
+            },
+
         ],
     },
     {

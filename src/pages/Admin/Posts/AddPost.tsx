@@ -1,21 +1,19 @@
-import { useParams } from 'react-router-dom';
+import FormPost from './FormPost';
+import usePost from '../../../hooks/usePosts';
+import useCookiesConfig from '../../../hooks/useCookiesConfig';
 import useQueryConfig from '../../../hooks/useQueryConfig';
-import useTopic from '../../../hooks/useTopic';
-import LoadingBlock from '../../../components/Loading/LoadingBlock';
 
 const AddPost = () => {
-    const { id } = useParams();
-    const { data, isFetching, refetch } = useQueryConfig('topic-add', 'api/topics/');
-    const { patchGroup } = useTopic();
+    const { loading ,addPost } = usePost();
+    const { cookies } = useCookiesConfig('user');
+    const { refetch } = useQueryConfig('posts', '/api/posts');
 
     const onFinish = (value: any) => {
-        if (id) {
-            patchGroup(1, value);
-            refetch();
-        }
+        if (cookies.adminId) addPost(value);
+        refetch();
     };
 
-    return <div>{isFetching ? <LoadingBlock /> : <div></div>}</div>;
+    return <FormPost title="Add Post" onFinish={onFinish} loading={loading} />;
 };
 
 export default AddPost;
