@@ -1,0 +1,40 @@
+/* App.css */
+.custom-button {
+    background-color: black !important;
+    color: white !important;
+    border-color: black !important;
+  }
+  
+  .custom-button:hover {
+    background-color: #333 !important;
+    border-color: #333 !important;
+  }
+  /* Add this to your CSS file or inside a style tag */
+/* Thêm vào CSS của bạn */
+.full-image {
+  width: 100%;        /* Đảm bảo ảnh chiếm toàn bộ chiều rộng của card */
+  height: 100%;       /* Đảm bảo ảnh chiếm toàn bộ chiều cao của card */
+  object-fit: cover;  /* Giữ tỷ lệ khung hình của ảnh và cắt nếu cần */
+  border-radius: 10px; /* Bo góc cho ảnh */
+  border: 2px solid white; /* Thêm viền màu trắng */
+}
+.button-black {
+  background-color: black;  /* Nền đen */
+  color: white;             /* Chữ màu trắng */
+  border: 1px solid white;  /* Viền trắng (nếu cần) */
+}
+
+.button-black:hover {
+  background-color: #333;   /* Thay đổi màu nền khi hover (tùy chọn) */
+}
+.ant-card {
+  border: none; /* Loại bỏ viền mặc định của thẻ Card */
+}
+.search-input {
+  width: 400px;               /* Chiều rộng cố định */
+  background-color: black;    /* Màu nền đen */
+  color: white;               /* Màu chữ trắng */
+}
+
+
+

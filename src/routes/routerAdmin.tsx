@@ -2,24 +2,32 @@ import LayoutAdmin from '../components/Layouts/LayoutAdmin';
 import ListCategory from '../pages/Admin/Category';
 import UpdateCategory from '../pages/Admin/Category/Update';
 import AdminDashboard from '../pages/Admin/DashboardAdmin';
-import ListProduct from '../pages/Admin/Products';
-import Attribute from '../pages/Admin/Products/Attribute';
-import UpdateProduct from '../pages/Admin/Products/UpdateProduct';
-import AddProduct from '../pages/Admin/Products/AddProduct';
-import AddVariant from '../pages/Admin/Products/AddVariant';
-import UpdateVariant from '../pages/Admin/Products/UpdateVariant';
 import Discounts from '../pages/Admin/Discount';
-import DiscountList from '../pages/Admin/Discount/ListCount';
 import AddCount from '../pages/Admin/Discount/AddCount';
 import AddSale from '../pages/Admin/Discount/AddSale';
+import DiscountList from '../pages/Admin/Discount/ListCount';
 import ListSale from '../pages/Admin/Discount/ListSale';
-import OrderList from '../pages/Admin/Oder/Order List';
-import Addorder from '../pages/Admin/Oder/AddOrder';
-import UpdateOrder from '../pages/Admin/Oder/UpdateOrder';
 import LoginAdmin from '../pages/Admin/Login';
 import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
 import ListGroups from '../pages/Admin/Groups/ListGroup';
 import Authorization from '../pages/Admin/Groups/Authorization';
+import PermissionPage from '../components/Permissions/PermissionPage';
+import ListTopic from '../pages/Admin/Topics';
+import UpdateTopic from '../pages/Admin/Topics/UpdateTopic';
+import ListPost from '../pages/Admin/Posts';
+import Addorder from '../pages/Admin/Oder/AddOrder';
+import OrderList from '../pages/Admin/Oder/Order List';
+import UpdateOrder from '../pages/Admin/Oder/UpdateOrder';
+import ListProduct from '../pages/Admin/Products';
+import AddProduct from '../pages/Admin/Products/AddProduct';
+import AddVariant from '../pages/Admin/Products/AddVariant';
+import Attribute from '../pages/Admin/Products/Attribute';
+import UpdateProduct from '../pages/Admin/Products/UpdateProduct';
+import UpdateVariant from '../pages/Admin/Products/UpdateVariant';
+import Statistic from '../pages/Admin/Statistic/Statistic List';
+import AddUser from '../pages/Admin/User/AddUser';
+import ListUser from '../pages/Admin/User/ListUser';
+import UpdateUser from '../pages/Admin/User/UpdateUser';
 
 const routerAdmin = [
     {
@@ -99,13 +107,45 @@ const routerAdmin = [
                 element: <UpdateOrder />,
             },
             {
+                path: 'list-user',
+                element: <ListUser />,
+            },
+            {
+                path: 'add-user',
+                element: <AddUser />,
+            },
+            {
+                path: 'Update-user/:id',
+                element: <UpdateUser />,
+            },
+            {
                 path: 'groups',
-                element: <ListGroups />,
+                element: (
+                    <PermissionPage keyName="product" action="edit">
+                        <ListGroups />
+                    </PermissionPage>
+                ),
+            },
+            {
+                path: 'statistic',
+                element: <Statistic />,
             },
             {
                 path: 'permissions/:id',
                 element: <Authorization />,
-            }
+            },
+            {
+                path: 'topic',
+                element: <ListTopic />,
+            },
+            {
+                path: 'topic/:id',
+                element: <UpdateTopic />,
+            },
+            {
+                path: 'posts',
+                element: <ListPost />,
+            },
         ],
     },
     {
