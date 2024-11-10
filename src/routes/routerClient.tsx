@@ -10,7 +10,7 @@ import PrivateRoute from '../components/PrivateRoute';
 import OrderComplete from '../pages/Client/OrderComplete/OrderComplete';
 import AccountSetting from "../pages/Client/Account/AccountSetting";
 import Layout from "../pages/Client/Account/Layout";
-
+import OrderAccount from "../pages/Client/Account/Order";
 const routerClient = [
     {
         path: '',
@@ -51,6 +51,10 @@ const routerClient = [
                     {
                         path:'setting',
                         element: <AccountSetting/>
+                    },
+                    {
+                        path:'orders',
+                        element: <OrderAccount/>
                     }
                 ]
             },
