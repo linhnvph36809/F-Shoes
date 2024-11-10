@@ -6,12 +6,16 @@ const defautConfig = {
     staleTime: 1000 * 60 * 1,
 };
 
-const useQueryConfig = (key:string, api: string, config: any = defautConfig) => {
-    const fetchUsers = async () => {
-        return await tokenManagerInstance('get', api);
+const useQueryConfig = (key: string, api: string, config: any = defautConfig) => {
+    const fetchData = async () => {
+        try {
+            return await tokenManagerInstance('get', api);
+        } catch (error: any) {
+            throw error;
+        }
     };
 
-    const { isLoading, data, error, isFetching, refetch } = useQuery([key], fetchUsers, config);
+    const { isLoading, data, error, isFetching, refetch } = useQuery([key], fetchData, config);
 
     return {
         isLoading,
