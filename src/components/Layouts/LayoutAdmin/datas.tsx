@@ -13,6 +13,8 @@ import {
     Users,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { BarChartOutlined } from '@ant-design/icons';
+
 
 export const items: MenuProps['items'] = [
     {
@@ -34,6 +36,23 @@ export const items: MenuProps['items'] = [
             },
         ],
     },
+
+    {
+        icon: <BarChartOutlined className="text-[14px]"/>,
+        label: 'Statistic',
+        children: [
+            {
+                key: '21',
+                label: (
+                    <Link to="statistic" className="text-[14px]">
+                        Statistic List
+                    </Link>
+                ),
+                icon: <Grid2X2 className="w-[16px]" />,
+            },
+        ],
+    },
+    
     {
         icon: <ListOrdered className="w-[18px]" />,
         label: 'Oder',
@@ -65,6 +84,7 @@ export const items: MenuProps['items'] = [
                 ),
                 icon: <ScanBarcode className="w-[16px]" />,
             },
+            
         ],
     },
     {
