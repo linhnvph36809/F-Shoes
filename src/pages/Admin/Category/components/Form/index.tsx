@@ -26,7 +26,7 @@ const FormCategory = ({ onFinish, mainCategories, initialValues }: any) => {
 
     return (
         <Form onFinish={handleFinish} form={form} initialValues={initialValues}>
-            <div className="flex justify-between gap-x-5 bg-black text-white placeholder-gray-400">
+            <div className="flex justify-between gap-x-5 text-white placeholder-gray-400">
                 <Form.Item
                     name="name"
                     rules={[{ required: true, message: 'Please enter category name' }]}
