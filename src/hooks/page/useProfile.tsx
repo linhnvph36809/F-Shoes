@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {tokenManagerInstance} from '../../api';
 import {IProduct} from "../../interfaces/IProduct.ts";
-import {IUser} from "../../interfaces/IUser.ts";
+import {IUser, model} from "../../interfaces/IUser.ts";
 
 
 const useProfile = () => {
@@ -27,16 +27,20 @@ const useProfile = () => {
         family_name: string,
         birth_date: string,
         detail_address: string,
-    }) => {
+    }) :Promise<IUser> => {
         try {
             setLoadingUpdate(true);
-            const user = await tokenManagerInstance('post','api/update-profile',data);
-            console.log(user);
+            const response = await tokenManagerInstance('put','api/update-profile',data);
+            alert(response.data.message);
+            return response.data.user;
         }catch (error)
         {
             console.log(error)
+            return model;
+
         }finally {
             setLoadingUpdate(false);
+
         }
     }
     useEffect(() => {
@@ -48,7 +52,8 @@ const useProfile = () => {
         currentUser,
         favoriteProducts,
         updateProfile,
-        loadingUpdate
+        loadingUpdate,
+        getCurrentUser
 
     };
 };

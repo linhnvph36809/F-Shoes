@@ -1,4 +1,4 @@
-import {Input, Select, DatePicker, Button, Form} from 'antd';
+import {Input, Select, DatePicker, Button, Form, Skeleton} from 'antd';
 import {
     UserOutlined,
     CreditCardOutlined,
@@ -9,14 +9,14 @@ import {
     LinkOutlined,
 } from '@ant-design/icons';
 import useProfile from "../../../../hooks/page/useProfile.tsx";
-import {IUser} from "../../../../interfaces/IUser.ts";
+import {IUser, model} from "../../../../interfaces/IUser.ts";
 import {useEffect, useState} from "react";
 import useCountry from "../../../../hooks/useCountry.tsx";
 import LoadingSmall from "../../../../components/Loading/LoadingSmall.tsx";
 import {tokenManagerInstance} from "../../../../api";
 import {useNavigate} from "react-router-dom";
 import {geonameCountry, geonameProvince} from "../../../../interfaces/GeoNames/IGeoNames.ts";
-
+import dayjs from "dayjs"
 interface DataChangePassword {
     password: string,
     newPassword: string,
@@ -36,29 +36,15 @@ const AccountSetting = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [updateProfileForm] = Form.useForm();
-    const {currentUser,updateProfile,loadingUpdate} = useProfile();
+    const {loading:loadUser,currentUser,updateProfile,loadingUpdate} = useProfile();
+    const [userD,setUserD] = useState<IUser>(model);
 
-    let userD: IUser = {
-        id: "",
-        avatar_url: "",
-        nickname: "",
-        name: "",
-        email: "",
-        email_verified_at: "",
-        google_id: "",
-        status: "",
-        profile: {
-            given_name: '',
-            family_name: '',
-            detail_address: '',
-            birth_date: ''
-        },
-        favoriteProducts: [],
-        created_at: ""
-    };
-    if (currentUser) {
-        userD = currentUser;
-    }
+
+    useEffect(() => {
+        if (currentUser) {
+            setUserD(currentUser);
+        }
+    }, [currentUser]);
     // update profile
     const [initialValues, setInitialValues] = useState({});
 
@@ -67,15 +53,21 @@ const AccountSetting = () => {
         setInitialValues({
             given_name: userD?.profile?.given_name,
             family_name: userD?.profile?.family_name,
-            birth_date: userD?.profile?.birth_date,
+            birth_date: userD?.profile?.birth_date ? dayjs(userD?.profile?.birth_date) : null,
             detail_address: userD?.profile?.detail_address
         })
+        if(initialValues){
+            updateProfileForm.setFieldsValue(initialValues);
+        }
+
+
     }, [userD]);
-    console.log(initialValues);
+
     if (userAddress){
         updateProfileForm.setFieldValue( 'detail_address', userAddress);
     }
-    // updateProfileForm.setFieldsValue()
+
+
     const onFinishUpdateProfile = async (data: DataUpdateProfile) => {
         let date;
         if(data.birth_date){
@@ -87,8 +79,11 @@ const AccountSetting = () => {
             detail_address: data.detail_address,
             birth_date: date,
         }
-        updateProfile(updateData);
 
+        const updateUser = await updateProfile(updateData);
+        if(updateUser?.name){
+            setUserD(updateUser);
+        }
     }
     // Address
     const {
@@ -129,7 +124,6 @@ const AccountSetting = () => {
     }
     const onChangeCommune = (value: string) => {
         setSelectedCommuneGeonameId(value);
-        //getCommunes(value);
     }
     useEffect(() => {
         getProvinces(selectedCountryGeonameId);
@@ -206,7 +200,11 @@ const AccountSetting = () => {
         setDisplayPasswordForm(false);
     };
 
-
+    if(loadUser || !userD){
+        return (
+            <Skeleton className="my-8"/>
+        );
+    }
     return (
 
         <div
@@ -221,7 +219,7 @@ const AccountSetting = () => {
                                 className="absolute top-1 right-1 size-10 bg-black text-white flex items-center justify-center rounded-3xl hover:bg-gray-200">X
                         </button>
                         <Form
-                            initialValues={initialValues}
+
                             labelCol={{span: 24}}
                             wrapperCol={{span: 24}}
                             form={changePasswordForm}
@@ -314,9 +312,9 @@ const AccountSetting = () => {
                                 optionFilterProp="children"
                                 onChange={onChangeCountry}
                                 filterOption={(input, option) => {
-                                    const {children} = option;
-                                    const name = children.props.children[0];
-                                    return name.toLowerCase().includes(input.toLowerCase()) || false
+                                    const children = option?.children;
+                                    const name:string = children?.props?.children[0];
+                                    return name?.toLowerCase().includes(input.toLowerCase()) || false
                                 }}
                             >
                                 {countries ? countries.map((country: geonameCountry, index) => (
@@ -342,8 +340,8 @@ const AccountSetting = () => {
                                     optionFilterProp="children"
                                     onChange={onChangeProvince}
                                     filterOption={(input, option) => {
-                                        const {children} = option;
-                                        const name = children.props.children[0];
+                                        const children = option?.children;
+                                        const name = children?.props?.children;
                                         return name.toLowerCase().includes(input.toLowerCase()) || false
                                     }}
                                 >
@@ -369,8 +367,8 @@ const AccountSetting = () => {
                                     optionFilterProp="children"
                                     onChange={onChangeDistrict}
                                     filterOption={(input, option) => {
-                                        const {children} = option;
-                                        const name = children.props.children[0];
+                                        const children = option?.children;
+                                        const name = children?.props?.children;
                                         return name.toLowerCase().includes(input.toLowerCase()) || false
                                     }}
                                 >
@@ -395,8 +393,8 @@ const AccountSetting = () => {
                                     optionFilterProp="children"
                                     onChange={onChangeCommune}
                                     filterOption={(input, option) => {
-                                        const {children} = option;
-                                        const name = children.props.children[0];
+                                        const children = option?.children;
+                                        const name = children?.props?.children;
                                         return name.toLowerCase().includes(input.toLowerCase()) || false
                                     }}
                                 >
@@ -463,7 +461,9 @@ const AccountSetting = () => {
                     wrapperCol={{span: 24}}
                     form={updateProfileForm}
                     onFinish={onFinishUpdateProfile}
-                    name="change-password"
+                    name="update-profile"
+                    key={JSON.stringify(initialValues)}
+                    initialValues={initialValues}
                 >
                     {/* Các trường nhập */}
 
