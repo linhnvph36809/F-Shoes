@@ -1,21 +1,20 @@
 import { Link } from 'react-router-dom';
 import { CircleX, RefreshCcw, SquarePen, Trash2 } from 'lucide-react';
 import { Input } from 'antd';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 import ButtonEdit from '../components/Button/ButtonEdit';
 import TableAdmin from '../components/Table';
 import LoadingBlock from '../../../components/Loading/LoadingBlock';
-import { ITopic } from '../../../interfaces/ITopic';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import { IPost } from '../../../interfaces/IPost';
 import usePost from '../../../hooks/usePosts';
 import ButtonPrimary from '../../../components/Button';
 
 const ListPost = () => {
-    const [searchTerm, setSearchTerm] = useState<any>();
+    const [searchTerm, setSearchTerm] = useState<string>('');
     const { data, isFetching, refetch } = useQueryConfig('posts', '/api/posts');
-    const { deletePost, loading, postPost, restorePost, softPost } = usePost();
+    const { deletePost, restorePost, softPost } = usePost();
 
     const handleDeletePost = (id?: string | number) => {
         if (id) {
@@ -38,9 +37,9 @@ const ListPost = () => {
         }
     };
 
-    // const filteredData = data?.data.filter((topic: ITopic) =>
-    //     topic.topic_name.toLowerCase().includes(searchTerm.toLowerCase()),
-    // );
+    const filteredData = useMemo(() => {
+        return data?.data.filter((post: IPost) => post.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    }, [data, searchTerm]);
 
     const columns = [
         {
@@ -54,20 +53,22 @@ const ListPost = () => {
             key: '2',
         },
         {
+            title: 'Theme',
+            dataIndex: 'theme',
+            key: '3',
+            render: (_: any, { theme }: { theme: string }) => (
+                <img src={theme} alt="" className="w-[60px] h-[80px] object-cover" />
+            ),
+        },
+        {
             title: 'Slug',
             dataIndex: 'slug',
-            key: '3',
+            key: '4',
         },
         {
             title: 'Author',
-            dataIndex: 'slug',
-            key: '3',
-        },
-
-        {
-            title: 'Topic',
             dataIndex: 'topic_id',
-            key: '4',
+            key: '5',
             render: (_: any, post: any) => (
                 <div className="flex gap-x-5 items-center">
                     <div>
@@ -80,19 +81,18 @@ const ListPost = () => {
                 </div>
             ),
         },
-
         {
             title: 'Created At',
             dataIndex: 'created_at',
-            key: '3',
+            key: '6',
         },
         {
             title: 'Actions',
             dataIndex: 'id',
-            key: '5',
+            key: '7',
             render: (_: any, post: IPost) => (
                 <div className="flex gap-2">
-                    <Link to={`/admin/topic/${post.id}`}>
+                    <Link to={`/admin/update-posts/${post.id}`}>
                         <ButtonEdit>
                             <SquarePen />
                         </ButtonEdit>
@@ -116,7 +116,7 @@ const ListPost = () => {
 
     return (
         <>
-            {false ? (
+            {isFetching ? (
                 <LoadingBlock />
             ) : (
                 <div>
@@ -130,17 +130,15 @@ const ListPost = () => {
                         </div>
                         <div className="mb-4">
                             <Input
-                                placeholder="Search by Topic Name"
+                                placeholder="Search by Title"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 allowClear
-                                className="w-full h-[40px]
-                            border-1 border-[#111111] focus:shadow
-                            font-medium focus:border-[#111111] hover:border-[#111111] px-5"
+                                className="w-full h-[40px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] px-5"
                             />
                         </div>
                     </div>
-                    <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={data?.data} />
+                    <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={filteredData} />
                 </div>
             )}
         </>

@@ -18,7 +18,6 @@ import { Link } from 'react-router-dom';
 import { PERMISSION } from '../../../constants';
 import { BarChartOutlined } from '@ant-design/icons';
 
-
 export const items: MenuProps['items'] = [
     {
         icon: <House className="w-[18px]" />,
@@ -88,7 +87,6 @@ export const items: MenuProps['items'] = [
                 ),
                 icon: <ScanBarcode className="w-[16px]" />,
             },
-
         ],
     },
     {
@@ -233,6 +231,15 @@ export const items: MenuProps['items'] = [
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
+            },
+            {
+                key: '37',
+                label: (
+                    <Link to="add-posts" className="text-[14px]">
+                        Add Post
+                    </Link>
+                ),
+                icon: <Plus className="w-[16px]" />,
             },
         ],
     },

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { tokenManagerInstance } from '../api';
-import { ITopic } from '../interfaces/ITopic';
+import { IPost } from '../interfaces/IPost';
 
 const API_POST = '/api/posts';
 
@@ -43,12 +43,19 @@ const usePost = () => {
         }
     };
 
-    const postPost = async (topic: ITopic) => {
+    const addPost = async (post: IPost) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('post', API_POST, topic);
-        } catch (error) {
-            console.error(error);
+            await tokenManagerInstance('post', API_POST, post, {
+                headers: { 'Content-Type': 'application/form-data' },
+            });
+            navigate('/admin/posts');
+        } catch (error: any) {
+            if (error?.response?.data?.message && error?.response?.status) {
+                alert(error?.response?.data?.message as any);
+            } else {
+                console.log(error);
+            }
         } finally {
             setLoading(false);
         }
@@ -58,9 +65,13 @@ const usePost = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('patch', API_POST + `/${id}`, group);
-            navigate('/admin/post');
-        } catch (error) {
-            console.error(error);
+            navigate('/admin/posts');
+        } catch (error: any) {
+            if (error?.response?.data?.message) {
+                alert(error?.response?.data?.message as any);
+            } else {
+                console.log(error);
+            }
         } finally {
             setLoading(false);
         }
@@ -70,7 +81,7 @@ const usePost = () => {
         loading,
         deletePost,
         softPost,
-        postPost,
+        addPost,
         patchPost,
         restorePost,
     };

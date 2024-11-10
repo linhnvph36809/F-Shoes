@@ -58,18 +58,29 @@ export const tokenManagerInstance = async (
     data: any = null,
     configs: any = {},
 ) => {
-    const token = configs?.token || (await tokenManager.getToken());
-    const updatedConfig = {
-        ...configs,
-        headers: {
-            ...configs.headers,
-            Authorization: `Bearer ${token}`,
-        },
-    };
+    try {
+        const token = configs?.token || (await tokenManager.getToken());
+        const updatedConfig = {
+            ...configs,
+            headers: {
+                ...configs.headers,
+                Authorization: `Bearer ${token}`,
+            },
+        };
 
-    if (['post', 'put', 'patch'].includes(method)) {
-        return axiosInstant[method](suffixUrl, data, updatedConfig);
-    } else {
-        return axiosInstant[method](suffixUrl, updatedConfig);
+        if (['post', 'put', 'patch'].includes(method)) {
+            return await axiosInstant[method](suffixUrl, data, updatedConfig);
+        } else {
+            return await axiosInstant[method](suffixUrl, updatedConfig);
+        }
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            throw {
+                message: error.message,
+                response: error.response,
+                status: error.response.status,
+            };
+        }
+        throw error;
     }
 };
