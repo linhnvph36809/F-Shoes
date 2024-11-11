@@ -16,6 +16,11 @@ export default {
                 sm: '100%',
             },
         },
+        fontSize: {
+            '10xl': '10rem', // 160px
+            '12xl': '12rem', // 192px
+            '16xl': '16rem', // 256px
+          },
     },
     plugins: [],
 };
