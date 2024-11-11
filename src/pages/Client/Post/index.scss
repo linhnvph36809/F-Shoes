@@ -1,0 +1,41 @@
+/* Trong file CSS */
+.no-border-card .ant-card {
+    border: none;
+    box-shadow: none; /* Nếu bạn cũng muốn loại bỏ bóng đổ */
+  }
+ /* styles.css */
+ .text-72px {
+    font-size: 72px;         // Kích thước chữ lớn
+    font-weight: bold;       // Đặt chữ đậm
+    word-wrap: break-word;   // Chia chữ thành nhiều dòng nếu cần
+    line-height: 1.2;        // Căn chỉnh khoảng cách giữa các dòng
+    max-width: 100%;         // Giới hạn chiều rộng của phần tử nếu cần
+}
+
+.text-16px {
+    font-size: $--text-base;
+}
+.font-normal{
+    $--font-normal: 400;;
+}
+.text-20px {
+    font-size: $--text-xl;
+}
+.text-24px {
+    font-size: $--text-2xl;
+}
+
+.text-28px {
+    font-size: $--text-3xl;
+}
+
+.text-30px {
+    font-size: $--text-4xl;
+}
+
+.text-40px {
+    font-size: $--text-5xl;
+}
+.text-15px {
+    font-size: 1.5rem;
+}
