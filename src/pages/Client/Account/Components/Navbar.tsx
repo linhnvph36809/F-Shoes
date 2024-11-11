@@ -18,7 +18,7 @@ const Item = [
     },
     {
         name: "Orders",
-        url: "/orders",
+        url: "/profile/orders",
     },
     {
         name: "Favorite",

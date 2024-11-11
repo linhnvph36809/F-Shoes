@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { message } from 'antd';
 
 import { tokenManagerInstance } from '../api';
 import { IGroup } from '../interfaces/IGroup';
@@ -16,10 +15,13 @@ const useGroups = () => {
     // Lấy tất cả các nhóm
     const getAllGroups = async () => {
         try {
+            setLoading(true);
             const { data } = await tokenManagerInstance('get', API_GROUP);
             setGroups(data);
         } catch (error) {
             console.error(error);
+        }finally{
+            setLoading(false);
         }
     };
 
@@ -50,7 +52,19 @@ const useGroups = () => {
     const postGroup = async (groupName: { group_name: string }) => {
         try {
             setLoading(true);
-            tokenManagerInstance('post', API_GROUP, groupName);
+            await tokenManagerInstance('post', API_GROUP, groupName);
+            getAllGroups();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const restoreGroup = async (id?: string | number) => {
+        try {
+            setLoading(true);
+            await tokenManagerInstance('post', API_GROUP + `/restore/${id}`);
             getAllGroups();
         } catch (error) {
             console.error(error);
@@ -61,26 +75,23 @@ const useGroups = () => {
 
     const patchGroup = async (id: string | number, group: { group_name: string; permissions: string }) => {
         try {
-            setLoading(true);
+            setLoadingDelete(true);
             await tokenManagerInstance('patch', API_GROUP + `/${id}`, group);
             navigate('/admin/groups/');
         } catch (error) {
             console.error(error);
         } finally {
-            setLoading(false);
+            setLoadingDelete(false);
         }
     };
 
-    // Sửa nhóm
-    const updateGroup = async (id: string | number, updatedGroup: Partial<IGroup>) => {
+    const softGroup = async (id?: string | number) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('put', `${API_GROUP}/${id}`, updatedGroup);
-            message.success('Cập nhật nhóm thành công!');
+            await tokenManagerInstance('delete', `${API_GROUP}/${id}`);
             getAllGroups();
         } catch (error) {
             console.error(error);
-            message.error('Lỗi khi cập nhật nhóm!');
         } finally {
             setLoading(false);
         }
@@ -96,9 +107,10 @@ const useGroups = () => {
         loadingDelete,
         deleteGroup,
         postGroup,
-        updateGroup,
+        softGroup,
         getOneGroup,
         patchGroup,
+        restoreGroup,
     };
 };
 

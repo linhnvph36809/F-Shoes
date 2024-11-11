@@ -13,7 +13,7 @@ import {IUser} from "../../../interfaces/IUser.ts";
 const ProfilePage = () => {
     const { cookies } = useCookiesConfig(COOKIE_USER);
 
-    const userName = cookies?.userName;
+    const userNameCookie = cookies?.userName;
 
     const {currentUser,favoriteProducts,loading} = useProfile();
 
@@ -26,7 +26,12 @@ const ProfilePage = () => {
         email_verified_at: "",
         google_id: "",
         status:"",
-        profile: [],
+        profile: {
+            given_name:'',
+            family_name:'',
+            detail_address: '',
+            birth_date: ''
+        },
         favoriteProducts: [],
         created_at: ""
     };
@@ -66,7 +71,7 @@ const ProfilePage = () => {
                         />
                     </div>
                     <div className="ml-8">
-                        <Heading title={userName} />
+                        <Heading title={userD.name ? userD.name : userNameCookie} />
                         <p className="text-[16px] font-medium text-gray-500">Fshoes Member Since {formatTime(currentUser?.created_at)}</p>
                     </div>
                 </div>

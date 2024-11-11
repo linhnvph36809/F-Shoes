@@ -10,10 +10,12 @@ import TableAdmin from '../../components/Table';
 import useGroups from '../../../../hooks/useGroup';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import { IGroup } from '../../../../interfaces/IGroup';
+import LoadingPage from '../../../../components/Loading/LoadingPage';
+import PermissionElement from '../../../../components/Permissions/PermissionElement';
 
 const ListGroups = ({ initialValues }: any) => {
     const [form] = Form.useForm();
-    const { loading, loadingDelete, groups, postGroup, deleteGroup } = useGroups();
+    const { loading, loadingDelete, groups, postGroup, deleteGroup, softGroup, restoreGroup } = useGroups();
 
     const onFinish = (value: any) => {
         postGroup(value);
@@ -56,35 +58,49 @@ const ListGroups = ({ initialValues }: any) => {
                             </ButtonEdit>
                         </Link>
                     )}
-                    <ButtonEdit>{group.deleted_at ? <RefreshCcw /> : <CircleX />}</ButtonEdit>
-                    <ButtonEdit onClick={() => handleDeleteGroup(group.id)}>
-                        {loadingDelete ? <LoadingSmall /> : <Trash2 />}
+                    <ButtonEdit>
+                        {group.deleted_at ? (
+                            <RefreshCcw onClick={() => restoreGroup(group.id)} />
+                        ) : (
+                            <CircleX onClick={() => softGroup(group.id)} />
+                        )}
                     </ButtonEdit>
+                    <PermissionElement keyName="product" action="delete">
+                        <ButtonEdit onClick={() => handleDeleteGroup(group.id)}>
+                            {loadingDelete ? <LoadingSmall /> : <Trash2 />}
+                        </ButtonEdit>
+                    </PermissionElement>
                 </div>
             ),
         },
     ];
 
     return (
-        <Form form={form} initialValues={initialValues} onFinish={onFinish}>
-            <Heading>List Groups</Heading>
-            <div className="my-4">
-                <Form.Item
-                    name="group_name"
-                    rules={[{ required: true, message: 'Please enter group name' }]}
-                    className="flex-1"
-                >
-                    <InputPrimary placeholder="Group name" width="100%" height="h-[56px]" margin="mb-0" />
-                </Form.Item>
+        <>
+            {loading ? (
+                <LoadingPage />
+            ) : (
+                <Form form={form} initialValues={initialValues} onFinish={onFinish} layout="vertical">
+                    <Heading>List Groups</Heading>
+                    <div className="my-4 w-6/12">
+                        <Form.Item
+                            label="Group Name"
+                            name="group_name"
+                            rules={[{ required: true, message: 'Please enter group name' }]}
+                        >
+                            <InputPrimary placeholder="Group name" width="100%" height="h-[56px]" margin="mb-0" />
+                        </Form.Item>
 
-                <Form.Item className="text-end">
-                    <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
-                        {loading ? <LoadingSmall /> : 'Submit'}
-                    </ButtonPrimary>
-                </Form.Item>
-            </div>
-            <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={groups} />
-        </Form>
+                        <Form.Item>
+                            <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
+                                {loading ? <LoadingSmall /> : 'Submit'}
+                            </ButtonPrimary>
+                        </Form.Item>
+                    </div>
+                    <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={groups} />
+                </Form>
+            )}
+        </>
     );
 };
 
