@@ -7,6 +7,7 @@ import {
     ListOrdered,
     Plus,
     ScanBarcode,
+    Star,
     Tag,
     TicketPercent,
     User,
@@ -178,6 +179,21 @@ export const items: MenuProps['items'] = [
                     </Link>
                 ),
                 icon: <Plus className="w-[16px]" />,
+            },
+        ],
+    },
+    {
+        icon: <Star className="w-[18px]" />,
+        label: 'Review',
+        children: [
+            {
+                key: '37',
+                label: (
+                    <Link to="list-review" className="text-[14px]">
+                        List Review
+                    </Link>
+                ),
+                icon: <Grid2X2 className="w-[16px]" />,
             },
         ],
     },

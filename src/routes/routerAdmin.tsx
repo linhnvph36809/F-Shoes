@@ -19,6 +19,7 @@ import AddVariant from '../pages/Admin/Products/AddVariant';
 import Attribute from '../pages/Admin/Products/Attribute';
 import UpdateProduct from '../pages/Admin/Products/UpdateProduct';
 import UpdateVariant from '../pages/Admin/Products/UpdateVariant';
+import ListReview from '../pages/Admin/Review/ListReview/Index';
 import AddUser from '../pages/Admin/User/AddUser';
 import ListUser from '../pages/Admin/User/ListUser';
 import UpdateUser from '../pages/Admin/User/UpdateUser';
@@ -111,6 +112,10 @@ const routerAdmin = [
             {
                 path: 'Update-user/:id',
                 element: <UpdateUser />,
+            },
+            {
+                path: 'list-review',
+                element: <ListReview />,
             },
             {
                 path: 'groups',
