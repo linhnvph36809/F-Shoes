@@ -79,8 +79,8 @@ const useAuth = () => {
             if (data?.access_token && data?.refresh_token) {
                 localStorage.setItem('accessToken', data.access_token);
                 localStorage.setItem('refreshToken', data.refresh_token);
-                handleSetCookie('adminName', data.user.name, new Date(Date.now() + 20 * 60 * 1000));
-                handleSetCookie('adminId', data.user.id, new Date(Date.now() + 20 * 60 * 1000));
+                handleSetCookie('adminName', data.user.name, new Date(Date.now() + 24 * 60 * 60 * 1000));
+                handleSetCookie('adminId', data.user.id, new Date(Date.now() + 24 * 60 * 60 * 1000));
             }
             navigate('/admin');
             return data;

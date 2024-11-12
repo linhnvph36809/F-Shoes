@@ -1,5 +1,4 @@
 import LayoutAdmin from '../components/Layouts/LayoutAdmin';
-import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
 import ListCategory from '../pages/Admin/Category';
 import UpdateCategory from '../pages/Admin/Category/Update';
 import AdminDashboard from '../pages/Admin/DashboardAdmin';
@@ -8,8 +7,14 @@ import AddCount from '../pages/Admin/Discount/AddCount';
 import AddSale from '../pages/Admin/Discount/AddSale';
 import DiscountList from '../pages/Admin/Discount/ListCount';
 import ListSale from '../pages/Admin/Discount/ListSale';
-import ListGroups from '../pages/Admin/Groups/listgroup';
 import LoginAdmin from '../pages/Admin/Login';
+import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
+
+import Authorization from '../pages/Admin/Groups/Authorization';
+import PermissionPage from '../components/Permissions/PermissionPage';
+import ListTopic from '../pages/Admin/Topics';
+import UpdateTopic from '../pages/Admin/Topics/UpdateTopic';
+import ListPost from '../pages/Admin/Posts';
 import Addorder from '../pages/Admin/Oder/AddOrder';
 import OrderList from '../pages/Admin/Oder/Order List';
 import UpdateOrder from '../pages/Admin/Oder/UpdateOrder';
@@ -20,9 +25,13 @@ import Attribute from '../pages/Admin/Products/Attribute';
 import UpdateProduct from '../pages/Admin/Products/UpdateProduct';
 import UpdateVariant from '../pages/Admin/Products/UpdateVariant';
 import ListReview from '../pages/Admin/Review/ListReview/Index';
+import Statistic from '../pages/Admin/Statistic/Statistic List';
 import AddUser from '../pages/Admin/User/AddUser';
 import ListUser from '../pages/Admin/User/ListUser';
 import UpdateUser from '../pages/Admin/User/UpdateUser';
+import AddPost from '../pages/Admin/Posts/AddPost';
+import UpdatePost from '../pages/Admin/Posts/UpdatePost';
+import ListGroups from '../pages/Admin/Groups/listgroup';
 
 const routerAdmin = [
     {
@@ -119,11 +128,41 @@ const routerAdmin = [
             },
             {
                 path: 'groups',
-                element: <ListGroups />,
+                element: (
+                    <PermissionPage keyName="product" action="edit">
+                        <ListGroups />
+                    </PermissionPage>
+                ),
+            },
+            {
+                path: 'statistic',
+                element: <Statistic />,
             },
             {
                 path: 'permissions/:id',
+                element: <Authorization />,
             },
+            {
+                path: 'topic',
+                element: <ListTopic />,
+            },
+            {
+                path: 'topic/:id',
+                element: <UpdateTopic />,
+            },
+            {
+                path: 'posts',
+                element: <ListPost />,
+            },
+            {
+                path: 'add-posts',
+                element: <AddPost />,
+            },
+            {
+                path: 'update-posts/:id',
+                element: <UpdatePost />,
+            },
+
         ],
     },
     {

@@ -9,7 +9,30 @@ export interface IUser {
     email_verified_at: string;
     google_id: string;
     status: string;
-    profile: any;
+    profile: {
+        given_name:string,
+        family_name:string,
+        detail_address:string,
+        birth_date:any
+    };
     favoriteProducts: IProduct[];
     created_at: any;
 }
+export const model ={
+    id: "",
+    avatar_url: "",
+    nickname: "",
+    name: "",
+    email: "",
+    email_verified_at: "",
+    google_id: "",
+    status: "",
+    profile: {
+        given_name: '',
+        family_name: '',
+        detail_address: '',
+        birth_date: ''
+    },
+    favoriteProducts: [],
+    created_at: ""
+};
