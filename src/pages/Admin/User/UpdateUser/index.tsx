@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import { message } from 'antd';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import LoadingBlock from '../../../../components/Loading/LoadingBlock';
 import useUser from '../../../../hooks/useUser';
 import Heading from '../../components/Heading';
 import FormUser from '../FormUser';
 
 const UpdateUser: React.FC = () => {
     const { id } = useParams<{ id: string }>(); // Assuming the user ID is in the URL params
-    const { users, editUser, getAllUser } = useUser();
+    const { users, editUser, getAllUser, loading } = useUser();
     const [initialValues, setInitialValues] = useState<any>(null);
 
     // Fetch the user details and set as initial values
@@ -37,14 +38,16 @@ const UpdateUser: React.FC = () => {
     );
 
     return (
-        <section>
-            <Heading>Update User</Heading>
-            {initialValues ? (
-                <FormUser onFinish={handleUpdateUser} initialValues={initialValues} />
+        <>
+            {loading ? (
+                <LoadingBlock />
             ) : (
-                <p>Loading user data...</p>
+                <section>
+                    <Heading>Update User</Heading>
+                    <FormUser onFinish={handleUpdateUser} initialValues={initialValues} />
+                </section>
             )}
-        </section>
+        </>
     );
 };
 

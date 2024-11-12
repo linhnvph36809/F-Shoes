@@ -2,6 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Card, Col, message, Row, Tag, Typography } from 'antd';
 import { SquarePen, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import LoadingBlock from '../../../../components/Loading/LoadingBlock';
 import useUser from '../../../../hooks/useUser';
 import { IUser } from '../../../../interfaces/IUser';
 import ButtonEdit from '../../components/Button/ButtonEdit';
@@ -150,13 +151,20 @@ const ListUser = () => {
             </Row>
 
             {/* User management table with loading state */}
-            <TableAdmin
-                columns={columns}
-                dataSource={users}
-                loading={loading}
-                pagination={{ pageSize: 8 }}
-                rowSelection={{ type: 'checkbox' }}
-            />
+            <>
+                {loading ? (
+                    <LoadingBlock />
+                ) : (
+                    <section>
+                        <TableAdmin
+                            columns={columns}
+                            dataSource={users}
+                            pagination={{ pageSize: 8 }}
+                            rowSelection={{ type: 'checkbox' }}
+                        />
+                    </section>
+                )}
+            </>
         </div>
     );
 };

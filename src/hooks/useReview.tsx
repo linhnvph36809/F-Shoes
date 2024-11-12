@@ -15,6 +15,17 @@ const useReview = () => {
         const index = slug.lastIndexOf('.');
         id = slug.substring(index + 1);
     }
+    const getList = async () => {
+        try {
+            setLoading(true);
+            const { data } = await tokenManagerInstance('get', '/api/review?include=user,product');
+            setReviews(data.reviews.data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const getAllReview = async (id: string | number) => {
         try {
@@ -53,8 +64,8 @@ const useReview = () => {
     const deleteReview = async (id: string | number) => {
         try {
             setLoading(true);
-            tokenManagerInstance('delete', '/api/review/' + id);
-            getAllReview(id);
+            await tokenManagerInstance('delete', `/api/review/${id}`);
+            await getList(); // Refresh the list to show updated data after deletion
         } catch (error) {
             console.log(error);
         } finally {
@@ -64,6 +75,7 @@ const useReview = () => {
 
     useEffect(() => {
         if (id) getAllReview(id);
+        getList();
     }, []);
     return {
         reviews,

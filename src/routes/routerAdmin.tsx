@@ -9,7 +9,7 @@ import DiscountList from '../pages/Admin/Discount/ListCount';
 import ListSale from '../pages/Admin/Discount/ListSale';
 import LoginAdmin from '../pages/Admin/Login';
 import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
-import ListGroups from '../pages/Admin/Groups/ListGroup';
+
 import Authorization from '../pages/Admin/Groups/Authorization';
 import PermissionPage from '../components/Permissions/PermissionPage';
 import ListTopic from '../pages/Admin/Topics';
@@ -24,12 +24,14 @@ import AddVariant from '../pages/Admin/Products/AddVariant';
 import Attribute from '../pages/Admin/Products/Attribute';
 import UpdateProduct from '../pages/Admin/Products/UpdateProduct';
 import UpdateVariant from '../pages/Admin/Products/UpdateVariant';
+import ListReview from '../pages/Admin/Review/ListReview/Index';
 import Statistic from '../pages/Admin/Statistic/Statistic List';
 import AddUser from '../pages/Admin/User/AddUser';
 import ListUser from '../pages/Admin/User/ListUser';
 import UpdateUser from '../pages/Admin/User/UpdateUser';
 import AddPost from '../pages/Admin/Posts/AddPost';
 import UpdatePost from '../pages/Admin/Posts/UpdatePost';
+import ListGroups from '../pages/Admin/Groups/listgroup';
 
 const routerAdmin = [
     {
@@ -119,6 +121,10 @@ const routerAdmin = [
             {
                 path: 'Update-user/:id',
                 element: <UpdateUser />,
+            },
+            {
+                path: 'list-review',
+                element: <ListReview />,
             },
             {
                 path: 'groups',
