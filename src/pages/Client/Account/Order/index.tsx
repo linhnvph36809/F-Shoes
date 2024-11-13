@@ -1,5 +1,5 @@
 import LeftSidebar from "./components/LeftSidebar";
-import {Input, Skeleton} from "antd";
+import { Skeleton} from "antd";
 import "./style.scss";
 import ItemOrder from "./components/ItemOrder";
 import useOrder from "../../../../hooks/profile/useOrder.tsx";
@@ -40,14 +40,14 @@ const OrderAccount = () => {
         setListOrder(filteredOrders);
     }, [filteredOrders]);
 
-    const onChangeFilterOrder = (e: any) => {
-
-        const value = e.target.value;
-
-       console.log(value);
-
-
-    }
+    // const onChangeFilterOrder = (e: any) => {
+    //
+    //     const value = e.target.value;
+    //
+    //    console.log(value);
+    //
+    //
+    // }
     return (
         <div className="border-t-2 w-full px-8 flex p-8 bg-gray-100">
             <LeftSidebar title="Orders" className="mx-6 bg-white w-[14%]"/>
