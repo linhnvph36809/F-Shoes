@@ -1,6 +1,15 @@
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
 export const formatPrice = (price: number): string  => {
     const intPart = Math.floor(price);
     return intPart.toLocaleString('vi-VN')
+}
+
+export const timeToNow = (time:string) => {
+    return dayjs(time).fromNow();
 }
 
 export const formatTime = (time:string|undefined):string =>  {

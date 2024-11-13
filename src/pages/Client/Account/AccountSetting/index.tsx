@@ -36,9 +36,11 @@ const AccountSetting = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [updateProfileForm] = Form.useForm();
-    const {loading:loadUser,currentUser,updateProfile,loadingUpdate} = useProfile();
+    const {loading:loadUser,currentUser,updateProfile,loadingUpdate,getCurrentUser} = useProfile();
     const [userD,setUserD] = useState<IUser>(model);
-
+    useEffect(() => {
+        getCurrentUser();
+    }, []);
 
     useEffect(() => {
         if (currentUser) {

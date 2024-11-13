@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {tokenManagerInstance} from '../../api';
 import {IProduct} from "../../interfaces/IProduct.ts";
 import {IUser, model} from "../../interfaces/IUser.ts";
@@ -43,9 +43,7 @@ const useProfile = () => {
 
         }
     }
-    useEffect(() => {
-        getCurrentUser();
-    }, []);
+
 
     return {
         loading,

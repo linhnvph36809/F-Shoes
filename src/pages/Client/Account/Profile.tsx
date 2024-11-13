@@ -9,14 +9,17 @@ import { formatPrice,formatTime } from '../../../utils';
 import useCookiesConfig from "../../../hooks/useCookiesConfig.tsx";
 import {COOKIE_USER} from "../../../constants";
 import {IUser} from "../../../interfaces/IUser.ts";
+import {useEffect} from "react";
 
 const ProfilePage = () => {
     const { cookies } = useCookiesConfig(COOKIE_USER);
 
     const userNameCookie = cookies?.userName;
 
-    const {currentUser,favoriteProducts,loading} = useProfile();
-
+    const {currentUser,favoriteProducts,loading,getCurrentUser} = useProfile();
+    useEffect(() => {
+        getCurrentUser();
+    }, []);
     let userD:IUser = {
         id: "",
         avatar_url: "",
