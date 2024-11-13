@@ -1,11 +1,12 @@
 import { message } from 'antd';
 import { useCallback } from 'react';
+import LoadingPage from '../../../../components/Loading/LoadingPage';
 import useUser from '../../../../hooks/useUser';
 import Heading from '../../components/Heading';
 import FormUser from '../FormUser';
 
 const AddUser = () => {
-    const { addUser } = useUser();
+    const { loading, addUser } = useUser();
 
     const handleAddUser = useCallback(
         async (values: any) => {
@@ -21,11 +22,17 @@ const AddUser = () => {
     );
 
     return (
-        <section>
-            <Heading>Add User</Heading>
-            <FormUser onFinish={handleAddUser} />
-            {/* Include delete functionality where needed */}
-        </section>
+        <>
+            {loading ? (
+                <LoadingPage />
+            ) : (
+                <section>
+                    <Heading>Add User</Heading>
+                    <FormUser onFinish={handleAddUser} />
+                    {/* Include delete functionality where needed */}
+                </section>
+            )}
+        </>
     );
 };
 
