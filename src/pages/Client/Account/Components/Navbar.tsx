@@ -13,16 +13,8 @@ const Item = [
         url: "/profile",
     },
     {
-        name: "Inbox",
-        url: "/inbox",
-    },
-    {
         name: "Orders",
         url: "/profile/orders",
-    },
-    {
-        name: "Favorite",
-        url: "/favorite",
     },
     {
         name: "Setting",
