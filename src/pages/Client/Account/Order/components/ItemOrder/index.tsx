@@ -14,7 +14,6 @@ type Props = {
 }
 const ItemOrder: React.FC<Props> = ({order}) => {
     const navigator = useNavigate();
-    console.log(order, 'order');
     const {cancelOrder, cancelLoading: loading} = useOrder();
     const [canCancel, setCanCancel] = useState(true);
 
@@ -88,7 +87,7 @@ const ItemOrder: React.FC<Props> = ({order}) => {
                     <div className="text-2xl text-gray">Order Total : <span
                         className="text-3xl color-primary">{formatPrice(order.total_amount)}đ</span></div>
                     <div className="flex space-x-4">
-                        <Link to={`order/${order?.id}`}><Button className="text-center"><Eye className="size-6"/>Watch
+                        <Link to={`/profile/order/${order?.id}`}><Button className="text-center"><Eye className="size-6"/>Watch
                             Detail</Button></Link>
                         {
                             order?.status === 0 ? <Button className="bg-amber-200">Buy again</Button> : canCancel ?

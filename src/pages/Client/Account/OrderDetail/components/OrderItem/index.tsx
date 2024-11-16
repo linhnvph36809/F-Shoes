@@ -1,5 +1,5 @@
 import {IProduct} from "../../../../../../interfaces/IProduct.ts";
-import "../../style.scss";
+import "../../../Order/style.scss";
 import {IVariation} from "../../../../../../interfaces/IVariation.ts";
 type Props = {
     product: IProduct,
@@ -8,7 +8,7 @@ type Props = {
 }
 import { formatPrice } from '../../../../../../utils';
 import {Link} from "react-router-dom";
-const ItemProduct:React.FC<Props> = ({product,variation,quantity}) => {
+const OrderItem:React.FC<Props> = ({product,variation,quantity}) => {
 
     return (
         <Link to={`/detail/${product.slug}`} className="opacity-80 bg-gray-50 cursor-pointer hover:opacity-100 hover:bg-white h-[100%] py-4 flex items-center border-2 rounded-xl space-x-4 relative p-2">
@@ -43,4 +43,4 @@ const ItemProduct:React.FC<Props> = ({product,variation,quantity}) => {
     );
 };
 
-export default ItemProduct;
+export default OrderItem;
