@@ -69,7 +69,7 @@ const OrderDetail = () => {
                                     |
                                 </Text>
                                 <Text type="danger" style={{fontSize: '16px'}}>
-                                    {order?.status ? statusString(order?.status) : ''}
+                                    {order?.status || order?.status === 0 ? statusString(order?.status) : ''}
                                 </Text>
                             </Row>
                         </Col>
