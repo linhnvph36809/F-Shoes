@@ -6,12 +6,13 @@ import { DownOutlined, FilterOutlined } from '@ant-design/icons';
 import Heading from './components/Heading';
 import useProduct from '../../../hooks/useProduct';
 import ProductList from './Productslist';
-import {Link, useParams, useSearchParams} from 'react-router-dom';
+import {useNavigate, useParams, useSearchParams} from 'react-router-dom';
 import {IProduct} from "../../../interfaces/IProduct.ts";
 import FilterByCategory from "./components/Fiter/FilterByCategory.tsx";
 import {tokenManagerInstance} from "../../../api";
 import {ICategory} from "../../../interfaces/ICategory.ts";
 import useCategory from "../../../hooks/useCategory.tsx";
+import FilterBox from "./components/Fiter";
 
 const sortKeysArray = [
     {
@@ -34,11 +35,12 @@ const sortKeysArray = [
 
 const CategoryPage = () => {
     const [filtersVisible, setFiltersVisible] = useState(true);
-
+    const navigator = useNavigate();
     const { products: rawProducts, loading: loadingProducts } = useProduct();
     const { slug } = useParams();
     const [searchParams] = useSearchParams();
     const sortOption = searchParams.get("sort");
+    const newQuery = new URLSearchParams(location.search);
     let listProducts:IProduct[]|[] = rawProducts;
 
     const {categories } = useCategory();
@@ -52,20 +54,46 @@ const CategoryPage = () => {
         const index = slug.lastIndexOf('.');
         id = slug.substring(index + 1);
     }
+    // useEffect(() => {
+    //     const getProductByCategoryById = async (id: number | string) => {
+    //         try {
+    //             const { data } = await tokenManagerInstance('get', `api/products/category/${id}`);
+    //             setProductsByCategory(data.products);
+    //         } catch (error) {
+    //             console.log(error);
+    //             return [];
+    //         }
+    //     };
+    //     getProductByCategoryById(id);
+    // }, [id]);
+    const variationsQuery = newQuery.get('attributes');
     useEffect(() => {
-        const getProductByCategoryById = async (id: number | string) => {
+
+        const getProductByAttribute = async (query:string|null|undefined,categoyId:string|number|null|undefined) => {
             try {
-                const { data } = await tokenManagerInstance('get', `api/products/category/${id}`);
+                let api = `api/product/by/attribute-values`;
+                if(categoyId){
+                    if(query) {
+                        api += `?categoryId=${categoyId}&attributes=${query}`;
+                    }else{
+                        api+= `?categoryId=${categoyId}`;
+                    }
+                }else{
+                    if(query) {
+                        api += `?attributes=${query}`;
+                    }
+                }
+                const { data } = await tokenManagerInstance('get',api);
                 setProductsByCategory(data.products);
-                console.log(data.products);
+                console.log(productsByCategory);
             } catch (error) {
                 console.log(error);
                 return [];
-
             }
         };
-        getProductByCategoryById(id);
-    }, [id]);
+
+        getProductByAttribute(variationsQuery,id);
+    }, [variationsQuery,id]);
     if(productsByCategory && productsByCategory.length > 0){
         listProducts = productsByCategory;
     }
@@ -73,14 +101,17 @@ const CategoryPage = () => {
         setFiltersVisible(!filtersVisible);
     };
 
-
+    const changeSort = (key:string) => {
+        newQuery.set('sort',`${key}`);
+        navigator(`?${newQuery.toString()}`, {replace: true});
+    }
 
     const sortMenu = (
         <Menu>
             {
                 sortKeysArray.map((item,index) => (
                     <Menu.Item key={index} >
-                        <Link to={`?sort=${item.key}`}> Sort by {item.name}</Link>
+                        <div onClick={() => changeSort(item.key)}> Sort by {item.name}</div>
                     </Menu.Item>
                 ))
             }
@@ -88,8 +119,6 @@ const CategoryPage = () => {
 
         </Menu>
     );
-
-
 
 
     return (
@@ -136,7 +165,7 @@ const CategoryPage = () => {
 
                         <FilterByCategory categories={listCategories}/>
                         <div className="mt-4">
-                            {/*<BoxFilter />*/}
+                            <FilterBox/>
                         </div>
                     </div>
                 )}
