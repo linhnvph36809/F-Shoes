@@ -1,4 +1,5 @@
 import { ICategory } from '../../../../../interfaces/ICategory';
+import {formatPrice} from "../../../../../utils";
 
 const BoxProducts = ({
     categories,
@@ -26,11 +27,11 @@ const BoxProducts = ({
                 <div className="mb-4">
                     {price_sale ? (
                         <>
-                            <span className="text-[18px] color-primary font-medium mr-2">{price_sale}đ</span>
-                            <span className="text-[14px] color-gray font-medium line-through mr-2">{price}đ</span>
+                            <span className="text-[18px] color-primary font-medium mr-2">{formatPrice(price_sale)}đ</span>
+                            <span className="text-[14px] color-gray font-medium line-through mr-2">{formatPrice(price)}đ</span>
                         </>
                     ) : (
-                        <span className="text-[18px] color-primary font">{price} đ</span>
+                        <span className="text-[18px] color-primary font">{formatPrice(price)} đ</span>
                     )}
                 </div>
             </div>

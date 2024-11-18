@@ -33,6 +33,7 @@ export interface IOrder{
     receiver_full_name: string|undefined;
     address: string;
     phone: string;
+    note:string;
     status:number;
     order_details: IOrderDetail[];
     created_at: string;

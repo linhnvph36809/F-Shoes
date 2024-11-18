@@ -4,6 +4,7 @@ import BoxProducts from '../components/BoxProduct';
 import { IProduct } from '../../../../interfaces/IProduct';
 import {Link} from "react-router-dom";
 
+
 interface ProductListProps {
     products: IProduct[]|[];
     loading: boolean;
