@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { tokenManagerInstance } from '../api';
+import { showMessageClient } from '../utils/messages';
 
 const API_CART = '/api/cart';
 
@@ -25,8 +26,9 @@ const useCart = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_CART, cart);
+            showMessageClient('Add to cart successfully', '', 'success');
         } catch (error) {
-            console.log(error);
+            showMessageClient('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }
@@ -47,15 +49,14 @@ const useCart = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('delete', API_CART + `/${id}`);
-            setCart([])
+            showMessageClient('Delete cart successfully', '', 'success');
+            setCart([]);
         } catch (error) {
-            console.log(error);
+            showMessageClient('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }
     };
-
-    
 
     return {
         carts,

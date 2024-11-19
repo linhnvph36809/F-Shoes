@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { tokenManagerInstance } from '../api';
 import { useNavigate } from 'react-router-dom';
+import { showMessageClient } from '../utils/messages';
 
 const API = '/api/';
 const API_ORDER = '/api/orders';
@@ -28,11 +29,11 @@ const useOnlinePayment = () => {
     const postOrder = async (order: any) => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('post', API_ORDER, order);
-            alert(data.message);
+            await tokenManagerInstance('post', API_ORDER, order);
+            showMessageClient('Order successfully', '', 'success');
             navigate('/order-cash-on-delivery');
         } catch (error) {
-            console.log(error);
+            showMessageClient('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }

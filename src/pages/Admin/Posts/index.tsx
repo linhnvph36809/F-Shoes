@@ -1,19 +1,22 @@
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { CircleX, RefreshCcw, SquarePen, Trash2 } from 'lucide-react';
 import { Input } from 'antd';
-import { useState, useMemo } from 'react';
 
 import ButtonEdit from '../components/Button/ButtonEdit';
 import TableAdmin from '../components/Table';
 import LoadingBlock from '../../../components/Loading/LoadingBlock';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import { IPost } from '../../../interfaces/IPost';
-import usePost from '../../../hooks/usePosts';
+import usePost, { API_POST } from '../../../hooks/usePosts';
 import ButtonPrimary from '../../../components/Button';
+import { PATH_ADMIN } from '../../../constants/path';
+
+export const KEY = 'list-posts';
 
 const ListPost = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const { data, isFetching, refetch } = useQueryConfig('posts', '/api/posts');
+    const { data, isFetching, refetch } = useQueryConfig(KEY, API_POST);
     const { deletePost, restorePost, softPost } = usePost();
 
     const handleDeletePost = (id?: string | number) => {
@@ -97,13 +100,15 @@ const ListPost = () => {
                             <SquarePen />
                         </ButtonEdit>
                     </Link>
-                    <ButtonEdit>
-                        {post.deleted_at ? (
+                    {post.deleted_at ? (
+                        <ButtonEdit>
                             <RefreshCcw onClick={() => handleRestorePost(post.id)} />
-                        ) : (
+                        </ButtonEdit>
+                    ) : (
+                        <ButtonEdit>
                             <CircleX onClick={() => handleSoftPost(post.id)} />
-                        )}
-                    </ButtonEdit>
+                        </ButtonEdit>
+                    )}
                     {post.deleted_at ? (
                         ''
                     ) : (
@@ -122,7 +127,7 @@ const ListPost = () => {
                 <div>
                     <div className="flex justify-between">
                         <div>
-                            <Link to="/admin/add-posts">
+                            <Link to={PATH_ADMIN.ADD_POST}>
                                 <ButtonPrimary width="w-[150px]" height="h-[50px]">
                                     Add Post
                                 </ButtonPrimary>

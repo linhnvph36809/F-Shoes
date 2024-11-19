@@ -1,33 +1,15 @@
-import { useEffect, useState } from 'react';
-
-import { IImage } from '../interfaces/IImage';
+import { useState } from 'react';
 import { tokenManagerInstance } from '../api';
 
 const API_IMAGE = '/api/image';
 
 const useImage = () => {
-    const [images, setImages] = useState<IImage[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-
-    const getAllImages = async () => {
-        try {
-            setLoading(true);
-            const {
-                data: { data },
-            } = await tokenManagerInstance('get', API_IMAGE);
-            setImages(data);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const deleteImage = async (id?: string | number) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('delete', API_IMAGE + id);
-            getAllImages();
+            await tokenManagerInstance('delete', API_IMAGE + `/${id}`);
         } catch (error) {
             console.log(error);
         } finally {
@@ -35,10 +17,12 @@ const useImage = () => {
         }
     };
 
-    const postImage = async (image: IImage) => {
+    const postImage = async (image: any) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('post', API_IMAGE, image);
+            await tokenManagerInstance('post', API_IMAGE, image, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
         } catch (error) {
             console.log(error);
         } finally {
@@ -46,12 +30,7 @@ const useImage = () => {
         }
     };
 
-    useEffect(() => {
-        getAllImages();
-    }, []);
-
     return {
-        images,
         loading,
         deleteImage,
         postImage,

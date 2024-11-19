@@ -19,7 +19,7 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
         if (!user?.id && userId) {
             setUser({
                 id: userId,
-            }); 
+            });
         }
     }, []);
     return (
@@ -27,6 +27,7 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
             <CookiesProvider>
                 <Context.Provider value={{ user, setUser }}>{children};</Context.Provider>
             </CookiesProvider>
+
         </QueryClientProvider>
     );
 };

@@ -2,8 +2,8 @@ import { useQuery } from 'react-query';
 import { tokenManagerInstance } from '../api';
 
 const defautConfig = {
-    cacheTime: 1000 * 60 * 5,
-    staleTime: 1000 * 60 * 1,
+    cacheTime: 1000 * 60 * 30,
+    staleTime: 1000 * 60 * 30,
 };
 
 const useQueryConfig = (key: string, api: string, config: any = defautConfig) => {

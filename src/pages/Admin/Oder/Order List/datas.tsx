@@ -36,10 +36,10 @@ export const columns = [
                 <Avatar src={``} size={40} />
                 <div style={{ marginLeft: '10px' }}>
                     {/* Hiển thị tên khách hàng */}
-                    <Text strong>{user.name}</Text>
+                    <Text strong>{user?.name}</Text>
                     <br />
                     {/* Hiển thị email khách hàng */}
-                    <Text type="secondary">{user.email}</Text>
+                    <Text type="secondary">{user?.email}</Text>
                 </div>
             </div>
         ),

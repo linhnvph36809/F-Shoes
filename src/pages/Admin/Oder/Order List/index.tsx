@@ -32,7 +32,7 @@ const OrderList = () => {
         if (value.trim() === '') {
             setFilteredData(orders);
         } else {
-            const filtered = orders.filter((order: any) => order.user.name?.toLowerCase() == value.toLowerCase());
+            const filtered = orders.filter((order: any) => order?.user?.name?.toLowerCase() == value.toLowerCase());
             setFilteredData(filtered);
         }
     };

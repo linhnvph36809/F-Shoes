@@ -9,10 +9,11 @@ import { useEffect } from 'react';
 
 const FormTopic = ({ title, initialValues, onFinish }: { title: string; initialValues: any; onFinish: any }) => {
     const [form] = Form.useForm();
-    const { data } = useQueryConfig('topic-form', 'api/topics');
+    const { data, refetch } = useQueryConfig('topic-form', 'api/topics');
 
     const handleFinish = (value: ITopic) => {
         onFinish(value);
+        refetch();
         form.resetFields();
     };
 

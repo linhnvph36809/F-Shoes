@@ -1,5 +1,6 @@
 import { Collapse, ConfigProvider, Form, Select } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import useAttribute from '../../../../hooks/useAttribute';
 import { IAttribute } from '../../../../interfaces/IAttribute';
@@ -13,14 +14,24 @@ import ButtonPrimary from '../../../../components/Button';
 import { IImage } from '../../../../interfaces/IImage';
 import ModalImage from '../AddProduct/ModalImage';
 import useVariant from '../../../../hooks/useVariant';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
+
+const API_ATTRIBUTE_GET = '/api/get/attribute/values/product/';
 
 const AddVariant = () => {
     const [form] = Form.useForm();
+    const { slug } = useParams();
+    let id: string | number | undefined;
+    if (slug) {
+        const index = slug.lastIndexOf('.');
+        id = slug.substring(index + 1);
+    }
     const [variants, setVariants] = useState<IAttribute[]>([]);
     const [variantsChanges, setVariantsChanges] = useState<IAttribute[]>([]);
     const [variantId, setVariantId] = useState<number[]>([]);
     const [listAttribute, setListAttribute] = useState<any>([]);
-    const { loading, attributeByIds, postAttribute } = useAttribute();
+    const { loading, postAttribute } = useAttribute();
+    const { data: attributeByIds, refetch } = useQueryConfig('attribute', API_ATTRIBUTE_GET + id);
     const { postVariant } = useVariant();
     const [imagesVariants, setImagesVariants] = useState<any>({});
 
@@ -54,7 +65,7 @@ const AddVariant = () => {
 
     const handleChangeItem = useCallback(
         (values: number[], id: number) => {
-            const attribute = attributeByIds.find((attribute: any) => attribute.id === id);
+            const attribute = attributeByIds?.data?.find((attribute: any) => attribute.id === id);
             const newValues = attribute?.values.filter((value: any) => values.includes(+value.id));
             const newAttribute = { ...attribute, values: newValues } as IAttribute;
 
@@ -82,8 +93,14 @@ const AddVariant = () => {
         [attributeByIds, variantsChanges],
     );
 
+    const handlePostAttributes = (value: any) => {
+        const res = postAttribute(value);
+        refetch();
+        return res;
+    };
+
     useEffect(() => {
-        const newAttributes = attributeByIds.filter((attribute: any) => variantId.includes(+attribute.id));
+        const newAttributes = attributeByIds?.data?.filter((attribute: any) => variantId.includes(+attribute.id));
         setVariants(newAttributes);
     }, [variantId, attributeByIds]);
 
@@ -124,12 +141,12 @@ const AddVariant = () => {
                                     onChange={handleChange}
                                     optionFilterProp="name"
                                     fieldNames={{ label: 'name', value: 'id' }}
-                                    options={attributeByIds}
+                                    options={attributeByIds?.data}
                                     value={variantId}
                                 />
                             </ConfigProvider>
                             <div>
-                                {variants.map((variant) => (
+                                {variants?.map((variant) => (
                                     <div className="p-5 bg-gray-200 rounded-lg mb-10 relative" key={variant.id}>
                                         <h3 className="color-primary text-16px font-medium mb-5">{variant.name}</h3>
                                         <div>
@@ -159,7 +176,10 @@ const AddVariant = () => {
                             </div>
                             <div className="mt-10">
                                 <h5 className="text-20px font-medium mb-3">Add variant</h5>
-                                <FormAttribute postAttribute={postAttribute} setVariantId={setVariantId} />
+                                <FormAttribute
+                                    handlePostAttributes={handlePostAttributes}
+                                    setVariantId={setVariantId}
+                                />
                             </div>
                         </div>
                         <div>
