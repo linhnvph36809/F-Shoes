@@ -10,6 +10,8 @@ import useQueryConfig from '../../../hooks/useQueryConfig';
 import LoadingBlock from '../../../components/Loading/LoadingBlock';
 import useTopic, { API_TOPIC } from '../../../hooks/useTopic';
 import FormTopic from './FormTopic';
+import { showMessageActive } from '../../../utils/messages';
+import Swal from 'sweetalert2';
 
 export const KEY = 'list-topic';
 
@@ -25,10 +27,14 @@ const ListTopic = ({ initialValues }: any) => {
 
     const handleDeleteTopic = (id?: string | number) => {
         if (id) {
-            deleteTopic(id);
-            refetch();
+            showMessageActive('Are you sure you want to delete the topic?', '', 'warning', () => {
+                deleteTopic(id);
+                refetch();
+            });
         }
     };
+
+
 
     const handleRestoreTopic = (id?: string | number) => {
         if (id) {

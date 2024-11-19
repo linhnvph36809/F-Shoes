@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { tokenManagerInstance } from '../api';
 import { ITopic } from '../interfaces/ITopic';
+import { showMessageAdmin } from '../utils/messages';
 
 export const API_TOPIC = '/api/topics';
 
@@ -13,9 +14,10 @@ const useTopic = () => {
     const deleteTopic = async (id: string | number) => {
         try {
             setLoading(true);
-            tokenManagerInstance('delete', `${API_TOPIC}/forceDelete/${id}`);
+            await tokenManagerInstance('delete', `${API_TOPIC}/forceDelete112/${id}`);
+            showMessageAdmin('Delete Topic successfully', '', 'success');
         } catch (error) {
-            console.error(error);
+            showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }
@@ -26,7 +28,7 @@ const useTopic = () => {
             setLoading(true);
             tokenManagerInstance('delete', `${API_TOPIC}/${id}`);
         } catch (error) {
-            console.error(error);
+            showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }
@@ -37,7 +39,7 @@ const useTopic = () => {
             setLoading(true);
             await tokenManagerInstance('post', API_TOPIC + `/restore/${id}`);
         } catch (error) {
-            console.error(error);
+            showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }
@@ -47,8 +49,9 @@ const useTopic = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_TOPIC, topic);
+            showMessageAdmin('Add Topic successfully', '', 'success');
         } catch (error) {
-            console.error(error);
+            showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }
@@ -58,9 +61,10 @@ const useTopic = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('patch', API_TOPIC + `/${id}`, group);
+            showMessageAdmin('Update Topic successfully', '', 'success');
             navigate('/admin/topic');
         } catch (error) {
-            console.error(error);
+            showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }

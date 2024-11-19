@@ -1,14 +1,16 @@
+import { Link } from 'react-router-dom';
+
 import { IProduct } from '../../../../../../interfaces/IProduct.ts';
-import '../../style.scss';
+import '../../../Order/style.scss';
 import { IVariation } from '../../../../../../interfaces/IVariation.ts';
 type Props = {
     product: IProduct;
     variation?: IVariation;
     quantity: number;
-};
+};  
 import { formatPrice } from '../../../../../../utils';
-import { Link } from 'react-router-dom';
-const ItemProduct: React.FC<Props> = ({ product, variation, quantity }) => {
+
+const OrderItem: React.FC<Props> = ({ product, variation, quantity }) => {
     return (
         <Link
             to={`/detail/${product?.slug}`}
@@ -51,4 +53,4 @@ const ItemProduct: React.FC<Props> = ({ product, variation, quantity }) => {
     );
 };
 
-export default ItemProduct;
+export default OrderItem;

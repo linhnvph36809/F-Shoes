@@ -81,7 +81,12 @@ const AccountSetting = () => {
             detail_address: data.detail_address,
             birth_date: date,
         }
-
+        setInitialValues({
+            given_name: data.given_name,
+            family_name: data.family_name,
+            detail_address: data.detail_address,
+            birth_date: data.birth_date,
+        })
         const updateUser = await updateProfile(updateData);
         if(updateUser?.name){
             setUserD(updateUser);
