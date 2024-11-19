@@ -4,13 +4,13 @@ import { Plus, X } from 'lucide-react';
 import InputPrimary from '../../../../../components/Input';
 import ButtonPrimary from '../../../../../components/Button';
 
-const FormAttribute = ({ postAttribute, setVariantId }: { postAttribute: any; setVariantId: any }) => {
+const FormAttribute = ({ handlePostAttributes, setVariantId }: { handlePostAttributes: any; setVariantId: any }) => {
     const [form] = Form.useForm();
 
     const handleAddSubmit = (name: string, remove: any) => {
         form.validateFields([['inputs', name]])
             .then((values) => {
-                postAttribute({
+                handlePostAttributes({
                     attribute: values.inputs[name].attribute,
                     values: values.inputs[name].values,
                 }).then((variant: any) => {

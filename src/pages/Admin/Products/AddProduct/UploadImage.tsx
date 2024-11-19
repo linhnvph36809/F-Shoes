@@ -68,7 +68,6 @@ const UploadImage = ({
                 itemRender={itemRender as any}
                 onPreview={handlePreview}
                 onChange={handleChange}
-                
                 multiple
             >
                 {uploadButton}

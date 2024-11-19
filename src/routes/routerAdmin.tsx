@@ -25,13 +25,17 @@ import Attribute from '../pages/Admin/Products/Attribute';
 import UpdateProduct from '../pages/Admin/Products/UpdateProduct';
 import UpdateVariant from '../pages/Admin/Products/UpdateVariant';
 import ListReview from '../pages/Admin/Review/ListReview/Index';
-import Statistic from '../pages/Admin/Statistic/Statistic List';
+import Statistic from '../pages/Admin/Statistic/StatisticList';
 import AddUser from '../pages/Admin/User/AddUser';
 import ListUser from '../pages/Admin/User/ListUser';
 import UpdateUser from '../pages/Admin/User/UpdateUser';
 import AddPost from '../pages/Admin/Posts/AddPost';
 import UpdatePost from '../pages/Admin/Posts/UpdatePost';
-import ListGroups from '../pages/Admin/Groups/listgroup';
+import ListGroups from '../pages/Admin/Groups/ListGroup';
+import MediaLibrary from '../pages/Admin/Image/list-image';
+import ListVouCher from '../pages/Admin/Voucher';
+import UpdateVoucher from '../pages/Admin/Voucher/UpdateVoucher';
+import UpdateAttribute from '../pages/Admin/Products/Attribute/UpdateAttribute';
 
 const routerAdmin = [
     {
@@ -69,6 +73,10 @@ const routerAdmin = [
             {
                 path: 'add-attribute',
                 element: <Attribute />,
+            },
+            {
+                path: 'update-attribute/:id',
+                element: <UpdateAttribute />,
             },
             {
                 path: 'add-variant/:slug',
@@ -128,11 +136,7 @@ const routerAdmin = [
             },
             {
                 path: 'groups',
-                element: (
-                    <PermissionPage keyName="product" action="edit">
-                        <ListGroups />
-                    </PermissionPage>
-                ),
+                element: <ListGroups />,
             },
             {
                 path: 'statistic',
@@ -162,7 +166,18 @@ const routerAdmin = [
                 path: 'update-posts/:id',
                 element: <UpdatePost />,
             },
-
+            {
+                path: 'media',
+                element: <MediaLibrary />,
+            },
+            {
+                path: 'voucher',
+                element: <ListVouCher />,
+            },
+            {
+                path: 'voucher/:id',
+                element: <UpdateVoucher />,
+            },
         ],
     },
     {

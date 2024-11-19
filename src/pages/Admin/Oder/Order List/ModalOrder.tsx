@@ -1,10 +1,8 @@
 import { Modal } from 'antd';
 import { Link } from 'react-router-dom';
-import { formatCurrencyVND } from '../../../../utils/formatCurrency';
+import { formatPrice, formatTime } from '../../../../utils';
 
 const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCancel: () => void }) => {
-    console.log(orderDetail);
-
     return (
         <>
             <Modal width={1000} footer={''} title="Order Detail" open={orderDetail.isModalOpen} onCancel={handleCancel}>
@@ -26,16 +24,20 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                         </div>
                         <div>
                             <div className="font-medium text-[14px] color-gray mb-2">
-                                Create At : {orderDetail.orderDetail?.created_at}
+                                Create At : {formatTime(orderDetail.orderDetail?.created_at)}
                             </div>
+                            {orderDetail.orderDetail?.voucher ? (
+                                <div className="font-medium text-[14px] color-gray mb-2">
+                                    Voucher : {formatPrice(orderDetail.orderDetail?.voucher)}
+                                </div>
+                            ) : (
+                                ''
+                            )}
                             <div className="font-medium text-[14px] color-gray mb-2">
-                                Voucher : {orderDetail.orderDetail?.voucher || 0}
-                            </div>
-                            <div className="font-medium text-[14px] color-gray mb-2">
-                                Shipping Cost : {orderDetail.orderDetail?.shipping_cost} VND
+                                Shipping Cost : {formatPrice(orderDetail.orderDetail?.shipping_cost)} đ
                             </div>
                             <div className="font-medium text-[15px] color-primary mb-2">
-                                Total : {orderDetail.orderDetail?.total_amount} VND
+                                Total : {formatPrice(orderDetail.orderDetail?.total_amount)} đ
                             </div>
                         </div>
                     </div>
@@ -73,14 +75,14 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     <img src={orderDetail.product.image_url} alt="Product Image" />
                                     <div className="flex justify-between items-center mt-2">
                                         <h3 className="text-[14px] color-primary font-medium">
-                                            {orderDetail?.product.name}
+                                            {orderDetail?.product?.name}
                                         </h3>
                                         <span className="text-[12px] color-gray font-medium">
                                             x{orderDetail?.quantity}
                                         </span>
                                     </div>
                                     <p className="text-[12px] color-primary font-medium mt-2">
-                                        {formatCurrencyVND(orderDetail?.price)} VND
+                                        {formatPrice(orderDetail?.price)} đ
                                     </p>
                                 </div>
                             </Link>

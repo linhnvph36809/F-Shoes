@@ -13,6 +13,7 @@ import LoadingSmall from "../../../../../../components/Loading/LoadingSmall.tsx"
 type Props = {
     order:IOrder
 }
+
 const ItemOrder:React.FC<Props> = ({order}) => {
     const navigator = useNavigate();
     const [orderItems,setOrderItems] = useState<IOrderDetail[]>();

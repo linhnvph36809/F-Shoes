@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Form, Button, Divider, Typography, Row, Col, Card, Progress, Radio, Select } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
 
 import InputPrimary from '../../../components/Input';
@@ -28,7 +28,6 @@ const Order = () => {
     const [districtId, setDistrictId] = useState<number | null>(null);
     const [wardCode, setWardCode] = useState<string | null>(null);
     const [code, setCode] = useState<string>('');
-    console.log(carts);
 
     const handleCityChange = (cityId: number) => {
         getAllDistrict(cityId);
@@ -148,7 +147,7 @@ const Order = () => {
             city: province,
             country: 'Viet Nam',
             voucher_id: voucher?.id ? voucher?.id : null,
-            status: 'Waiting Confirm',
+            status: 1,
             note: value.note,
             order_details,
             amount_collected: value.payment_method !== 'cash on delivery' ? total_amount : 0,

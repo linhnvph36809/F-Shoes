@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { tokenManagerInstance } from '../api';
 import { ITopic } from '../interfaces/ITopic';
 
-const API_TOPIC = '/api/topics';
+export const API_TOPIC = '/api/topics';
 
 const useTopic = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -21,7 +21,7 @@ const useTopic = () => {
         }
     };
 
-    const softGroup = async (id: string | number) => {
+    const softTopic = async (id: string | number) => {
         try {
             setLoading(true);
             tokenManagerInstance('delete', `${API_TOPIC}/${id}`);
@@ -54,7 +54,7 @@ const useTopic = () => {
         }
     };
 
-    const patchGroup = async (id: string | number, group: { group_name: string; permissions: string }) => {
+    const patchTopic = async (id: string | number, group: { group_name: string; permissions: string }) => {
         try {
             setLoading(true);
             await tokenManagerInstance('patch', API_TOPIC + `/${id}`, group);
@@ -69,9 +69,9 @@ const useTopic = () => {
     return {
         loading,
         deleteTopic,
-        softGroup,
+        softTopic,
         postTopic,
-        patchGroup,
+        patchTopic,
         restoreTopic,
     };
 };

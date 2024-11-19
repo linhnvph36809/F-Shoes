@@ -88,12 +88,12 @@ const ListCategory = () => {
             if (index !== 0) {
                 return (
                     <div className="flex-row-center gap-x-5">
-                        <Link to={`/admin/update-category/${values.id}`}>
+                        <Link to={`/admin/update-category/${values?.id}`}>
                             <ButtonEdit>
                                 <SquarePen />
                             </ButtonEdit>
                         </Link>
-                        <ButtonEdit onClick={() => handleDeleteCategory(values.id)}>
+                        <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
                             <Trash2 />
                         </ButtonEdit>
                     </div>

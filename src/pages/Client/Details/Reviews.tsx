@@ -5,11 +5,22 @@ import ReviewForm from '../../../components/FormReview';
 import { Dropdown, Menu } from 'antd';
 import { useContextGlobal } from '../../../contexts';
 import LoadingBlock from '../../../components/Loading/LoadingBlock';
+import useQueryConfig from '../../../hooks/useQueryConfig';
+import { useParams } from 'react-router-dom';
 
 const Reviews = ({ productId }: { productId?: string | number }) => {
-    const { loading, reviews, deleteReview, putReview, postReview } = useReview();
+    const { slug } = useParams();
+
+    let id: string | number | undefined;
+
+    if (slug) {
+        const index = slug.lastIndexOf('.');
+        id = slug.substring(index + 1);
+    }
+    const { loading, deleteReview, putReview, postReview } = useReview();
+    const { data } = useQueryConfig('get-review', `/api/product/${id}/reviews?times=review`);
     const { user } = useContextGlobal();
-    console.log(reviews);
+    console.log(data);
 
     const starElements = (rating: number) => {
         const list = [];
@@ -20,10 +31,10 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
     };
 
     const averageRating: any = useMemo(() => {
-        if (reviews?.reviews?.length === 0) return 0;
-        const total = reviews?.reviews?.reduce((sum: number, item: any) => sum + item.rating, 0);
-        return (total / reviews?.reviews?.length).toFixed(1);
-    }, [reviews]);
+        if (data?.data?.reviews?.length === 0) return 0;
+        const total = data?.data?.reviews?.reduce((sum: number, item: any) => sum + item.rating, 0);
+        return (total / data?.data?.reviews?.length).toFixed(1);
+    }, [data]);
 
     return (
         <ul>
@@ -52,7 +63,7 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
                     className="flex-row-center justify-between color-primary text-[18px]
             font-medium"
                 >
-                    Reviews {reviews?.reviews?.length}
+                    Reviews {data?.data?.reviews?.length}
                     <div className="flex-row-center gap-x-4">
                         <span className="flex-row-center gap-x-1">
                             <Star className="w-[16px]" />
@@ -77,7 +88,7 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
                             {loading ? (
                                 <LoadingBlock />
                             ) : (
-                                reviews?.reviews?.map((review: any, index: number) => (
+                                data?.data?.reviews.map((review: any, index: number) => (
                                     <div key={index} className="my-12">
                                         <div>
                                             <div>

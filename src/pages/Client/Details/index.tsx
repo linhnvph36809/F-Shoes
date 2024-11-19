@@ -177,10 +177,7 @@ const Detail = () => {
                                 </button>
 
                                 <button
-                                    onClick={() =>
-                                        postWishlist(
-                                            productD.id,
-                                        )}
+                                    onClick={() => postWishlist(productD.id)}
                                     className="h-[58px] color-primary border
                                     hover:border-[#111111] rounded-[30px] w-full
                                     transition-global mt-5 flex-row-center justify-center gap-x-2"

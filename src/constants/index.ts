@@ -10,6 +10,14 @@ export const PERMISSION = {
     PERMISSION_PRODUCT: 'product',
     PERMISSION_CATEGORY: 'category',
     PERMISSION_USER: 'user',
+    PERMISSION_VOUCHER: 'voucher',
+    PERMISSION_STATISTIC: 'statistic',
+    PERMISSION_TOPIC: 'topic',
+    PERMISSION_POST: 'post',
+    PERMISSION_ORDER: 'order',
+    PERMISSION_GROUP: 'group',
+    PERMISSION_MEDIA: 'media',
+    PERMISSION_DISCOUNT: 'discount',
 };
 
 export const ACTIONS = {

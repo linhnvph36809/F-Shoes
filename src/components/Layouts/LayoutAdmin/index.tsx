@@ -27,8 +27,9 @@ export const usePermissionContext = () => useContext(ContextAdmin);
 
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
+
     useEffect(() => {
-        const starCountRef = ref(db, `groups/7`);
+        const starCountRef = ref(db, `groups/3`);
         const unsubscribe = onValue(starCountRef, (snapshot) => {
             try {
                 const data = snapshot.val();
@@ -45,7 +46,7 @@ const LayoutAdmin: React.FC = () => {
     const itemsPermission = useMemo(() => {
         return items?.filter((item: any) => {
             if (item.permissionName !== undefined) {
-                if (permissions?.[item.permissionName].length == 0) {
+                if (permissions?.[item.permissionName]?.length == 0) {
                     return false;
                 } else {
                     return true;
