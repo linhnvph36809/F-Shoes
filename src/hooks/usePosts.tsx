@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { tokenManagerInstance } from '../api';
 import { IPost } from '../interfaces/IPost';
 
-const API_POST = '/api/posts';
+export const API_POST = '/api/posts';
 
 const usePost = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -61,10 +61,10 @@ const usePost = () => {
         }
     };
 
-    const patchPost = async (id: string | number, group: { group_name: string; permissions: string }) => {
+    const patchPost = async (id: string | number, post: any) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('patch', API_POST + `/${id}`, group);
+            await tokenManagerInstance('patch', API_POST + `/${id}`, post);
             navigate('/admin/posts');
         } catch (error: any) {
             if (error?.response?.data?.message) {

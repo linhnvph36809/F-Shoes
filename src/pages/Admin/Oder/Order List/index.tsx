@@ -9,8 +9,9 @@ import {
 } from '@ant-design/icons';
 import Heading from '../../components/Heading';
 import { columns } from './datas';
-import useOrder from '../../../../hooks/useOrder';
+import { API_ORDER } from '../../../../hooks/useOrder';
 import ModalOrder from './ModalOrder';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
 
 const { Option } = Select;
 
@@ -22,7 +23,7 @@ const OrderList = () => {
         orderDetail: null,
     });
 
-    const { orders } = useOrder();
+    const { data: orders } = useQueryConfig('order-admin', API_ORDER);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -30,9 +31,11 @@ const OrderList = () => {
         console.log(value);
 
         if (value.trim() === '') {
-            setFilteredData(orders);
+            setFilteredData(orders?.data);
         } else {
-            const filtered = orders.filter((order: any) => order.user.name?.toLowerCase() == value.toLowerCase());
+            const filtered = orders?.data.filter(
+                (order: any) => order?.user?.name?.toLowerCase() == value.toLowerCase(),
+            );
             setFilteredData(filtered);
         }
     };
@@ -59,7 +62,7 @@ const OrderList = () => {
     };
 
     useEffect(() => {
-        setFilteredData(orders);
+        setFilteredData(orders?.data);
     }, [orders]);
 
     const handleCancel = () => {

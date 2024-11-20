@@ -16,7 +16,6 @@ const ReviewForm = ({
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
-  console.log(defaultValues);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -39,6 +38,7 @@ const ReviewForm = ({
         ...values,
       });
     }
+    setIsModalVisible(false);
   };
 
   return (

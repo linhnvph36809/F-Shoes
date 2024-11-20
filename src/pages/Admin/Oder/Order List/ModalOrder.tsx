@@ -1,13 +1,28 @@
-import { Modal } from 'antd';
+import { Modal, Select } from 'antd';
 import { Link } from 'react-router-dom';
-import { formatCurrencyVND } from '../../../../utils/formatCurrency';
+import { formatPrice, formatTime } from '../../../../utils';
+import { STATUS_ORDER } from '../../../../constants';
+import { Option } from 'antd/es/mentions';
+import useOrder, { API_ORDER } from '../../../../hooks/useOrder';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
 
 const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCancel: () => void }) => {
-    console.log(orderDetail);
+    const { refetch } = useQueryConfig('order-admin', API_ORDER);
+    const { putOrder } = useOrder();
+
+    const handleChangeStatus = (status: string) => {
+        if (orderDetail?.orderDetail.id) {
+            putOrder(orderDetail.orderDetail.id, {
+                status,
+            });
+            handleCancel();
+            refetch();
+        }
+    };
 
     return (
         <>
-            <Modal width={1000} footer={''} title="Order Detail" open={orderDetail.isModalOpen} onCancel={handleCancel}>
+            <Modal width={600} footer={''} title="Order Detail" open={orderDetail.isModalOpen} onCancel={handleCancel}>
                 <div>
                     <div className="grid grid-cols-2 mb-10">
                         <div>
@@ -26,20 +41,49 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                         </div>
                         <div>
                             <div className="font-medium text-[14px] color-gray mb-2">
-                                Create At : {orderDetail.orderDetail?.created_at}
+                                Create At : {formatTime(orderDetail.orderDetail?.created_at)}
                             </div>
+                            {orderDetail.orderDetail?.voucher ? (
+                                <div className="font-medium text-[14px] color-gray mb-2">
+                                    Voucher : {formatPrice(orderDetail.orderDetail?.voucher)}
+                                </div>
+                            ) : (
+                                ''
+                            )}
                             <div className="font-medium text-[14px] color-gray mb-2">
-                                Voucher : {orderDetail.orderDetail?.voucher || 0}
-                            </div>
-                            <div className="font-medium text-[14px] color-gray mb-2">
-                                Shipping Cost : {orderDetail.orderDetail?.shipping_cost} VND
+                                Shipping Cost : {formatPrice(orderDetail.orderDetail?.shipping_cost)} đ
                             </div>
                             <div className="font-medium text-[15px] color-primary mb-2">
-                                Total : {orderDetail.orderDetail?.total_amount} VND
+                                Total : {formatPrice(orderDetail.orderDetail?.total_amount)} đ
                             </div>
                         </div>
                     </div>
-                    <h1 className="color-gray font-normal mb-2">Order id: {orderDetail?.orderDetail?.id}</h1>
+                    {orderDetail?.orderDetail?.status == 0 ? (
+                        ''
+                    ) : (
+                        <div className="mb-10">
+                            <Select
+                                style={{ width: 200, marginRight: 8 }}
+                                placeholder="Please select status"
+                                onChange={handleChangeStatus}
+                            >
+                                {STATUS_ORDER.map((status: string, index: number) => {
+                                    if (
+                                        orderDetail?.orderDetail?.status == 0 ||
+                                        orderDetail?.orderDetail?.status < index
+                                    ) {
+                                        return (
+                                            <Option key={String(index)} value={String(index)}>
+                                                {status}
+                                            </Option>
+                                        );
+                                    } else {
+                                        return '';
+                                    }
+                                })}
+                            </Select>
+                        </div>
+                    )}
                     <div className="grid grid-cols-4 gap-x-5 border p-6">
                         <div>
                             <p className="font-medium color-primary">Shipping method:</p>
@@ -62,26 +106,28 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                         <div>
                             <p className="font-medium color-primary">Status :</p>
                             <span className="color-primary font-normal color-gray">
-                                {orderDetail?.orderDetail?.status}
+                                {STATUS_ORDER[orderDetail?.orderDetail?.status]}
                             </span>
                         </div>
                     </div>
-                    <div className="grid grid-cols-6 gap-10 mt-10">
+                    <div className="h-[300px] overflow-auto">
                         {orderDetail?.orderDetail?.order_details?.map((orderDetail: any) => (
-                            <Link to={`/detail/${orderDetail?.product.slug}`} key={orderDetail?.orderDetail?.id}>
-                                <div>
-                                    <img src={orderDetail.product.image_url} alt="Product Image" />
-                                    <div className="flex justify-between items-center mt-2">
-                                        <h3 className="text-[14px] color-primary font-medium">
-                                            {orderDetail?.product.name}
-                                        </h3>
-                                        <span className="text-[12px] color-gray font-medium">
-                                            x{orderDetail?.quantity}
-                                        </span>
+                            <Link to={`/detail/${orderDetail?.product?.slug}`} key={orderDetail?.orderDetail?.id}>
+                                <div className="flex gap-x-5 h-[80px] my-5 border-b pb-3">
+                                    <img src={orderDetail.product?.image_url} alt="Product Image" />
+                                    <div>
+                                        <div className="flex justify-between items-center gap-x-2 mt-2">
+                                            <h3 className="text-[16px] color-primary font-medium">
+                                                {orderDetail?.product?.name}
+                                            </h3>
+                                            <span className="text-[12px] color-gray font-medium">
+                                                x{orderDetail?.quantity}
+                                            </span>
+                                        </div>
+                                        <p className="text-[12px] color-primary font-medium mt-2">
+                                            {formatPrice(orderDetail?.price)} đ
+                                        </p>
                                     </div>
-                                    <p className="text-[12px] color-primary font-medium mt-2">
-                                        {formatCurrencyVND(orderDetail?.price)} VND
-                                    </p>
                                 </div>
                             </Link>
                         ))}

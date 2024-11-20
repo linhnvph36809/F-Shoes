@@ -1,6 +1,6 @@
-import {useState} from "react";
-import {IOrder} from "../../interfaces/IOrder.ts";
-import {tokenManagerInstance} from "../../api";
+import { useState } from 'react';
+import { IOrder } from '../../interfaces/IOrder.ts';
+import { tokenManagerInstance } from '../../api';
 
 const API_ORDER = 'api/orders';
 const UseOrder = () => {
@@ -12,18 +12,18 @@ const UseOrder = () => {
     const myOrders = async () => {
         try {
             setLoading(true);
-            const {data} = await tokenManagerInstance('get', 'api/me/orders');
+            const { data } = await tokenManagerInstance('get', 'api/me/orders');
             setOrders(data);
         } catch (error) {
             console.log(error, 'error');
         } finally {
             setLoading(false);
         }
-    }
+    };
     const cancelOrder = async (id: string) => {
         try {
             setCancelLoading(true);
-            const {data} = await tokenManagerInstance('patch', `api/cancel/order/${id}`);
+            const { data } = await tokenManagerInstance('patch', `api/cancel/order/${id}`);
 
             return data.order;
         } catch (error) {
@@ -32,18 +32,18 @@ const UseOrder = () => {
         } finally {
             setCancelLoading(false);
         }
-    }
+    };
     const getOrderDetail = async (id: string) => {
         try {
             setLoading(true);
-            const {data} = await tokenManagerInstance('get',`${API_ORDER}/${id}`);
+            const { data } = await tokenManagerInstance('get', `${API_ORDER}/${id}`);
             setOrderDetail(data);
         } catch (error) {
             console.log(error);
         } finally {
             setLoading(false);
         }
-    }
+    };
     return {
         orders,
         loading,
@@ -51,8 +51,8 @@ const UseOrder = () => {
         cancelOrder,
         cancelLoading,
         orderDetail,
-        getOrderDetail
-    }
+        getOrderDetail,
+    };
 };
 
 export default UseOrder;

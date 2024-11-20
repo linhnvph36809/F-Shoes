@@ -1,3 +1,5 @@
+import { CircleX } from "lucide-react";
+import ButtonEdit from "../../components/Button/ButtonEdit";
 
 export const columnsAttribute = [
     {
@@ -14,10 +16,12 @@ export const columnsAttribute = [
         title: 'Attribute Value',
         dataIndex: 'values',
         key: '3',
-        render: (values: any) => {
+        render: (_: any, attributeValues: any) => {
             return (
                 <div>
-                    {values.length ? values.map((value: any) => <div key={value.id}>{value.value}</div>) : 'null'}
+                    {attributeValues.values.length
+                        ? attributeValues.values.map((value: any) => <div key={value.id}>{value.value}</div>)
+                        : 'null'}
                 </div>
             );
         },

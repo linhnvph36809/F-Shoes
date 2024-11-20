@@ -13,9 +13,9 @@ import Layout from '../pages/Client/Account/Layout';
 import OrderAccount from '../pages/Client/Account/Order';
 import Post from '../pages/Client/Post';
 import PostDetail from '../pages/Client/PostDetail';
+import OrderCashOnDelivery from '../pages/Client/OrderComplete/OrderCashOnDelivery';
 import OrderList from '../pages/Client/Account/OrderDetail';
 import OrderDetail from '../pages/Client/Account/OrderDetail';
-import OrderCashOnDelivery from '../pages/Client/OrderComplete/OrderCashOnDelivery';
 const routerClient = [
     {
         path: '',

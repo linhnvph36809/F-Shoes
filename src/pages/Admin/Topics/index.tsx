@@ -3,18 +3,21 @@ import { CircleX, RefreshCcw, SquarePen, Trash2 } from 'lucide-react';
 import { Input } from 'antd';
 import { useState } from 'react';
 
+import { ITopic } from '../../../interfaces/ITopic';
 import ButtonEdit from '../components/Button/ButtonEdit';
 import TableAdmin from '../components/Table';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import LoadingBlock from '../../../components/Loading/LoadingBlock';
-import useTopic from '../../../hooks/useTopic';
-import { ITopic } from '../../../interfaces/ITopic';
+import useTopic, { API_TOPIC } from '../../../hooks/useTopic';
 import FormTopic from './FormTopic';
+import { showMessageActive } from '../../../utils/messages';
+import Swal from 'sweetalert2';
+
+export const KEY = 'list-topic';
 
 const ListTopic = ({ initialValues }: any) => {
-    const { data, isFetching, refetch } = useQueryConfig('topic-add', 'api/topics');
-    const { deleteTopic, postTopic, restoreTopic, softGroup } = useTopic();
-
+    const { data, isFetching, refetch } = useQueryConfig(KEY, API_TOPIC);
+    const { deleteTopic, postTopic, restoreTopic, softTopic } = useTopic();
     const [searchTerm, setSearchTerm] = useState('');
 
     const onFinish = (value: any) => {
@@ -24,10 +27,14 @@ const ListTopic = ({ initialValues }: any) => {
 
     const handleDeleteTopic = (id?: string | number) => {
         if (id) {
-            deleteTopic(id);
-            refetch();
+            showMessageActive('Are you sure you want to delete the topic?', '', 'warning', () => {
+                deleteTopic(id);
+                refetch();
+            });
         }
     };
+
+
 
     const handleRestoreTopic = (id?: string | number) => {
         if (id) {
@@ -38,7 +45,7 @@ const ListTopic = ({ initialValues }: any) => {
 
     const handleSoftTopic = (id?: string | number) => {
         if (id) {
-            softGroup(id);
+            softTopic(id);
             refetch();
         }
     };
@@ -79,13 +86,16 @@ const ListTopic = ({ initialValues }: any) => {
                             <SquarePen />
                         </ButtonEdit>
                     </Link>
-                    <ButtonEdit>
-                        {topic.deleted_at ? (
-                            <RefreshCcw onClick={() => handleRestoreTopic(topic.id)} />
-                        ) : (
-                            <CircleX onClick={() => handleSoftTopic(topic.id)} />
-                        )}
-                    </ButtonEdit>
+                    {topic.deleted_at ? (
+                        <ButtonEdit onClick={() => handleRestoreTopic(topic.id)}>
+                            <RefreshCcw />
+                        </ButtonEdit>
+                    ) : (
+                        <ButtonEdit onClick={() => handleSoftTopic(topic.id)}>
+                            <CircleX />
+                        </ButtonEdit>
+                    )}
+
                     {topic.deleted_at ? (
                         ''
                     ) : (

@@ -10,8 +10,6 @@ const OrderCashOnDelivery = () => {
         cookies: { order },
     } = useCookiesConfig('order');
 
-
-
     return (
         <>
             {order ? (
@@ -33,24 +31,24 @@ const OrderCashOnDelivery = () => {
                         <Card className="mb-8 border rounded-lg" bordered={false}>
                             {order?.order_details
                                 ? order.order_details.map((order: any) => (
-                                    <div className="flex justify-between items-center mb-6 border-b pb-4">
-                                        <img
-                                            src={order?.product_image}
-                                            alt="Nike Air Force One"
-                                            className="w-[60px] h-[60px] rounded-md"
-                                        />
-                                        <div className="flex-1 ml-6 text-left">
-                                            <p className="font-medium text-gray-700 text-2xl">
-                                                {order?.product_name}
-                                            </p>
-                                            <p className="text-gray-700 text-lg">Qty: {order?.quantity}</p>
-                                        </div>
-                                        <p className="font-semibold text-gray-800 text-2xl">
-                                            {' '}
-                                            {formatPrice(order?.total_amount)} đ
-                                        </p>
-                                    </div>
-                                ))
+                                      <div className="flex justify-between items-center mb-6 border-b pb-4">
+                                          <img
+                                              src={order?.product_image}
+                                              alt="Nike Air Force One"
+                                              className="w-[60px] h-[60px] rounded-md"
+                                          />
+                                          <div className="flex-1 ml-6 text-left">
+                                              <p className="font-medium text-gray-700 text-2xl">
+                                                  {order?.product_name}
+                                              </p>
+                                              <p className="text-gray-700 text-lg">Qty: {order?.quantity}</p>
+                                          </div>
+                                          <p className="font-semibold text-gray-800 text-2xl">
+                                              {' '}
+                                              {formatPrice(order?.total_amount)} đ
+                                          </p>
+                                      </div>
+                                  ))
                                 : ''}
 
                             <div className="mt-20">
@@ -61,7 +59,7 @@ const OrderCashOnDelivery = () => {
 
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
                                     <span className="text-xl text-gray-800">Payment</span>
-                                    <span className="font-semibold text-xl text-gray-800"> VNPAY</span>
+                                    <span className="font-semibold text-xl text-gray-800">Cash On Delivery</span>
                                 </div>
 
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">

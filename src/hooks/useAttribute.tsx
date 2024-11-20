@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { tokenManagerInstance } from '../api';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { PATH_ADMIN } from '../constants/path';
 
-const API_ATTRIBUTE_GET = '/api/get/attribute/values/product/';
 const API_ATTRIBUTE_ADD = '/api/add/attribute/values/product/';
+const API_ATTRIBUTE = '/api/attribute/';
 
 const useAttribute = () => {
-    const [attributeByIds, setAttributeByIds] = useState<any>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const { slug } = useParams();
+    const navigate = useNavigate();
 
     let id: string | number | undefined;
 
@@ -18,34 +19,10 @@ const useAttribute = () => {
         id = slug.substring(index + 1);
     }
 
-    const getAttributesById = async () => {
-        try {
-            setLoading(true);
-            const { data } = await tokenManagerInstance('get', API_ATTRIBUTE_GET + id);
-            setAttributeByIds(data);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const getAllAttributes = async () => {
-        try {
-            setLoading(true);
-            const { data } = await tokenManagerInstance('get', '/api/attribute?include=values');
-            setAttributeByIds(data);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     const getValueAttributeById = async (id: string | number) => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('get', `/api/attribute/${id}/value`);            
+            const { data } = await tokenManagerInstance('get', `/api/attribute/${id}/value`);
             return data;
         } catch (error) {
             console.log(error);
@@ -54,12 +31,10 @@ const useAttribute = () => {
         }
     };
 
-    
     const putValueAttribute = async (attribute: { attribute: string; values: string[] }) => {
         try {
             setLoading(true);
             const { data } = await tokenManagerInstance('put', API_ATTRIBUTE_ADD + id, attribute);
-            getAttributesById();
             return data;
         } catch (error) {
             console.log(error);
@@ -67,13 +42,11 @@ const useAttribute = () => {
             setLoading(false);
         }
     };
-
 
     const postAttribute = async (attribute: { attribute: string; values: string[] }) => {
         try {
             setLoading(true);
             const { data } = await tokenManagerInstance('post', API_ATTRIBUTE_ADD + id, attribute);
-            getAttributesById();
             return data;
         } catch (error) {
             console.log(error);
@@ -86,7 +59,6 @@ const useAttribute = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `/api/attribute`, attributeName);
-            getAllAttributes();
         } catch (error) {
             console.log(error);
         } finally {
@@ -94,17 +66,48 @@ const useAttribute = () => {
         }
     };
 
-    useEffect(() => {
-        getAllAttributes();
-        if (id) getAttributesById();
-    }, []);
+    const postAttributeValue = async (id: string | number, values: any) => {
+        try {
+            setLoading(true);
+            await tokenManagerInstance('post', `/api/attribute/${id}/value`, values);
+            navigate(PATH_ADMIN.ADD_ATTRIBUTE);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const deleteAttribute = async (id: string | number) => {
+        try {
+            setLoading(true);
+            await tokenManagerInstance('delete', API_ATTRIBUTE + id);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const deleteAttributeValue = async (idValue: string | number, idAttribute: string | number) => {
+        try {
+            setLoading(true);
+            await tokenManagerInstance('delete', `${API_ATTRIBUTE}${idAttribute}/value/${idValue}`);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return {
-        attributeByIds,
         loading,
         postAttribute,
         postAttributeName,
         getValueAttributeById,
+        deleteAttribute,
+        postAttributeValue,
+        deleteAttributeValue
     };
 };
 

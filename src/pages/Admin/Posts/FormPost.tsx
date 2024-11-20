@@ -1,13 +1,15 @@
+import { useEffect, useState } from 'react';
 import { ConfigProvider, Form, Select, Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+
 import InputPrimary from '../../../components/Input';
 import ButtonPrimary from '../../../components/Button';
 import Heading from '../components/Heading';
 import useQueryConfig from '../../../hooks/useQueryConfig';
-import { useEffect, useState } from 'react';
 import EditorComponent from '../Products/components/FormProduct/Editor';
 import useCookiesConfig from '../../../hooks/useCookiesConfig';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
+import { COOKIE_USER } from '../../../constants';
 
 const FormPost = ({
     title,
@@ -23,7 +25,7 @@ const FormPost = ({
     const [form] = Form.useForm();
     const { data } = useQueryConfig('topic-form', 'api/topics');
     const [imageFile, setImageFile] = useState(null);
-    const { cookies } = useCookiesConfig('user');
+    const { cookies } = useCookiesConfig(COOKIE_USER);
 
     const handleFinish = (values: any) => {
         const formData = new FormData();
@@ -32,11 +34,10 @@ const FormPost = ({
         formData.append('slug', values.slug);
         formData.append('content', values.content);
         formData.append('author_id', cookies.adminId);
-
         if (imageFile) {
             formData.append('theme', imageFile);
         }
-
+        
         onFinish(formData);
     };
 
@@ -45,9 +46,9 @@ const FormPost = ({
         if (!isImage) {
             message.error('You can only upload image files!');
         } else {
-            setImageFile(file); // Lưu ảnh vào state
+            setImageFile(file);
         }
-        return false; // Ngăn không cho Ant Design tự upload ảnh
+        return false;
     };
 
     useEffect(() => {
@@ -117,7 +118,11 @@ const FormPost = ({
             ) : (
                 ''
             )}
-            <Form.Item label="Image" name="theme" rules={[{ required: true, message: 'Please upload an image' }]}>
+            <Form.Item
+                label="Image"
+                name="theme"
+                rules={initialValues?.theme ? [] : [{ required: true, message: 'Please upload an image' }]}
+            >
                 <Upload name="image" listType="picture" accept="image/*" beforeUpload={handleImageUpload}>
                     <Button icon={<UploadOutlined />}>Upload Image</Button>
                 </Upload>

@@ -1,31 +1,41 @@
+import { Navigate, useParams } from 'react-router-dom';
+
 import FormPost from './FormPost';
-import usePost from '../../../hooks/usePosts';
+import usePost, { API_POST } from '../../../hooks/usePosts';
 import useCookiesConfig from '../../../hooks/useCookiesConfig';
 import useQueryConfig from '../../../hooks/useQueryConfig';
-import { useNavigate, useParams } from 'react-router-dom';
+import LoadingBlock from '../../../components/Loading/LoadingBlock';
+import { PATH_ADMIN } from '../../../constants/path';
+import { KEY } from './index';
+import { COOKIE_USER } from '../../../constants';
 
 const UpdatePost = () => {
     const { id } = useParams();
     const { loading, patchPost } = usePost();
-    const { cookies } = useCookiesConfig('user');
-    const { data, refetch } = useQueryConfig('posts-update', '/api/posts/' + id);
-    const navigate = useNavigate();
+    const { data, isFetching, refetch } = useQueryConfig(KEY, API_POST);
+    const { cookies } = useCookiesConfig(COOKIE_USER);
+    const initialValues = data?.data.find((item: any) => item.id == id);
 
-    if (!data?.data) {
-        navigate('/admin/posts');
+    if (!initialValues) {
+        return <Navigate to={PATH_ADMIN.LIST_POST} />;
     }
 
-    const onFinish = (value: any) => {
-        if (cookies.adminId && id)
-            patchPost(id, {
-                ...value,
-                author_id: cookies.adminId,
-            });
-        refetch();
+    const onFinish = async (value: any) => {
+        if (cookies.adminId && id) {
+            await patchPost(id, value);
+            refetch();
+        }
     };
 
-    return <FormPost title="Update Post" onFinish={onFinish}
-        initialValues={data?.data} loading={loading} />;
+    return (
+        <>
+            {isFetching ? (
+                <LoadingBlock />
+            ) : (
+                <FormPost title="Update Post" onFinish={onFinish} initialValues={initialValues} loading={loading} />
+            )}
+        </>
+    );
 };
 
 export default UpdatePost;

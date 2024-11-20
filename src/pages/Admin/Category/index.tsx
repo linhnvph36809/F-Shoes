@@ -84,22 +84,23 @@ const ListCategory = () => {
         title: '',
         dataIndex: 'id',
         key: '8',
-        render: (values: ICategory, index: number) => {
+        render: (_: any, values: ICategory, index: number) => {
+            // Sử dụng index để kiểm tra dòng đầu tiên
             if (index !== 0) {
                 return (
                     <div className="flex-row-center gap-x-5">
-                        <Link to={`/admin/update-category/${values.id}`}>
+                        <Link to={`/admin/update-category/${values?.id}`}>
                             <ButtonEdit>
                                 <SquarePen />
                             </ButtonEdit>
                         </Link>
-                        <ButtonEdit onClick={() => handleDeleteCategory(values.id)}>
+                        <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
                             <Trash2 />
                         </ButtonEdit>
                     </div>
                 );
             } else {
-                return null;
+                return null; // Không hiển thị gì ở dòng đầu
             }
         },
     };

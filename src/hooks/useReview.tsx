@@ -74,7 +74,6 @@ const useReview = () => {
     };
 
     useEffect(() => {
-        if (id) getAllReview(id);
         getList();
     }, []);
     return {

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { ConfigProvider, Form, Select } from 'antd';
 
 import InputPrimary from '../../../components/Input';
@@ -5,14 +6,14 @@ import ButtonPrimary from '../../../components/Button';
 import Heading from '../components/Heading';
 import { ITopic } from '../../../interfaces/ITopic';
 import useQueryConfig from '../../../hooks/useQueryConfig';
-import { useEffect } from 'react';
 
 const FormTopic = ({ title, initialValues, onFinish }: { title: string; initialValues: any; onFinish: any }) => {
     const [form] = Form.useForm();
-    const { data } = useQueryConfig('topic-form', 'api/topics');
+    const { data, refetch } = useQueryConfig('topic-form', 'api/topics');
 
     const handleFinish = (value: ITopic) => {
         onFinish(value);
+        refetch();
         form.resetFields();
     };
 
