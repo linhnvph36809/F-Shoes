@@ -83,15 +83,6 @@ export const items: MenuProps['items'] = [
                 ),
                 icon: <Plus className="w-[16px]" />,
             },
-            {
-                key: '4-3',
-                label: (
-                    <Link to="orderdetail" className="text-[14px]">
-                        Order Details
-                    </Link>
-                ),
-                icon: <ScanBarcode className="w-[16px]" />,
-            },
         ],
     },
     {

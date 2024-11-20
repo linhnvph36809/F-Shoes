@@ -9,6 +9,7 @@ import LoadingBlock from '../../../components/Loading/LoadingBlock';
 import FormVoucher from './FormVoucher';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import useVoucher, { API_VOUCHER } from '../../../hooks/useVoucher';
+import { showMessageActive } from '../../../utils/messages';
 
 export const KEY = 'list-voucher';
 
@@ -24,8 +25,10 @@ const ListVoucher = ({ initialValues }: any) => {
 
     const handleDeleteVoucher = (id?: string | number) => {
         if (id) {
-            deleteVoucher(id);
-            refetch();
+            showMessageActive('Are you sure you want to delete the voucher?', '', 'warning', () => {
+                deleteVoucher(id);
+                refetch();
+            });
         }
     };
 

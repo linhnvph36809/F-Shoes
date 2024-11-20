@@ -79,7 +79,7 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                     name="discount"
                     rules={[{ required: true, message: 'Please enter discount' }]}
                 >
-                    <InputPrimary placeholder="Discount" width="100%" height="h-[56px]" margin="mb-0" />
+                    <InputPrimary placeholder="Discount" width="100%" height="h-[56px]" margin="mb-0" type="number" />
                 </Form.Item>
 
                 <Form.Item
@@ -112,10 +112,19 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                 >
                     <InputPrimary placeholder="Quantity" width="100%" height="h-[56px]" margin="mb-0" />
                 </Form.Item>
+                <Form.Item label="Min Total Amount" name="min_total_amount">
+                    <InputPrimary
+                        type="number"
+                        placeholder="Min Total Amount"
+                        width="100%"
+                        height="h-[56px]"
+                        margin="mb-0"
+                    />
+                </Form.Item>
             </div>
             <Form.Item className="mt-20">
                 <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit" loading={loading}>
-                    {loading ? <LoadingSmall /> : "Submit"}
+                    {loading ? <LoadingSmall /> : 'Submit'}
                 </ButtonPrimary>
             </Form.Item>
         </Form>

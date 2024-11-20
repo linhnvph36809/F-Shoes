@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { tokenManagerInstance } from '../api';
+import { showMessageAdmin, showMessageClient } from '../utils/messages';
 
 export const API_VOUCHER = 'api/vouchers';
 
@@ -14,6 +15,7 @@ const useVoucher = () => {
         try {
             setLoading(true);
             const { data } = await tokenManagerInstance('get', 'api/vouchers/code/' + `${voucher}`);
+            showMessageClient('Voucher Valid', '', 'success');
             setVoucher(data);
         } catch (error) {
             console.log(error);
@@ -26,6 +28,7 @@ const useVoucher = () => {
         try {
             setLoading(true);
             tokenManagerInstance('delete', `api/vouchers/forceDelete/${id}`);
+            showMessageAdmin('Delete Voucher successfully', '', 'success');
         } catch (error) {
             console.error(error);
         } finally {
@@ -37,8 +40,13 @@ const useVoucher = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_VOUCHER, voucher);
+            showMessageAdmin('Add Voucher successfully', '', 'success');
         } catch (error) {
-            console.log(error);
+            if ((error as any)?.response?.data?.message) {
+                showMessageAdmin('Error', (error as any).response.data.message, 'error');
+            } else {
+                showMessageAdmin('Error', (error as any).message, 'error');
+            }
         } finally {
             setLoading(false);
         }
@@ -49,6 +57,7 @@ const useVoucher = () => {
             setLoading(true);
             await tokenManagerInstance('patch', `${API_VOUCHER}/${id}`, voucher);
             navigate('/admin/voucher');
+            showMessageAdmin('Update Voucher successfully', '', 'success');
         } catch (error) {
             console.log(error);
         } finally {
