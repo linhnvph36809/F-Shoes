@@ -14,7 +14,8 @@ import OrderAccount from '../pages/Client/Account/Order';
 import Post from '../pages/Client/Post';
 import PostDetail from '../pages/Client/PostDetail';
 import OrderList from '../pages/Client/Account/OrderDetail';
-import OrderDetail from "../pages/Client/Account/OrderDetail";
+import OrderDetail from '../pages/Client/Account/OrderDetail';
+import OrderCashOnDelivery from '../pages/Client/OrderComplete/OrderCashOnDelivery';
 const routerClient = [
     {
         path: '',
@@ -61,9 +62,9 @@ const routerClient = [
                         element: <OrderAccount />,
                     },
                     {
-                        path:'order/:id',
+                        path: 'order/:id',
                         element: <OrderDetail />,
-                    }
+                    },
                 ],
             },
             {
@@ -90,8 +91,13 @@ const routerClient = [
                 path: '/post-detail',
                 element: <PostDetail />,
             },
+            {
+                path: '/order-cash-on-delivery',
+                element: <OrderCashOnDelivery />,
+            },
         ],
     },
+
     {
         path: '/authentication',
         element: <LayoutAuthentication />,

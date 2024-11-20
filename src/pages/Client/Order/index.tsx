@@ -142,13 +142,14 @@ const Order = () => {
             shipping_cost: fee?.total || '',
             tax_amount: null,
             receiver_full_name: value.receiver_full_name,
+            receiver_email: value.receiver_email,
             address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
                 districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
             } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: voucher?.id ? voucher?.id : null,
-            status: 'Waiting Confirm',
+            status: '1',
             note: value.note,
             order_details,
             amount_collected: value.payment_method !== 'cash on delivery' ? total_amount : 0,
@@ -201,6 +202,13 @@ const Order = () => {
                                         rules={[{ required: true, message: 'Please enter your Receiver Name' }]}
                                     >
                                         <InputPrimary placeholder="Receiver Name" margin="mb-0" />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="receiver_email"
+                                        label="receiver_email"
+                                        rules={[{ required: true, message: 'Please enter your Receiver Email' }]}
+                                    >
+                                        <InputPrimary placeholder="receiver_email" margin="mb-0" />
                                     </Form.Item>
                                     <Form.Item label="Country">
                                         <InputPrimary
