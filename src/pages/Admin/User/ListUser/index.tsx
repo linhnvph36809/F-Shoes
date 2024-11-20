@@ -8,13 +8,26 @@ import { IUser } from '../../../../interfaces/IUser';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import Heading from '../../components/Heading';
 import TableAdmin from '../../components/Table';
+import {useEffect, useState} from "react";
+import {tokenManagerInstance} from "../../../../api";
 
 const { Text } = Typography;
 
 const ListUser = () => {
     const { users, loading, deleteUser } = useUser();
+    const [userHasOrderCount, setUserHasOrderCount] = useState<number[]>()
+    useEffect(() => {
+        const getUserHasOrderCount = async () => {
+            try {
+                const {data} = await tokenManagerInstance('get','api/count/user/has/orders');
+                setUserHasOrderCount(data.count);
+            }catch (error){
+                console.log(error);
+            }
+        }
+        getUserHasOrderCount();
+    }, []);
 
-    // Hàm xử lý xoá người dùng
     const handleDeleteUser = async (id: string | number) => {
         if (window.confirm('Bạn có chắc chắn muốn xoá người dùng này không?')) {
             try {
@@ -49,7 +62,7 @@ const ListUser = () => {
             dataIndex: 'status',
             key: 'status',
             render: (status: any) => {
-                let color = status === 'Active' ? 'green' : status === 'Pending' ? 'orange' : 'gray';
+                let color = status === 'active' ? 'green' : 'gray';
                 return <Tag color={color}>{status}</Tag>;
             },
         },
@@ -110,9 +123,8 @@ const ListUser = () => {
             <Row gutter={[16, 16]}>
                 <Col span={6}>
                     <StatCard
-                        title="Session"
-                        value="21,459"
-                        percentage="(+29%)"
+                        title="Total Users"
+                        value={users?.length}
                         description="Total Users"
                         color="#d4d4ff"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#6c63ff' }} />}
@@ -120,10 +132,10 @@ const ListUser = () => {
                 </Col>
                 <Col span={6}>
                     <StatCard
-                        title="Paid Users"
-                        value="4,567"
-                        percentage="(+18%)"
-                        description="Last week analytics"
+                        title="Inactive Users"
+                        value={users?.filter(u => u.status !== 'active').length}
+
+                        description="Banned or Inactive Accounts"
                         color="#ffd6d6"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#ff6666' }} />}
                     />
@@ -131,19 +143,18 @@ const ListUser = () => {
                 <Col span={6}>
                     <StatCard
                         title="Active Users"
-                        value="19,860"
-                        percentage="(-14%)"
-                        description="Last week analytics"
+                        value={users?.filter(u => u.status === 'active').length}
+                        description="Active Accounts"
                         color="#d6f5e6"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#66cc99' }} />}
                     />
                 </Col>
                 <Col span={6}>
                     <StatCard
-                        title="Pending Users"
-                        value="237"
-                        percentage="(+42%)"
-                        description="Last week analytics"
+                        title="Users Ordering Number"
+                        value={userHasOrderCount}
+
+                        description="People have made purchases"
                         color="#ffecd6"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#ffa500' }} />}
                     />

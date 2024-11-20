@@ -88,28 +88,10 @@ export const items: MenuProps['items'] = [
     {
         key: '5',
         icon: <TicketPercent className="w-[18px]" />,
-        label: 'Discount',
+        label: 'Sale',
         children: [
             {
                 key: '5-1',
-                label: (
-                    <Link to="listcount" className="text-[14px]">
-                        List Count
-                    </Link>
-                ),
-                icon: <Grid2X2 className="w-[16px]" />,
-            },
-            {
-                key: '5-2',
-                label: (
-                    <Link to="addcount" className="text-[14px]">
-                        Add Count
-                    </Link>
-                ),
-                icon: <Plus className="w-[16px]" />,
-            },
-            {
-                key: '5-3',
                 label: (
                     <Link to="listsale" className="text-[14px]">
                         List Sale
@@ -118,7 +100,7 @@ export const items: MenuProps['items'] = [
                 icon: <Grid2X2 className="w-[16px]" />,
             },
             {
-                key: '5-4',
+                key: '5-2',
                 label: (
                     <Link to="addsale" className="text-[14px]">
                         Add Sale

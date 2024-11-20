@@ -7,8 +7,9 @@ import useSale from "../../../../hooks/useSale.tsx";
 import {ISale} from "../../../../interfaces/ISale.ts";
 import {formatTime} from "../../../../utils";
 import { Switch } from "antd";
+import {showMessageAdmin} from "../../../../utils/messages.ts";
 const ListSale = () => {
-    const {switchStatus} = useSale();
+    const {switchStatus,updateStatusLoad} = useSale();
     const [statusFilter, setStatusFilter] = useState('all');
     const [data, setData] = useState<ISale[]>([]);
     useEffect(() => {
@@ -28,8 +29,13 @@ const ListSale = () => {
             eventSource.close();
         };
     }, []);
-    const onClickSwitchActive = (e) => {
-        console.log(e);
+    const onClickSwitchActive =async (status:boolean, id: number|string) => {
+        const success = await switchStatus(id,!status);
+        if(success){
+            showMessageAdmin('Update',"Update Successfully!",'success');
+        }else{
+            showMessageAdmin('Error',"Something went wrong!",'error');
+        }
 
     }
     const searchSale = (e) => {
@@ -48,11 +54,17 @@ const ListSale = () => {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            render: (text: string) => (
+                <span className={text ? 'text-gray-500' : 'text-amber-500'}>{text ? text : 'This sale name is empty'}</span>
+            )
         },
         {
             title: 'Type',
             dataIndex: 'type',
             key: 'type',
+            render: (type:string) => (
+                <Tag color={type === 'percent' ? 'blue' : 'red'}>{type}</Tag>
+            )
         },
         {
             title: 'Value',
@@ -76,16 +88,33 @@ const ListSale = () => {
             )
         },
         {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status:string,record:ISale) => {
+                if(status){
+                    console.log(status);
+                }
+                const start_date =  new Date(record.start_date);
+                const end_date =  new Date(record.end_date);
+                const now = new Date();
+                if(start_date < now && end_date < now){
+                    return (<Tag color="red">Ended</Tag>);
+                }else if(start_date < now && end_date > now){
+                    return (<Tag color="green">On going</Tag>);
+                }else if(start_date > now){
+                    return (<Tag color="gold">Upcomming</Tag>);
+                }
+
+            }
+        },
+        {
             title: 'Active',
             key: 'is_active',
             dataIndex: 'is_active',
             render: (is_active:boolean,record:ISale) => {
 
-                return (
-                    <>
-                        <Switch onChange={onClickSwitchActive} />
-                    </>
-                )
+                return is_active ? ( <Tag color="geekblue">Active</Tag>) : ( <Tag color="red">Inactive</Tag>)
             },
         },
         {
@@ -100,7 +129,6 @@ const ListSale = () => {
         },
     ];
 
-    // Xử lý thay đổi bộ lọc trạng thái
     const handleStatusChange = (e) => {
         setStatusFilter(e.target.value);
     };
