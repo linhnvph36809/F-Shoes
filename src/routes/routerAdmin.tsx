@@ -3,7 +3,7 @@ import ListCategory from '../pages/Admin/Category';
 import UpdateCategory from '../pages/Admin/Category/Update';
 import AdminDashboard from '../pages/Admin/DashboardAdmin';
 import Discounts from '../pages/Admin/Discount';
-import AddCount from '../pages/Admin/Discount/AddCount';
+import UpdateSale from '../pages/Admin/Discount/UpdateSale';
 import AddSale from '../pages/Admin/Discount/AddSale';
 import DiscountList from '../pages/Admin/Discount/ListCount';
 import ListSale from '../pages/Admin/Discount/ListSale';
@@ -99,8 +99,8 @@ const routerAdmin = [
                 element: <DiscountList />,
             },
             {
-                path: 'addcount',
-                element: <AddCount />,
+                path: 'sale/update/:id?',
+                element: <UpdateSale />,
             },
             {
                 path: 'addsale',
