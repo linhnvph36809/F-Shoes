@@ -7,6 +7,7 @@ import {Link, useNavigate} from "react-router-dom";
 import useOrder from "../../../../../../hooks/profile/useOrder.tsx";
 import LoadingSmall from "../../../../../../components/Loading/LoadingSmall.tsx";
 import {Eye} from "lucide-react";
+import {showMessageActive} from "../../../../../../utils/messages.ts";
 
 
 type Props = {
@@ -14,7 +15,7 @@ type Props = {
 }
 const ItemOrder: React.FC<Props> = ({order}) => {
     const navigator = useNavigate();
-    const {cancelOrder, cancelLoading: loading} = useOrder();
+    const {cancelOrder, cancelLoading: loading,reOrderLoading,reOrder} = useOrder();
     const [canCancel, setCanCancel] = useState(true);
 
     useEffect(() => {
@@ -23,18 +24,17 @@ const ItemOrder: React.FC<Props> = ({order}) => {
         }
     }, []);
     const handleCancelOrder = async (id: string) => {
-        if (confirm("Are you sure you want to cancel this order?")) {
-            const cancelledOrder = await cancelOrder(id);
-            if (cancelledOrder) {
-                navigator(0);
-                alert('Order cancelled successfully!');
-                setCanCancel(false);
-            } else {
-                navigator(0);
-                alert('Something went wrong!');
-            }
+        showMessageActive('Are you sure you want to delete the topic?', '', 'warning', () => {
+             cancelOrder(id);
+            setCanCancel(false);
+        });
+    }
 
-        }
+    const handleBuyAgain = async (id: string) => {
+        showMessageActive('Are you sure you want to reorder the order?', '', 'warning', () => {
+             reOrder(id);
+        });
+
     }
     return (
         <div className=" rounded p-8 mt-6 bg-gray-50 hover:bg-white">
@@ -90,7 +90,7 @@ const ItemOrder: React.FC<Props> = ({order}) => {
                         <Link to={`/profile/order/${order?.id}`}><Button className="text-center"><Eye className="size-6"/>Watch
                             Detail</Button></Link>
                         {
-                            order?.status === 0 ? <Button className="bg-amber-200">Buy again</Button> : canCancel ?
+                            order?.status === 0 ? <Button className="bg-amber-200" onClick={() => handleBuyAgain(order?.id)} >Buy again</Button> : canCancel ?
                                 loading ? <Button className="bg-black cursor-default"><LoadingSmall/></Button> :
                                     <Button onClick={() => handleCancelOrder(order?.id)}>Cancel</Button>
                                 : <button

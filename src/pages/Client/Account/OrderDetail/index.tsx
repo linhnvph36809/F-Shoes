@@ -7,13 +7,14 @@ import {IOrderDetail} from "../../../../interfaces/IOrderDetail.ts";
 import {formatPrice} from '../../../../utils';
 import LoadingPage from "../../../../components/Loading/LoadingPage.tsx";
 import LoadingSmall from "../../../../components/Loading/LoadingSmall.tsx";
+import {showMessageActive} from "../../../../utils/messages.ts";
 
 const {Text, Title} = Typography;
 
 const OrderDetail = () => {
     const [order, setOrder] = useState<IOrder>();
     const [canCancel, setCanCancel] = useState(false);
-    const {getOrderDetail, orderDetail, loading, cancelOrder, cancelLoading} = useOrder();
+    const {reOrder,reOrderLoading,getOrderDetail, orderDetail, loading, cancelOrder, cancelLoading} = useOrder();
     const [items, setItems] = useState<IOrderDetail[] | undefined>([]);
     const {id} = useParams();
     useEffect(() => {
@@ -44,9 +45,12 @@ const OrderDetail = () => {
 
         }
     }
-    // const handleBuyAgain = async () => {
-    //
-    // }
+    const handleBuyAgain = async (id: string) => {
+        showMessageActive('Are you sure you want to reorder the order?', '', 'warning', () => {
+            reOrder(id);
+        });
+
+    }
     return (
         loading || !id ? <div>
                 <LoadingPage/>
@@ -236,7 +240,7 @@ const OrderDetail = () => {
                                 <Divider type="vertical" style={{height: '100%', margin: '0 8px'}}/>
                                 {
                                     order?.status === 0 ?
-                                        <Button className="bg-amber-200">Buy again</Button> : canCancel ?
+                                        <Button className="bg-amber-200" onClick={() => handleBuyAgain(order?.id)}>Buy again</Button> : canCancel ?
                                             cancelLoading ?
                                                 <Button className="bg-black cursor-default"><LoadingSmall/></Button> :
                                                 <Button
