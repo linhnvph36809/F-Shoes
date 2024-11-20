@@ -27,4 +27,15 @@ export const ACTIONS = {
     ACTIONS_DELETE: 'delete',
 };
 
-export const ACTIONS_LIST = Object.values(ACTIONS) ; 
+export const ACTIONS_LIST = Object.values(ACTIONS);
+
+export const STATUS_ORDER = [
+    'Cancelled',
+    'Waiting Confirm',
+    'Confirmed',
+    'Delivering',
+    'Delivered',
+    'Return Processing',
+    'Denied Return',
+    'Returned',
+];

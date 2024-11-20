@@ -9,14 +9,15 @@ import { useMemo, useState } from 'react';
 import { formatPrice } from '../../../../utils';
 import TableOrder from '../TableOrder';
 import TopProduct from '../TopProduct';
+import PieChartExample from '../Review';
 
 const currentYear = new Date().getFullYear();
 
 const Statistic = () => {
-    const { data } = useQueryConfig('statistic', '/api/statistics/overall');
+    const { data } = useQueryConfig('statistic-all', '/api/statistics/overall');
     const { data: orders } = useQueryConfig('statistic-order', '/api/statistics/order');
     const { data: users } = useQueryConfig('statistic-user', '/api/statistics/user');
-    console.log(orders);
+    console.log(data);
     const [selectedYear, setSelectedYear] = useState<any>(currentYear);
 
     const handleChange = (dateString: any) => {
@@ -83,7 +84,7 @@ const Statistic = () => {
     const dataDasboard = [
         {
             icon: <CircleDollarSign />,
-            amount: <p>{Math.round(data?.data.total_amount / 1000)}K</p>,
+            amount: <p>{Math.round(+data?.data?.total_amount / 1000)}K</p>,
             title: 'Total Amount',
             positive: null,
         },
@@ -153,7 +154,8 @@ const Statistic = () => {
     // Bảng TopChannel
     const TopChannels = () => {
         return (
-            <div className="bg-white p-4 rounded-lg shadow-md mb-4 w-full">
+            <div className="h-[600px] bg-white p-4 rounded-lg shadow-md mb-4 w-full">
+                <h3 className="font-medium">Top Order</h3>
                 <TopProduct />
             </div>
         );
@@ -161,7 +163,7 @@ const Statistic = () => {
 
     const Chats = () => {
         return (
-            <div className="bg-white p-4 rounded-lg shadow-md w-full">
+            <div className="bg-white p-4 rounded-lg shadow-md w-full h-[600px]">
                 <span className="text-black-600 font-semibold mr-2">Top User</span>
                 <div>
                     {top5Spending?.map((chat: any, index: number) => (
@@ -196,8 +198,13 @@ const Statistic = () => {
             <div className="col-span-5 md:col-span-2 lg:col-span-4 mt-4">
                 <ProfitChart />
             </div>
-            <div>
-                <TableOrder dataSource={orders?.data?.data} />
+            <div className="flex items-center">
+                <div className="w-4/12">
+                    <PieChartExample />
+                </div>
+                <div className="w-8/12">
+                    <TableOrder dataSource={orders?.data?.data} />
+                </div>
             </div>
             <div className="grid grid-cols-3 gap-x-5 my-5">
                 <>

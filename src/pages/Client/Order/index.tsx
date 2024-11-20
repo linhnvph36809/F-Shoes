@@ -140,6 +140,7 @@ const Order = () => {
             phone: value.phone,
             shipping_cost: fee?.total || '',
             tax_amount: null,
+            receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
             address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
                 districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
@@ -200,6 +201,16 @@ const Order = () => {
                                         rules={[{ required: true, message: 'Please enter your Receiver Name' }]}
                                     >
                                         <InputPrimary placeholder="Receiver Name" margin="mb-0" />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="receiver_email"
+                                        label="Receiver Email"
+                                        rules={[
+                                            { required: true, message: 'Please enter your Receiver Email' },
+                                            { type: 'email', message: 'Please enter a valid email address' },
+                                        ]}
+                                    >
+                                        <InputPrimary placeholder="Receiver Email" margin="mb-0" type="email" />
                                     </Form.Item>
                                     <Form.Item label="Country">
                                         <InputPrimary

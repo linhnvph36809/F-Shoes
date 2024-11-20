@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { tokenManagerInstance } from '../api';
 import { useNavigate } from 'react-router-dom';
 
-const API_ORDER = '/api/orders';
+export const API_ORDER = '/api/orders';
 
 const useOrder = () => {
     const [orders, setOrders] = useState<any>([]);

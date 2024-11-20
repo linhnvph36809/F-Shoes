@@ -1,30 +1,15 @@
-import { Avatar, Button, Tag, Typography } from 'antd';
-import { SquarePen } from 'lucide-react';
+import { Avatar, Button, Dropdown, Menu, Tag, Typography } from 'antd';
+import { Ellipsis, SquarePen } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { formatCurrencyVND } from '../../../../utils/formatCurrency';
+import { formatPrice, formatTime } from '../../../../utils';
+import { STATUS_ORDER } from '../../../../constants';
 const { Text } = Typography;
 
 export const columns = [
     {
-        title: 'Order',
+        title: 'Order ID',
         dataIndex: 'id',
         key: '1',
-        // render: (
-        //     text:
-        //         | string
-        //         | number
-        //         | boolean
-        //         | React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>>
-        //         | Iterable<React.ReactNode>
-        //         | React.ReactPortal
-        //         | null
-        //         | undefined,
-        // ) => <a>{text}</a>,
-    },
-    {
-        title: 'Date',
-        dataIndex: 'created_at',
-        key: '2',
     },
     {
         title: 'Customer',
@@ -32,13 +17,10 @@ export const columns = [
         dataIndex: 'user',
         render: (_: any, { user }: any) => (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                {/* Hiển thị ảnh đại diện của khách hàng */}
-                <Avatar src={``} size={40} />
+                <Avatar src={user?.avatar_url} size={40} />
                 <div style={{ marginLeft: '10px' }}>
-                    {/* Hiển thị tên khách hàng */}
                     <Text strong>{user?.name}</Text>
                     <br />
-                    {/* Hiển thị email khách hàng */}
                     <Text type="secondary">{user?.email}</Text>
                 </div>
             </div>
@@ -67,27 +49,21 @@ export const columns = [
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        render: (
-            status:
-                | string
-                | number
-                | boolean
-                | React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>>
-                | Iterable<React.ReactNode>
-                | null
-                | undefined,
-        ) => {
-            const color =
-                status === 'Delivered'
-                    ? 'green'
-                    : status === 'Out for Delivery'
-                        ? 'purple'
-                        : status === 'Dispatched'
-                            ? 'orange'
-                            : status === 'Ready to Pickup'
-                                ? 'blue'
-                                : 'volcano';
-            return <Tag color={color}>{status}</Tag>;
+        render: (_: any, { status }: any) => {
+            const statusColors: Record<string, string> = {
+                '0': 'red',
+                '1': 'purple',
+                '2': 'orange',
+                '3': 'blue',
+                '4': 'green',
+                '5': 'pink',
+                '6': '#930510',
+                '7': 'gray',
+            };
+
+            const color = statusColors[status] || 'default';
+
+            return <Tag color={color}>{STATUS_ORDER[status]}</Tag>;
         },
     },
     {
@@ -97,9 +73,15 @@ export const columns = [
         render: (_: any, { total_amount }: any) => (
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 {/* Hiển thị logo ngân hàng */}
-                <Text className="font-medium text-red-500">{formatCurrencyVND(total_amount)} VND</Text>
+                <Text className="font-medium text-red-500">{formatPrice(total_amount)} đ</Text>
             </div>
         ),
+    },
+    {
+        title: 'Date',
+        dataIndex: 'created_at',
+        key: '2',
+        render: (_: any, { created_at }: any) => <p>{formatTime(created_at)}</p>,
     },
     {
         title: 'Actions',
