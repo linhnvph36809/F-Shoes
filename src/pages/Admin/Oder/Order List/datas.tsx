@@ -1,8 +1,8 @@
-import { Avatar, Button, Dropdown, Menu, Tag, Typography } from 'antd';
-import { Ellipsis, SquarePen } from 'lucide-react';
+import { Avatar, Button, Tag, Typography } from 'antd';
+import { SquarePen } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { formatPrice, formatTime } from '../../../../utils';
 import { STATUS_ORDER } from '../../../../constants';
+import { formatPrice, formatTime } from '../../../../utils';
 const { Text } = Typography;
 
 export const columns = [

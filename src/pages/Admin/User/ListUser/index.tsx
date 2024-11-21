@@ -167,12 +167,7 @@ const ListUser = () => {
                     <LoadingBlock />
                 ) : (
                     <section>
-                        <TableAdmin
-                            columns={columns}
-                            dataSource={users}
-                            pagination={{ pageSize: 8 }}
-                            rowSelection={{ type: 'checkbox' }}
-                        />
+                        <TableAdmin columns={columns} dataSource={users} pagination={{ pageSize: 8 }} />
                     </section>
                 )}
             </>

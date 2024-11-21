@@ -11,7 +11,6 @@ import LoginAdmin from '../pages/Admin/Login';
 import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
 
 import Authorization from '../pages/Admin/Groups/Authorization';
-import PermissionPage from '../components/Permissions/PermissionPage';
 import ListTopic from '../pages/Admin/Topics';
 import UpdateTopic from '../pages/Admin/Topics/UpdateTopic';
 import ListPost from '../pages/Admin/Posts';
@@ -31,11 +30,11 @@ import ListUser from '../pages/Admin/User/ListUser';
 import UpdateUser from '../pages/Admin/User/UpdateUser';
 import AddPost from '../pages/Admin/Posts/AddPost';
 import UpdatePost from '../pages/Admin/Posts/UpdatePost';
-import ListGroups from '../pages/Admin/Groups/ListGroup';
 import MediaLibrary from '../pages/Admin/Image/list-image';
 import ListVouCher from '../pages/Admin/Voucher';
 import UpdateVoucher from '../pages/Admin/Voucher/UpdateVoucher';
 import UpdateAttribute from '../pages/Admin/Products/Attribute/UpdateAttribute';
+import ListGroups from '../pages/Admin/Groups/listgroup';
 
 const routerAdmin = [
     {

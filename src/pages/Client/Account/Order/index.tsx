@@ -59,7 +59,7 @@ const OrderAccount = () => {
                     ) : listOrder && listOrder.length > 0 ? (
                         listOrder.map((order, index) => <ItemOrder order={order} key={index} />)
                     ) : (
-                        <div className="flex items-center justify-center text-2xl">
+                        <div className="flex items-center justify-center text-[18px]">
                             There's nothing here !{' '}
                             <Link to="/category" className="decoration-1 underline hover:font-bold">
                                 Find products

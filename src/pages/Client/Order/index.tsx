@@ -142,6 +142,7 @@ const Order = () => {
             tax_amount: null,
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
+
             address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
                 districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
             } - ${province}`,

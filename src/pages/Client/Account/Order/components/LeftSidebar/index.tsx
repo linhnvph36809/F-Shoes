@@ -1,16 +1,19 @@
 import React from 'react';
-import {Link, useSearchParams} from "react-router-dom";
-
+import { Link, useSearchParams } from 'react-router-dom';
+import { Card, Menu, Typography } from 'antd';
 
 type Props = {
-    className?: string,
-    title?: string
-}
+    className?: string;
+    title?: string;
+};
+
+const { Title } = Typography;
+
 const items = [
     {
-      path: '',
-      label: 'All',
-      key: ''
+        path: '',
+        label: 'All',
+        key: '',
     },
     {
         path: '?status=waiting_confirm',
@@ -51,20 +54,35 @@ const items = [
         path: '?status=cancelled',
         label: 'Cancelled',
         key: 'cancelled',
-    }
+    },
 ];
-const LeftSidebar:React.FC<Props> = ({className,title}) => {
+
+const LeftSidebar: React.FC<Props> = ({ className, title }) => {
     const [searchParams] = useSearchParams();
-    const statusOptionParam = searchParams.get("status");
+    const statusOptionParam = searchParams.get('status');
+
     return (
-        <div className={`flex flex-col h-[360px] items-center justify-center space-y-4 rounded-xl p-8 ${className}`}>
-            <h3 className="text-3xl font-bold">{title}</h3>
-            <div className="flex flex-col space-y-6">
-                {items.map((item, index) => (
-                    <Link to={item.path} key={index} className={`text-2xl hover:font-bold cursor-pointer ${statusOptionParam && statusOptionParam === item.key ? 'font-bold': item.key ==='' && !statusOptionParam ? 'font-bold' : '' }`}> {item.label}</Link>
-                ))}
-            </div>
-        </div>
+        <Card
+            className={`w-[400px] ${className}`}
+            style={{ borderRadius: 12, padding: '20px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
+        >
+            <Title level={3} style={{ marginBottom: 20, textAlign: 'center' }}>
+                {title}
+            </Title>
+            <Menu
+                mode="vertical"
+                selectedKeys={[statusOptionParam || '']}
+                style={{ border: 'none', fontSize: '16px', fontWeight: 500 }}
+                items={items.map((item) => ({
+                    key: item.key,
+                    label: (
+                        <Link to={item.path} style={{ color: 'inherit' }}>
+                            {item.label}
+                        </Link>
+                    ),
+                }))}
+            />
+        </Card>
     );
 };
 

@@ -1,20 +1,21 @@
-import {IOrder, statusString} from "../../../../../../interfaces/IOrder.ts";
-import React, {useEffect, useState} from "react";
-import "../../style.scss";
-import {Button} from "antd";
-import {timeToNow, formatPrice} from '../../../../../../utils';
-import {Link, useNavigate} from "react-router-dom";
-import useOrder from "../../../../../../hooks/profile/useOrder.tsx";
-import LoadingSmall from "../../../../../../components/Loading/LoadingSmall.tsx";
-import {Eye} from "lucide-react";
-
+import { IOrder, statusString } from '../../../../../../interfaces/IOrder.ts';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, Descriptions, Divider, Typography, Space } from 'antd';
+import { timeToNow, formatPrice } from '../../../../../../utils';
+import { Link, useNavigate } from 'react-router-dom';
+import useOrder from '../../../../../../hooks/profile/useOrder.tsx';
+import LoadingSmall from '../../../../../../components/Loading/LoadingSmall.tsx';
+import { Eye } from 'lucide-react';
 
 type Props = {
-    order: IOrder
-}
-const ItemOrder: React.FC<Props> = ({order}) => {
+    order: IOrder;
+};
+
+const { Text, Title } = Typography;
+
+const ItemOrder: React.FC<Props> = ({ order }) => {
     const navigator = useNavigate();
-    const {cancelOrder, cancelLoading: loading} = useOrder();
+    const { cancelOrder, cancelLoading: loading } = useOrder();
     const [canCancel, setCanCancel] = useState(true);
 
     useEffect(() => {
@@ -22,8 +23,9 @@ const ItemOrder: React.FC<Props> = ({order}) => {
             setCanCancel(false);
         }
     }, []);
+
     const handleCancelOrder = async (id: string) => {
-        if (confirm("Are you sure you want to cancel this order?")) {
+        if (confirm('Are you sure you want to cancel this order?')) {
             const cancelledOrder = await cancelOrder(id);
             if (cancelledOrder) {
                 navigator(0);
@@ -33,74 +35,102 @@ const ItemOrder: React.FC<Props> = ({order}) => {
                 navigator(0);
                 alert('Something went wrong!');
             }
-
         }
-    }
+    };
+
     return (
-        <div className=" rounded p-8 mt-6 bg-gray-50 hover:bg-white">
-            <header className=" flex items-center justify-between text-2xl my-6">
-                <div className="flex items-center space-x-4">
-                    <div>ID: {order?.id}</div>
-                    <div className="font-bold">
+        <Card
+            bordered
+            style={{
+                height: '550px',
+                borderRadius: '12px',
+                background: '#f9f9f9',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+            }}
+        >
+            {/* Header */}
+            <Space style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+                <div>
+                    <Title level={5} style={{ fontSize: '18px', fontWeight: 600 }}>
+                        Order ID: {order?.id}
+                    </Title>
+                    <Text type="secondary" style={{ fontSize: '14px' }}>
                         {statusString(order?.status)}
-                    </div>
+                    </Text>
                 </div>
-                <div>{timeToNow(order?.created_at)}</div>
-            </header>
-            <main className="border-t-1  border-b-1">
-                <div className="grid grid-cols-9 gap-4">
-                    <div className="p-4 rounded col-span-2 flex flex-col space-y-4 hover:bg-gray-200">
+                <Text type="secondary" style={{ fontSize: '14px' }}>
+                    {timeToNow(order?.created_at)}
+                </Text>
+            </Space>
 
-                        <div className="text-2xl ">
-                            <span
-                                className="text-gray-500 font-bold text-xl">Receiver Name :</span> {order?.receiver_full_name}
-                        </div>
+            <Divider />
 
-                        <div className="text-2xl"><span
-                            className="text-gray-500 font-bold text-xl">Phone :</span> {order?.phone}
-                        </div>
-                    </div>
-                    <div className=" p-4 rounded col-span-3 hover:bg-gray-200">
-                        <div className="col-span-2 rounded break-words  ">
-                           <span
-                               className="text-gray-500 font-bold text-xl">Delivery Address : </span>{order?.address}
-                        </div>
-                    </div>
-                    <div className=" p-4 rounded col-span-4 hover:bg-gray-200">
+            {/* Order Information */}
+            <Descriptions
+                column={1}
+                bordered
+                size="middle"
+                labelStyle={{ fontWeight: 600, fontSize: '16px' }}
+                contentStyle={{ fontSize: '16px' }}
+            >
+                <Descriptions.Item label="Receiver Name">{order?.receiver_full_name}</Descriptions.Item>
+                <Descriptions.Item label="Phone">{order?.phone}</Descriptions.Item>
+                <Descriptions.Item label="Delivery Address">{order?.address}</Descriptions.Item>
+                <Descriptions.Item label="Note">
+                    {order?.note && order?.note !== '' ? (
+                        order?.note
+                    ) : (
+                        <Text type="secondary">
+                            This order doesn't have any notes.{' '}
+                            <Link to={`/profile/order/${order.id}`} style={{ textDecoration: 'underline' }}>
+                                Watch order detail!
+                            </Link>
+                        </Text>
+                    )}
+                </Descriptions.Item>
+            </Descriptions>
 
-                        <div className="col-span-2 rounded break-words  ">
-                           <span
-                               className="text-gray-500 font-bold text-xl">Note :</span>
-                            {!order?.note || order?.note === '' ? <div className="flex-1 flex items-center justify-center font-bold text-gray-500">
-                                This order don't have any note. <Link className="font-light hover:underline" to={`/profile/order/${order.id}`}>Watch order detail!</Link>
-                            </div> : order?.note}
-                        </div>
-                    </div>
+            <Divider />
 
-                </div>
-            </main>
-            <div className="mt-6  w-full flex items-center justify-between px-6">
-                <div className="">
+            {/* Footer */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text type="secondary" style={{ fontSize: '14px' }}>
                     Confirm receipt after you've checked the received items
-                </div>
-                <div className="flex flex-col items-center p-4 space-y-4">
-                    <div className="text-2xl text-gray">Order Total : <span
-                        className="text-3xl color-primary">{formatPrice(order.total_amount)}đ</span></div>
-                    <div className="flex space-x-4">
-                        <Link to={`/profile/order/${order?.id}`}><Button className="text-center"><Eye className="size-6"/>Watch
-                            Detail</Button></Link>
-                        {
-                            order?.status === 0 ? <Button className="bg-amber-200">Buy again</Button> : canCancel ?
-                                loading ? <Button className="bg-black cursor-default"><LoadingSmall/></Button> :
-                                    <Button onClick={() => handleCancelOrder(order?.id)}>Cancel</Button>
-                                : <button
-                                    className="rounded-lg cursor-default bg-gray-200 text-xl py-1 px-6 ">Cancel</button>
-                        }
-
-                    </div>
-                </div>
+                </Text>
+                <Space direction="vertical" style={{ alignItems: 'center' }}>
+                    <Title level={5} style={{ margin: 0, fontSize: '20px' }}>
+                        Order Total:{' '}
+                        <Text style={{ color: '#ff4d4f', fontSize: '18px' }}>{formatPrice(order.total_amount)}đ</Text>
+                    </Title>
+                    <Space>
+                        <Link to={`/profile/order/${order?.id}`}>
+                            <Button type="primary" icon={<Eye />} size="large">
+                                Watch Detail
+                            </Button>
+                        </Link>
+                        {order?.status === 0 ? (
+                            <Button type="default" size="large">
+                                Buy again
+                            </Button>
+                        ) : canCancel ? (
+                            loading ? (
+                                <Button type="default" size="large" disabled>
+                                    <LoadingSmall />
+                                </Button>
+                            ) : (
+                                <Button type="default" size="large" danger onClick={() => handleCancelOrder(order?.id)}>
+                                    Cancel
+                                </Button>
+                            )
+                        ) : (
+                            <Button type="default" size="large" disabled>
+                                Cancel
+                            </Button>
+                        )}
+                    </Space>
+                </Space>
             </div>
-        </div>
+        </Card>
     );
 };
 

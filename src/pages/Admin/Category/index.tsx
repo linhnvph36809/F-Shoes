@@ -84,7 +84,8 @@ const ListCategory = () => {
         title: '',
         dataIndex: 'id',
         key: '8',
-        render: (values: ICategory, index: number) => {
+        render: (_: any, values: ICategory, index: number) => {
+            // Sử dụng index để kiểm tra dòng đầu tiên
             if (index !== 0) {
                 return (
                     <div className="flex-row-center gap-x-5">
@@ -99,7 +100,7 @@ const ListCategory = () => {
                     </div>
                 );
             } else {
-                return null;
+                return null; // Không hiển thị gì ở dòng đầu
             }
         },
     };
