@@ -31,7 +31,8 @@ const UseOrder = () => {
 
         } catch (error) {
             console.log(error);
-            showMessageClient('', 'Something went wrong!', 'error');
+            const {data} = error?.response;
+            showMessageClient('', data.message, 'error');
         } finally {
             setCancelLoading(false);
         }
@@ -55,7 +56,8 @@ const UseOrder = () => {
             navigator('/cart');
         } catch (error) {
             console.log(error);
-            showMessageClient('', 'Something went wrong!', 'error');
+            const {data} = error?.response;
+            showMessageClient('', data.message, 'error');
             navigator('/');
         }finally {
             setReOrderLoading(false);

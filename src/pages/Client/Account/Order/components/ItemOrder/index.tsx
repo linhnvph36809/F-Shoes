@@ -32,7 +32,7 @@ const ItemOrder: React.FC<Props> = ({order}) => {
 
     const handleBuyAgain = async (id: string) => {
         showMessageActive('Are you sure you want to reorder the order?', '', 'warning', () => {
-             reOrder(id);
+            reOrder(id);
         });
 
     }
@@ -49,7 +49,7 @@ const ItemOrder: React.FC<Props> = ({order}) => {
             </header>
             <main className="border-t-1  border-b-1">
                 <div className="grid grid-cols-9 gap-4">
-                    <div className="p-4 rounded col-span-2 flex flex-col space-y-4 hover:bg-gray-200">
+                    <div className="p-4 rounded col-span-2 flex flex-col space-y-4 y-200">
 
                         <div className="text-2xl ">
                             <span
@@ -60,13 +60,13 @@ const ItemOrder: React.FC<Props> = ({order}) => {
                             className="text-gray-500 font-bold text-xl">Phone :</span> {order?.phone}
                         </div>
                     </div>
-                    <div className=" p-4 rounded col-span-3 hover:bg-gray-200">
+                    <div className=" p-4 rounded col-span-3 ">
                         <div className="col-span-2 rounded break-words  ">
                            <span
                                className="text-gray-500 font-bold text-xl">Delivery Address : </span>{order?.address}
                         </div>
                     </div>
-                    <div className=" p-4 rounded col-span-4 hover:bg-gray-200">
+                    <div className=" p-4 rounded col-span-4 ">
 
                         <div className="col-span-2 rounded break-words  ">
                            <span

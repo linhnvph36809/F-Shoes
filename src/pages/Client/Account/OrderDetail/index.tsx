@@ -1,4 +1,4 @@
-import {Button, Card, Col, Divider, List, Row, Typography} from 'antd';
+import {Button, Card, Col, Divider, List, Modal, Row, Typography} from 'antd';
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import useOrder from "../../../../hooks/profile/useOrder.tsx";
@@ -14,7 +14,7 @@ const {Text, Title} = Typography;
 const OrderDetail = () => {
     const [order, setOrder] = useState<IOrder>();
     const [canCancel, setCanCancel] = useState(false);
-    const {reOrder,reOrderLoading,getOrderDetail, orderDetail, loading, cancelOrder, cancelLoading} = useOrder();
+    const {reOrder, reOrderLoading, getOrderDetail, orderDetail, loading, cancelOrder, cancelLoading} = useOrder();
     const [items, setItems] = useState<IOrderDetail[] | undefined>([]);
     const {id} = useParams();
     useEffect(() => {
@@ -32,18 +32,14 @@ const OrderDetail = () => {
         setOrder(orderDetail);
         setItems(orderDetail?.order_details);
     }, [orderDetail]);
-    
-    const handleCancelOrder = async (id: string) => {
-        if (confirm("Are you sure you want to cancel this order?")) {
-            const cancelledOrder = await cancelOrder(id);
-            if (cancelledOrder) {
-                alert('Order cancelled successfully!');
-                setCanCancel(false);
-            } else {
-                alert('Something went wrong!');
-            }
 
-        }
+    const handleCancelOrder = async (id: string) => {
+        showMessageActive('Are you sure you want to cancel the order?', '', 'warning', () => {
+            cancelOrder(id);
+            setCanCancel(false);
+        });
+
+
     }
     const handleBuyAgain = async (id: string) => {
         showMessageActive('Are you sure you want to reorder the order?', '', 'warning', () => {
@@ -51,12 +47,14 @@ const OrderDetail = () => {
         });
 
     }
+
     return (
         loading || !id ? <div>
                 <LoadingPage/>
             </div> :
             <div style={{padding: '20px'}}>
                 {/* Header */}
+
                 <Card bodyStyle={{padding: '8px 16px'}}>
                     <Row justify="space-between" align="middle" style={{lineHeight: '1', fontSize: '16px'}}>
                         <Col>
@@ -72,7 +70,7 @@ const OrderDetail = () => {
                                 <Text strong style={{margin: '0 8px', fontSize: '16px'}}>
                                     |
                                 </Text>
-                                <Text type="danger" style={{fontSize: '16px'}}>
+                                <Text type={order?.status === 0 || order?.status === 6 ? 'danger' : 'secondary'} style={{fontSize: '16px'}}>
                                     {order?.status || order?.status === 0 ? statusString(order?.status) : ''}
                                 </Text>
                             </Row>
@@ -240,7 +238,8 @@ const OrderDetail = () => {
                                 <Divider type="vertical" style={{height: '100%', margin: '0 8px'}}/>
                                 {
                                     order?.status === 0 ?
-                                        <Button className="bg-amber-200" onClick={() => handleBuyAgain(order?.id)}>Buy again</Button> : canCancel ?
+                                        <Button className="bg-amber-200" onClick={() => handleBuyAgain(order?.id)}>Buy
+                                            again</Button> : canCancel ?
                                             cancelLoading ?
                                                 <Button className="bg-black cursor-default"><LoadingSmall/></Button> :
                                                 <Button
