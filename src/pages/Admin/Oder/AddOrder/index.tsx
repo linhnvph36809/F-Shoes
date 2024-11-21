@@ -9,7 +9,7 @@ import useProduct from '../../../../hooks/useProduct';
 import useDelivery from '../../../../hooks/useDelivery';
 import useOrder from '../../../../hooks/useOrder';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
-import { formatCurrencyVND } from '../../../../utils/formatCurrency';
+import { formatPrice } from '../../../../utils';
 
 const Addorder = () => {
     const { products } = useProduct();
@@ -83,9 +83,8 @@ const Addorder = () => {
             tax_amount: null,
             amount_collected: value.amount_collected,
             receiver_full_name: value.receiver_full_name,
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
-                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-            } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+                } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: null,
@@ -343,13 +342,11 @@ const Addorder = () => {
                 {fee.service_fee && totalAmount && (
                     <div className="text-end my-10">
                         <p className="font-medium text-[16px] color-gray">
-                            Shipping Fee: {formatCurrencyVND(fee.service_fee)} VND
+                            Shipping Fee: {formatPrice(fee.service_fee)} VND
                         </p>
-                        <p className="font-medium text-[16px] color-gray">
-                            Product: {formatCurrencyVND(totalAmount)} VND
-                        </p>
+                        <p className="font-medium text-[16px] color-gray">Product: {formatPrice(totalAmount)} VND</p>
                         <h1 className="font-medium text-[20px] text-red-500">
-                            Total: {formatCurrencyVND(totalAmount + +fee.service_fee)} VND
+                            Total: {formatPrice(totalAmount + +fee.service_fee)} VND
                         </h1>
                     </div>
                 )}

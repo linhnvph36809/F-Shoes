@@ -10,12 +10,13 @@ import PrivateRoute from '../components/PrivateRoute';
 import OrderComplete from '../pages/Client/OrderComplete/OrderComplete';
 import AccountSetting from '../pages/Client/Account/AccountSetting';
 import Layout from '../pages/Client/Account/Layout';
-import OrderAccount from '../pages/Client/Account/Order';
+import OrderProfile from '../pages/Client/Account/Order';
 import Post from '../pages/Client/Post';
 import PostDetail from '../pages/Client/PostDetail';
 import OrderCashOnDelivery from '../pages/Client/OrderComplete/OrderCashOnDelivery';
 import OrderList from '../pages/Client/Account/OrderDetail';
 import OrderDetail from '../pages/Client/Account/OrderDetail';
+import LayoutOrderProfile from '../pages/Client/Account/Order/components/Layout';
 const routerClient = [
     {
         path: '',
@@ -59,7 +60,13 @@ const routerClient = [
                     },
                     {
                         path: 'orders',
-                        element: <OrderAccount />,
+                        element: <LayoutOrderProfile />,
+                        children: [
+                            {
+                                path: '',
+                                element: <OrderProfile />
+                            }
+                        ]
                     },
                     {
                         path: 'order/:id',
