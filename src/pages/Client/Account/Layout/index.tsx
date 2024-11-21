@@ -4,9 +4,11 @@ import Navbar from "../Components/Navbar.tsx";
 
 const Layout = () => {
     return (
-        <div className="min-h-screen bg-white flex flex-col items-center">
+        <div className="min-h-screen">
             <Navbar/>
-            <Outlet/>
+            <div className="px-[15px] w-full">
+            <Outlet/>   
+            </div>
         </div>
 
     )

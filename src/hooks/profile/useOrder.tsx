@@ -13,6 +13,8 @@ const UseOrder = () => {
         try {
             setLoading(true);
             const { data } = await tokenManagerInstance('get', 'api/me/orders');
+            console.log(data);
+
             setOrders(data);
         } catch (error) {
             console.log(error, 'error');

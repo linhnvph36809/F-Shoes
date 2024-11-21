@@ -9,7 +9,6 @@ import {
     Image,
     ListOrdered,
     Plus,
-    ScanBarcode,
     Star,
     Tag,
     TicketCheck,

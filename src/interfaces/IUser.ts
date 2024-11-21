@@ -18,21 +18,4 @@ export interface IUser {
     favoriteProducts: IProduct[];
     created_at: any;
 }
-export const model ={
-    id: "",
-    avatar_url: "",
-    nickname: "",
-    name: "",
-    email: "",
-    email_verified_at: "",
-    google_id: "",
-    status: "",
-    profile: {
-        given_name: '',
-        family_name: '',
-        detail_address: '',
-        birth_date: ''
-    },
-    favoriteProducts: [],
-    created_at: ""
-};
+
