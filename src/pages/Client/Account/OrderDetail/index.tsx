@@ -1,254 +1,173 @@
-import {Button, Card, Col, Divider, List, Row, Typography} from 'antd';
-import {Link, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import useOrder from "../../../../hooks/profile/useOrder.tsx";
-import {IOrder, statusString} from "../../../../interfaces/IOrder.ts";
-import {IOrderDetail} from "../../../../interfaces/IOrderDetail.ts";
-import {formatPrice} from '../../../../utils';
-import LoadingPage from "../../../../components/Loading/LoadingPage.tsx";
-import LoadingSmall from "../../../../components/Loading/LoadingSmall.tsx";
+import { Skeleton, Tag } from 'antd';
+import { Link, useParams } from 'react-router-dom';
 
-const {Text, Title} = Typography;
+import Heading from '../Order/components/Heading';
+import ButtonPrimary from '../../../../components/Button';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
+import { IOrder, statusString } from '../../../../interfaces/IOrder';
+import { formatPrice, formatTime } from '../../../../utils';
+import NotFound from '../../../../components/NotFound';
 
 const OrderDetail = () => {
-    const [order, setOrder] = useState<IOrder>();
-    const [canCancel, setCanCancel] = useState(false);
-    const {getOrderDetail, orderDetail, loading, cancelOrder, cancelLoading} = useOrder();
-    const [items, setItems] = useState<IOrderDetail[] | undefined>([]);
-    const {id} = useParams();
-    useEffect(() => {
-        if (id) getOrderDetail(id);
-        setOrder(orderDetail);
-    }, [id]);
-    useEffect(() => {
-        if (order?.status && order?.status >= 3) {
-            setCanCancel(false);
-        } else {
-            setCanCancel(true);
-        }
-    }, [order]);
-    useEffect(() => {
-        setOrder(orderDetail);
-        setItems(orderDetail?.order_details);
-    }, [orderDetail]);
-    
-    const handleCancelOrder = async (id: string) => {
-        if (confirm("Are you sure you want to cancel this order?")) {
-            const cancelledOrder = await cancelOrder(id);
-            if (cancelledOrder) {
-                alert('Order cancelled successfully!');
-                setCanCancel(false);
-            } else {
-                alert('Something went wrong!');
-            }
+    const { id } = useParams();
+    const { data, isFetching, error } = useQueryConfig(`order-detail-profile-${id}`, `api/orders/${id}`);
+    const order: IOrder = data?.data;
 
-        }
+    if (error) {
+        return <NotFound />;
     }
-    // const handleBuyAgain = async () => {
-    //
-    // }
+
+    const status:
+        | {
+              className: string;
+              text: string;
+          }
+        | undefined = statusString(order?.status);
+
     return (
-        loading || !id ? <div>
-                <LoadingPage/>
-            </div> :
-            <div style={{padding: '20px'}}>
-                {/* Header */}
-                <Card bodyStyle={{padding: '8px 16px'}}>
-                    <Row justify="space-between" align="middle" style={{lineHeight: '1', fontSize: '16px'}}>
-                        <Col>
-                            <Button type="link" style={{fontSize: '16px', padding: 0}}>
-                                {'< BACK'}
-                            </Button>
-                        </Col>
-                        <Col>
-                            <Row align="middle" gutter={8}>
-                                <Text strong style={{fontSize: '16px'}}>
-                                    ORDER ID: {order?.id}
-                                </Text>
-                                <Text strong style={{margin: '0 8px', fontSize: '16px'}}>
-                                    |
-                                </Text>
-                                <Text type="danger" style={{fontSize: '16px'}}>
-                                    {order?.status || order?.status === 0 ? statusString(order?.status) : ''}
-                                </Text>
-                            </Row>
-                        </Col>
-                    </Row>
-                </Card>
-                <Divider/>
-
-                {/* Order Item List */}
-                <Card>
-                    <List
-                        itemLayout="vertical"
-                        dataSource={items}
-                        renderItem={(detail, index) => (
-                            <List.Item>
-                                <Link to={`/detail/${detail?.product?.slug}`}>
-                                    <Row gutter={[16, 16]} className="hover:bg-gray-200 py-4 rounded"
-                                         key={index}>
-                                        {/* Image */}
-                                        <Col span={2}>
-                                            <img
-                                                src={detail?.product?.image_url}
-                                                alt={detail?.variation ? detail.variation?.name : detail?.product?.name}
-                                                style={{width: '100%', height: '85%', borderRadius: '4px'}}
-                                            />
-                                        </Col>
-
-                                        {/* Item Details */}
-                                        <Col span={20}>
-                                            <Title level={5} style={{fontSize: '18px'}}>
-                                                {detail?.product?.name}
-                                            </Title>
-                                            {detail?.variation ? <Text
-                                                style={{fontSize: '16px'}}>Variation: {detail?.variation?.classify}</Text> : ''}
-                                            <Row justify="space-between" align="middle"
-                                                 style={{marginTop: '8px'}}>
-                                                <Text style={{fontSize: '16px'}}>x{detail?.quantity}</Text>
-                                                {
-                                                    detail?.variation ?
-                                                        //Variation
-                                                        detail?.variation?.sale_price ?
-                                                            <Row justify="end" style={{width: '100%'}}>
-                                                                <Text delete style={{
-                                                                    marginRight: '10px',
-                                                                    fontSize: '16px'
-                                                                }}>
-                                                                    {formatPrice(detail?.variation?.price)}đ
-                                                                </Text>
-                                                                <Text strong style={{
-                                                                    color: 'red',
-                                                                    fontSize: '16px'
-                                                                }}>
-                                                                    {formatPrice(detail?.variation?.sale_price)}đ
-                                                                </Text>
-                                                            </Row>
-                                                            :
-                                                            <Row justify="end" style={{width: '100%'}}>
-
-                                                                <Text strong style={{
-                                                                    color: 'red',
-                                                                    fontSize: '16px'
-                                                                }}>
-                                                                    {formatPrice(detail?.variation?.price)} đ
-                                                                </Text>
-                                                            </Row>
-                                                        // Product
-                                                        : detail?.product?.sale_price ?
-                                                            <Row justify="end" style={{width: '100%'}}>
-                                                                <Text delete style={{
-                                                                    marginRight: '10px',
-                                                                    fontSize: '16px'
-                                                                }}>
-                                                                    {formatPrice(detail?.product?.price)} đ
-                                                                </Text>
-                                                                <Text strong
-                                                                      style={{color: 'red', fontSize: '16px'}}>
-                                                                    {formatPrice(detail?.product?.sale_price)} đ
-                                                                </Text>
-                                                            </Row>
-                                                            :
-                                                            <Row justify="end" style={{width: '100%'}}>
-
-                                                                <Text strong
-                                                                      style={{color: 'red', fontSize: '16px'}}>
-                                                                    {formatPrice(detail?.product?.price)} đ
-                                                                </Text>
-                                                            </Row>
-                                                }
-                                            </Row>
-                                        </Col>
-                                    </Row>
-                                </Link>
-                                <Divider/>
-                            </List.Item>
-                        )}
-                    />
-                    {/* Order Details */}
-                    <Row justify="end">
-                        <Col
-                            span={9}
-                            style={{
-                                paddingRight: '122px',
-                                paddingLeft: '10px',
-                                borderLeft: '2px solid #e8e8e8',
-                            }}
-                        >
-                            {/* Merchandise Subtotal */}
-                            {/*<Row justify="space-between" align="middle" style={{padding: '8px 0'}}>*/}
-                            {/*    <Text style={{fontSize: '16px'}}>Merchandise Subtotal</Text>*/}
-                            {/*    <Divider type="vertical" style={{height: '100%', margin: '0 8px'}}/>*/}
-                            {/*    <Text style={{fontSize: '16px'}}>{item.subtotal}</Text>*/}
-                            {/*</Row>*/}
-                            {/*<Divider style={{margin: '0'}}/>*/}
-
-                            {/* Shipping Fee */}
-                            <Row justify="space-between" align="middle" style={{padding: '8px 0'}}>
-                                <Text style={{fontSize: '16px'}}>Shipping Fee</Text>
-                                <Divider type="vertical" style={{height: '100%', margin: '0 8px'}}/>
-                                {
-                                    order?.shipping_cost ?
-                                        <Text
-                                            style={{fontSize: '16px'}}>{formatPrice(order?.shipping_cost)}đ</Text> : ''
-                                }
-                            </Row>
-                            <Divider style={{margin: '0'}}/>
-
-                            {/* Shipping Discount Subtotal */}
-                            {/*<Row justify="space-between" align="middle" style={{padding: '8px 0'}}>*/}
-                            {/*    <Text style={{fontSize: '16px'}}>Shipping Discount Subtotal</Text>*/}
-                            {/*    <Divider type="vertical" style={{height: '100%', margin: '0 8px'}}/>*/}
-                            {/*    <Text style={{fontSize: '16px'}}>{item.shippingDiscount}</Text>*/}
-                            {/*</Row>*/}
-                            {/*<Divider style={{margin: '0'}}/>*/}
-
-                            {/* Shopee Voucher Applied */}
-                            {/*<Row justify="space-between" align="middle" style={{padding: '8px 0'}}>*/}
-                            {/*    <Text style={{fontSize: '16px'}}>Shopee Voucher Applied</Text>*/}
-                            {/*    <Divider type="vertical" style={{height: '100%', margin: '0 8px'}}/>*/}
-                            {/*    <Text style={{fontSize: '16px'}}>{item.voucher}</Text>*/}
-                            {/*</Row>*/}
-                            {/*<Divider style={{margin: '0'}}/>*/}
-
-                            {/* Order Total */}
-                            <Row justify="space-between" align="middle" style={{padding: '8px 0'}}>
-                                <Text strong style={{color: 'red', fontSize: '16px'}}>
-                                    Order Total
-                                </Text>
-                                <Divider type="vertical" style={{height: '100%', margin: '0 8px'}}/>
-                                <Text strong style={{color: 'red', fontSize: '16px'}}>
-                                    {order?.total_amount ? formatPrice(order?.total_amount) + ' đ' : 'Error!'}
-                                </Text>
-                            </Row>
-                            <Divider style={{margin: '0'}}/>
-
-                            {/* Payment Method */}
-                            <Row justify="space-between" align="middle" style={{padding: '8px 0'}}>
-                                <Text style={{fontSize: '16px'}}>Payment Method</Text>
-                                <Divider type="vertical" style={{height: '100%', margin: '0 8px'}}/>
-                                <Text style={{fontSize: '16px'}}>{order?.payment_method}</Text>
-                            </Row>
-
-                            {/*  Button  */}
-                            <Row justify="space-between" align="middle" style={{padding: '8px 0'}}>
-
-                                <Divider type="vertical" style={{height: '100%', margin: '0 8px'}}/>
-                                {
-                                    order?.status === 0 ?
-                                        <Button className="bg-amber-200">Buy again</Button> : canCancel ?
-                                            cancelLoading ?
-                                                <Button className="bg-black cursor-default"><LoadingSmall/></Button> :
-                                                <Button
-                                                    onClick={() => order?.id ? handleCancelOrder(order?.id) : console.log("Something went wrong!")}>Cancel</Button>
-                                            : <button
-                                                className="rounded-lg cursor-default bg-gray-200 text-xl py-1 px-6 ">Cancel</button>
-                                }
-                            </Row>
-                        </Col>
-                    </Row>
-                </Card>
-            </div>
+        <>
+            {isFetching ? (
+                <Skeleton />
+            ) : (
+                <section>
+                    <Heading>Order Detail</Heading>
+                    <div>
+                        <div className="bg-whitesmoke p-8 rounded-lg min-h-[650px]">
+                            <div>
+                                <div className="flex justify-between items-center mb-6">
+                                    <h3 className="font-medium text-[25px]">Ordering information</h3>
+                                    <div className="flex items-center gap-x-2">
+                                        <Tag
+                                            className={`flex justify-center items-center text-[16px]
+                                    rounded-lg px-6 py-2 ${status?.className}`}
+                                        >
+                                            {status?.text}
+                                        </Tag>
+                                        <p className="text-[15px] color-gray">ID : {order?.id}</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-x-10">
+                                    <div className="w-6/12">
+                                        <h3 className="text-[15px] font-medium color-primary">
+                                            Name : {order?.user.name}
+                                        </h3>
+                                        <p className="text-[14px] color-gray my-3">Phone : {order?.phone} </p>
+                                        <p className="text-[14px] color-gray mb-3">Address : {order?.address}</p>
+                                        <p className="text-[14px] color-gray my-3">
+                                            Date : {formatTime(order?.created_at)}
+                                        </p>
+                                    </div>
+                                    <div className="w-6/12 pl-10 border-l">
+                                        <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+                                            <p>
+                                                {' '}
+                                                <p>Shipping Method :</p>
+                                            </p>
+                                            <p className="font-medium">{order?.shipping_method}</p>
+                                        </div>
+                                        <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+                                            <p>
+                                                {' '}
+                                                <p>Shipping Cost :</p>
+                                            </p>
+                                            <p className="font-medium">{formatPrice(order?.shipping_cost)}đ</p>
+                                        </div>
+                                        {order?.voucher_id ? (
+                                            <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+                                                <p>
+                                                    {' '}
+                                                    <p>Voucher :</p>
+                                                </p>
+                                                <p className="font-medium">{order?.voucher_id}</p>
+                                            </div>
+                                        ) : (
+                                            ''
+                                        )}
+                                        <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+                                            <p>
+                                                {' '}
+                                                <p>Payment Method :</p>
+                                            </p>
+                                            <p className="font-medium">{order?.payment_method}</p>
+                                        </div>
+                                        <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+                                            <p>
+                                                {' '}
+                                                <p>Subtotal :</p>
+                                            </p>
+                                            <p className="font-medium">Express</p>
+                                        </div>
+                                        <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+                                            <p>
+                                                {' '}
+                                                <p className="font-medium text-[20px]">Total :</p>
+                                            </p>
+                                            <p className="font-medium text-[20px]">
+                                                {formatPrice(order?.total_amount)}đ
+                                            </p>
+                                        </div>
+                                        <div className="mt-10 flex justify-end gap-x-3">
+                                            <button
+                                                className="w-[140px] h-[50px] bg-red-500
+                                        rounded-[30px] text-[16px] font-medium transition-global hover:opacity-70 text-white"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <ButtonPrimary width="w-[140px]" height="h-[50px]">
+                                                Buy Again
+                                            </ButtonPrimary>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-10 mt-20 pt-10 border-t">
+                                    {order?.order_details.map((orderDetail: any) => (
+                                        <Link to={`/detail/${orderDetail?.product?.slug}`}>
+                                            <div className="flex justify-between items-center bg-white p-8 rounded-xl">
+                                                <div className="flex items-start gap-x-5">
+                                                    <div>
+                                                        <img
+                                                            src={
+                                                                orderDetail?.product
+                                                                    ? orderDetail?.product.image_url
+                                                                    : orderDetail?.product_variation?.product?.image_url
+                                                            }
+                                                            alt=""
+                                                            className="w-[100px]"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="font-medium text-[18px]">
+                                                            {orderDetail?.product
+                                                                ? orderDetail?.product.name
+                                                                : orderDetail?.product_variation?.name}
+                                                        </h3>
+                                                        {orderDetail?.variation?.classify ? (
+                                                            <p className="font-medium color-gray text-[14px] my-2">
+                                                                Variant : {orderDetail?.variation?.classify}
+                                                            </p>
+                                                        ) : (
+                                                            ''
+                                                        )}
+                                                        <p className="font-medium color-gray text-[14px]">
+                                                            x{orderDetail?.quantity}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p className="font-medium text-[18px] text-red-500">
+                                                        {formatPrice(orderDetail?.total_amount)}đ
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
+        </>
     );
 };
 

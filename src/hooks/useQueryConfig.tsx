@@ -4,6 +4,7 @@ import { tokenManagerInstance } from '../api';
 const defautConfig = {
     cacheTime: 1000 * 60 * 30,
     staleTime: 1000 * 60 * 30,
+    retry: false,
 };
 
 const useQueryConfig = (key: string, api: string, config: any = defautConfig) => {
