@@ -10,6 +10,7 @@ import useCookiesConfig from '../../../hooks/useCookiesConfig.tsx';
 import { COOKIE_USER } from '../../../constants';
 import { IUser } from '../../../interfaces/IUser.ts';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
+import { Link } from 'react-router-dom';
 
 const ProfilePage = () => {
     const { cookies } = useCookiesConfig(COOKIE_USER);
@@ -75,38 +76,48 @@ const ProfilePage = () => {
                             </div>
                         ) : (
                             <SlidesScroll className="slidesProducts pb-20 mt-[50px]">
-                                {listFavoriteProducts.map((item: IProduct) => (
-                                    <SwiperSlide>
-                                        <div>
-                                            <a href={`detail/${item.slug}`}>
-                                                <div>
-                                                    <img src={item.image_url} alt="" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-15px color-primary font-medium pt-4">
-                                                        {item.name}
-                                                    </h3>
-                                                    <h5 className="text-[#707072] text-15px">
-                                                        {item?.categories
-                                                            ? item?.categories.map((cat, index, array) => {
-                                                                  if (array.length < 2) {
-                                                                      return ' ' + cat?.name;
-                                                                  } else {
-                                                                      if (index == 2) return;
-                                                                      if (index == 1) return ' ' + cat?.name;
-                                                                      return ' ' + cat?.name + ',';
-                                                                  }
-                                                              })
-                                                            : ' '}
-                                                    </h5>
-                                                    <h3 className="text-15px color-primary font-medium mt-3">
-                                                        {formatPrice(item.price)} ₫
-                                                    </h3>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </SwiperSlide>
-                                ))}
+                                {listFavoriteProducts.length ? (
+                                    listFavoriteProducts.map((item: IProduct) => (
+                                        <SwiperSlide>
+                                            <div>
+                                                <a href={`detail/${item.slug}`}>
+                                                    <div>
+                                                        <img src={item.image_url} alt="" />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="text-15px color-primary font-medium pt-4">
+                                                            {item.name}
+                                                        </h3>
+                                                        <h5 className="text-[#707072] text-15px">
+                                                            {item?.categories
+                                                                ? item?.categories.map((cat, index, array) => {
+                                                                      if (array.length < 2) {
+                                                                          return ' ' + cat?.name;
+                                                                      } else {
+                                                                          if (index == 2) return;
+                                                                          if (index == 1) return ' ' + cat?.name;
+                                                                          return ' ' + cat?.name + ',';
+                                                                      }
+                                                                  })
+                                                                : ' '}
+                                                        </h5>
+                                                        <h3 className="text-15px color-primary font-medium mt-3">
+                                                            {formatPrice(item.price)} ₫
+                                                        </h3>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </SwiperSlide>
+                                    ))
+                                ) : (
+                                    <p className="text-center text-[16px] font-medium">
+                                        You don't have any favorite products yet!.{' '}
+                                        <Link className="underline" to="/category">
+                                            {' '}
+                                            Add ones
+                                        </Link>
+                                    </p>
+                                )}
                             </SlidesScroll>
                         )}
                     </div>

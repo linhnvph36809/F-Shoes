@@ -11,5 +11,6 @@ export interface IOrderDetail {
     total_amount:number;
     product:IProduct;
     variation: IVariation;
+    
 
 }

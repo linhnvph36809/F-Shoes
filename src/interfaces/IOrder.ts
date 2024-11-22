@@ -1,4 +1,5 @@
 import { IOrderDetail } from './IOrderDetail.ts';
+import { IUser } from './IUser.ts';
 
 export const statusString = (id: number) => {
     if (id === 0)
@@ -77,4 +78,6 @@ export interface IOrder {
     order_details: IOrderDetail[];
     created_at: string;
     updated_at: string;
+    user: IUser;
+    voucher_id: string|number;
 }

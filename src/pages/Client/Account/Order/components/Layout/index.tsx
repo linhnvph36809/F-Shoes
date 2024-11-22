@@ -1,6 +1,6 @@
 import { ConfigProvider, Menu } from 'antd';
 import Sider from 'antd/es/layout/Sider';
-import { House } from 'lucide-react';
+import { House, PanelsLeftBottom } from 'lucide-react';
 import { Link, Outlet } from 'react-router-dom';
 
 const siderStyle: React.CSSProperties = {
@@ -33,7 +33,7 @@ const LayoutOrderProfile = () => {
                             items={[
                                 {
                                     key: '1',
-                                    icon: <House className="w-[18px]" />,
+                                    icon: <PanelsLeftBottom className="w-[18px]" />,
                                     label: <Link to="">All Order</Link>,
                                 },
                             ]}

@@ -64,9 +64,13 @@ const routerClient = [
                         children: [
                             {
                                 path: '',
-                                element: <OrderProfile />
-                            }
-                        ]
+                                element: <OrderProfile />,
+                            },
+                            {
+                                path: ':id',
+                                element: <OrderDetail />,
+                            },
+                        ],
                     },
                     {
                         path: 'order/:id',
