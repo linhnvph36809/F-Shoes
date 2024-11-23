@@ -1,25 +1,28 @@
 import { Skeleton, Tag } from 'antd';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
+import { ArrowLeftToLine } from 'lucide-react';
 
+import UseOrder from '../../../../hooks/profile/useOrder';
 import Heading from '../Order/components/Heading';
 import ButtonPrimary from '../../../../components/Button';
+import NotFound from '../../../../components/NotFound';
+import ModalCancel from './components/ModalCancel';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { IOrder, statusString } from '../../../../interfaces/IOrder';
 import { formatPrice, formatTime } from '../../../../utils';
-import NotFound from '../../../../components/NotFound';
-import ModalCancel from './components/ModalCancel';
 import { showMessageActive } from '../../../../utils/messages';
-import UseOrder from '../../../../hooks/profile/useOrder';
 
 const OrderDetail = () => {
-    const { reOrder} = UseOrder();
+    const { reOrder } = UseOrder();
     const { id } = useParams();
     const { data, isFetching, error, refetch } = useQueryConfig(`order-detail-profile-${id}`, `api/orders/${id}`);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const location = useLocation();
     const prevUrl = location.state?.prevUrl;
     const navigator = useNavigate();
+    console.log(prevUrl);
+
     if (error) {
         return <NotFound />;
     }
@@ -38,8 +41,8 @@ const OrderDetail = () => {
         }
     };
 
-    const handleBuyAgain = (id:string|number) => {
-        showMessageActive("Buy Again","This will add the order items to your cart.Are you sure?","warning",() => {
+    const handleBuyAgain = (id: string | number) => {
+        showMessageActive('Buy Again', 'This will add the order items to your cart.Are you sure?', 'warning', () => {
             reOrder(id);
             navigator('/cart');
         });
@@ -58,8 +61,16 @@ const OrderDetail = () => {
                 <Skeleton />
             ) : (
                 <section>
-                    <Link to={prevUrl}>Back</Link>
                     <Heading>Order Detail</Heading>
+                    <Link
+                        to={prevUrl}
+                        className="w-[100px] h-[40px] flex items-center
+                        justify-center gap-x-2 text-[16px] border-[1px] border-[#cacacb] font-medium
+                        mb-10 hover:bg-gray-200 transition-global"
+                    >
+                        <ArrowLeftToLine className="w-[16px]" />
+                        Back
+                    </Link>
                     <div>
                         <div className="bg-whitesmoke p-8 rounded-lg min-h-[650px]">
                             <div>
@@ -153,7 +164,11 @@ const OrderDetail = () => {
                                                 ''
                                             )}
                                             {order.status === 0 ? (
-                                                <ButtonPrimary onClick={() => handleBuyAgain(order?.id)} width="w-[140px]" height="h-[50px]">
+                                                <ButtonPrimary
+                                                    onClick={() => handleBuyAgain(order?.id)}
+                                                    width="w-[140px]"
+                                                    height="h-[50px]"
+                                                >
                                                     Buy Again
                                                 </ButtonPrimary>
                                             ) : (

@@ -2,7 +2,6 @@ import { Form, Modal } from 'antd';
 import UseOrder from '../../../../../../hooks/profile/useOrder';
 import TextArea from 'antd/es/input/TextArea';
 import { useForm } from 'antd/es/form/Form';
-import { showMessageClient } from '../../../../../../utils/messages';
 
 const ModalCancel = ({
     isModalOpen,
@@ -15,7 +14,7 @@ const ModalCancel = ({
     orderId: string;
     refetch: any;
 }) => {
-    const { cancelOrder, loading } = UseOrder();
+    const { cancelOrder } = UseOrder();
     const [form] = useForm();
 
     const handleOk = () => {
@@ -24,7 +23,7 @@ const ModalCancel = ({
         cancelOrder(orderId, {
             reason_cancelled,
         });
-
+        refetch();
         setIsModalOpen(false);
     };
 

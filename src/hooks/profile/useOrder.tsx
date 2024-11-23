@@ -23,6 +23,7 @@ const UseOrder = () => {
             setLoading(false);
         }
     };
+
     const cancelOrder = async (id: string, reason: { reason_cancelled: string }) => {
         try {
             setCancelLoading(true);
@@ -47,14 +48,14 @@ const UseOrder = () => {
         }
     };
 
-    const reOrder = async (id: number|string) => {
+    const reOrder = async (id: number | string) => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `api/reorder/order/${id}`);
-            showMessageClient("Reorder","The items was added to your cart!","success");
+            showMessageClient('Reorder', 'The items was added to your cart!', 'success');
         } catch (error) {
             console.log(error);
-            showMessageAdmin("Error","Something went wrong!","error");
+            showMessageAdmin('Error', 'Something went wrong!', 'error');
         } finally {
             setLoading(false);
         }
@@ -67,7 +68,7 @@ const UseOrder = () => {
         cancelLoading,
         orderDetail,
         getOrderDetail,
-        reOrder
+        reOrder,
     };
 };
 
