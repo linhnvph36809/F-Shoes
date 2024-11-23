@@ -1,5 +1,5 @@
 import { Skeleton, Tag } from 'antd';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
 
 import Heading from '../Order/components/Heading';
@@ -9,14 +9,17 @@ import { IOrder, statusString } from '../../../../interfaces/IOrder';
 import { formatPrice, formatTime } from '../../../../utils';
 import NotFound from '../../../../components/NotFound';
 import ModalCancel from './components/ModalCancel';
+import { showMessageActive } from '../../../../utils/messages';
+import UseOrder from '../../../../hooks/profile/useOrder';
 
 const OrderDetail = () => {
+    const { reOrder} = UseOrder();
     const { id } = useParams();
     const { data, isFetching, error, refetch } = useQueryConfig(`order-detail-profile-${id}`, `api/orders/${id}`);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const location = useLocation();
     const prevUrl = location.state?.prevUrl;
-
+    const navigator = useNavigate();
     if (error) {
         return <NotFound />;
     }
@@ -35,7 +38,12 @@ const OrderDetail = () => {
         }
     };
 
-    const handleBuyAgain = () => {};
+    const handleBuyAgain = (id:string|number) => {
+        showMessageActive("Buy Again","This will add the order items to your cart.Are you sure?","warning",() => {
+            reOrder(id);
+            navigator('/cart');
+        });
+    };
 
     const status:
         | {
@@ -145,7 +153,7 @@ const OrderDetail = () => {
                                                 ''
                                             )}
                                             {order.status === 0 ? (
-                                                <ButtonPrimary width="w-[140px]" height="h-[50px]">
+                                                <ButtonPrimary onClick={() => handleBuyAgain(order?.id)} width="w-[140px]" height="h-[50px]">
                                                     Buy Again
                                                 </ButtonPrimary>
                                             ) : (

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IOrder } from '../../interfaces/IOrder.ts';
 import { tokenManagerInstance } from '../../api';
-import { showMessageClient } from '../../utils/messages.ts';
+import { showMessageAdmin, showMessageClient } from '../../utils/messages.ts';
 
 const API_ORDER = 'api/orders';
 const UseOrder = () => {
@@ -47,12 +47,14 @@ const UseOrder = () => {
         }
     };
 
-    const reOrder = async (id: string) => {
+    const reOrder = async (id: number|string) => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('post', `api/reorder/order/${id}`);
+            await tokenManagerInstance('post', `api/reorder/order/${id}`);
+            showMessageClient("Reorder","The items was added to your cart!","success");
         } catch (error) {
             console.log(error);
+            showMessageAdmin("Error","Something went wrong!","error");
         } finally {
             setLoading(false);
         }
@@ -65,6 +67,7 @@ const UseOrder = () => {
         cancelLoading,
         orderDetail,
         getOrderDetail,
+        reOrder
     };
 };
 
