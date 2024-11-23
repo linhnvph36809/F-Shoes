@@ -1,7 +1,8 @@
 import { ConfigProvider, Menu } from 'antd';
+import { Outlet } from 'react-router-dom';
+
 import Sider from 'antd/es/layout/Sider';
-import { House, PanelsLeftBottom } from 'lucide-react';
-import { Link, Outlet } from 'react-router-dom';
+import MENU_ITEM from './datas';
 
 const siderStyle: React.CSSProperties = {
     overflow: 'auto',
@@ -30,13 +31,7 @@ const LayoutOrderProfile = () => {
                             mode="inline"
                             className="text-[15px] font-medium"
                             defaultSelectedKeys={['1']}
-                            items={[
-                                {
-                                    key: '1',
-                                    icon: <PanelsLeftBottom className="w-[18px]" />,
-                                    label: <Link to="">All Order</Link>,
-                                },
-                            ]}
+                            items={MENU_ITEM}
                         />
                     </ConfigProvider>
                 </Sider>
