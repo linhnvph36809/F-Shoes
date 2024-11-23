@@ -1,25 +1,32 @@
 import { ConfigProvider, Pagination, Skeleton } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import Heading from './components/Heading';
 import ListOrder from './components/ListOrder';
+import { useNavigate } from 'react-router-dom';
 
 const OrderProfile = () => {
-    const [currentPage, setCurrentPage] = useState<number>(1);
+    const navigate = useNavigate();
 
-    const { data, isFetching } = useQueryConfig(
-        `order-all-${currentPage}`,
-        `/api/me/orders?per_page=5&page=${currentPage}`,
-    );
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const page = params.get('page') || 1;
+    const statusQueryUrl = params.get('status');
 
-    console.log(data);
+    const [currentPage, setCurrentPage] = useState<number | string>(page);
+    const { data, isFetching } = useQueryConfig(`order-all-${page}`, `/api/me/orders?per_page=5&page=${page}`);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
+        navigate(`?page=${page}`);
     };
 
     const totalItems = data?.data?.paginator?.total_item || 0;
     const pageSize = data?.data?.paginator?.per_page || 5;
+
+    useEffect(() => {
+        navigate(`?page=${currentPage}`);
+    }, []);
 
     return (
         <section>
@@ -35,7 +42,7 @@ const OrderProfile = () => {
                 {' '}
                 <Pagination
                     align="end"
-                    current={currentPage}
+                    current={page || (1 as any)}
                     total={totalItems}
                     pageSize={pageSize}
                     onChange={handlePageChange}

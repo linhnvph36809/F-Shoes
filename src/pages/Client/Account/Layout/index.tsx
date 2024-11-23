@@ -1,18 +1,15 @@
-import {Outlet} from "react-router-dom";
-import Navbar from "../Components/Navbar.tsx";
-
+import { Outlet } from 'react-router-dom';
+import Navbar from '../Components/Navbar.tsx';
 
 const Layout = () => {
     return (
         <div className="min-h-screen">
-            <Navbar/>
+            <Navbar />
             <div className="px-[15px] w-full">
-            <Outlet/>   
+                <Outlet />
             </div>
         </div>
-
-    )
-        ;
+    );
 };
 
 export default Layout;

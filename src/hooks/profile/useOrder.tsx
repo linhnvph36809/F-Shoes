@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { IOrder } from '../../interfaces/IOrder.ts';
 import { tokenManagerInstance } from '../../api';
+import { showMessageClient } from '../../utils/messages.ts';
 
 const API_ORDER = 'api/orders';
 const UseOrder = () => {
@@ -22,15 +23,14 @@ const UseOrder = () => {
             setLoading(false);
         }
     };
-    const cancelOrder = async (id: string) => {
+    const cancelOrder = async (id: string, reason: { reason_cancelled: string }) => {
         try {
             setCancelLoading(true);
-            const { data } = await tokenManagerInstance('patch', `api/cancel/order/${id}`);
-
-            return data.order;
+            await tokenManagerInstance('patch', `api/cancel/order/${id}`, reason);
+            showMessageClient('', 'Order cancelled successfully', 'success');
         } catch (error) {
             console.log(error);
-            return false;
+            showMessageClient('Something went wrong!', '', 'error');
         } finally {
             setCancelLoading(false);
         }
@@ -40,6 +40,17 @@ const UseOrder = () => {
             setLoading(true);
             const { data } = await tokenManagerInstance('get', `${API_ORDER}/${id}`);
             setOrderDetail(data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const reOrder = async (id: string) => {
+        try {
+            setLoading(true);
+            const { data } = await tokenManagerInstance('post', `api/reorder/order/${id}`);
         } catch (error) {
             console.log(error);
         } finally {
