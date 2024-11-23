@@ -5,24 +5,21 @@ import {tokenManagerInstance} from "../../../../api";
 import {IProduct} from "../../../../interfaces/IProduct.ts";
 import {formatPrice} from "../../../../utils";
 import {IVariation} from "../../../../interfaces/IVariation.ts";
+import useQueryConfig from '../../../../hooks/useQueryConfig.tsx';
 
 
 
 const AddSale = () => {
     //const [form] = Form.useForm();
-    const [products, setProducts] = useState<IProduct[]>([]);
+    let products = [];
     //const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
-    useEffect(() => {
-        const allProduct = async () => {
-            try {
-                const {data} = await tokenManagerInstance('get', 'api/products/all/summary');
-                setProducts(data.products);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        allProduct();
-    }, []);
+    const { data } = useQueryConfig(
+        `sale-list_products-add_sale_page`,
+        `/api/products/all/summary`,
+    );
+    if(data?.data?.products){
+        products = data.data.products;
+    }
     const dataSource = [
         ...products
     ];
@@ -35,8 +32,6 @@ const AddSale = () => {
         if (checked) {
             if (product?.variations && product?.variations.length > 0) {
                 setSelectedVariations([...selectedVariations, ...product.variations]);
-
-                console.log(selectedVariations, 'selected');
             } else {
                 setSelectedSimpleProducts([...selectedSimpleProducts, product]);
             }
@@ -52,42 +47,43 @@ const AddSale = () => {
             }
         }
 
-
     }
     useEffect(() => {
         setDataSourceVariation(selectedVariations);
-    }, [selectedVariations]);
-    useEffect(() => {
         setDataSourceProduct(selectedSimpleProducts);
-    }, [selectedSimpleProducts]);
+    }, [selectedVariations,selectedSimpleProducts]);
+    
     const selectAllProduct = (checked: boolean, products: IProduct[]) => {
         if (checked) {
+            let variantsInProducts:IVariation[] = [];
+            let simpleProductInProducts:IProduct[] = [];
             products.map((p) => {
-                if (p?.variations && p?.variations.length > 0) {
-                    const filtered = selectedVariations.filter((item) => {
-                        return !p?.variations.find(variant => item.id === variant.id);
-                    });
-                    setSelectedVariations([...filtered, ...p.variations]);
-                } else {
-                    console.log(1);
+                if(p?.variations && p.variations.length > 0) {
+                    variantsInProducts = [...variantsInProducts,...p.variations];
+                }else{
+                    simpleProductInProducts = [...simpleProductInProducts, p];
                 }
             })
-
-
-        } else {
-            products.map((p) => {
-                if (p?.variations && p?.variations.length > 0) {
-                    const filtered = selectedVariations.filter((item) => {
-                        return !p?.variations.find(variant => item.id === variant.id);
-                    });
-                    setSelectedVariations(filtered);
-                } else {
-                    console.log(1);
+            const filteredVariation = selectedVariations.filter((item) => {
+                const variationInProduct = variantsInProducts.find(variant => item.id === variant.id);
+                if(variationInProduct){
+                    return false;
                 }
-            })
-        }
+                return true;
+            });
+            const filteredSimpleProduct = selectedSimpleProducts.filter((item) => {
+                const productInList = simpleProductInProducts.find(product => item.id === product.id);
+                if(productInList){
+                    return false;
+                }
+                return true;
+            });
+            setSelectedVariations([...filteredVariation, ...variantsInProducts]);
+            setSelectedSimpleProducts([...filteredSimpleProduct,...simpleProductInProducts]);
+        }else {
+            console.log(products,'products');
+        } 
     }
-
     const columnsVariations = [
 
         {
