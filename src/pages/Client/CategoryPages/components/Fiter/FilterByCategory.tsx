@@ -19,6 +19,13 @@ const FilterByCategory:React.FC<Props>= ({categories}) => {
     return (
         <div>
             <ul>
+            <Link
+                       
+                        to={`/category`}
+                        className="block text-20px font-medium my-2"
+                    >
+                        All
+                    </Link>
                 {categories.map((category) => (
                     <Link
                         key={category.id}
