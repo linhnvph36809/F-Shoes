@@ -3,25 +3,19 @@ import Title from './components/Title';
 import InputPrimary from '../../../components/Input';
 import ButtonComponent from './components/Button';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
-import { useContextGlobal } from '../../../contexts';
 
 const Password = ({ handleLogin, email, loading }: any) => {
-    const { setUser } = useContextGlobal();
-
     const onFinish = async (values: { password: string }) => {
-        const res = await handleLogin({
+        handleLogin({
             ...email,
             ...values,
         });
-        if (res?.user) {
-            setUser(res?.user);
-        }
     };
 
     return (
         <section>
             <div className="my-10">
-                <Title>Quel est ton mot de passe ?.</Title>
+                <Title>What is your password?.</Title>
             </div>
             <div>
                 <Form onFinish={onFinish} layout="vertical">
@@ -39,7 +33,7 @@ const Password = ({ handleLogin, email, loading }: any) => {
 
                     <p className="w-[80%] text-[#757575] md:text-base font-medium sm:my-5 md:my-10">
                         <a href="#" className="underline">
-                            Mot de passe oublié ?
+                            Forgotten password ?
                         </a>
                     </p>
 

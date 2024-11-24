@@ -5,10 +5,8 @@ import { useEffect, useState } from 'react';
 
 import HeaderCategory from './HeaderCategory.tsx';
 import { ICategory } from '../../interfaces/ICategory.ts';
-import useCookiesConfig from '../../hooks/useCookiesConfig.tsx';
-import { COOKIE_USER } from '../../constants/index.ts';
 import useAuth from '../../hooks/useAuth.tsx';
-import { useContextGlobal } from '../../contexts/index.tsx';
+import { useContextClient } from '../Layouts/LayoutClient/index.tsx';
 import useQueryConfig from '../../hooks/useQueryConfig.tsx';
 import LoadingSmall from '../Loading/LoadingSmall.tsx';
 
@@ -21,13 +19,11 @@ const Header = () => {
     });
     const [headCategories, setHeadCategories] = useState<ICategory[][]>([]);
     const { logout } = useAuth();
-    const { cookies, removeCookie } = useCookiesConfig(COOKIE_USER);
-    const { setUser } = useContextGlobal();
+    const { userName } = useContextClient();
 
-    const userName = cookies?.userName;
-    const {data:dataCategories, isFetching:fetchingData} = useQueryConfig(
-        "header-list-categories",
-        'api/main/categories?include=children'
+    const { data: dataCategories, isFetching: fetchingData } = useQueryConfig(
+        'header-list-categories',
+        'api/main/categories?include=children',
     );
     useEffect(() => {
         setHeadCategories(dataCategories?.data?.categories?.data);
@@ -248,7 +244,13 @@ const Header = () => {
                                 setHeadCates(headCates);
                             }}
                         >
-                            {fetchingData ? <div className='flex -items-center justify-center'><LoadingSmall color='gray'/></div> : <HeaderCategory categories={headCates} />}
+                            {fetchingData ? (
+                                <div className="flex -items-center justify-center">
+                                    <LoadingSmall color="gray" />
+                                </div>
+                            ) : (
+                                <HeaderCategory categories={headCates} />
+                            )}
                         </div>
                     </div>
                 </div>
