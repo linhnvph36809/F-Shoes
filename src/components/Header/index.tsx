@@ -4,11 +4,11 @@ import { Heart, Menu as MenuLucide, Search, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import HeaderCategory from './HeaderCategory.tsx';
-import SkeletonComponent from '../../pages/Admin/components/Skeleton';
-import { tokenManagerInstance } from '../../api';
 import { ICategory } from '../../interfaces/ICategory.ts';
 import useAuth from '../../hooks/useAuth.tsx';
 import { useContextClient } from '../Layouts/LayoutClient/index.tsx';
+import useQueryConfig from '../../hooks/useQueryConfig.tsx';
+import LoadingSmall from '../Loading/LoadingSmall.tsx';
 
 const Header = () => {
     const [showMenu, setShowMenu] = useState<boolean>(false);
@@ -17,26 +17,17 @@ const Header = () => {
         isFixed: false,
         position: 0,
     });
-    const [loading, setLoading] = useState<boolean>(false);
     const [headCategories, setHeadCategories] = useState<ICategory[][]>([]);
     const { logout } = useAuth();
     const { userName } = useContextClient();
 
+    const { data: dataCategories, isFetching: fetchingData } = useQueryConfig(
+        'header-list-categories',
+        'api/main/categories?include=children',
+    );
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const { data } = await tokenManagerInstance('get', 'api/main/categories?include=children');
-                setHeadCategories(data.categories.data);
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
-
+        setHeadCategories(dataCategories?.data?.categories?.data);
+    }, [dataCategories?.data?.categories?.data]);
     const categories = headCategories ? headCategories : ([[]] as any);
     const handleScroll = () => {
         const position = window.scrollY;
@@ -253,7 +244,13 @@ const Header = () => {
                                 setHeadCates(headCates);
                             }}
                         >
-                            {loading ? <SkeletonComponent /> : <HeaderCategory categories={headCates} />}
+                            {fetchingData ? (
+                                <div className="flex -items-center justify-center">
+                                    <LoadingSmall color="gray" />
+                                </div>
+                            ) : (
+                                <HeaderCategory categories={headCates} />
+                            )}
                         </div>
                     </div>
                 </div>
