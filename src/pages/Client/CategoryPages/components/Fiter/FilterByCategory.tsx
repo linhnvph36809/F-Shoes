@@ -17,12 +17,12 @@ const FilterByCategory:React.FC<Props>= ({categories}) => {
         )
     }
     return (
-        <div>
+        <div className='flex items-center '>
             <ul>
             <Link
                        
                         to={`/category`}
-                        className="block text-20px font-medium my-2"
+                        className="block text-[14px] font-medium my-2"
                     >
                         All
                     </Link>
@@ -30,7 +30,7 @@ const FilterByCategory:React.FC<Props>= ({categories}) => {
                     <Link
                         key={category.id}
                         to={`/category/${category.slug}`}
-                        className="block text-20px font-medium my-2"
+                        className="block text-[14px] font-medium my-2"
                     >
                         {category.name}
                     </Link>
