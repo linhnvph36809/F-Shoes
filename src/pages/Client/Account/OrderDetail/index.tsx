@@ -47,7 +47,6 @@ const OrderDetail = () => {
             navigator('/cart');
         });
     };
-
     const status:
         | {
               className: string;
