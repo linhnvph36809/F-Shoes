@@ -9,6 +9,7 @@ const CartItem = ({ product, handleDeleteCart, handeGetAllCart }: any) => {
     const { putCart } = useCart();
     const { postWishlist } = useWishlist();
     const { user } = useContextGlobal();
+
     const onChange = (id: string | number, value: any) => {
         putCart(id, {
             quantity: +value,

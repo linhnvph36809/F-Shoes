@@ -7,10 +7,8 @@ import HeaderCategory from './HeaderCategory.tsx';
 import SkeletonComponent from '../../pages/Admin/components/Skeleton';
 import { tokenManagerInstance } from '../../api';
 import { ICategory } from '../../interfaces/ICategory.ts';
-import useCookiesConfig from '../../hooks/useCookiesConfig.tsx';
-import { COOKIE_USER } from '../../constants/index.ts';
 import useAuth from '../../hooks/useAuth.tsx';
-import { useContextGlobal } from '../../contexts/index.tsx';
+import { useContextClient } from '../Layouts/LayoutClient/index.tsx';
 
 const Header = () => {
     const [showMenu, setShowMenu] = useState<boolean>(false);
@@ -22,10 +20,7 @@ const Header = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [headCategories, setHeadCategories] = useState<ICategory[][]>([]);
     const { logout } = useAuth();
-    const { cookies, removeCookie } = useCookiesConfig(COOKIE_USER);
-    const { setUser } = useContextGlobal();
-
-    const userName = cookies?.userName;
+    const { userName } = useContextClient();
 
     useEffect(() => {
         const fetchData = async () => {

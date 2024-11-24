@@ -13,7 +13,6 @@ import LoadingBlock from '../../../components/Loading/LoadingBlock';
 const Cart = () => {
     const { loading, carts, getAllCart, deleteCart } = useCart();
     const { user } = useContextGlobal();
-
     const handleDeleteCart = (id: string | number) => {
         deleteCart(id);
         handeGetAllCart();
