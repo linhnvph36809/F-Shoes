@@ -5,11 +5,10 @@ import { IProduct } from '../interfaces/IProduct';
 import { tokenManagerInstance } from '../api';
 import { PATH_LIST_PRODUCT } from '../constants';
 
-const API_PRODUCT = '/api/product';
+export const API_PRODUCT = '/api/product';
 
 const useProduct = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
-    const [product, setProduct] = useState<IProduct | undefined>();
     const [loading, setLoading] = useState<boolean>(false);
 
     const navigate = useNavigate();
@@ -29,18 +28,6 @@ const useProduct = () => {
                 data: { data },
             } = await tokenManagerInstance('get', API_PRODUCT + '?include=images,categories,sale_price,variations');
             setProducts(data);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const getOneProduct = async () => {
-        try {
-            setLoading(true);
-            const { data } = await tokenManagerInstance('get', `${API_PRODUCT}/${id}?include=categories,images`);
-            setProduct(data);
         } catch (error) {
             console.log(error);
         } finally {
@@ -75,7 +62,7 @@ const useProduct = () => {
     const putProduct = async (product: IProduct) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('put', API_PRODUCT + id, product);
+            await tokenManagerInstance('put', `${API_PRODUCT}/${id}`, product);
             navigate(PATH_LIST_PRODUCT);
         } catch (error) {
             console.log(error);
@@ -86,21 +73,15 @@ const useProduct = () => {
 
     useEffect(() => {
         getAllProduct();
-
-        if (id) {
-            getOneProduct();
-        }
     }, [id]);
 
     return {
-        product,
         products,
         loading,
         postProduct,
         getAllProduct,
         putProduct,
         deleteProduct,
-        getOneProduct,
     };
 };
 

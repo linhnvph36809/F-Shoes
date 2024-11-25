@@ -25,6 +25,7 @@ const Categories = memo(() => {
                     fieldNames={{ label: 'name', value: 'id' }}
                     options={categories}
                     loading={loading}
+                    key={'value'}
                 />
             </Form.Item>
         </ConfigProvider>

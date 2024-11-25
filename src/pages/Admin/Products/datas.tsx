@@ -30,5 +30,5 @@ export const columnsAttribute = [
         title: 'Created at',
         dataIndex: 'created_at',
         key: '6',
-    }
+    },
 ];

@@ -13,7 +13,6 @@ const OrderItem = ({ order }: { order: IOrder }) => {
         | undefined = statusString(order.status);
 
     const currentUrl = `${window.location.origin}${location.pathname}${location.search}`;
-    console.log(currentUrl);
 
     return (
         <div
