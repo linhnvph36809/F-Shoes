@@ -1,21 +1,20 @@
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import utc from "dayjs/plugin/utc";
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import utc from 'dayjs/plugin/utc';
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
-export const formatPrice = (price: number): string  => {
+export const formatPrice = (price: number): string => {
     const intPart = Math.floor(price);
-    return intPart.toLocaleString('vi-VN')
-}
+    return intPart.toLocaleString('vi-VN');
+};
 
-export const timeToNow = (time:string) => {
+export const timeToNow = (time: string) => {
     return dayjs(time).fromNow();
-}
+};
 
-export const formatTime = (time:string|undefined):string =>  {
-    if(!time) return '';
+export const formatTime = (time: string | undefined): string => {
+    if (!time) return '';
     const date = new Date(time);
-
 
     if (isNaN(date.getTime())) {
         throw new Error('Invalid Date');
@@ -32,4 +31,4 @@ export const formatTime = (time:string|undefined):string =>  {
     });
 
     return formattedDate;
-}
+};
