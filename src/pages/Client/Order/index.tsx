@@ -5,7 +5,6 @@ import TextArea from 'antd/es/input/TextArea';
 
 import InputPrimary from '../../../components/Input';
 import useDelivery from '../../../hooks/useDelivery';
-import useCart from '../../../hooks/useCart';
 import { useContextGlobal } from '../../../contexts';
 import ButtonPrimary from '../../../components/Button';
 import useVoucher from '../../../hooks/useVoucher';
@@ -14,11 +13,29 @@ import { formatPrice } from '../../../utils';
 import useOnlinePayment from '../../../hooks/useOnlinePayment';
 import LoadingPage from '../../../components/Loading/LoadingPage';
 import useCookiesConfig from '../../../hooks/useCookiesConfig';
+import useQueryConfig from '../../../hooks/useQueryConfig';
+
 const { Title, Text } = Typography;
 
 const Order = () => {
+    const navigate = useNavigate();
     const { provinces, districts, fee, wards, getAllWard, getAllDistrict, getFee } = useDelivery();
-    const { loading: loadingCart, carts, getAllCart } = useCart();
+    const orderId = JSON.parse(localStorage.getItem('orderId') || '[]');
+
+    const { data, isFetching: loadingCart } = useQueryConfig('cart', '/api/cart', {
+        cacheTime: 0,
+        staleTime: 0,
+        retry: false,
+    });
+
+    const carts = data?.data.filter((cart: any) => orderId.includes(cart.id)) || [];
+
+    useEffect(() => {
+        if (carts && !carts.length) {
+            navigate('/');
+        }
+    }, []);
+
     const { loading: loadingVoucher, voucher, postVoucher } = useVoucher();
     const { loading: loadingCheckOut, postVNPAY, postOrder } = useOnlinePayment();
     const { user } = useContextGlobal();
@@ -52,14 +69,8 @@ const Order = () => {
         }
     };
 
-    useEffect(() => {
-        if (user?.id) {
-            getAllCart(user.id);
-        }
-    }, [user]);
-
     const handleTotalPrice = useMemo(() => {
-        return carts.reduce((sum, curr) => {
+        return carts?.reduce((sum: any, curr: any) => {
             if (curr?.product?.price) {
                 return sum + curr.product.price * curr.quantity;
             } else if (curr?.product_variation?.price) {
@@ -105,9 +116,7 @@ const Order = () => {
                 : handleTotalPrice + fee.total
             : handleTotalPrice;
 
-        console.log(carts);
-
-        const order_details = carts.map((cart: any) => {
+        const order_details = carts?.map((cart: any) => {
             if (cart?.product_variation) {
                 return {
                     product_variation_id: cart.product_variation.id,

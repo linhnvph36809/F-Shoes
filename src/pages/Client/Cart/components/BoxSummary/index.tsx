@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
-import { formatPrice } from '../../../../../utils';
+import { useNavigate } from 'react-router-dom';
 
-const Summary = ({ total }: { total: number }) => {
+import { formatPrice } from '../../../../../utils';
+const Summary = ({ total, cartId }: { total: number; cartId: number[] }) => {
+    const navigate = useNavigate();
     return (
         <div className="p-4 shadow-sm rounded-lg">
             <h2 className="text-[24px] font-bold mb-4">Summary</h2>
@@ -21,13 +22,17 @@ const Summary = ({ total }: { total: number }) => {
                 </div>
                 <hr className="mb-4" />
             </div>
-            <Link
-                to="/order"
-                className="flex items-center justify-center mt-2 bg-primary
-                color-whitesmoke font-medium text-[16px] h-[55px] rounded-full mt-4"
+            <button
+                onClick={() => {
+                    navigate('/order');
+                }}
+                disabled={cartId.length ? false : true}
+                className={`flex w-full items-center justify-center mt-2 bg-primary
+                color-whitesmoke font-medium text-[16px] h-[55px] rounded-full mt-4 
+                transition-global ${cartId.length ? 'opacity-1' : 'opacity-50'}`}
             >
                 Checkout
-            </Link>
+            </button>
         </div>
     );
 };
