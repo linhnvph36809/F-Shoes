@@ -1,16 +1,40 @@
+import { DatePicker } from 'antd';
+import { Download } from 'lucide-react';
+
 import { Content } from 'antd/es/layout/layout';
 import Heading from '../components/Heading';
+import useQueryConfig from '../../../hooks/useQueryConfig';
+import { formatPrice } from '../../../utils';
+
+const { RangePicker } = DatePicker;
 
 const AdminDashboard = () => {
+    const { data } = useQueryConfig('statistics/overall', '/api/v1/statistics/overall');
+    const overall = data?.data.data;
+
     return (
         <Content>
-            <Heading>Dashboard</Heading>
+            <div className="flex justify-between items-center">
+                <Heading>Dashboard</Heading>
+                <div className="flex gap-x-5 mb-10">
+                    <RangePicker className="active:border-[#111111] border-[#111111] hover:border-[#ccc]" />
+                    <button
+                        className="flex gap-x-4 py-3 px-8 bg-primary
+                        text-white rounded-lg text-[16px] font-medium"
+                    >
+                        <Download />
+                        Export
+                    </button>
+                </div>
+            </div>
             <div className="grid grid-cols-4 gap-x-10">
                 <div className="h-[180px] flex flex-col justify-between bg-[#FFFFFF] p-9 rounded-[14px]">
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-[16px] text-[#606060] font-medium">Total User</p>
-                            <h3 className="text-[30px] font-bold color-primary mt-5">40,689</h3>
+                            <h3 className="text-[30px] font-bold color-primary mt-5">
+                                {overall?.users ? overall.users.total : 0}
+                            </h3>
                         </div>
                         <div>
                             <svg
@@ -51,7 +75,10 @@ const AdminDashboard = () => {
                             />
                         </svg>
                         <p className="text-[#606060]">
-                            <span className="font-medium text-[#00B69B]">8.5%</span> Up from yesterday
+                            <span className="font-medium text-[#00B69B]">
+                                {overall?.users ? overall.users.percentage : 0}%
+                            </span>{' '}
+                            Up from yesterday
                         </p>
                     </div>
                 </div>
@@ -59,7 +86,9 @@ const AdminDashboard = () => {
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-[16px] text-[#606060] font-medium">Total Order</p>
-                            <h3 className="text-[30px] font-bold color-primary mt-5">10293</h3>
+                            <h3 className="text-[30px] font-bold color-primary mt-5">
+                                {overall?.orders ? overall.orders.total : 0}
+                            </h3>
                         </div>
                         <div>
                             <svg
@@ -100,60 +129,20 @@ const AdminDashboard = () => {
                             />
                         </svg>
                         <p className="text-[#606060]">
-                            <span className="font-medium text-[#00B69B]">8.5%</span> Up from yesterday
+                            <span className="font-medium text-[#00B69B]">
+                                {overall?.orders ? overall.orders.percentage : 0}%
+                            </span>{' '}
+                            Up from yesterday
                         </p>
                     </div>
                 </div>
                 <div className="h-[180px] flex flex-col justify-between bg-[#FFFFFF] p-9 rounded-[14px]">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-[16px] text-[#606060] font-medium">Total Order</p>
-                            <h3 className="text-[30px] font-bold color-primary mt-5">10293</h3>
-                        </div>
-                        <div>
-                            <svg
-                                width={60}
-                                height={60}
-                                viewBox="0 0 60 60"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    opacity="0.21"
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                    d="M0 30V37C0 49.7025 10.2975 60 23 60H30H37C49.7025 60 60 49.7025 60 37V30V23C60 10.2975 49.7025 0 37 0H30H23C10.2975 0 0 10.2975 0 23V30Z"
-                                    fill="#4AD991"
-                                />
-                                <path
-                                    d="M19.1111 40.8889H42.4444C43.3036 40.8889 44 41.5853 44 42.4444C44 43.3036 43.3036 44 42.4444 44H17.5556C16.6964 44 16 43.3036 16 42.4444V17.5556C16 16.6964 16.6964 16 17.5556 16C18.4147 16 19.1111 16.6964 19.1111 17.5556V40.8889Z"
-                                    fill="#4AD991"
-                                />
-                                <path
-                                    opacity="0.5"
-                                    d="M24.9126 34.175C24.325 34.8018 23.3406 34.8335 22.7139 34.2459C22.0871 33.6584 22.0554 32.674 22.643 32.0472L28.4763 25.825C29.0445 25.2188 29.9888 25.1663 30.6209 25.7056L35.2249 29.6344L41.2235 22.0361C41.7559 21.3618 42.734 21.2467 43.4083 21.7791C44.0826 22.3114 44.1977 23.2896 43.6654 23.9639L36.6654 32.8306C36.1186 33.5231 35.1059 33.6227 34.4347 33.05L29.7306 29.0358L24.9126 34.175Z"
-                                    fill="#4AD991"
-                                />
-                            </svg>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-x-4">
-                        <svg width={20} height={12} viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M14 0L16.29 2.29L11.41 7.17L7.41 3.17L0 10.59L1.41 12L7.41 6L11.41 10L17.71 3.71L20 6V0H14Z"
-                                fill="#00B69B"
-                            />
-                        </svg>
-                        <p className="text-[#606060]">
-                            <span className="font-medium text-[#00B69B]">8.5%</span> Up from yesterday
-                        </p>
-                    </div>
-                </div>
-                <div className="h-[180px] flex flex-col justify-between bg-[#FFFFFF] p-9 rounded-[14px]">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-[16px] text-[#606060] font-medium">Total Order</p>
-                            <h3 className="text-[30px] font-bold color-primary mt-5">10293</h3>
+                            <p className="text-[16px] text-[#606060] font-medium">Total Product</p>
+                            <h3 className="text-[30px] font-bold color-primary mt-5">
+                                {overall?.products ? overall.products.total : 0}
+                            </h3>
                         </div>
                         <div>
                             <svg
@@ -195,8 +184,47 @@ const AdminDashboard = () => {
                             />
                         </svg>
                         <p className="text-[#606060]">
-                            <span className="font-medium text-[#00B69B]">8.5%</span> Up from yesterday
+                            <span className="font-medium text-[#00B69B]">
+                                {overall?.products ? overall.products.percentage : 0}%
+                            </span>{' '}
+                            Up from yesterday
                         </p>
+                    </div>
+                </div>
+                <div className="h-[180px] flex flex-col justify-between bg-[#FFFFFF] p-9 rounded-[14px]">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-[16px] text-[#606060] font-medium">Total Amount Order</p>
+                            <h3 className="text-[30px] font-bold color-primary mt-5">
+                                {formatPrice(overall?.total_amount_orders ? overall.total_amount_orders : 0)}đ
+                            </h3>
+                        </div>
+                        <div>
+                            <svg
+                                width={60}
+                                height={60}
+                                viewBox="0 0 60 60"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    opacity="0.21"
+                                    fillRule="evenodd"
+                                    clipRule="evenodd"
+                                    d="M0 30V37C0 49.7025 10.2975 60 23 60H30H37C49.7025 60 60 49.7025 60 37V30V23C60 10.2975 49.7025 0 37 0H30H23C10.2975 0 0 10.2975 0 23V30Z"
+                                    fill="#4AD991"
+                                />
+                                <path
+                                    d="M19.1111 40.8889H42.4444C43.3036 40.8889 44 41.5853 44 42.4444C44 43.3036 43.3036 44 42.4444 44H17.5556C16.6964 44 16 43.3036 16 42.4444V17.5556C16 16.6964 16.6964 16 17.5556 16C18.4147 16 19.1111 16.6964 19.1111 17.5556V40.8889Z"
+                                    fill="#4AD991"
+                                />
+                                <path
+                                    opacity="0.5"
+                                    d="M24.9126 34.175C24.325 34.8018 23.3406 34.8335 22.7139 34.2459C22.0871 33.6584 22.0554 32.674 22.643 32.0472L28.4763 25.825C29.0445 25.2188 29.9888 25.1663 30.6209 25.7056L35.2249 29.6344L41.2235 22.0361C41.7559 21.3618 42.734 21.2467 43.4083 21.7791C44.0826 22.3114 44.1977 23.2896 43.6654 23.9639L36.6654 32.8306C36.1186 33.5231 35.1059 33.6227 34.4347 33.05L29.7306 29.0358L24.9126 34.175Z"
+                                    fill="#4AD991"
+                                />
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -205,9 +233,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-
-[
-    ['1/10/2024', 50],
-    ['2/10/2024', 50],
-    ['3/10/2024', 50],
-];

@@ -21,7 +21,6 @@ const OrderDetail = () => {
     const location = useLocation();
     const prevUrl = location.state?.prevUrl;
     const navigator = useNavigate();
-    console.log(prevUrl);
 
     if (error) {
         return <NotFound />;
