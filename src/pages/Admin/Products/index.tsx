@@ -1,21 +1,50 @@
 import { CopyPlus, SquarePen, Trash2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { columnsAttribute } from './datas';
-import useProduct from '../../../hooks/useProduct';
+import useProduct, { API_PRODUCT } from '../../../hooks/useProduct';
 import { IProduct } from '../../../interfaces/IProduct';
 import Heading from '../components/Heading';
 import TableAdmin from '../components/Table';
 import ButtonEdit from '../components/Button/ButtonEdit';
 import SkeletonComponent from '../components/Skeleton';
+import useQueryConfig from '../../../hooks/useQueryConfig';
+import PaginationComponent from '../../../components/Pagination';
+import { showMessageActive } from '../../../utils/messages';
 
 const ListProduct = () => {
-    const { loading, deleteProduct, products } = useProduct();
-    console.log(products);
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const page = params.get('page') || 1;
+
+    const currentUrl = `${window.location.origin}${location.pathname}${location.search}`;
+
+    const navigate = useNavigate();
+    const { deleteProduct } = useProduct();
+
+    const {
+        data: products,
+        isFetching,
+        refetch,
+    } = useQueryConfig(
+        `all-product-admin-${page}`,
+        API_PRODUCT + `?per_page=8&page=${page}&include=categories,sale_price,variations`,
+    );
 
     const handleDeleteProduct = (id: string | number) => {
-        if (confirm('Are you sure you want to delete this product')) deleteProduct(id);
+        showMessageActive('Are you sure you want to delete this product', '', 'warning', () => {
+            deleteProduct(id);
+            refetch();
+        });
     };
+
+    const handlePageChange = (page: number) => {
+        params.set('page', `${page}`);
+        navigate(`?${params.toString()}`, { replace: true });
+    };
+
+    const totalItems = products?.data?.paginator?.total_item || 0;
+    const pageSize = products?.data?.paginator?.per_page || 8;
 
     const columnDelete = {
         title: '',
@@ -24,12 +53,17 @@ const ListProduct = () => {
         render: (slug: string | number, values: IProduct) => {
             return (
                 <div className="flex-row-center gap-x-3">
-                    <Link to={`/admin/add-variant/${slug}`}>
+                    <Link
+                        state={{ prevUrl: currentUrl }}
+                        to={`/admin/${
+                            values?.variations && values.variations.length ? 'update-variant' : 'add-variant'
+                        }/${slug}`}
+                    >
                         <ButtonEdit>
                             <CopyPlus />
                         </ButtonEdit>
                     </Link>
-                    <Link to={`/admin/update-product/${slug}`}>
+                    <Link state={{ prevUrl: currentUrl }} to={`/admin/update-product/${slug}`}>
                         <ButtonEdit>
                             <SquarePen />
                         </ButtonEdit>
@@ -43,7 +77,7 @@ const ListProduct = () => {
     };
     return (
         <>
-            {loading ? (
+            {isFetching ? (
                 <SkeletonComponent />
             ) : (
                 <section>
@@ -53,7 +87,16 @@ const ListProduct = () => {
                             scroll={{ x: 'max-content' }}
                             rowKey="id"
                             columns={[...columnsAttribute, columnDelete]}
-                            datas={products}
+                            datas={products?.data.data}
+                            pagination={false}
+                        />
+                    </div>
+                    <div className="mt-8">
+                        <PaginationComponent
+                            page={page || (1 as any)}
+                            totalItems={totalItems}
+                            pageSize={pageSize}
+                            handlePageChange={handlePageChange}
                         />
                     </div>
                 </section>

@@ -10,8 +10,10 @@ import InputPrimary from '../../../../../components/Input';
 import ModalImage from '../../AddProduct/ModalImage';
 import Categories from './Categories';
 import EditorComponent from './Editor';
+import LoadingSmall from '../../../../../components/Loading/LoadingSmall';
+import { showMessageClient } from '../../../../../utils/messages';
 
-const FormProduct = ({ onFinish, images, setImages, initialValues }: any) => {
+const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: any) => {
     const [form] = Form.useForm();
     const [description, setDescription] = useState<string>('');
     const [shortDescription, setShortDescription] = useState<string>('');
@@ -27,7 +29,7 @@ const FormProduct = ({ onFinish, images, setImages, initialValues }: any) => {
         (values: IProduct) => {
             const imageArray = images.images.map((image: IImage) => image.id);
             if (!imageArray.length) {
-                alert('Please choose image');
+                showMessageClient('Please choose image', '', 'error');
                 return;
             }
             const datas = {
@@ -97,8 +99,8 @@ const FormProduct = ({ onFinish, images, setImages, initialValues }: any) => {
                     <Form.Item name="image_url" rules={[{ required: true, message: 'Choose main image' }]}>
                         <Radio.Group buttonStyle="solid" defaultValue={initialValues?.image_url}>
                             <div className="grid grid-cols-12 gap-x-6 mt-10">
-                                {images.images.map((image: any) => (
-                                    <Radio.Button value={image.url} key={image.id}>
+                                {images.images.map((image: any, index: number) => (
+                                    <Radio.Button value={image.url} key={index}>
                                         <div className="relative">
                                             <img src={image.url} alt="" className="rounded-lg w-[70px]" />
                                             <X
@@ -113,7 +115,8 @@ const FormProduct = ({ onFinish, images, setImages, initialValues }: any) => {
                         </Radio.Group>
                     </Form.Item>
                 </ConfigProvider>
-            )}
+            )
+            }
 
             <div className="my-20">
                 <h5 className="text-[18px] font-medium color-primary mb-5">Short Description</h5>
@@ -137,10 +140,10 @@ const FormProduct = ({ onFinish, images, setImages, initialValues }: any) => {
             </div>
             <div className="text-end mt-10">
                 <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
-                    Submit
+                    {loading ? <LoadingSmall /> : 'Submit'}
                 </ButtonPrimary>
             </div>
-        </Form>
+        </Form >
     );
 };
 

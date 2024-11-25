@@ -13,8 +13,7 @@ const TableAdmin = ({ columns, datas, ...props }: any) => {
                 },
             }}
         >
-            <Table<any> columns={columns} dataSource={datas} className="mt-10"  {...props}>
-            </Table>
+            <Table<any> columns={columns} dataSource={datas} className="mt-10" {...props}></Table>
         </ConfigProvider>
     );
 };
