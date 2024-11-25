@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu } from 'antd';
+import { Button, Dropdown, Menu, Pagination } from 'antd';
 import { useEffect, useState } from 'react';
 import { DownOutlined, FilterOutlined } from '@ant-design/icons';
 import Heading from './components/Heading';
@@ -30,59 +30,66 @@ const sortKeysArray = [
 ];
 
 const CategoryPage = () => {
+    const newQuery = new URLSearchParams(location.search);
     const [filtersVisible, setFiltersVisible] = useState(true);
     const navigator = useNavigate();
-    
-    const {data:dataRawProducts, isFetching: loadingProducts} = useQueryConfig(
-        'category-list-raw-products',
-        'api/product?include=categories'
-    );    
+    const page = newQuery.get('page') || 1;
+    const [totalItemPage, setTotalItemPage] = useState<number|undefined>();
+   
     const { slug } = useParams();
     const [searchParams] = useSearchParams();
     const sortOption = searchParams.get('sort');
-    const newQuery = new URLSearchParams(location.search);
-    let listProducts: IProduct[] | [] = dataRawProducts?.data?.data || [];
-    
-   
-    const {data:dataCachingCategories} = useQueryConfig('category-list_categories_filter','api/category');
-    
-    
-    const listCategories: ICategory[] | [] =dataCachingCategories?.data?.categories?.data  || [];
- 
-    const [productsByCategory, setProductsByCategory] = useState<IProduct[] | []>([]);
 
+    const { data: dataCachingCategories } = useQueryConfig('category-list_categories_filter', 'api/category');
+
+    const listCategories: ICategory[] | [] = dataCachingCategories?.data?.categories?.data || [];
+
+    const [listProducts, setListProduct] = useState<IProduct[] | []>([]);
     
-    const [idCategory, setIdCategory] = useState<number|string|undefined>();
+    const [idCategory, setIdCategory] = useState<number | string | undefined>();
     useEffect(() => {
         if (slug !== undefined) {
             const index = slug.lastIndexOf('.');
             const id = slug.substring(index + 1);
             setIdCategory(id);
+        }else{
+            setIdCategory('');
         }
-    }, [slug])
-    
+    }, [slug]);
+
     const variationsQuery = newQuery.get('attributes');
- 
-       
-    const { data:dataAttribute, isFetching:attributeFetchingProduct } = useQueryConfig(`category-list-load-by-attributes-${idCategory ? `${idCategory}` : 'empty'}-${variationsQuery ? `${variationsQuery}` : 'empty'}`, `api/product/by/attribute-values?categoryId=${idCategory ? idCategory:''}&attributes=${variationsQuery ? variationsQuery : ''}`);
-    useEffect(() => {   
-        if(dataAttribute?.data?.products){
-            setProductsByCategory(dataAttribute?.data?.products);
+
+    const { data: dataProduct, isFetching: productFetching } = useQueryConfig(
+        `category-list-products-${idCategory ? `${slug}` : 'empty'}-${
+            variationsQuery ? `${variationsQuery}` : 'empty'
+        }-page-${page}-total-${totalItemPage ? totalItemPage : 'all'}`,
+        `api/product/by/attribute-values?categoryId=${idCategory ? idCategory : ''}&attributes=${
+            variationsQuery ? variationsQuery : ''
+        }&per_page=12&page=${page}`,
+    );
+    
+    useEffect(() => {
+        if(dataProduct?.data?.products?.data){
+            setListProduct(dataProduct?.data?.products?.data);
+            setTotalItemPage(dataProduct?.data?.products?.paginator?.total_item);    
         }
-       
-    }, [dataAttribute?.data?.products]);
-    if (productsByCategory && productsByCategory.length > 0) {
-        listProducts = productsByCategory;
-    }
+        
+    }, [dataProduct?.data?.products?.data,slug,newQuery])
+   
+    
     const toggleFilters = () => {
         setFiltersVisible(!filtersVisible);
     };
-
+    
     const changeSort = (key: string) => {
         newQuery.set('sort', `${key}`);
         navigator(`?${newQuery.toString()}`, { replace: true });
     };
-
+    
+    const handlePageChange = (page: number) => {
+        newQuery.set('page', `${page}`);
+        navigator(`?${newQuery.toString()}`, { replace: true });
+    };
     const sortMenu = (
         <Menu>
             {sortKeysArray.map((item, index) => (
@@ -96,7 +103,6 @@ const CategoryPage = () => {
     return (
         <div className="container mx-auto py-6">
             <div className="flex justify-between items-center mb-5">
-                
                 <div className="flex items-center space-x-4">
                     <Button icon={<FilterOutlined />} onClick={toggleFilters}>
                         {filtersVisible ? 'Hide Filters' : 'Show Filters'}
@@ -124,20 +130,7 @@ const CategoryPage = () => {
                             overflowY: 'auto',
                         }}
                     >
-                        {/* {categories.map((category, index) => (
-                            <a
-                                key={index}
-                                href="#"
-                                className="block text-16px font-bold my-2"
-                                onClick={() => navigate(`/category/${category.id}`)}
-                            >
-                                {category.name}
-                            </a>
-                        ))} */}
-
-                       
-                        
-                        <Heading title='List'  />
+                        <Heading title="List" />
                         <FilterByCategory categories={listCategories} />
                         <div className="my-4">
                             <FilterBox />
@@ -147,15 +140,26 @@ const CategoryPage = () => {
 
                 {/* Right Content - Product List */}
                 <div className="flex-1">
-                    {slug && productsByCategory.length === 0 && (
-                        <div className='flex items-center justify-center w-full h-[40ppx] border mb-8'>
+                    {slug && listProducts.length === 0 && (
+                        <div className="flex items-center justify-center w-full h-[40ppx] border mb-8">
                             <p className="text-center text-xl my-4 font-sans text-[14px] text-gray-400">
-                            There are too few products in this category! Please check out products in other categories
-                            below.
-                        </p>
+                                There are too few products in this category! Please check out products in other
+                                categories below.
+                            </p>
                         </div>
                     )}
-                    <ProductList products={listProducts} loading={loadingProducts || attributeFetchingProduct} sortOption={sortOption} />
+                    <ProductList
+                        products={listProducts}
+                        loading={productFetching}
+                        sortOption={sortOption}
+                    />
+                    <Pagination
+                        align="end"
+                        current={page || (1 as any)}
+                        total={totalItemPage}
+                        pageSize={10}
+                        onChange={handlePageChange}
+                    />
                 </div>
             </div>
         </div>
