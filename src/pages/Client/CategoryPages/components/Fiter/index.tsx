@@ -4,30 +4,19 @@ import {useEffect, useState} from "react";
 import {IAttribute} from "../../../../../interfaces/IAttribute.ts";
 import {useLocation, useNavigate} from "react-router-dom";
 import {CheckboxChangeEvent} from "antd/lib/checkbox";
+import useQueryConfig from '../../../../../hooks/useQueryConfig.tsx';
 
 const {Panel} = Collapse;
 
 
 const FilterBox = () => {
     const navigator = useNavigate();
-    const [loading, setLoading] = useState(false);
     const [fixedAttributes, setFixedAttributes] = useState<IAttribute[]>([]);
-
-
+    const {data:dataCachingAttributes,isFetching:loading} = useQueryConfig("category-filters-list__attributes","api/attributes/isFilter");
+    
     useEffect(() => {
-        const fixedAttributes = async () => {
-            try {
-                setLoading(true);
-                const {data} = await tokenManagerInstance('get', 'api/attributes/isFilter');
-                setFixedAttributes(data.attributes);
-            } catch (error) {
-                console.log(error, 'error');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fixedAttributes();
-    }, []);
+        setFixedAttributes(dataCachingAttributes?.data?.attributes);
+    }, [dataCachingAttributes?.data?.attributes]);
 
     const query = new URLSearchParams(useLocation().search);
     const [selectedVariations, setSelectedVariations] = useState<Array<string | number>>([]);
@@ -39,8 +28,6 @@ const FilterBox = () => {
         const {value, checked} = e.target;
 
         let updatedVariations = [...selectedVariations];
-
-
         if (checked) {
             if (!updatedVariations.includes(value)) {
                 updatedVariations.push(value);
@@ -54,8 +41,10 @@ const FilterBox = () => {
         const newQuery = new URLSearchParams(location.search);
 
         if (updatedVariations.length > 0) {
-
             newQuery.set('attributes', updatedVariations.join('-'));
+            if(newQuery.get('page')){
+                newQuery.delete('page');
+            }
         } else {
 
             newQuery.delete('attributes');
@@ -70,29 +59,31 @@ const FilterBox = () => {
                 loading ? <Skeleton/> :
                     fixedAttributes && fixedAttributes.length > 0 ?
                         fixedAttributes.map((item) => (
-                            <Collapse
+                           <div key={item.id}>
+                             <Collapse
                                 key={item?.id}
                                 expandIconPosition="end"
-                                className="custom-collapse"
+                                className="w-[200px] "
                                 bordered={false}
                             >
                                 <Panel
                                     header={item?.name}
                                     key={item?.id}
-                                    className="text-[16px] font-semibold border-b-2 border-gray-300" // Tailwind class for border
+                                    className="text-[16px] font-semibold bg-white border-t-[1px] border-gray-200" // Tailwind class for border
                                 >
                                     {item.values.map((value) => (
-                                        <div key={value?.id} className="mb-2">
+                                        <div key={value?.id} className="my-2">
                                             <Checkbox
                                                 checked={selectedVariations.includes(`${value?.id}`)}
                                                 onChange={(e) => onchangeCheckbox(e)} value={value?.id}
-                                                className="text-[15px]">{value?.value}</Checkbox>
+                                                className="text-[15px] break-words">{value?.value}</Checkbox>
                                         </div>
                                     ))}
                                 </Panel>
 
 
                             </Collapse>
+                           </div>
                         ))
                         : ''
             }
