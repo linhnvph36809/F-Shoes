@@ -1,4 +1,5 @@
-import { Col, Row, Skeleton } from 'antd';
+import { Col, Row } from 'antd';
+import SkeletonComponent from '../../../Admin/components/Skeleton';
 import BoxProducts from '../components/BoxProduct';
 import { IProduct } from '../../../../interfaces/IProduct';
 import {Link} from "react-router-dom";
@@ -23,7 +24,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading, sortOption
     return (
         <Row gutter={[16, 16]}>
             {loading ? (
-                <Skeleton className='h-screen w-full' />
+                <SkeletonComponent />
             ) : (
                 sortedProducts.map((product) => (
                     <Col span={8} key={product.id}>
