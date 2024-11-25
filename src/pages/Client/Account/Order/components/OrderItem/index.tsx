@@ -7,10 +7,13 @@ import { formatPrice, timeToNow } from '../../../../../../utils';
 const OrderItem = ({ order }: { order: IOrder }) => {
     const status:
         | {
-              className: string;
-              text: string;
-          }
+            className: string;
+            text: string;
+        }
         | undefined = statusString(order.status);
+
+    const currentUrl = `${window.location.origin}${location.pathname}${location.search}`;
+    console.log(currentUrl);
 
     return (
         <div
@@ -66,7 +69,7 @@ const OrderItem = ({ order }: { order: IOrder }) => {
                 <span className="color-gray text-[13px] font-medium">{timeToNow(order.created_at)}</span>
             </div>
             <div>
-                <Link to={`/profile/orders/${order.id}`}>
+                <Link to={`/profile/orders/${order.id}`} state={{ prevUrl: currentUrl }}>
                     <button
                         className="w-[150px] h-[50px] text-[15px] font-medium 
                         color-primary border border-[#111111] rounded-[50px] 

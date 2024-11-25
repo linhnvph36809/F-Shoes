@@ -1,44 +1,57 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SwiperSlide } from 'swiper/react';
 
+import useCart from '../../../hooks/useCart';
 import { useContextGlobal } from '../../../contexts';
 import CartItem from './components';
 import Summary from './components/BoxSummary';
 import Heading from '../HomePages/components/Heading';
 import SlidesScroll from '../../../components/SlidesScroll';
-import { SwiperSlide } from 'swiper/react';
-import useCart from '../../../hooks/useCart';
-import LoadingBlock from '../../../components/Loading/LoadingBlock';
+import useQueryConfig from '../../../hooks/useQueryConfig';
+import LoadingPage from '../../../components/Loading/LoadingPage';
 
 const Cart = () => {
-    const { loading, carts, getAllCart, deleteCart } = useCart();
+    const [cartId, setCartId] = useState<number[]>([]);
+
+    const { deleteCart } = useCart();
+    const {
+        data: carts,
+        isFetching,
+        refetch,
+    } = useQueryConfig('cart', '/api/cart', {
+        cacheTime: 0,
+        staleTime: 0,
+        retry: false,
+    });
+
     const { user } = useContextGlobal();
 
-    const handleDeleteCart = (id: string | number) => {
-        deleteCart(id);
-        handeGetAllCart();
+    const handleDeleteCart = (idCart: string | number) => {
+        setCartId((preIds: number[]) => {
+            const newData = preIds.filter((id) => id !== +idCart);
+            localStorage.setItem('orderId', JSON.stringify(newData));
+            return newData;
+        });
+        deleteCart(idCart);
+        refetch();
     };
-
-    const handeGetAllCart = () => {
-        if (user?.id) {
-            getAllCart(user.id);
-        }
-    };
-
-    useEffect(() => {
-        handeGetAllCart();
-    }, [user]);
 
     const handleTotalPrice = useMemo(() => {
-        return carts.reduce((sum, curr) => {
-            if (curr?.product?.price) {
-                return sum + curr.product.price * curr.quantity;
-            } else if (curr?.product_variation?.price) {
-                return sum + curr.product_variation.price * curr.quantity;
-            }
-            return sum;
-        }, 0);
-    }, [carts, user]);
+        if (cartId.length) {
+            const newCarts = carts?.data.filter((cart: any) => cartId.includes(cart.id));
+            return newCarts?.reduce((sum: any, curr: any) => {
+                if (curr?.product?.price) {
+                    return sum + curr.product.price * curr.quantity;
+                } else if (curr?.product_variation?.price) {
+                    return sum + curr.product_variation.price * curr.quantity;
+                }
+                return sum;
+            }, 0);
+        } else {
+            return 0;
+        }
+    }, [carts, user, cartId]);
 
     return (
         <div className="container">
@@ -46,20 +59,22 @@ const Cart = () => {
                 <div className="flex gap-10">
                     <div style={{ width: '733px' }}>
                         <h2 className="text-[24px] font-bold m-6">Bag</h2>
-                        <div className="relative min-h-[500px]">
-                            {carts?.map((cart: any) => (
+                        <div className="min-h-[300px]">
+                            {carts?.data.map((cart: any) => (
                                 <CartItem
+                                    key={cart.id}
                                     product={cart}
                                     handleDeleteCart={handleDeleteCart}
-                                    handeGetAllCart={handeGetAllCart}
+                                    setCartId={setCartId}
+                                    refetch={refetch}
                                 />
                             ))}
-                            {loading && <LoadingBlock />}
+                            {isFetching && <LoadingPage />}
                         </div>
                     </div>
 
                     <div style={{ width: '350px' }}>
-                        <Summary total={handleTotalPrice} />
+                        <Summary total={handleTotalPrice} cartId={cartId} />
                     </div>
                 </div>
 

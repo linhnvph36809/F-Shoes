@@ -1,34 +1,29 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { CookiesProvider } from 'react-cookie';
-import { QueryClient, QueryClientProvider } from 'react-query';
 
-import useCookiesConfig from '../hooks/useCookiesConfig';
-import { COOKIE_USER } from '../constants';
+import useQueryConfig from '../hooks/useQueryConfig';
+import LoadingPage from '../components/Loading/LoadingPage';
 
 const Context = createContext<any>({});
-const queryClient = new QueryClient();
 
 export const useContextGlobal = () => useContext(Context);
 
 const ContextGlobal = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<any>();
-    const { cookies } = useCookiesConfig(COOKIE_USER);
+    const { data } = useQueryConfig('user-infor', '/api/auth/me');
+    const userIdLocal = localStorage.getItem('userId');
 
     useEffect(() => {
-        const userId = cookies?.userId;
-        if (!user?.id && userId) {
-            setUser({
-                id: userId,
-            });
+        if (userIdLocal && data?.data.user) {
+            setUser(data?.data.user);
+            localStorage.setItem('userName', data?.data.user.name);
         }
-    }, []);
-    return (
-        <QueryClientProvider client={queryClient}>
-            <CookiesProvider>
-                <Context.Provider value={{ user, setUser }}>{children};</Context.Provider>
-            </CookiesProvider>
+    }, [data]);
 
-        </QueryClientProvider>
+    return (
+        <CookiesProvider>
+            <Context.Provider value={{ user, setUser }}>{children};</Context.Provider>
+        </CookiesProvider>
     );
 };
 

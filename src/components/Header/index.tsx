@@ -4,13 +4,11 @@ import { Heart, Menu as MenuLucide, Search, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import HeaderCategory from './HeaderCategory.tsx';
-import SkeletonComponent from '../../pages/Admin/components/Skeleton';
-import { tokenManagerInstance } from '../../api';
 import { ICategory } from '../../interfaces/ICategory.ts';
-import useCookiesConfig from '../../hooks/useCookiesConfig.tsx';
-import { COOKIE_USER } from '../../constants/index.ts';
 import useAuth from '../../hooks/useAuth.tsx';
-import { useContextGlobal } from '../../contexts/index.tsx';
+import { useContextClient } from '../Layouts/LayoutClient/index.tsx';
+import useQueryConfig from '../../hooks/useQueryConfig.tsx';
+import LoadingSmall from '../Loading/LoadingSmall.tsx';
 
 const Header = () => {
     const [showMenu, setShowMenu] = useState<boolean>(false);
@@ -19,29 +17,17 @@ const Header = () => {
         isFixed: false,
         position: 0,
     });
-    const [loading, setLoading] = useState<boolean>(false);
     const [headCategories, setHeadCategories] = useState<ICategory[][]>([]);
     const { logout } = useAuth();
-    const { cookies, removeCookie } = useCookiesConfig(COOKIE_USER);
-    const { setUser } = useContextGlobal();
+    const { userName } = useContextClient();
 
-    const userName = cookies?.userName;
-
+    const { data: dataCategories, isFetching: fetchingData } = useQueryConfig(
+        'header-list-categories',
+        'api/main/categories?include=children',
+    );
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const { data } = await tokenManagerInstance('get', 'api/main/categories?include=children');
-                setHeadCategories(data.categories.data);
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
-
+        setHeadCategories(dataCategories?.data?.categories?.data);
+    }, [dataCategories?.data?.categories?.data]);
     const categories = headCategories ? headCategories : ([[]] as any);
     const handleScroll = () => {
         const position = window.scrollY;
@@ -127,9 +113,8 @@ const Header = () => {
                     </div>
                 </div>
                 <div
-                    className={`${
-                        scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
-                    } bg-white transition-all duration-300 ease-linear`}
+                    className={`${scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
+                        } bg-white transition-all duration-300 ease-linear`}
                 >
                     <div className="container flex-row-center justify-between">
                         <div>
@@ -249,16 +234,21 @@ const Header = () => {
                     <div className="absolute top-full w-full bg-white z-10">
                         <div
                             className={`w-[70%] overflow-hidden mx-auto grid grid-cols-4
-                            transition-all duration-100 ease-linear ${
-                                showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
-                            } `}
+                            transition-all duration-100 ease-linear ${showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
+                                } `}
                             onMouseLeave={() => setShowMenu(false)}
                             onMouseEnter={() => {
                                 setShowMenu(true);
                                 setHeadCates(headCates);
                             }}
                         >
-                            {loading ? <SkeletonComponent /> : <HeaderCategory categories={headCates} />}
+                            {fetchingData ? (
+                                <div className="flex -items-center justify-center">
+                                    <LoadingSmall color="gray" />
+                                </div>
+                            ) : (
+                                <HeaderCategory categories={headCates} />
+                            )}
                         </div>
                     </div>
                 </div>

@@ -6,21 +6,7 @@ import { showMessageClient } from '../utils/messages';
 const API_CART = '/api/cart';
 
 const useCart = () => {
-    const [carts, setCart] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-
-    const getAllCart = async (userId: string | number) => {
-        try {
-            setLoading(true);
-            const { data } = await tokenManagerInstance('get', API_CART + `?user_id=${userId}`);
-            console.log(userId);
-            setCart(data);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const postCart = async (cart: any) => {
         try {
@@ -50,7 +36,6 @@ const useCart = () => {
             setLoading(true);
             await tokenManagerInstance('delete', API_CART + `/${id}`);
             showMessageClient('Delete cart successfully', '', 'success');
-            setCart([]);
         } catch (error) {
             showMessageClient('Error', (error as any).message, 'error');
         } finally {
@@ -59,10 +44,8 @@ const useCart = () => {
     };
 
     return {
-        carts,
         loading,
         postCart,
-        getAllCart,
         putCart,
         deleteCart,
     };

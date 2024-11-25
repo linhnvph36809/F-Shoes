@@ -17,7 +17,7 @@ const BoxProducts = ({
     return (
         <div className="product-box">
             <div className="text-center mb-4">
-                <img src={imageUrl} alt={productName} className="w-full h-[390px] object-cover rounded-md mx-auto" />
+                <img src={imageUrl} alt={productName} className="w-full h-[390px] break-words object-cover rounded-md mx-auto" />
             </div>
             <div className="text-left">
                 <p className="text-[18px] color-brown font-medium">{productName}</p>
