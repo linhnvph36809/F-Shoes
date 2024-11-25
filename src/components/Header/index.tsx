@@ -113,9 +113,8 @@ const Header = () => {
                     </div>
                 </div>
                 <div
-                    className={`${
-                        scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
-                    } bg-white transition-all duration-300 ease-linear`}
+                    className={`${scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
+                        } bg-white transition-all duration-300 ease-linear`}
                 >
                     <div className="container flex-row-center justify-between">
                         <div>
@@ -235,9 +234,8 @@ const Header = () => {
                     <div className="absolute top-full w-full bg-white z-10">
                         <div
                             className={`w-[70%] overflow-hidden mx-auto grid grid-cols-4
-                            transition-all duration-100 ease-linear ${
-                                showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
-                            } `}
+                            transition-all duration-100 ease-linear ${showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
+                                } `}
                             onMouseLeave={() => setShowMenu(false)}
                             onMouseEnter={() => {
                                 setShowMenu(true);

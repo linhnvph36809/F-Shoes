@@ -34,8 +34,8 @@ const CategoryPage = () => {
     const [filtersVisible, setFiltersVisible] = useState(true);
     const navigator = useNavigate();
     const page = newQuery.get('page') || 1;
-    const [totalItemPage, setTotalItemPage] = useState<number|undefined>();
-   
+    const [totalItemPage, setTotalItemPage] = useState<number | undefined>();
+
     const { slug } = useParams();
     const [searchParams] = useSearchParams();
     const sortOption = searchParams.get('sort');
@@ -45,14 +45,14 @@ const CategoryPage = () => {
     const listCategories: ICategory[] | [] = dataCachingCategories?.data?.categories?.data || [];
 
     const [listProducts, setListProduct] = useState<IProduct[] | []>([]);
-    
+
     const [idCategory, setIdCategory] = useState<number | string | undefined>();
     useEffect(() => {
         if (slug !== undefined) {
             const index = slug.lastIndexOf('.');
             const id = slug.substring(index + 1);
             setIdCategory(id);
-        }else{
+        } else {
             setIdCategory('');
         }
     }, [slug]);
@@ -67,25 +67,23 @@ const CategoryPage = () => {
             variationsQuery ? variationsQuery : ''
         }&per_page=12&page=${page}`,
     );
-    
+
     useEffect(() => {
-        if(dataProduct?.data?.products?.data){
+        if (dataProduct?.data?.products?.data) {
             setListProduct(dataProduct?.data?.products?.data);
-            setTotalItemPage(dataProduct?.data?.products?.paginator?.total_item);    
+            setTotalItemPage(dataProduct?.data?.products?.paginator?.total_item);
         }
-        
-    }, [dataProduct?.data?.products?.data,slug,newQuery])
-   
-    
+    }, [dataProduct?.data?.products?.data, slug, newQuery]);
+
     const toggleFilters = () => {
         setFiltersVisible(!filtersVisible);
     };
-    
+
     const changeSort = (key: string) => {
         newQuery.set('sort', `${key}`);
         navigator(`?${newQuery.toString()}`, { replace: true });
     };
-    
+
     const handlePageChange = (page: number) => {
         newQuery.set('page', `${page}`);
         navigator(`?${newQuery.toString()}`, { replace: true });
@@ -148,11 +146,7 @@ const CategoryPage = () => {
                             </p>
                         </div>
                     )}
-                    <ProductList
-                        products={listProducts}
-                        loading={productFetching}
-                        sortOption={sortOption}
-                    />
+                    <ProductList products={listProducts} loading={productFetching} sortOption={sortOption} />
                     <Pagination
                         align="end"
                         current={page || (1 as any)}
