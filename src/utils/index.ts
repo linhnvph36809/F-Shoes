@@ -32,3 +32,9 @@ export const formatTime = (time: string | undefined): string => {
 
     return formattedDate;
 };
+export const oneMonthAgo = ():Date => {
+    const date = new Date();
+    date.setMonth(date.getMonth() - 1);
+    return date;
+}
+
