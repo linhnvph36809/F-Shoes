@@ -21,8 +21,6 @@ const AdminDashboard = () => {
         date_end: '',
     });
 
-
-
     const { data, isFetching } = useQueryConfig(
         `statistics/overall/from=${dates.date_start}&to=$${dates.date_end}`,
         `/api/v1/statistics/overall?from=${dates.date_start}&to=$${dates.date_end}`,
