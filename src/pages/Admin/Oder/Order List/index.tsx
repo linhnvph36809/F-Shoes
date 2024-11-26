@@ -25,10 +25,11 @@ const OrderList = () => {
 
     const { data: orders } = useQueryConfig('order-admin', API_ORDER);
 
+    console.log(orders);
+
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchText(value);
-        console.log(value);
 
         if (value.trim() === '') {
             setFilteredData(orders?.data);

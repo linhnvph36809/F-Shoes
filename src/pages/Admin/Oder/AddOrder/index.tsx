@@ -83,8 +83,9 @@ const Addorder = () => {
             tax_amount: null,
             amount_collected: value.amount_collected,
             receiver_full_name: value.receiver_full_name,
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-                } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
+                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+            } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: null,
@@ -159,15 +160,14 @@ const Addorder = () => {
                     rules={[{ required: true, message: 'Please select a user' }]}
                 >
                     <Select
+                        mode="multiple"
                         placeholder="Select User"
-                        optionFilterProp="name"
+                        optionFilterProp="email"
                         allowClear
                         options={users}
                         fieldNames={{ label: 'email', value: 'id' }}
                     />
                 </Form.Item>
-
-                {/* Select Product */}
                 <Form.Item
                     label="Select Product"
                     name="product"
@@ -274,6 +274,9 @@ const Addorder = () => {
                         optionFilterProp="ProvinceName"
                         options={provinces}
                         fieldNames={{ label: 'ProvinceName', value: 'ProvinceID' }}
+                        style={{
+                            height: '56px',
+                        }}
                     />
                 </Form.Item>
 
@@ -336,7 +339,7 @@ const Addorder = () => {
                 </Form.Item>
 
                 <Form.Item label="Note" name="note">
-                    <TextArea placeholder="Enter note" />
+                    <TextArea placeholder="Enter note" rows={9} />
                 </Form.Item>
 
                 {fee.service_fee && totalAmount && (

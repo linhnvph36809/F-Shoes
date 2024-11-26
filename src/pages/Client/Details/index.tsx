@@ -18,10 +18,21 @@ import LoadingSmall from '../../../components/Loading/LoadingSmall.tsx';
 import LoadingPage from '../../../components/Loading/LoadingPage.tsx';
 import useWishlist from '../../../hooks/useWishlist.tsx';
 import Reviews from './Reviews.tsx';
+import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 
 const Detail = () => {
-    const { products, loading } = useProductDetail();
     const { slug } = useParams();
+
+    let id: string | number | undefined;
+
+    if (slug) {
+        const index = slug.lastIndexOf('.');
+        id = slug.substring(index + 1);
+    }
+
+    const { data, isFetching } = useQueryConfig(`product-detail-${id}`, `/api/product/detail/${id}`);
+
+    const products = data?.data;
     const { user } = useContextGlobal();
     const [idVariants, setIdVariants] = useState<number[]>([]);
     const [variant, setVariant] = useState<any>();
@@ -92,7 +103,7 @@ const Detail = () => {
 
     return (
         <>
-            {loading ? (
+            {isFetching ? (
                 <LoadingPage />
             ) : (
                 <section className="container">
@@ -122,16 +133,6 @@ const Detail = () => {
                                     : ' '}
                             </h4>
                             <Price product={variant || productD} variation={variationD} />
-
-                            {/*<div className="grid md:grid-cols-6 gap-5 mb-10">*/}
-                            {/*    <div>*/}
-                            {/*        <img*/}
-                            {/*            src="https://static.nike.com/a/images/t_PDP_144_v1/f_auto,q_auto:eco/90f458e7-38ac-4132-bb32-0aff816f891b/W+AIR+ZOOM+PEGASUS+41.png"*/}
-                            {/*            alt=""*/}
-                            {/*            className="border border-[#e5e5e5] rounded-lg hover:border-[#111111] transition-global hover:cursor-pointer"*/}
-                            {/*        />*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
                             {productD?.attributes
                                 ? productD.attributes.map((item: any, index: number) => {
                                       return (
@@ -146,7 +147,7 @@ const Detail = () => {
                                                       {item?.values.map((value: any, index: number) => (
                                                           <Radio.Button
                                                               key={index}
-                                                              className="font-medium h-[45px]"
+                                                              className="font-medium h-[45px] text-[16px]"
                                                               value={value.id}
                                                           >
                                                               {value.value}
