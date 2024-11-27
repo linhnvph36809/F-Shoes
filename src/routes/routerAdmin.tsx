@@ -35,6 +35,8 @@ import ListVouCher from '../pages/Admin/Voucher';
 import UpdateVoucher from '../pages/Admin/Voucher/UpdateVoucher';
 import UpdateAttribute from '../pages/Admin/Products/Attribute/UpdateAttribute';
 import ListGroups from '../pages/Admin/Groups/listgroup';
+import { element } from 'prop-types';
+import CreateOrder from '../pages/Admin/Oder/Create';
 
 const routerAdmin = [
     {
@@ -112,6 +114,10 @@ const routerAdmin = [
             {
                 path: 'orderadd',
                 element: <Addorder />,
+            },
+            {
+                path:'create-order',
+                element: <CreateOrder/>  
             },
             {
                 path: 'orderupdate/:id',
