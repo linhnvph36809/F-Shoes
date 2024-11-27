@@ -8,13 +8,40 @@ const CreateOrder = () => {
             key: 'name', 
         },
         {
+            title: 'Variant',
+            dataIndex: 'classify',
+            key: 'classify',
+            render: (classify:string) => {
+               return <div>{classify ? classify : 'Simple Product'}</div>
+            }
+        },
+        {
             title: 'Image',
             dataIndex: 'image_url',
             key: 'image_url', 
         },
         {
-            
-        }
+            title: 'Price',
+            dataIndex: 'price',
+            key: 'price',
+        },
+        {
+            title: 'Quantity',
+            dataIndex: 'quantity',
+            key: 'quantity',
+        },
+        {
+            title: 'Action',
+            render: () => {
+                return (
+                    <div>
+                      
+                        <Button type="dashed">Remove</Button>
+                    </div>
+                )
+            }
+        },
+        
     ]
     return (
         <div className="bg-white h-full w-full p-8">
@@ -32,7 +59,7 @@ const CreateOrder = () => {
                 </header>
                 <main className="">
                     <div>Cart</div>
-                    <Table/>
+                    <Table columns={columns} dataSource={[]}/>
                 </main>
            </div>
         </div>

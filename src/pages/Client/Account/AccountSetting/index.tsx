@@ -1,13 +1,4 @@
 import { Input, Select, DatePicker, Button, Form, Skeleton } from 'antd';
-import {
-    UserOutlined,
-    CreditCardOutlined,
-    HomeOutlined,
-    ShoppingOutlined,
-    MailOutlined,
-    EyeOutlined,
-    LinkOutlined,
-} from '@ant-design/icons';
 import useProfile from '../../../../hooks/page/useProfile.tsx';
 import dayjs from 'dayjs';
 import { IUser } from '../../../../interfaces/IUser.ts';
@@ -19,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { geonameCountry, geonameProvince } from '../../../../interfaces/GeoNames/IGeoNames.ts';
 import useQueryConfig from '../../../../hooks/useQueryConfig.tsx';
 import ButtonPrimary from '../../../../components/Button/index.tsx';
+import { showMessageClient } from '../../../../utils/messages.ts';
 interface DataChangePassword {
     password: string;
     newPassword: string;
@@ -39,9 +31,10 @@ const AccountSetting = () => {
     const [loading, setLoading] = useState(false);
     const [updateProfileForm] = Form.useForm();
     const { updateProfile, loadingUpdate } = useProfile();
-    const { data, isFetching } = useQueryConfig('user-setting', 'api/auth/me?include=profile,times=user');
+    const { data, isFetching,refetch } = useQueryConfig('user-setting', 'api/auth/me?include=profile,times=user');
     const [userD, setUserD] = useState<IUser>();
-
+    
+    
     useEffect(() => {
         if (data?.data.user) {
             setUserD(data?.data.user);
@@ -53,16 +46,17 @@ const AccountSetting = () => {
     const [userAddress, setUserAddress] = useState<string>('');
     useEffect(() => {
         setInitialValues({
-            given_name: userD?.profile?.given_name,
-            family_name: userD?.profile?.family_name,
-            birth_date: userD?.profile?.birth_date ? dayjs(userD?.profile?.birth_date) : null,
-            detail_address: userD?.profile?.detail_address,
+            given_name: data?.data.user?.profile?.given_name,
+            family_name: data?.data.user?.profile?.family_name,
+            birth_date: data?.data.user?.profile?.birth_date ? dayjs(data?.data.user?.profile?.birth_date) : null,
+            detail_address: data?.data.user?.profile?.detail_address,
         });
         if (initialValues) {
             updateProfileForm.setFieldsValue(initialValues);
         }
     }, [userD, data?.data.user]);
-
+    console.log(initialValues,'value');
+    
     if (userAddress) {
         updateProfileForm.setFieldValue('detail_address', userAddress);
     }
@@ -88,6 +82,7 @@ const AccountSetting = () => {
         if (updateUser?.name) {
             setUserD(updateUser);
         }
+        refetch();
     };
     // Address
     const {
@@ -180,12 +175,15 @@ const AccountSetting = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', 'api/change-password', data);
-            alert('Changed password Successfully!');
+          
+            showMessageClient('Change Password','Changed password Successfully!','success');
             navigate('/profile/setting');
+            refetch();
         } catch (error) {
             const e = error as any;
             const { data } = e.response;
-            alert(data.message);
+          
+            showMessageClient('Change Password',data.message,'error');
         } finally {
             setLoading(false);
         }
@@ -203,7 +201,7 @@ const AccountSetting = () => {
         return <Skeleton className="my-8" />;
     }
     return (
-        <div className="flex w-full flex-col md:flex-row p-4 space-y-6 md:space-y-0 md:space-x-6 bg-gray-100 min-h-screen  ">
+        <div className="flex w-full flex-col md:flex-row p-4 space-y-6 md:space-y-0 md:space-x-6 bg-gray-100 min-h-screen items-center justify-center">
             {/* change password form */}
             {displayPasswordForm ? (
                 <div className="fixed top-0 bottom-0 right-0 left-0 bg-gray-100 bg-opacity-80 z-10 flex items-center justify-center">
@@ -433,44 +431,11 @@ const AccountSetting = () => {
             ) : (
                 ''
             )}
-            <div className="w-full md:w-1/4 ml-12 text-2xl">
-                <ul className="space-y-4">
-                    <li className="font-bold">Settings</li>
-                    <li className="flex items-center space-x-2">
-                        <UserOutlined />
-
-                        <span>Account Details</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                        <CreditCardOutlined />
-                        <span>Payment Methods</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                        <HomeOutlined />
-                        <span>Delivery Addresses</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                        <ShoppingOutlined />
-                        <span>Shop Preferences</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                        <MailOutlined />
-                        <span>Communication Preferences</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                        <EyeOutlined />
-                        <span>Profile Visibility</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                        <LinkOutlined />
-                        <span>Linked Accounts</span>
-                    </li>
-                </ul>
-            </div>
+            
 
             <div className="w-full md:w-1/2 bg-white p-6 shadow-md rounded-lg">
                 <h1 className="text-5xl font-semibold mb-4">Account Details</h1>
-
+                
                 <Form
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
@@ -481,7 +446,9 @@ const AccountSetting = () => {
                     initialValues={initialValues}
                 >
                     {/* Các trường nhập */}
-
+                    <div>
+                        
+                    </div>
                     <div className="my-8">
                         <Form.Item label="Given Name" name="given_name">
                             <Input type="text" placeholder="Given name" className="w-full border border-black h-20" />
