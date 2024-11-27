@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { tokenManagerInstance } from '../api';
 import { PATH_LIST_CATEGORY } from '../constants';
 import { ICategory } from '../interfaces/ICategory';
+import { showMessageAdmin } from '../utils/messages';
 
 export const API_CATEGORY = '/api/category';
 
@@ -42,8 +43,9 @@ const useCategory = () => {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_CATEGORY}/${id}`);
             getAllCategory();
+            showMessageAdmin('Delete Topic successfully', '', 'success');
         } catch (error) {
-            console.log(error);
+            showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }
@@ -54,20 +56,23 @@ const useCategory = () => {
             setLoading(true);
             await tokenManagerInstance('post', API_CATEGORY, category);
             getAllCategory();
+            showMessageAdmin('Create Topic successfully', '', 'success');
         } catch (error) {
-            console.log(error);
+            showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }
     };
 
-    const putCategory = async (category: ICategory) => {
+    const putCategory = async (id: string | number, category: ICategory) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('put', `${API_CATEGORY}/${category.id}`, category);
+            await tokenManagerInstance('put', `${API_CATEGORY}/${id}`, category);
+            getAllCategory();
             navigate(PATH_LIST_CATEGORY);
+            showMessageAdmin('Update Topic successfully', '', 'success');
         } catch (error) {
-            console.log(error);
+            showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }
@@ -104,25 +109,22 @@ const useCategory = () => {
             throw error;
         }
     };
+
     const deleteProductFromCategory = async (categoryId: any, productIds: (string | number)[]) => {
         try {
-            setLoading(true);
+            if (!productIds?.length) throw new Error('Product IDs must not be empty.');
+
             const response = await tokenManagerInstance('delete', `${API_CATEGORY}/${categoryId}/products`, {
                 data: { products: productIds },
             });
 
-            if (response.status === 200 || response.status === 204) {
-                console.log('Products deleted successfully:', response.data);
-                return { success: true, message: 'Products deleted successfully!' };
-            } else {
-                console.warn('Unexpected response status:', response.status);
-                return { success: false, message: 'Unexpected response status' };
-            }
-        } catch (error) {
-            console.error('Failed to delete products from category:', error);
-            return { success: false, message: 'Failed to delete products. Please try again.' };
-        } finally {
-            setLoading(false);
+            const message =
+                response.status === 200 || response.status === 204
+                    ? 'Products deleted successfully!'
+                    : 'Unexpected response status';
+            showMessageAdmin(message, '', response.status === 200 || response.status === 204 ? 'success' : 'warning');
+        } catch (error: any) {
+            showMessageAdmin('Error', error.response?.data?.message || 'Something went wrong.', 'error');
         }
     };
     const getCategoryById = async (id: number | string) => {

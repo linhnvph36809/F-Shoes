@@ -7,7 +7,7 @@ const tokenManager = new TokenManager({
         return token ? token : '';
     },
     getRefreshToken: async () => {
-        const refreshToken = localStorage.getItem('refreshToken1');
+        const refreshToken = localStorage.getItem('refreshToken');
         return refreshToken ? refreshToken : '';
     },
     onInvalidRefreshToken: () => {
@@ -16,7 +16,7 @@ const tokenManager = new TokenManager({
     },
 
     executeRefreshToken: async () => {
-        const refreshToken = localStorage.getItem('refreshToken1');
+        const refreshToken = localStorage.getItem('refreshToken');
 
         if (!refreshToken) {
             return {
@@ -26,9 +26,9 @@ const tokenManager = new TokenManager({
         }
 
         const response = await axiosInstant.post('/api/auth/refresh/token', {
-            refreshToken,
+            refresh_token: refreshToken,
         });
-        const { accessToken: accessTokenNew, refreshToken: refreshTokenNew } = response.data;
+        const { access_token: accessTokenNew, refresh_token: refreshTokenNew } = response.data;
 
         return {
             token: accessTokenNew,
@@ -75,6 +75,10 @@ export const tokenManagerInstance = async (
         }
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
+            if (error.status === 401) {
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+            }
             throw {
                 message: error.message,
                 response: error.response,

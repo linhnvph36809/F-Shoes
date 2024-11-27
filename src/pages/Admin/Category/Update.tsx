@@ -1,18 +1,19 @@
 import { message, Select } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
+import { CopyPlus, SquarePen, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import ButtonPrimary from '../../../components/Button';
 import useCategory from '../../../hooks/useCategory';
+import useProduct from '../../../hooks/useProduct';
 import { ICategory } from '../../../interfaces/ICategory';
-import Heading from '../components/Heading';
-import FormCategory from './components/Form';
-import SkeletonComponent from '../components/Skeleton';
 import { IProduct } from '../../../interfaces/IProduct';
+import { showMessageActive } from '../../../utils/messages';
+import ButtonEdit from '../components/Button/ButtonEdit';
+import Heading from '../components/Heading';
+import SkeletonComponent from '../components/Skeleton';
 import TableAdmin from '../components/Table';
 import { columnsAttribute } from '../Products/datas';
-import ButtonEdit from '../components/Button/ButtonEdit';
-import { CopyPlus, SquarePen, Trash2 } from 'lucide-react';
-import useProduct from '../../../hooks/useProduct';
-import ButtonPrimary from '../../../components/Button';
+// import './style.scss';
 
 const UpdateCategory = () => {
     const { id } = useParams<{ id: string }>();
@@ -25,24 +26,14 @@ const UpdateCategory = () => {
     const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
     const { products: allProducts } = useProduct();
 
-    const handleDeleteProduct = async (productId: string | number) => {
-        if (confirm('Are you sure you want to delete this product?')) {
+    const handleDeleteProduct = (productId: string | number) => {
+        showMessageActive('Are you sure you want to delete this product?', '', 'warning', async () => {
             try {
-                const result = await deleteProductFromCategory(categoryId, [productId]);
-
-                if (result.success) {
-                    // Cập nhật danh sách sản phẩm ngay sau khi xóa thành công
-                    setProducts((prevProducts) =>
-                        prevProducts ? prevProducts.filter((product) => product.id !== productId) : [],
-                    );
-                    message.success(result.message);
-                } else {
-                    message.error(result.message);
-                }
+                await deleteProductFromCategory(categoryId, [productId]);
             } catch (error) {
                 message.error('Failed to delete product. Please try again.');
             }
-        }
+        });
     };
     const handleAddProducts = async () => {
         try {
@@ -76,27 +67,27 @@ const UpdateCategory = () => {
         }
     }, [id, categories]);
 
-    const handleFinish = useCallback(
-        async (updatedCategory: ICategory) => {
-            try {
-                if (categoryId) {
-                    await putCategory({
-                        ...updatedCategory,
-                        id: categoryId,
-                        products,
-                    });
-                    message.success('Category updated successfully!');
-                }
-            } catch (error) {
-                message.error('Failed to update category. Please try again.');
-                console.error('Error updating category:', error);
-            }
-        },
-        [categoryId, putCategory, products],
-    );
+    // const handleFinish = useCallback(
+    //     async (updatedCategory: ICategory) => {
+    //         try {
+    //             if (categoryId) {
+    //                 // await putCategory({
+    //                 //     ...updatedCategory,
+    //                 //     id: categoryId,
+    //                 //     products,
+    //                 // });
+    //                 message.success('Category updated successfully!');
+    //             }
+    //         } catch (error) {
+    //             message.error('Failed to update category. Please try again.');
+    //             console.error('Error updating category:', error);
+    //         }
+    //     },
+    //     [categoryId, putCategory, products],
+    // );
 
     const columnDelete = {
-        title: '',
+        title: 'Action',
         dataIndex: 'slug',
         key: '8',
         render: (slug: string | number, values: IProduct) => {
@@ -127,11 +118,11 @@ const UpdateCategory = () => {
             ) : (
                 <section>
                     <Heading>Update Category</Heading>
-                    <FormCategory
+                    {/* <FormCategory
                         mainCategories={mainCategories}
                         onFinish={handleFinish}
                         initialValues={initialValues}
-                    />
+                    /> */}
                     <section>
                         <div className="my-4">
                             <Select
@@ -139,7 +130,7 @@ const UpdateCategory = () => {
                                 value={selectedProducts}
                                 onChange={(value) => setSelectedProducts(value)}
                                 placeholder="Select products"
-                                style={{ width: '510px', height: '50px' }}
+                                style={{ width: '360px', height: '50px', marginRight: '10px' }}
                             >
                                 {allProducts.map((product) => (
                                     <Select.Option key={product.id} value={String(product.id)}>
@@ -150,7 +141,7 @@ const UpdateCategory = () => {
                             <ButtonPrimary
                                 onClick={handleAddProducts}
                                 width="w-[120px]"
-                                height="h-[56px]"
+                                height="h-[50px]"
                                 htmlType="submit"
                             >
                                 Add Products
