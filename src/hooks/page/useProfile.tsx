@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { tokenManagerInstance } from '../../api';
+import { showMessageClient } from '../../utils/messages';
 
 const useProfile = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -14,10 +15,11 @@ const useProfile = () => {
         try {
             setLoadingUpdate(true);
             const response = await tokenManagerInstance('put', 'api/update-profile', data);
-            alert(response.data.message);
-            return response.data.user;
+            showMessageClient('Update Profile',response.data.message,'success');
+            
         } catch (error) {
             console.log(error);
+            showMessageClient('Update Profile',"Something went wrong",'error');
         } finally {
             setLoadingUpdate(false);
         }

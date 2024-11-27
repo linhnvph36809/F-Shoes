@@ -1,5 +1,5 @@
 import { SwiperSlide } from 'swiper/react';
-
+import './style.scss';
 import Heading from './Heading';
 import SlidesScroll from './../../../components/SlidesScroll/index';
 import MemberBenefits from './MemberBenefits';
@@ -11,11 +11,35 @@ import { COOKIE_USER } from '../../../constants';
 import { IUser } from '../../../interfaces/IUser.ts';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { Flex, message, Upload } from 'antd';
+import type { GetProp, UploadProps } from 'antd';
+
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
+const getBase64 = (img: FileType, callback: (url: string) => void) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result as string));
+    reader.readAsDataURL(img);
+};
+
+const beforeUpload = (file: FileType) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+        message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+};
 const ProfilePage = () => {
     const { cookies } = useCookiesConfig(COOKIE_USER);
     const userNameCookie = cookies?.userName;
-    const { data, isFetching } = useQueryConfig(
+    const { data, isFetching,refetch } = useQueryConfig(
         'user-profile',
         'api/auth/me?include=profile,favoriteProducts&times=user',
         {
@@ -52,13 +76,67 @@ const ProfilePage = () => {
         listFavoriteProducts = data?.data.user.favoriteProducts;
     }
 
+    const [loadingUploadImage, setLoadingUploadImage] = useState(false);
+    const [imageUrl, setImageUrl] = useState<string>();
+
+    const handleChange: UploadProps['onChange'] = (info) => {
+        if (info.file.status === 'uploading') {
+            setLoadingUploadImage(true);
+            return;
+        }
+        if (info.file.status === 'done') {
+         
+            getBase64(info.file.originFileObj as FileType, (url) => {
+                setLoadingUploadImage(false);
+                setImageUrl(url);
+            });
+        }
+        refetch();
+    };
+    // Upload avatar
+    const uploadButton = (
+        <button style={{ border: 0, background: 'none' }} type="button">
+          {loadingUploadImage ? <LoadingOutlined /> : <PlusOutlined />}
+          <div style={{ marginTop: 8 }}>Upload</div>
+        </button>
+      );
     return (
         <>
             <div className="bg-white w-full p-6 mt-0 rounded-lg shadow-md relative">
                 <div className="flex items-center">
-                    <div className="w-40 h-40 bg-gray-200 rounded-full ">
-                        {' '}
-                        <img className="w-full h-full object-cover rounded-full" src={userD?.avatar_url} alt="" />
+                    <div className="w-40 h-40 bg-gray-200 rounded-full avatar-image">
+                        <div className={`absolute ${loadingUploadImage ? '':'opacity-0'} upload-avatar`}>
+                            <Flex gap="middle" wrap>
+                                <Upload
+                                    name="avatar"
+                                    accept='.jpg,.jpeg,.png'
+                                    listType="picture-circle"
+                                    className="avatar-uploader"
+                                    showUploadList={false}
+                                    action="http://127.0.0.1:8000/api/update/user/avatar"
+                                    beforeUpload={beforeUpload}
+                                    onChange={handleChange}
+                                    disabled={
+                                        loadingUploadImage
+                                    }
+                                    headers={{
+                                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                                      }}
+                                >
+                                    {imageUrl ? (
+                                        ''
+                                    ) : (
+                                        uploadButton
+                                    )}
+                                </Upload>
+                            </Flex>
+                        </div>
+                        <img
+                            className="w-full h-full object-cover rounded-full"
+                            src={userD?.avatar_url}
+                            alt=""
+                        />
+                       
                     </div>
                     <div className="ml-8">
                         <Heading title={userD.name ? userD.name : userNameCookie} />
