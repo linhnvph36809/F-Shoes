@@ -27,6 +27,14 @@ const ListReview = () => {
 
     const columns = [
         {
+            title: 'P-ID',
+            dataIndex:'product_id',
+            key: 'product_id',
+            render: (_: any, record: any) => (
+               <p>{ record.product.id}</p>
+            ),
+        },
+        {
             title: 'Product',
             dataIndex: 'name',
             key: 'name',
@@ -96,8 +104,8 @@ const ListReview = () => {
                     <TableAdmin
                         columns={columns}
                         dataSource={reviews}
-                        pagination={{ pageSize: 8 }}
-                        rowKey="id" // Ensure each row has a unique key
+                        pagination={ false}
+                        rowKey="id" 
                     />
                 </section>
             )}

@@ -33,20 +33,25 @@ const AdminDashboard = () => {
         `/api/v1/statistics/data/orders/diagram?from=${dates.date_start}&to=$${dates.date_end}`,
     );
     const chartData = chartDataCaching?.data?.data?.orders || [];
-    const [yearOfRevenueChart, setYearOfRevenueChart] = useState(2024);
+    const [yearOfRevenueChart, setYearOfRevenueChart] = useState(new Date().getFullYear());
     const { data: revenueOfYearCaching } = useQueryConfig(
         `statistics/revenue/year/${yearOfRevenueChart}`,
         `/api/v1/statistics/revenue/year?year=${yearOfRevenueChart}`,
+    );
+    const [yearOfRevenueChart2,setYearOfRevenueChart2] = useState<number|string>(new Date().getFullYear());
+    const { data: revenueOfYearCaching2 } = useQueryConfig(
+        `statistics/revenue/year/${yearOfRevenueChart2}/2`,
+        `/api/v1/statistics/revenue/year?year=${yearOfRevenueChart2}`,
     );
     const { data: productBestSellingCaching } = useQueryConfig(
         `statistics/product/bestselling/${dates.date_start}/${dates.date_end}`,
         `/api/v1/statistics/product/bestselling?from=${dates.date_start}&to=${dates.date_end}`,
     );
     const productBestSellingData = productBestSellingCaching?.data?.data || [];
-    console.log(productBestSellingData, 'anc');
+  
 
     const revenueOfYearData = revenueOfYearCaching?.data?.data || [];
-
+    const revenueOfYearData2 = revenueOfYearCaching2?.data?.data || [];
     const handleChange = (value: any) => {
         if (value) {
             setDates({
@@ -62,6 +67,13 @@ const AdminDashboard = () => {
             setYearOfRevenueChart(value.$y);
         } else {
             setYearOfRevenueChart(new Date().getFullYear());
+        }
+    };
+    const onChangeYearOfRevenueStatisticsChart2 = (value: any) => {
+        if (value && value?.$y) {
+            setYearOfRevenueChart2(value.$y);
+        } else {
+            setYearOfRevenueChart2(new Date().getFullYear());
         }
     };
     const UptoFrom = (
@@ -323,13 +335,21 @@ const AdminDashboard = () => {
                 <h3 className="text-[18px] font-bold m-4 border-b-[1px]">Annual Revenue Statistics Chart</h3>
                 <div className="flex justify-end my-4">
                     <DatePicker
+                        placeholder='Select a year'
                         picker="year"
                         className="w-[20%] focus:border-none focus:outline-none"
                         format="YYYY"
                         onChange={onChangeYearOfRevenueStatisticsChart}
                     />
+                    <DatePicker
+                        placeholder='Select a year'
+                        picker="year"
+                        className="w-[20%] focus:border-none focus:outline-none"
+                        format="YYYY"
+                        onChange={onChangeYearOfRevenueStatisticsChart2}
+                    />
                 </div>
-                <ColumnChart data={revenueOfYearData} />
+                <ColumnChart data1={revenueOfYearData} year1={yearOfRevenueChart} data2={revenueOfYearData2} year2={yearOfRevenueChart2} />
             </div>
         </Content>
     );
