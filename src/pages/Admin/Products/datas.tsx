@@ -1,3 +1,6 @@
+import { Star } from 'lucide-react';
+import { formatPrice } from '../../../utils';
+
 export const columnsAttribute = [
     {
         title: 'ID',
@@ -25,10 +28,27 @@ export const columnsAttribute = [
         title: 'Price',
         dataIndex: 'price',
         key: '5',
+        render: (price: number) => <p className="text-[15px] font-medium">{formatPrice(price)}đ</p>,
     },
     {
-        title: 'Created at',
-        dataIndex: 'created_at',
+        title: 'Quantity Sold',
+        dataIndex: 'qty_sold',
+        key: '5',
+    },
+    {
+        title: 'Stock Quantity',
+        dataIndex: 'stock_qty',
         key: '6',
+    },
+    {
+        title: 'Rating',
+        dataIndex: 'rating',
+        key: '7',
+        render: (rating: string) => (
+            <p className="flex gap-x-2 items-center">
+                {rating}
+                <Star className="w-[16px] text-yellow-500" />
+            </p>
+        ),
     },
 ];

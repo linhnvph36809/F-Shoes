@@ -6,6 +6,7 @@ import './style.scss';
 import { items } from './datas';
 import { db } from '../../../../firebaseConfig';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { useContextGlobal } from '../../../contexts';
 
 const { Header, Content, Sider } = Layout;
 
@@ -27,9 +28,11 @@ export const usePermissionContext = () => useContext(ContextAdmin);
 
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
+    const { user } = useContextGlobal();
+    console.log(user);
 
     useEffect(() => {
-        const starCountRef = ref(db, `groups/3`);
+        const starCountRef = ref(db, `groups/1`);
         const unsubscribe = onValue(starCountRef, (snapshot) => {
             try {
                 const data = snapshot.val();

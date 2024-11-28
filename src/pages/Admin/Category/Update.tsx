@@ -117,7 +117,7 @@ const UpdateCategory = () => {
                 <SkeletonComponent />
             ) : (
                 <section>
-                    <Heading>Update Category</Heading>
+                    <Heading>Add Category For Product</Heading>
                     {/* <FormCategory
                         mainCategories={mainCategories}
                         onFinish={handleFinish}

@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { formatTime } from '../../../utils';
 
 export interface DataType {
     key: string;
@@ -45,22 +46,22 @@ export const columns: any['columns'] = [
             return parentNames;
         },
     },
-
-    // {
-    //     title: 'Created At',
-    //     dataIndex: 'created_at',
-    //     key: 'created_at',
-    //     render: (text: any, _: any, index: any) => {
-    //         if (index === 0) {
-    //             return {
-    //                 props: {
-    //                     colSpan: 0,
-    //                 },
-    //             };
-    //         }
-    //         return text;
-    //     },
-    // },
+    {
+        title: 'Created At',
+        dataIndex: 'created_at',
+        key: 'created_at',
+        render: (created_at: string) => {
+            return <p>{formatTime(created_at)}</p>
+        },
+    },
+    {
+        title: 'Updated At',
+        dataIndex: 'updated_at',
+        key: 'updated_at',
+        render: (updated_at: string) => {
+            return <p>{formatTime(updated_at)}</p>
+        },
+    },
 ];
 
 export const data: DataType[] = [
