@@ -43,7 +43,6 @@ const AdminDashboard = () => {
         `/api/v1/statistics/product/bestselling?from=${dates.date_start}&to=${dates.date_end}`,
     );
     const productBestSellingData = productBestSellingCaching?.data?.data || [];
-    console.log(productBestSellingData, 'anc');
 
     const revenueOfYearData = revenueOfYearCaching?.data?.data || [];
 

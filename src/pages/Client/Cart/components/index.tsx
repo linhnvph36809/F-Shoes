@@ -3,6 +3,7 @@ import { DeleteOutlined, HeartOutlined } from '@ant-design/icons';
 
 import useCart from '../../../../hooks/useCart';
 import useWishlist from '../../../../hooks/useWishlist';
+import { formatPrice } from '../../../../utils';
 
 const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
     const { putCart } = useCart();
@@ -52,9 +53,13 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
                     </div>
                     <p className="color-gray text-[15px]">{product?.description}</p>
                     <p className="color-gray text-[15px]">{product?.color}</p>
+                    <div className="text-[16px] font-medium">
+                        {formatPrice(product.product_variation.product.price) || formatPrice(product?.price)}đ
+                    </div>
                     <div>
                         <p className="text-[14px] color-gray font-medium">{product?.product_variation?.classify}</p>
                     </div>
+
                     <div className="flex items-center space-x-4 mt-2 text-[15px] color-gray">
                         <div>
                             Quantity:

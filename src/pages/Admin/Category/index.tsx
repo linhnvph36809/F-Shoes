@@ -1,5 +1,6 @@
 import { CopyPlus, SquarePen, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import useCategory from '../../../hooks/useCategory';
 import { ICategory } from '../../../interfaces/ICategory';
@@ -10,11 +11,13 @@ import TableAdmin from '../components/Table';
 import FormCategory from './components/Form';
 import { columns } from './datas';
 import { showMessageActive } from '../../../utils/messages';
-import { Link } from 'react-router-dom';
+import { ACTIONS, PERMISSION } from '../../../constants';
+import PermissionElement from '../../../components/Permissions/PermissionElement';
 
 const ListCategory = () => {
     const { loading, deleteCategory, categories, mainCategories, postCategory, getAllCategory, putCategory } =
         useCategory();
+
     const [cateUpdate, setCateUpdate] = useState<any>();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -80,17 +83,21 @@ const ListCategory = () => {
             if (index !== 0) {
                 return (
                     <div className="flex-row-center gap-x-5">
-                        <ButtonEdit onClick={() => handleUpdate(values)}>
-                            <SquarePen />
-                        </ButtonEdit>
+                        <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
+                            <ButtonEdit onClick={() => handleUpdate(values)}>
+                                <SquarePen />
+                            </ButtonEdit>
+                        </PermissionElement>
                         <Link to={`/admin/update-category/${values.id}`}>
                             <ButtonEdit>
                                 <CopyPlus />
                             </ButtonEdit>
                         </Link>
-                        <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
-                            <Trash2 />
-                        </ButtonEdit>
+                        <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}>
+                            <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
+                                <Trash2 />
+                            </ButtonEdit>
+                        </PermissionElement>
                     </div>
                 );
             } else {
@@ -121,8 +128,7 @@ const ListCategory = () => {
                         />
 
                         {/* Ô tìm kiếm */}
-                        <div className="relative w-full max-w-[300px] mr-[63px]">
-                            {/* Biểu tượng kính lúp */}
+                        <div className="relative w-full max-w-[300px]">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400"
