@@ -6,9 +6,6 @@ const TableAdmin = ({ columns, datas, ...props }: any) => {
             theme={{
                 components: {
                     Table: {
-                        cellFontSize: 18,
-                        headerBg: '#111111',
-                        headerColor: '#fff',
                     },
                 },
             }}

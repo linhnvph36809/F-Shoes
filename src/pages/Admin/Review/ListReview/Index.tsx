@@ -1,4 +1,4 @@
-import { StarFilled } from '@ant-design/icons';
+import { EyeOutlined, StarFilled } from '@ant-design/icons';
 import { message, Typography } from 'antd';
 import { Trash2 } from 'lucide-react';
 import LoadingBlock from '../../../../components/Loading/LoadingBlock';
@@ -7,6 +7,7 @@ import { IReview } from '../../../../interfaces/IReview';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import Heading from '../../components/Heading';
 import TableAdmin from '../../components/Table';
+import { Link } from 'react-router-dom';
 
 const { Text } = Typography;
 
@@ -26,14 +27,6 @@ const ListReview = () => {
     };
 
     const columns = [
-        {
-            title: 'P-ID',
-            dataIndex:'product_id',
-            key: 'product_id',
-            render: (_: any, record: any) => (
-               <p>{ record.product.id}</p>
-            ),
-        },
         {
             title: 'Product',
             dataIndex: 'name',
@@ -89,6 +82,11 @@ const ListReview = () => {
                     <ButtonEdit onClick={() => handleDeleteUser(record.id)}>
                         <Trash2 />
                     </ButtonEdit>
+                    <ButtonEdit>
+                        <Link to={`/detail/${record?.product?.slug}`}>
+                            <EyeOutlined />
+                        </Link>
+                    </ButtonEdit>
                 </div>
             ),
         },
@@ -104,8 +102,8 @@ const ListReview = () => {
                     <TableAdmin
                         columns={columns}
                         dataSource={reviews}
-                        pagination={ false}
-                        rowKey="id" 
+                        pagination={false}
+                        rowKey="id" // Ensure each row has a unique key
                     />
                 </section>
             )}

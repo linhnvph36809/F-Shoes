@@ -17,7 +17,7 @@ const useCategory = () => {
     const getAllCategory = async () => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('get', API_CATEGORY + '?include=parents,products');
+            const { data } = await tokenManagerInstance('get', API_CATEGORY + '?include=parents,products&times=category');
             setCategories(data.categories.data);
         } catch (error) {
             console.log(error);

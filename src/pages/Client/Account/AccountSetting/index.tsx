@@ -31,10 +31,10 @@ const AccountSetting = () => {
     const [loading, setLoading] = useState(false);
     const [updateProfileForm] = Form.useForm();
     const { updateProfile, loadingUpdate } = useProfile();
-    const { data, isFetching,refetch } = useQueryConfig('user-setting', 'api/auth/me?include=profile,times=user');
+    const { data, isFetching, refetch } = useQueryConfig('user-setting', 'api/auth/me?include=profile,times=user');
     const [userD, setUserD] = useState<IUser>();
-    
-    
+
+
     useEffect(() => {
         if (data?.data.user) {
             setUserD(data?.data.user);
@@ -55,8 +55,8 @@ const AccountSetting = () => {
             updateProfileForm.setFieldsValue(initialValues);
         }
     }, [userD, data?.data.user]);
-    console.log(initialValues,'value');
-    
+    console.log(initialValues, 'value');
+
     if (userAddress) {
         updateProfileForm.setFieldValue('detail_address', userAddress);
     }
@@ -175,15 +175,15 @@ const AccountSetting = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', 'api/change-password', data);
-          
-            showMessageClient('Change Password','Changed password Successfully!','success');
+
+            showMessageClient('Change Password', 'Changed password Successfully!', 'success');
             navigate('/profile/setting');
             refetch();
         } catch (error) {
             const e = error as any;
             const { data } = e.response;
-          
-            showMessageClient('Change Password',data.message,'error');
+
+            showMessageClient('Change Password', data.message, 'error');
         } finally {
             setLoading(false);
         }
@@ -325,16 +325,16 @@ const AccountSetting = () => {
                             >
                                 {countries
                                     ? countries.map((country: geonameCountry, index) => (
-                                          <Option key={index} value={country?.geonameId}>
-                                              <div className="flex items-center">
-                                                  {country?.countryName}
-                                                  <img
-                                                      src={`https://flagsapi.com/${country?.countryCode}/flat/64.png`}
-                                                      className="mx-4 size-6"
-                                                  />
-                                              </div>
-                                          </Option>
-                                      ))
+                                        <Option key={index} value={country?.geonameId}>
+                                            <div className="flex items-center">
+                                                {country?.countryName}
+                                                <img
+                                                    src={`https://flagsapi.com/${country?.countryCode}/flat/64.png`}
+                                                    className="mx-4 size-6"
+                                                />
+                                            </div>
+                                        </Option>
+                                    ))
                                     : ''}
                             </Select>
                         </div>
@@ -356,10 +356,10 @@ const AccountSetting = () => {
                                 >
                                     {provinces
                                         ? provinces.map((province: geonameProvince, index) => (
-                                              <Option key={index} value={province?.geonameId}>
-                                                  <div className="flex items-center">{province?.toponymName}</div>
-                                              </Option>
-                                          ))
+                                            <Option key={index} value={province?.geonameId}>
+                                                <div className="flex items-center">{province?.toponymName}</div>
+                                            </Option>
+                                        ))
                                         : ''}
                                 </Select>
                             </div>
@@ -384,10 +384,10 @@ const AccountSetting = () => {
                                 >
                                     {districts
                                         ? districts.map((district: geonameProvince, index) => (
-                                              <Option key={index} value={district?.geonameId}>
-                                                  <div className="flex items-center">{district?.toponymName}</div>
-                                              </Option>
-                                          ))
+                                            <Option key={index} value={district?.geonameId}>
+                                                <div className="flex items-center">{district?.toponymName}</div>
+                                            </Option>
+                                        ))
                                         : ''}
                                 </Select>
                             </div>
@@ -411,10 +411,10 @@ const AccountSetting = () => {
                                 >
                                     {communes
                                         ? communes.map((district: geonameProvince, index) => (
-                                              <Option key={index} value={district?.geonameId}>
-                                                  <div className="flex items-center">{district?.toponymName}</div>
-                                              </Option>
-                                          ))
+                                            <Option key={index} value={district?.geonameId}>
+                                                <div className="flex items-center">{district?.toponymName}</div>
+                                            </Option>
+                                        ))
                                         : ''}
                                 </Select>
                             </div>
@@ -431,11 +431,11 @@ const AccountSetting = () => {
             ) : (
                 ''
             )}
-            
+
 
             <div className="w-full md:w-1/2 bg-white p-6 shadow-md rounded-lg">
-                <h1 className="text-5xl font-semibold mb-4">Account Details</h1>
-                
+                <h1 className="text-[32px] font-semibold mb-4">Account Details</h1>
+
                 <Form
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
@@ -447,7 +447,7 @@ const AccountSetting = () => {
                 >
                     {/* Các trường nhập */}
                     <div>
-                        
+
                     </div>
                     <div className="my-8">
                         <Form.Item label="Given Name" name="given_name">

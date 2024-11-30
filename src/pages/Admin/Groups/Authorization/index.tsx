@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 
 import useGroups from '../../../../hooks/useGroup';
 import ButtonPrimary from '../../../../components/Button';
-import LoadingBlock from '../../../../components/Loading/LoadingBlock';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import { ACTIONS_LIST, PERMISSION } from '../../../../constants';
+import LoadingPage from '../../../../components/Loading/LoadingPage';
 
 const { Title } = Typography;
 
@@ -115,7 +115,7 @@ const Authorization = () => {
                         </div>
                     ))
                 ) : (
-                    <LoadingBlock />
+                    <LoadingPage />
                 )}
             </div>
             <ButtonPrimary onClick={handleSubmit} width="w-[100px]" height="h-[40px]">

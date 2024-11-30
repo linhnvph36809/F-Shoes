@@ -34,9 +34,10 @@ import MediaLibrary from '../pages/Admin/Image/list-image';
 import ListVouCher from '../pages/Admin/Voucher';
 import UpdateVoucher from '../pages/Admin/Voucher/UpdateVoucher';
 import UpdateAttribute from '../pages/Admin/Products/Attribute/UpdateAttribute';
-import ListGroups from '../pages/Admin/Groups/listgroup';
-import { element } from 'prop-types';
 import CreateOrder from '../pages/Admin/Oder/Create';
+import ListGroups from '../pages/Admin/Groups/ListGroup';
+import { ACTIONS, PERMISSION } from '../constants';
+import PermissionPage from '../components/Permissions/PermissionPage';
 
 const routerAdmin = [
     {
@@ -53,7 +54,11 @@ const routerAdmin = [
             },
             {
                 path: 'list-category',
-                element: <ListCategory />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_VIEW}>
+                        <ListCategory />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'update-category/:id',
@@ -116,8 +121,8 @@ const routerAdmin = [
                 element: <Addorder />,
             },
             {
-                path:'create-order',
-                element: <CreateOrder/>  
+                path: 'create-order',
+                element: <CreateOrder />,
             },
             {
                 path: 'orderupdate/:id',

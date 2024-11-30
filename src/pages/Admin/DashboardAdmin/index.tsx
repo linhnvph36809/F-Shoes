@@ -28,7 +28,7 @@ const AdminDashboard = () => {
         `/api/v1/statistics/overall?from=${dates.date_start}&to=$${dates.date_end}`,
     );
     const overall = data?.data.data;
-    const { data: chartDataCaching, isFetching: fetchingChartData } = useQueryConfig(
+    const { data: chartDataCaching} = useQueryConfig(
         `statistics/data/orders/diagram/from${dates.date_start}&to=${dates.date_end}`,
         `/api/v1/statistics/data/orders/diagram?from=${dates.date_start}&to=$${dates.date_end}`,
     );
@@ -48,7 +48,6 @@ const AdminDashboard = () => {
         `/api/v1/statistics/product/bestselling?from=${dates.date_start}&to=${dates.date_end}`,
     );
     const productBestSellingData = productBestSellingCaching?.data?.data || [];
-  
 
     const revenueOfYearData = revenueOfYearCaching?.data?.data || [];
     const revenueOfYearData2 = revenueOfYearCaching2?.data?.data || [];

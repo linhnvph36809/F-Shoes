@@ -11,7 +11,6 @@ import useGroups from '../../../../hooks/useGroup';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import { IGroup } from '../../../../interfaces/IGroup';
 import LoadingPage from '../../../../components/Loading/LoadingPage';
-import PermissionElement from '../../../../components/Permissions/PermissionElement';
 
 const ListGroups = ({ initialValues }: any) => {
     const [form] = Form.useForm();
@@ -65,11 +64,9 @@ const ListGroups = ({ initialValues }: any) => {
                             <CircleX onClick={() => softGroup(group.id)} />
                         )}
                     </ButtonEdit>
-                    <PermissionElement keyName="product" action="delete">
-                        <ButtonEdit onClick={() => handleDeleteGroup(group.id)}>
-                            {loadingDelete ? <LoadingSmall /> : <Trash2 />}
-                        </ButtonEdit>
-                    </PermissionElement>
+                    <ButtonEdit onClick={() => handleDeleteGroup(group.id)}>
+                        {loadingDelete ? <LoadingSmall /> : <Trash2 />}
+                    </ButtonEdit>
                 </div>
             ),
         },
