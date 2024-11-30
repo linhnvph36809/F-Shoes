@@ -39,3 +39,5 @@ export const STATUS_ORDER = [
     'Denied Return',
     'Returned',
 ];
+
+export const FREE_SHIP = 1000000 ; 

@@ -53,9 +53,7 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
                     </div>
                     <p className="color-gray text-[15px]">{product?.description}</p>
                     <p className="color-gray text-[15px]">{product?.color}</p>
-                    <div className="text-[16px] font-medium">
-                        {formatPrice(product.product_variation.product.price) || formatPrice(product?.price)}đ
-                    </div>
+
                     <div>
                         <p className="text-[14px] color-gray font-medium">{product?.product_variation?.classify}</p>
                     </div>
@@ -79,6 +77,21 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
                     </div>
                 </div>
             </div>
+            <div className="text-[16px] font-medium flex items-center gap-x-3">
+                <p className="color-gray text-[14px] font-normal line-through">
+                    {formatPrice(product.product_variation.price) || formatPrice(product?.product?.price)}đ
+                </p>
+                {product.product_variation.price || product?.price ? (
+                    <p>
+                        {formatPrice(product.product_variation.sale_price) ||
+                            formatPrice(product?.product?.sale_price)}
+                        đ
+                    </p>
+                ) : (
+                    ''
+                )}
+            </div>
+
             <input
                 onChange={handleSelectCart}
                 id="default-checkbox"
