@@ -6,11 +6,20 @@ import Heading from '../../components/Heading';
 
 import { ISale } from '../../../../interfaces/ISale.ts';
 import { formatTime } from '../../../../utils';
+import { STREAM_SALE_LIST_URL } from '../../../../constants/index.ts';
+
+import { showMessageActive, showMessageClient } from '../../../../utils/messages.ts';
+import LoadingSmall from '../../../../components/Loading/LoadingSmall.tsx';
+import { tokenManagerInstance } from '../../../../api/index.tsx';
+import { API_SALE } from '../../../../hooks/useSale.tsx';
 const ListSale = () => {
     const [statusFilter, setStatusFilter] = useState('all');
     const [data, setData] = useState<ISale[]>([]);
+    const [loadingDeleteSale, setLoadingDeleteSale] = useState<boolean>(false);
+    const [deletedSaleID, setDeletedSaleID] = useState<number|string>(0);
+    
     useEffect(() => {
-        const eventSource = new EventSource('http://localhost:8000/api/sales/stream?column=id&sort=desc');
+        const eventSource = new EventSource(STREAM_SALE_LIST_URL);
         eventSource.onmessage = (event) => {
             const sales = JSON.parse(event.data);
             if (sales.data) {
@@ -21,12 +30,38 @@ const ListSale = () => {
             console.error('Something went wrong!:', error);
             eventSource.close();
         };
-
+        const deleteSale = async (id:string|number) => {
+            try{
+                setLoadingDeleteSale(true);
+                eventSource.close();
+                const {data} = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
+                showMessageClient('Success','Sale deleted successfully!','success');
+            }catch(error){  
+                console.log(error);
+                showMessageClient('Error','Something went wrong!','error');
+            }finally{
+                setLoadingDeleteSale(false);
+            }
+        }
+        if(deletedSaleID !== 0){
+            deleteSale(deletedSaleID);
+        }
+       
         return () => {
             eventSource.close();
         };
-    }, []);
-
+    }, [deletedSaleID]);
+    useEffect(() => {
+        if(!loadingDeleteSale){
+            setDeletedSaleID(0);
+        }
+    },[loadingDeleteSale]);
+    const handleDelete = async (id:string|number) => {
+        await showMessageActive('Delete','Are you sure you want to delete?','warning',() => {
+            setDeletedSaleID(id);
+        });
+       
+    }
     const searchSale = (e: any) => {
         console.log(e);
     };
@@ -101,12 +136,28 @@ const ListSale = () => {
         {
             title: 'Action',
             key: 'actions',
-            render: () => (
-                <Space>
-                    <Button icon={<EditOutlined />} />
-                    <Button style={{ color: 'black' }} danger icon={<DeleteOutlined />} />
-                </Space>
-            ),
+            render: (e:any, record:ISale) => {  
+                if(loadingDeleteSale &&  deletedSaleID == record.id){
+                    return <div className='flex gap-2' >
+                        <Button  style={{ color: 'black' }} className='bg-black' danger icon={<LoadingSmall />} />;
+                        <Button  style={{ color: 'black' }}   icon={<EditOutlined />} />
+                    </div>
+                }else if(loadingDeleteSale && deletedSaleID != record.id){
+                    return <div className='flex gap-2'>
+                        <Button  style={{ color: 'black' }} className='bg-gray-400 border-none hover:bg-gray-300' danger icon={<DeleteOutlined />} />
+                        <Button  style={{ color: 'black' }}  icon={<EditOutlined />} />
+                    </div>
+                }else {
+                    return  <div className='flex gap-2'>
+                    <Button onClick={() => handleDelete(record.id)} style={{ color: 'black' }} danger icon={<DeleteOutlined />} />
+                    <Button  style={{ color: 'black' }}  icon={<EditOutlined />} />
+                </div>
+                   
+                }
+                
+            }
+               
+            ,
         },
     ];
 

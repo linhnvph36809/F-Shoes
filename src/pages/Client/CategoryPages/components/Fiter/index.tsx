@@ -1,5 +1,4 @@
 import {Collapse, Checkbox, Skeleton} from 'antd';
-import {tokenManagerInstance} from "../../../../../api";
 import {useEffect, useState} from "react";
 import {IAttribute} from "../../../../../interfaces/IAttribute.ts";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -26,7 +25,6 @@ const FilterBox = () => {
     }, [query.get('attributes')]);
     const onchangeCheckbox = (e:CheckboxChangeEvent) => {
         const {value, checked} = e.target;
-
         let updatedVariations = [...selectedVariations];
         if (checked) {
             if (!updatedVariations.includes(value)) {
