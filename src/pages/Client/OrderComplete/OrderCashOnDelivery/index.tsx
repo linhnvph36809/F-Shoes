@@ -18,30 +18,30 @@ const OrderCashOnDelivery = () => {
                         {/* Icon và văn bản thông báo */}
                         <div className="flex flex-col items-center mb-8">
                             <div className="bg-green-100 p-4 rounded-full mb-10">
-                                <CheckCircleOutlined className="text-8xl text-green-500" />
+                                <CheckCircleOutlined className="text-[50px] text-green-500" />
                             </div>
-                            <h1 className="text-4xl font-bold mb-4 color-primary">Thank you for your purchase</h1>
-                            <h3 className="text-2xl text-gray-600 mb-8">
+                            <h1 className="text-[25px] font-bold mb-4 color-primary">Thank you for your purchase</h1>
+                            <h3 className="text-[14px] text-gray-600 mb-8">
                                 We've received your order and it will ship in 5-7 business days.
                                 <br />
                             </h3>
                         </div>
 
-                        {/* Thông tin chi tiết sản phẩm */}
                         <Card className="mb-8 border rounded-lg" bordered={false}>
                             {order?.order_details
                                 ? order.order_details.map((order: any) => (
-                                      <div className="flex justify-between items-center mb-6 border-b pb-4">
+                                      <div className="flex justify-between items-start mb-6 border-b pb-4">
                                           <img
                                               src={order?.product_image}
                                               alt="Nike Air Force One"
-                                              className="w-[60px] h-[60px] rounded-md"
+                                              className="w-[80px] h-[100px] object-cover rounded-md"
                                           />
                                           <div className="flex-1 ml-6 text-left">
-                                              <p className="font-medium text-gray-700 text-2xl">
+                                              <p className="font-medium color-primary text-[15px]">
                                                   {order?.product_name}
                                               </p>
-                                              <p className="text-gray-700 text-lg">Qty: {order?.quantity}</p>
+                                              <p className="text-[13px] color-gray font-medium">{order?.classify}</p>
+                                              <p className="color-primary text-[13px]">Qty: {order?.quantity}</p>
                                           </div>
                                           <p className="font-semibold text-gray-800 text-2xl">
                                               {' '}
@@ -53,25 +53,27 @@ const OrderCashOnDelivery = () => {
 
                             <div className="mt-20">
                                 <div className="flex justify-between items-center mt-6 pt-4">
-                                    <span className="text-xl text-gray-800">Address</span>
-                                    <span className="text-lg text-gray-800"> {order?.address}</span>
+                                    <span className="text-[14px] font-medium color-primary">Address : </span>
+                                    <span className="text-[13px] color-gray"> {order?.address}</span>
                                 </div>
 
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
-                                    <span className="text-xl text-gray-800">Payment</span>
-                                    <span className="font-semibold text-xl text-gray-800">Cash On Delivery</span>
-                                </div>
-
-                                <div className="flex justify-between items-center mt-6 border-t pt-4">
-                                    <span className="text-xl text-gray-800">Shipping</span>
+                                    <span className="text-[14px] font-medium color-primary">Payment</span>
                                     <span className="font-semibold text-xl text-gray-800">
                                         {' '}
-                                        {formatPrice(+order.shipping_cost)} đ
+                                        {order?.payment_method}
+                                    </span>
+                                </div>
+
+                                <div className="flex justify-between items-center mt-6 border-t pt-4">
+                                    <span className="text-[14px] font-medium color-primary">Shipping</span>
+                                    <span className="font-semibold text-xl text-gray-800">
+                                        {order.shipping_method}-{formatPrice(+order.shipping_cost)}đ
                                     </span>
                                 </div>
                                 {order?.voucher_cost ? (
                                     <div className="flex justify-between items-center mt-6 border-t pt-4">
-                                        <span className="text-xl text-gray-800">Voucher</span>
+                                        <span className="text-[14px] font-medium color-primary">Voucher</span>
                                         <span className="font-semibold text-xl text-gray-800">
                                             {' '}
                                             {formatPrice(+order.voucher_cost)} đ
@@ -82,8 +84,8 @@ const OrderCashOnDelivery = () => {
                                 )}
 
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
-                                    <span className="font-semibold text-3xl text-gray-800">Total</span>
-                                    <span className="font-semibold text-3xl text-gray-800">
+                                    <span className="font-semibold text-[18px] color-primary">Total</span>
+                                    <span className="font-semibold text-[18px] text-gray-800">
                                         {' '}
                                         {formatPrice(order.total_amount)}đ
                                     </span>

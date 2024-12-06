@@ -115,7 +115,7 @@ const ListVoucher = ({ initialValues }: any) => {
             ) : (
                 <div>
                     <FormVoucher
-                        title="List Topic"
+                        title="List Voucher"
                         initialValues={initialValues}
                         onFinish={onFinish}
                         loading={loading}

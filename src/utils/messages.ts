@@ -1,11 +1,11 @@
 import Swal from 'sweetalert2';
-export const showMessageAdmin = (title: string, text: string, type: 'success' | 'error' | 'warning') => {
+export const showMessageAdmin = (title: string, text: string, type: 'success' | 'error' | 'warning',time?:number) => {
     Swal.fire({
         title: title,
         text: text,
         icon: type,
         showConfirmButton: false,
-        timer: 1000,
+        timer: time || 1000,
     });
 };
 

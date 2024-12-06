@@ -50,25 +50,25 @@ const OrderComplete = () => {
                         <Card className="mb-8 border rounded-lg" bordered={false}>
                             {order?.order_details
                                 ? order.order_details.map((order: any) => (
-                                      <div className="flex justify-between items-start mb-6 border-b pb-4">
-                                          <img
-                                              src={order?.product_image}
-                                              alt="Nike Air Force One"
-                                              className="w-[80px] h-[100px] object-cover rounded-md"
-                                          />
-                                          <div className="flex-1 ml-6 text-left">
-                                              <p className="font-medium color-primary text-[15px]">
-                                                  {order?.product_name}
-                                              </p>
-                                              <p className="text-[13px] color-gray font-medium">{order?.classify}</p>
-                                              <p className="color-primary text-[13px]">Qty: {order?.quantity}</p>
-                                          </div>
-                                          <p className="font-semibold text-gray-800 text-2xl">
-                                              {' '}
-                                              {formatPrice(order?.total_amount)} đ
-                                          </p>
-                                      </div>
-                                  ))
+                                    <div className="flex justify-between items-start mb-6 border-b pb-4">
+                                        <img
+                                            src={order?.product_image}
+                                            alt="Nike Air Force One"
+                                            className="w-[80px] h-[100px] object-cover rounded-md"
+                                        />
+                                        <div className="flex-1 ml-6 text-left">
+                                            <p className="font-medium color-primary text-[15px]">
+                                                {order?.product_name}
+                                            </p>
+                                            <p className="text-[13px] color-gray font-medium">{order?.classify}</p>
+                                            <p className="color-primary text-[13px]">Qty: {order?.quantity}</p>
+                                        </div>
+                                        <p className="font-semibold text-gray-800 text-2xl">
+                                            {' '}
+                                            {formatPrice(order?.total_amount)} đ
+                                        </p>
+                                    </div>
+                                ))
                                 : ''}
 
                             <div className="mt-20">

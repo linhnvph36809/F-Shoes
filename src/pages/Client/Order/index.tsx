@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Form, Button, Divider, Typography, Row, Col, Card, Progress, Radio, Select, ConfigProvider } from 'antd';
-import { Link, Navigate } from 'react-router-dom';
+import { Form, Divider, Typography, Row, Col, Card, Progress, Radio, Select, ConfigProvider } from 'antd';
+import { Navigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
 
 import InputPrimary from '../../../components/Input';
@@ -28,7 +28,7 @@ const Order = () => {
     const carts = data?.data ? data.data.filter((cart: any) => orderId.includes(cart.id)) : null;
 
     const { loading: loadingVoucher, voucher, postVoucher } = useVoucher();
-    const { loading: loadingCheckOut, postVNPAY, postOrder } = useOnlinePayment();
+    const { loading: loadingCheckOut, postVNPAY, postOrder, postMomo } = useOnlinePayment();
     const { user } = useContextGlobal();
     const { handleSetCookie } = useCookiesConfig('order');
 
@@ -91,7 +91,7 @@ const Order = () => {
         }
     };
 
-    const onFinish = (value: any) => {
+    const onFinish = async (value: any) => {
         let shipping_method;
         if (value.shipping_method == 1) {
             shipping_method = 'Express Shipping';
@@ -104,7 +104,7 @@ const Order = () => {
         const total_amount =
             fee?.total && handleTotalPrice <= FREE_SHIP
                 ? voucher?.discount
-                    ? handleTotalPrice + fee.total - ((handleTotalPrice + fee.total) * voucher.discount) / 100
+                    ? handleTotalPrice + fee.total - ((handleTotalPrice + fee.total) * +voucher.discount) / 100
                     : handleTotalPrice + fee.total
                 : handleTotalPrice;
 
@@ -138,10 +138,10 @@ const Order = () => {
             user_id: user.id,
             total_amount,
             payment_method: value.payment_method,
-            payment_status: value.payment_method !== 'cash on delivery' ? '1' : '0',
+            payment_status: 'not_yet_paid',
             shipping_method,
             phone: value.phone,
-            shipping_cost: total_amount >= FREE_SHIP ? '' : fee?.total,
+            shipping_cost: total_amount >= FREE_SHIP ? '0' : fee?.total,
             tax_amount: null,
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
@@ -160,18 +160,28 @@ const Order = () => {
 
         handleSetCookie(
             'order',
-            { voucher_cost: (handleTotalPrice * voucher.discount) / 100, ...newValues },
+            { voucher_cost: (handleTotalPrice * +voucher.discount) / 100, ...newValues },
             new Date(Date.now() + 20 * 60 * 1000),
         );
-        console.log(newValues);
 
         if (value.payment_method == 'cash on delivery') {
             postOrder(newValues);
-        } else {
-            postVNPAY(value.payment_method, {
-                total: Math.round(total_amount),
-                url: `${window.location.origin}/order-complete`,
-            });
+        } else if (value.payment_method == 'vnpay') {
+            postVNPAY(
+                {
+                    total: Math.round(total_amount),
+                    url: `${window.location.origin}/order-complete`,
+                },
+                newValues,
+            );
+        } else if (value.payment_method == 'momo') {
+            postMomo(
+                {
+                    total: Math.round(total_amount),
+                    url: `${window.location.origin}/order-complete`,
+                },
+                newValues,
+            );
         }
     };
 
@@ -190,15 +200,6 @@ const Order = () => {
                             <Card bordered={false}>
                                 <div style={{ width: '100%', maxWidth: '500px', margin: '0 auto', padding: '20px' }}>
                                     <Title level={1}>Delivery</Title>
-                                    {user ? (
-                                        ''
-                                    ) : (
-                                        <Link to="/authentication">
-                                            <Button type="default" style={{ marginBottom: '25px' }}>
-                                                Login
-                                            </Button>
-                                        </Link>
-                                    )}
                                     <Title level={4}>Enter your name and address:</Title>
                                     <Text type="secondary" className="mb-5 block">
                                         If you have a promo code, you will be able to input it after filling in your
@@ -401,7 +402,7 @@ const Order = () => {
                                         >
                                             <Text className="color-primary font-medium">Voucher</Text>
                                             <Text className="color-primary font-medium">
-                                                -{formatPrice((handleTotalPrice * voucher.discount) / 100)}đ
+                                                -{formatPrice((handleTotalPrice * +voucher.discount) / 100)}đ
                                             </Text>
                                         </div>
                                     ) : (
@@ -440,7 +441,7 @@ const Order = () => {
                                                     ? voucher?.discount
                                                         ? handleTotalPrice +
                                                           fee.total -
-                                                          ((handleTotalPrice + fee.total) * voucher.discount) / 100
+                                                          ((handleTotalPrice + fee.total) * +voucher.discount) / 100
                                                         : handleTotalPrice + fee.total
                                                     : handleTotalPrice,
                                             )}
