@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { tokenManagerInstance } from '../api';
 import { useParams } from 'react-router-dom';
+import { showMessageClient } from '../utils/messages';
 
 const useReview = () => {
     const [reviews, setReviews] = useState<any>([]);
@@ -45,6 +46,8 @@ const useReview = () => {
             await tokenManagerInstance('post', '/api/review', review);
         } catch (error) {
             console.log(error);
+            const e = error as any;
+            showMessageClient('Error',e?.response.data?.message,'error');
         } finally {
             setLoading(false);
         }

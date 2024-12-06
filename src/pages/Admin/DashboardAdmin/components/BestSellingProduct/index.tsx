@@ -56,7 +56,12 @@ const BestSellingProduct = ({data}:Props) => {
             key: 'total_sold_quantity',
         }
     ];
-    return <Table columns={columns}  dataSource={data} pagination={{ pageSize: 5 }}/>
+    return (
+        <div>
+            <h3 className="text-[18px] font-bold">Best Selling Product</h3>
+            <Table columns={columns}  dataSource={data} pagination={{ pageSize: 5 }}/>
+        </div>
+    )
 }
 
 export default BestSellingProduct;
