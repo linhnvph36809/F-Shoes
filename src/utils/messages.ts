@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-export const showMessageAdmin = (title: string, text: string, type: 'success' | 'error' | 'warning',time?:number) => {
+export const showMessageAdmin = (title: string, text: string, type: 'success' | 'error' | 'warning', time?: number) => {
     Swal.fire({
         title: title,
         text: text,

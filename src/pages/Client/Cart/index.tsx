@@ -54,17 +54,21 @@ const Cart = () => {
             <div className="container mx-auto" style={{ width: '1100px' }}>
                 <div className="flex gap-10">
                     <div style={{ width: '733px' }}>
-                        <h2 className="text-[24px] font-bold m-6">Bag</h2>
+                        <h2 className="text-[24px] font-bold my-6">Bag</h2>
                         <div className="min-h-[300px]">
-                            {carts?.data.map((cart: any) => (
-                                <CartItem
-                                    key={cart.id}
-                                    product={cart}
-                                    handleDeleteCart={handleDeleteCart}
-                                    setCartId={setCartId}
-                                    refetch={refetch}
-                                />
-                            ))}
+                            {carts?.data.length ? (
+                                carts?.data.map((cart: any) => (
+                                    <CartItem
+                                        key={cart.id}
+                                        product={cart}
+                                        handleDeleteCart={handleDeleteCart}
+                                        setCartId={setCartId}
+                                        refetch={refetch}
+                                    />
+                                ))
+                            ) : (
+                                <p className="text-center color-primary text-[16px]">Emty</p>
+                            )}
                             {isFetching && <LoadingPage />}
                         </div>
                     </div>

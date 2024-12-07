@@ -40,8 +40,5 @@ export const STATUS_ORDER = [
     'Returned',
 ];
 
-<<<<<<< HEAD
-export const FREE_SHIP = 1000000 ; 
-=======
-export const STREAM_SALE_LIST_URL = "http://localhost:8000/api/sales/stream?column=id&sort=desc";
->>>>>>> d5829f2fd5f0b54dfbb9f7923e668dad87490d7e
+export const FREE_SHIP = 1000000;
+export const STREAM_SALE_LIST_URL = 'http://localhost:8000/api/sales/stream?column=id&sort=desc';

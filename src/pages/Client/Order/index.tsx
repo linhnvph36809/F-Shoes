@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Form, Divider, Typography, Row, Col, Card, Progress, Radio, Select, ConfigProvider } from 'antd';
 import { Navigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
@@ -16,10 +16,12 @@ import useCookiesConfig from '../../../hooks/useCookiesConfig';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import { showMessageClient } from '../../../utils/messages';
 import { FREE_SHIP } from '../../../constants';
+import { useForm } from 'antd/es/form/Form';
 
 const { Title, Text } = Typography;
 
 const Order = () => {
+    const [form] = useForm();
     const { provinces, districts, fee, wards, getAllWard, getAllDistrict, getFee } = useDelivery();
     const orderId = JSON.parse(localStorage.getItem('orderId') || '[]');
 
@@ -31,6 +33,8 @@ const Order = () => {
     const { loading: loadingCheckOut, postVNPAY, postOrder, postMomo } = useOnlinePayment();
     const { user } = useContextGlobal();
     const { handleSetCookie } = useCookiesConfig('order');
+
+    console.log(user);
 
     const [province, setProvince] = useState<any>('');
     const [districtId, setDistrictId] = useState<number | null>(null);
@@ -117,8 +121,8 @@ const Order = () => {
                     classify: cart?.product_variation?.classify,
                     product_id: null,
                     quantity: cart.quantity,
-                    price: +cart.product_variation.price,
-                    total_amount: +cart.product_variation.price * cart.quantity,
+                    price: +cart.product_variation.sale_price || +cart.product_variation.price,
+                    total_amount: +cart.product_variation.sale_price || +cart.product_variation.price * cart.quantity,
                 };
             } else if (cart?.product) {
                 return {
@@ -128,8 +132,8 @@ const Order = () => {
                     classify: cart?.product?.classify,
                     product_id: cart.product.id,
                     quantity: cart.quantity,
-                    price: +cart.product.price,
-                    total_amount: +cart.product.price * cart.quantity,
+                    price: +cart.product.sale_price || +cart.product.price,
+                    total_amount: +cart.product.sale_price || +cart.product.price * cart.quantity,
                 };
             }
         });
@@ -137,7 +141,7 @@ const Order = () => {
         const newValues = {
             user_id: user.id,
             total_amount,
-            payment_method: value.payment_method,
+            payment_method: 'cash_on_delivery',
             payment_status: 'not_yet_paid',
             shipping_method,
             phone: value.phone,
@@ -146,9 +150,8 @@ const Order = () => {
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
 
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
-                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-            } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+                } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: voucher?.id ? voucher?.id : null,
@@ -156,6 +159,7 @@ const Order = () => {
             note: value.note,
             order_details,
             amount_collected: value.payment_method !== 'cash on delivery' ? total_amount : 0,
+            cart_ids: orderId,
         };
 
         handleSetCookie(
@@ -170,7 +174,7 @@ const Order = () => {
             postVNPAY(
                 {
                     total: Math.round(total_amount),
-                    url: `${window.location.origin}/order-complete`,
+                    url: `${window.location.origin}/order-vnpay-complete`,
                 },
                 newValues,
             );
@@ -178,7 +182,7 @@ const Order = () => {
             postMomo(
                 {
                     total: Math.round(total_amount),
-                    url: `${window.location.origin}/order-complete`,
+                    url: `${window.location.origin}/order-momo-complete`,
                 },
                 newValues,
             );
@@ -189,12 +193,17 @@ const Order = () => {
         return <Navigate to="/" />;
     }
 
+    useEffect(() => {
+        form.setFieldValue('receiver_full_name', user?.name);
+        form.setFieldValue('receiver_email', user?.email);
+    }, [user]);
+
     return (
         <>
             {loadingCart ? (
                 <LoadingPage />
             ) : (
-                <Form layout="vertical" style={{ marginTop: '20px' }} onFinish={onFinish}>
+                <Form layout="vertical" form={form} style={{ marginTop: '20px' }} onFinish={onFinish}>
                     <Row style={{ padding: '20px' }}>
                         <Col xs={24} md={12}>
                             <Card bordered={false}>
@@ -440,8 +449,8 @@ const Order = () => {
                                                 fee?.total && handleTotalPrice <= FREE_SHIP
                                                     ? voucher?.discount
                                                         ? handleTotalPrice +
-                                                          fee.total -
-                                                          ((handleTotalPrice + fee.total) * +voucher.discount) / 100
+                                                        fee.total -
+                                                        ((handleTotalPrice + fee.total) * +voucher.discount) / 100
                                                         : handleTotalPrice + fee.total
                                                     : handleTotalPrice,
                                             )}
@@ -484,7 +493,7 @@ const Order = () => {
                                                             cart?.product
                                                                 ? cart?.product.price
                                                                 : cart?.product_variation?.sale_price ||
-                                                                      cart?.product_variation?.price,
+                                                                cart?.product_variation?.price,
                                                         )}{' '}
                                                         ₫
                                                     </Text>
@@ -537,20 +546,6 @@ const Order = () => {
                                                 >
                                                     <Radio.Group name="payment_method" style={{ width: '100%' }}>
                                                         <Radio.Button
-                                                            value="paypal"
-                                                            className="font-medium"
-                                                            style={styles.radioButton}
-                                                        >
-                                                            <div className="text-[15px] flex items-center gap-x-3">
-                                                                <img
-                                                                    src="https://www.paypalobjects.com/webstatic/icon/pp258.png"
-                                                                    alt="PayPal"
-                                                                    className={'w-[30px]'}
-                                                                />
-                                                                PAYPAL
-                                                            </div>
-                                                        </Radio.Button>
-                                                        <Radio.Button
                                                             value="momo"
                                                             className="font-medium"
                                                             style={styles.radioButton}
@@ -576,20 +571,6 @@ const Order = () => {
                                                                     className={'w-[30px]'}
                                                                 />
                                                                 VNPAY
-                                                            </div>
-                                                        </Radio.Button>
-                                                        <Radio.Button
-                                                            value="stripe"
-                                                            className="font-medium"
-                                                            style={styles.radioButton}
-                                                        >
-                                                            <div className="text-[15px] flex items-center gap-x-3">
-                                                                <img
-                                                                    src="data:image/png;base64,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"
-                                                                    alt="PayPal"
-                                                                    className={'w-[30px]'}
-                                                                />
-                                                                STRIPE
                                                             </div>
                                                         </Radio.Button>
                                                         <Radio.Button

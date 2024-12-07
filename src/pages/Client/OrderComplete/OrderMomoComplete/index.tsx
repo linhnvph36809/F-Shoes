@@ -5,34 +5,63 @@ import { ArrowLeft } from 'lucide-react';
 
 import { formatPrice } from '../../../../utils';
 import useCookiesConfig from '../../../../hooks/useCookiesConfig';
+import useOnlinePayment from '../../../../hooks/useOnlinePayment';
+import { useEffect } from 'react';
 
-const OrderComplete = () => {
+const OrderMomoComplete = () => {
     const location = useLocation();
     const {
         cookies: { order },
+        removeCookie,
     } = useCookiesConfig('order');
 
-    console.log(order);
 
-    const queryParams = new URLSearchParams(location.search);
-    const params: any = {
-        vnp_Amount: queryParams.get('vnp_Amount'),
-        vnp_BankCode: queryParams.get('vnp_BankCode'),
-        vnp_BankTranNo: queryParams.get('vnp_BankTranNo'),
-        vnp_CardType: queryParams.get('vnp_CardType'),
-        vnp_OrderInfo: queryParams.get('vnp_OrderInfo'),
-        vnp_PayDate: queryParams.get('vnp_PayDate'),
-        vnp_ResponseCode: queryParams.get('vnp_ResponseCode'),
-        vnp_TmnCode: queryParams.get('vnp_TmnCode'),
-        vnp_TransactionNo: queryParams.get('vnp_TransactionNo'),
-        vnp_TransactionStatus: queryParams.get('vnp_TransactionStatus'),
-        vnp_TxnRef: queryParams.get('vnp_TxnRef'),
-        vnp_SecureHash: queryParams.get('vnp_SecureHash'),
+    const {
+        cookies: { orderId },
+        removeCookie: removeCookieOrderId,
+    } = useCookiesConfig('orderId');
+
+    const { putOrder } = useOnlinePayment();
+
+
+    const searchParams = new URLSearchParams(location.search);
+    const paramsObj = {
+        partnerCode: searchParams.get('partnerCode'),
+        orderId: searchParams.get('orderId'),
+        requestId: searchParams.get('requestId'),
+        amount: searchParams.get('amount'),
+        orderInfo: searchParams.get('orderInfo'),
+        orderType: searchParams.get('orderType'),
+        transId: searchParams.get('transId'),
+        resultCode: searchParams.get('resultCode'),
+        message: searchParams.get('message'),
+        payType: searchParams.get('payType'),
+        responseTime: searchParams.get('responseTime'),
+        extraData: searchParams.get('extraData'),
+        signature: searchParams.get('signature'),
     };
+
+    if (paramsObj.resultCode != '0' || !order) {
+        removeCookie('order');
+        return <Navigate to="/profile/orders?status=waiting_confirm" />;
+    }
+
+    useEffect(() => {
+        if (orderId) {
+            putOrder(
+                {
+                    payment_status: true,
+                    payment_method: "momo"
+                },
+                orderId,
+            );
+            removeCookieOrderId('orderId');
+        }
+    }, []);
 
     return (
         <>
-            {params.vnp_TransactionStatus == '00' ? (
+            {paramsObj.resultCode == '0' && order ? (
                 <div className="flex items-center justify-center min-h-screen w-full bg-gray-50 p-12">
                     <div className="bg-white rounded-lg shadow-lg p-12 w-full max-w-4xl text-center animate-fadeIn">
                         {/* Icon và văn bản thông báo */}
@@ -65,7 +94,7 @@ const OrderComplete = () => {
                                         </div>
                                         <p className="font-semibold text-gray-800 text-2xl">
                                             {' '}
-                                            {formatPrice(order?.total_amount)} đ
+                                            {formatPrice(order?.price)} đ
                                         </p>
                                     </div>
                                 ))
@@ -79,13 +108,12 @@ const OrderComplete = () => {
 
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
                                     <span className="text-[14px] font-medium color-primary">Payment</span>
-                                    <span className="font-semibold text-xl text-gray-800"> VNPAY</span>
+                                    <span className="font-semibold text-xl text-gray-800"> MOMO</span>
                                 </div>
-
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
                                     <span className="text-[14px] font-medium color-primary">Shipping</span>
                                     <span className="font-semibold text-xl text-gray-800">
-                                        {order.shipping_method}-{formatPrice(+order.shipping_cost)}đ
+                                        {order?.shipping_method}-{formatPrice(+order?.shipping_cost)}đ
                                     </span>
                                 </div>
                                 {order?.voucher_cost ? (
@@ -93,7 +121,7 @@ const OrderComplete = () => {
                                         <span className="text-[14px] font-medium color-primary">Voucher</span>
                                         <span className="font-semibold text-xl text-gray-800">
                                             {' '}
-                                            {formatPrice(+order.voucher_cost)} đ
+                                            {formatPrice(+order?.voucher_cost)} đ
                                         </span>
                                     </div>
                                 ) : (
@@ -104,7 +132,7 @@ const OrderComplete = () => {
                                     <span className="font-semibold text-[18px] color-primary">Total</span>
                                     <span className="font-semibold text-[18px] text-gray-800">
                                         {' '}
-                                        {formatPrice(order.total_amount)}đ
+                                        {formatPrice(order?.total_amount)}đ
                                     </span>
                                 </div>
                             </div>
@@ -119,10 +147,10 @@ const OrderComplete = () => {
                     </div>
                 </div>
             ) : (
-                <Navigate to="/order" />
+                ''
             )}
         </>
     );
 };
 
-export default OrderComplete;
+export default OrderMomoComplete;
