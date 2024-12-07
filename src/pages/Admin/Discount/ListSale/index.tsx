@@ -36,8 +36,9 @@ const ListSale = () => {
         };
         const deleteSale = async (id:string|number) => {
             try{
-                setLoadingDeleteSale(true);
                 eventSource.close();
+                setLoadingDeleteSale(true);
+                
                 const {data} = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
                 showMessageClient('Success','Sale deleted successfully!','success');
             }catch(error){  
@@ -50,15 +51,18 @@ const ListSale = () => {
         if(deletedSaleID !== 0){
             deleteSale(deletedSaleID);
         }
-       
+        
         return () => {
             eventSource.close();
         };
-    }, [deletedSaleID,loadingDeleteSale]);
+    }, [deletedSaleID]);
     useEffect(() => {
         if(!loadingDeleteSale){
             setDeletedSaleID(0);
         }
+    },[loadingDeleteSale]);
+    useEffect(() => {
+        
         const statusData = data.filter((item:ISale) => {
             const start_date = new Date(item.start_date);
             const end_date = new Date(item.end_date);
@@ -75,8 +79,10 @@ const ListSale = () => {
                     return true;
                 }
                 return false;
+            }else {
+                return true;
             }
-            return false;
+           
         });
         if(keySearch && keySearch.length > 0){
             
@@ -89,7 +95,7 @@ const ListSale = () => {
         }else{
             setDataSearch([...statusData]);
         }
-    },[loadingDeleteSale,keySearch,keyStatus]);
+    },[keySearch,keyStatus,data]);
     const handleDelete = async (id:string|number) => {
         await showMessageActive('Delete','Are you sure you want to delete?','warning',() => {
             setDeletedSaleID(id);
