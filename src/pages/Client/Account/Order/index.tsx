@@ -36,6 +36,8 @@ const OrderProfile = () => {
         `/api/me/orders?per_page=5&page=${page}&status=${indexStatus || indexStatus === 0 ? indexStatus : ''}`,
     );
 
+
+
     const handlePageChange = (page: number) => {
         params.set('page', `${page}`);
         navigate(`?${params.toString()}`, { replace: true });

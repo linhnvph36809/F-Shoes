@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { tokenManagerInstance } from '../api';
 import { useNavigate } from 'react-router-dom';
 import { showMessageClient } from '../utils/messages';
+import useCookiesConfig from './useCookiesConfig';
 
 const API = '/api/';
 const API_ORDER = '/api/orders';
@@ -10,21 +11,7 @@ const API_ORDER = '/api/orders';
 const useOnlinePayment = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
-    const postVNPAY = async (paymentMethod: string, value: any) => {
-        try {
-            setLoading(true);
-            const { data } = await tokenManagerInstance('post', API + paymentMethod, value);
-            if (data?.data) {
-                window.location.href = data.data;
-            } else {
-                window.location.href = data;
-            }
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const { handleSetCookie } = useCookiesConfig('orderId');
 
     const postOrder = async (order: any) => {
         try {
@@ -39,10 +26,54 @@ const useOnlinePayment = () => {
         }
     };
 
+    const postVNPAY = async (value: any, orders: any) => {
+        try {
+            setLoading(true);
+            const order = await tokenManagerInstance('post', API_ORDER, orders);
+            handleSetCookie('orderId', order?.data?.order?.id, new Date(Date.now() + 20 * 60 * 1000));
+            const { data } = await tokenManagerInstance('post', API + 'vnpay', value);
+            if (data?.data) {
+                window.location.href = data.data;
+            } else {
+                window.location.href = data;
+            }
+        } catch (error) {
+            showMessageClient('Error', (error as any).message, 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const postMomo = async (value: any, orders: any) => {
+        try {
+            setLoading(true);
+            const order = await tokenManagerInstance('post', API_ORDER, orders);
+            handleSetCookie('orderId', order?.data?.order?.id, new Date(Date.now() + 20 * 60 * 1000));
+            const { data } = await tokenManagerInstance('post', API + 'momo', value);
+            if (data?.payUrl) {
+                window.location.href = data.payUrl;
+            }
+        } catch (error) {
+            showMessageClient('Error', (error as any).message, 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const putOrder = async (paymentStatus: any, id: string | number) => {
+        try {
+            await tokenManagerInstance('put', `api/order/update/payment-status/${id}`, paymentStatus);
+        } catch (error) {
+            showMessageClient('Error', (error as any).message, 'error');
+        }
+    };
+
     return {
         loading,
         postVNPAY,
+        postMomo,
         postOrder,
+        putOrder,
     };
 };
 
