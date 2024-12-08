@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { tokenManagerInstance } from '../api';
 import { showMessageAdmin, showMessageClient } from '../utils/messages';
+import { PATH_ADMIN } from '../constants/path';
 
 export const API_VOUCHER = 'api/vouchers';
 
@@ -45,6 +46,7 @@ const useVoucher = () => {
             setLoading(true);
             await tokenManagerInstance('post', API_VOUCHER, voucher);
             showMessageAdmin('Add Voucher successfully', '', 'success');
+            navigate(PATH_ADMIN.VOUCHER);
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
                 showMessageAdmin('Error', (error as any).response.data.message, 'error');

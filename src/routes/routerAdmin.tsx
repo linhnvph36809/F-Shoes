@@ -38,7 +38,7 @@ import CreateOrder from '../pages/Admin/Oder/Create';
 
 import { ACTIONS, PERMISSION } from '../constants';
 import PermissionPage from '../components/Permissions/PermissionPage';
-import ListGroups from '../pages/Admin/Groups/listgroup';
+import ListGroups from '../pages/Admin/Groups/ListGroup';
 
 const routerAdmin = [
     {
@@ -180,6 +180,10 @@ const routerAdmin = [
             {
                 path: 'voucher',
                 element: <ListVouCher />,
+            },
+            {
+                path: 'add-voucher',
+                element: <AddVoucher />,
             },
             {
                 path: 'voucher/:id',

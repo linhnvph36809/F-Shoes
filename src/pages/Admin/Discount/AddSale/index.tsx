@@ -17,7 +17,7 @@ const AddSale = () => {
 
 
     const dataSourceProductOriginList = JSON.parse(JSON.stringify([...productListData]));;
-    
+
     const [openAddProductTable, setOpenAddProductTable] = useState<boolean>(false);
     const [selectedSimpleProducts, setSelectedSimpleProducts] = useState<IProduct[]>([]);
     const [selectedVariations, setSelectedVariations] = useState<IVariation[]>([]);
@@ -286,9 +286,8 @@ const AddSale = () => {
                         <Input
                             onChange={(e) => onChangeQuantityProduct(e, record)}
                             type="number"
-                            className={`${
-                                !stock_qty ? 'border-red-400' : 'border-none'
-                            } bg-slate-100 box-border px-6 rounded-2xl `}
+                            className={`${!stock_qty ? 'border-red-400' : 'border-none'
+                                } bg-slate-100 box-border px-6 rounded-2xl `}
                             value={stock_qty}
                             min={1}
                             max={stock_qty}
@@ -385,7 +384,7 @@ const AddSale = () => {
             setError({ ...error, value: 'Value is required' });
         } else if (parseInt(e.target.value) > 100) {
             setError({ ...error, value: 'Value must be less than or equal to 100' });
-        }else{
+        } else {
             setError({ ...error, value: '' });
         }
         setDataSale({ ...dataSale, value: e.target.value });
@@ -393,7 +392,7 @@ const AddSale = () => {
     const onChangeValueFixed = (e: any) => {
         if (e.target.value === '') {
             setError({ ...error, value: 'Value is required' });
-        } else{
+        } else {
             setError({ ...error, value: '' });
         }
         setDataSale({ ...dataSale, value: e.target.value });
