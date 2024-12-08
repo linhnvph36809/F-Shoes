@@ -196,31 +196,37 @@ const ListSale = () => {
             title: 'Action',
             key: 'actions',
             render: (e: any, record: ISale) => {
+                let buttonDelete = (
+                    <Button
+                        onClick={() => handleDelete(record.id)}
+                        style={{ color: 'black' }}
+                        danger
+                        icon={<DeleteOutlined />}
+                    />
+                );
                 if (loadingDeleteSale && deletedSaleID == record.id) {
-                    return <div className='flex gap-2' >
-                        <Button style={{ color: 'black' }} className='bg-black' danger icon={<LoadingSmall />} />
-                        <Button style={{ color: 'black' }} icon={<EditOutlined />} />
-                    </div>
+                    buttonDelete = (
+                        <Button style={{ color: 'black' }} className="bg-black" danger icon={<LoadingSmall />} />
+                    );
                 } else if (loadingDeleteSale && deletedSaleID != record.id) {
-                    return <div className='flex gap-2'>
-                        <Button style={{ color: 'black' }} className='bg-gray-400 border-none hover:bg-gray-300' danger icon={<DeleteOutlined />} />
-                        <Button style={{ color: 'black' }} icon={<EditOutlined />} />
-                    </div>
-                } else {
-                    return <div className='flex gap-2'>
-                        <Button onClick={() => handleDelete(record.id)} style={{ color: 'black' }} danger icon={<DeleteOutlined />} />
-                        <Button style={{ color: 'black' }} icon={<EditOutlined />} />
-                    </div>
-
+                    buttonDelete = (
+                        <Button
+                            style={{ color: 'black' }}
+                            className="bg-gray-400 border-none hover:bg-gray-300"
+                            danger
+                            icon={<DeleteOutlined />}
+                        />
+                    );
                 }
-
-            }
-
-            ,
+                return (
+                    <div className="flex gap-2">
+                        {buttonDelete}
+                        <Button onClick={() => navigate(`/admin/sale/update/${record.id}`)} style={{ color: 'black' }} icon={<EditOutlined />} />
+                    </div>
+                );
+            },
         },
     ];
-
-
 
     return (
         <div>
