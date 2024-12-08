@@ -22,6 +22,8 @@ const ListSale = () => {
     const keySearch = urlQuery.get('search');
     const keyStatus = urlQuery.get('status') || 'all';
     const [dataSearch, setDataSearch] = useState<ISale[]>([]);
+
+
     useEffect(() => {
         const eventSource = new EventSource(STREAM_SALE_LIST_URL);
         eventSource.onmessage = (event) => {
@@ -34,33 +36,42 @@ const ListSale = () => {
             console.error('Something went wrong!:', error);
             eventSource.close();
         };
-        const deleteSale = async (id: string | number) => {
-            try {
+
+        const deleteSale = async (id:string|number) => {
+            try{
                 eventSource.close();
                 setLoadingDeleteSale(true);
-                const { data } = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
-                showMessageClient('Success', 'Sale deleted successfully!', 'success');
-            } catch (error) {
+                
+                const {data} = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
+                showMessageClient('Success','Sale deleted successfully!','success');
+            }catch(error){  
+
                 console.log(error);
                 showMessageClient('Error', 'Something went wrong!', 'error');
             } finally {
                 setLoadingDeleteSale(false);
             }
-        };
+        }
         if (deletedSaleID !== 0) {
             deleteSale(deletedSaleID);
         }
+
+        
         return () => {
             eventSource.close();
         };
     }, [deletedSaleID]);
+
     useEffect(() => {
         if (!loadingDeleteSale) {
             setDeletedSaleID(0);
         }
-    }, [loadingDeleteSale]);
+
+    },[loadingDeleteSale]);
     useEffect(() => {
-        const statusData = data.filter((item: ISale) => {
+        
+        const statusData = data.filter((item:ISale) => {
+
             const start_date = new Date(item.start_date);
             const end_date = new Date(item.end_date);
             const now = new Date();
@@ -71,6 +82,7 @@ const ListSale = () => {
             } else if (keyStatus === 'active') {
                 return start_date < now && end_date > now;
             } else if (keyStatus === 'expired') {
+                console.log('end ded');
                 if (start_date < now && end_date < now) {
                     return true;
                 }
@@ -80,35 +92,37 @@ const ListSale = () => {
             }
         });
         if (keySearch && keySearch.length > 0) {
-            setDataSearch(
-                statusData.filter((item: ISale) => {
-                    if (item.name) {
-                        return (
-                            item.name.toLowerCase().includes(keySearch.toLowerCase()) ||
-                            item.id.toString().includes(keySearch.toLowerCase())
-                        );
-                    }
-                    return item.id.toString().includes(keySearch.toLowerCase());
-                }),
-            );
+
+            setDataSearch(statusData.filter((item: ISale) => {
+                if (item.name) {
+                    return item.name.toLowerCase().includes(keySearch.toLowerCase()) || item.id.toString().includes(keySearch.toLowerCase());
+                }
+                return item.id.toString().includes(keySearch.toLowerCase());
+            }))
         } else {
             setDataSearch([...statusData]);
         }
-    }, [keySearch, keyStatus, data]);
-    const handleDelete = async (id: string | number) => {
-        await showMessageActive('Delete', 'Are you sure you want to delete?', 'warning', () => {
+
+    },[keySearch,keyStatus,data]);
+    const handleDelete = async (id:string|number) => {
+        await showMessageActive('Delete','Are you sure you want to delete?','warning',() => {
+
             setDeletedSaleID(id);
         });
-    };
+
+    }
 
     // Search
     const searchSale = (e: any) => {
+
         urlQuery.set('search', e.target.value);
         navigate(`?${urlQuery.toString()}`, { replace: true });
     };
     const handleStatusChange = (e: any) => {
         urlQuery.set('status', e.target.value);
         navigate(`?${urlQuery.toString()}`, { replace: true });
+
+
     };
     const dataSource = [...dataSearch];
     const columns = [
@@ -182,37 +196,31 @@ const ListSale = () => {
             title: 'Action',
             key: 'actions',
             render: (e: any, record: ISale) => {
-                let buttonDelete = (
-                    <Button
-                        onClick={() => handleDelete(record.id)}
-                        style={{ color: 'black' }}
-                        danger
-                        icon={<DeleteOutlined />}
-                    />
-                );
                 if (loadingDeleteSale && deletedSaleID == record.id) {
-                    buttonDelete = (
-                        <Button style={{ color: 'black' }} className="bg-black" danger icon={<LoadingSmall />} />
-                    );
-                } else if (loadingDeleteSale && deletedSaleID != record.id) {
-                    buttonDelete = (
-                        <Button
-                            style={{ color: 'black' }}
-                            className="bg-gray-400 border-none hover:bg-gray-300"
-                            danger
-                            icon={<DeleteOutlined />}
-                        />
-                    );
-                }
-                return (
-                    <div className="flex gap-2">
-                        {buttonDelete}
-                        <Button onClick={() => navigate(`/admin/sale/update/${record.id}`)} style={{ color: 'black' }} icon={<EditOutlined />} />
+                    return <div className='flex gap-2' >
+                        <Button style={{ color: 'black' }} className='bg-black' danger icon={<LoadingSmall />} />
+                        <Button style={{ color: 'black' }} icon={<EditOutlined />} />
                     </div>
-                );
-            },
+                } else if (loadingDeleteSale && deletedSaleID != record.id) {
+                    return <div className='flex gap-2'>
+                        <Button style={{ color: 'black' }} className='bg-gray-400 border-none hover:bg-gray-300' danger icon={<DeleteOutlined />} />
+                        <Button style={{ color: 'black' }} icon={<EditOutlined />} />
+                    </div>
+                } else {
+                    return <div className='flex gap-2'>
+                        <Button onClick={() => handleDelete(record.id)} style={{ color: 'black' }} danger icon={<DeleteOutlined />} />
+                        <Button style={{ color: 'black' }} icon={<EditOutlined />} />
+                    </div>
+
+                }
+
+            }
+
+            ,
         },
     ];
+
+
 
     return (
         <div>

@@ -1,13 +1,9 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { SwiperSlide } from 'swiper/react';
 
 import useCart from '../../../hooks/useCart';
 import { useContextGlobal } from '../../../contexts';
 import CartItem from './components';
 import Summary from './components/BoxSummary';
-import Heading from '../HomePages/components/Heading';
-import SlidesScroll from '../../../components/SlidesScroll';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import LoadingPage from '../../../components/Loading/LoadingPage';
 
@@ -42,9 +38,9 @@ const Cart = () => {
             const newCarts = carts?.data.filter((cart: any) => cartId.includes(cart.id));
             return newCarts?.reduce((sum: any, curr: any) => {
                 if (curr?.product?.price) {
-                    return sum + curr.product.price * curr.quantity;
+                    return sum + (curr.product.sale_price || curr.product.price) * curr.quantity;
                 } else if (curr?.product_variation?.price) {
-                    return sum + curr.product_variation.price * curr.quantity;
+                    return sum + (curr.product_variation.sale_price || curr.product_variation.price) * curr.quantity;
                 }
                 return sum;
             }, 0);
@@ -58,17 +54,21 @@ const Cart = () => {
             <div className="container mx-auto" style={{ width: '1100px' }}>
                 <div className="flex gap-10">
                     <div style={{ width: '733px' }}>
-                        <h2 className="text-[24px] font-bold m-6">Bag</h2>
+                        <h2 className="text-[24px] font-bold my-6">Bag</h2>
                         <div className="min-h-[300px]">
-                            {carts?.data.map((cart: any) => (
-                                <CartItem
-                                    key={cart.id}
-                                    product={cart}
-                                    handleDeleteCart={handleDeleteCart}
-                                    setCartId={setCartId}
-                                    refetch={refetch}
-                                />
-                            ))}
+                            {carts?.data.length ? (
+                                carts?.data.map((cart: any) => (
+                                    <CartItem
+                                        key={cart.id}
+                                        product={cart}
+                                        handleDeleteCart={handleDeleteCart}
+                                        setCartId={setCartId}
+                                        refetch={refetch}
+                                    />
+                                ))
+                            ) : (
+                                <p className="text-center color-primary text-[16px]">Emty</p>
+                            )}
                             {isFetching && <LoadingPage />}
                         </div>
                     </div>
@@ -77,22 +77,8 @@ const Cart = () => {
                         <Summary total={handleTotalPrice} cartId={cartId} />
                     </div>
                 </div>
-
-                <div className="mt-8">
-                    <h2 className="text-[24px] ">Favourites</h2>
-                    <p className="color-gray text-[15px]">
-                        Want to view your favourites?{' '}
-                        <a href="#" className="text-blue-500">
-                            Join us
-                        </a>{' '}
-                        or{' '}
-                        <Link to="/authentication" className="text-blue-500">
-                            Sign in
-                        </Link>
-                    </p>
-                </div>
             </div>
-            <div className="my-20">
+            {/* <div className="my-20">
                 <div>
                     <Heading title="You Might Also Like" />
                     <SlidesScroll className="slidesProducts pb-20">
@@ -174,7 +160,7 @@ const Cart = () => {
                         </SwiperSlide>
                     </SlidesScroll>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

@@ -1,7 +1,7 @@
 import { Input, Button, DatePicker, Table, Switch, Flex, Radio } from 'antd';
 import Heading from '../../components/Heading';
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import {  useLocation } from 'react-router-dom';
 import { IProduct } from '../../../../interfaces/IProduct.ts';
 import { formatPrice } from '../../../../utils';
 import { IVariation } from '../../../../interfaces/IVariation.ts';
@@ -122,7 +122,7 @@ const UpdateSale = () => {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
-            render: (action, record) => {
+            render: (action:any, record:any) => {
                 return <Button>Delete</Button>;
             },
         },
@@ -172,7 +172,7 @@ const UpdateSale = () => {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
-            render: (action, record) => {
+            render: (action:any, record:any) => {
                 return <Button>Delete</Button>;
             },
         },

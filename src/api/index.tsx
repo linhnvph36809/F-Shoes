@@ -78,6 +78,8 @@ export const tokenManagerInstance = async (
             if (error.status === 401) {
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userId');
             }
             throw {
                 message: error.message,

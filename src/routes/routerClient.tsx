@@ -7,7 +7,7 @@ import LayoutAuthentication from '../pages/Client/Authtication';
 import ProfilePage from '../pages/Client/Account/Profile';
 import Order from '../pages/Client/Order';
 import PrivateRoute from '../components/PrivateRoute';
-import OrderComplete from '../pages/Client/OrderComplete/OrderComplete';
+import OrderVnpayComplete from '../pages/Client/OrderComplete/OrderVnpayComplete';
 import AccountSetting from '../pages/Client/Account/AccountSetting';
 import Layout from '../pages/Client/Account/Layout';
 import OrderProfile from '../pages/Client/Account/Order';
@@ -17,6 +17,7 @@ import OrderCashOnDelivery from '../pages/Client/OrderComplete/OrderCashOnDelive
 import OrderList from '../pages/Client/Account/OrderDetail';
 import OrderDetail from '../pages/Client/Account/OrderDetail';
 import LayoutOrderProfile from '../pages/Client/Account/Order/components/Layout';
+import OrderMomoComplete from '../pages/Client/OrderComplete/OrderMomoComplete';
 const routerClient = [
     {
         path: '',
@@ -87,8 +88,12 @@ const routerClient = [
                 ),
             },
             {
-                path: '/order-complete',
-                element: <OrderComplete />,
+                path: '/order-vnpay-complete',
+                element: <OrderVnpayComplete />,
+            },
+            {
+                path: '/order-momo-complete',
+                element: <OrderMomoComplete />,
             },
             {
                 path: '/orderlist',

@@ -7,9 +7,9 @@ import { formatPrice, timeToNow } from '../../../../../../utils';
 const OrderItem = ({ order }: { order: IOrder }) => {
     const status:
         | {
-            className: string;
-            text: string;
-        }
+              className: string;
+              text: string;
+          }
         | undefined = statusString(order.status);
 
     const currentUrl = `${window.location.origin}${location.pathname}${location.search}`;
@@ -53,8 +53,8 @@ const OrderItem = ({ order }: { order: IOrder }) => {
                 <span className="color-gray text-[18px] font-medium">{formatPrice(order.total_amount)}đ</span>
             </div>
             <div>
-                <p className="color-primary text-[18px] font-medium mb-3">Shipping Method</p>
-                <span className="color-gray text-[15px]">{order.shipping_method}</span>
+                <p className="color-primary text-[18px] font-medium mb-3">Payment Method</p>
+                <span className="color-gray text-[15px]">{order.payment_method}</span>
             </div>
             <div>
                 <p className="color-primary text-[18px] font-medium mb-3">Status</p>
