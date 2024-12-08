@@ -36,13 +36,16 @@ const ListSale = () => {
             console.error('Something went wrong!:', error);
             eventSource.close();
         };
-        const deleteSale = async (id: string | number) => {
-            try {
-                setLoadingDeleteSale(true);
+
+        const deleteSale = async (id:string|number) => {
+            try{
                 eventSource.close();
-                const { data } = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
-                showMessageClient('Success', 'Sale deleted successfully!', 'success');
-            } catch (error) {
+                setLoadingDeleteSale(true);
+                
+                const {data} = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
+                showMessageClient('Success','Sale deleted successfully!','success');
+            }catch(error){  
+
                 console.log(error);
                 showMessageClient('Error', 'Something went wrong!', 'error');
             } finally {
@@ -53,15 +56,22 @@ const ListSale = () => {
             deleteSale(deletedSaleID);
         }
 
+        
         return () => {
             eventSource.close();
         };
-    }, [deletedSaleID, loadingDeleteSale]);
+    }, [deletedSaleID]);
+
     useEffect(() => {
         if (!loadingDeleteSale) {
             setDeletedSaleID(0);
         }
-        const statusData = data.filter((item: ISale) => {
+
+    },[loadingDeleteSale]);
+    useEffect(() => {
+        
+        const statusData = data.filter((item:ISale) => {
+
             const start_date = new Date(item.start_date);
             const end_date = new Date(item.end_date);
             const now = new Date();
@@ -77,8 +87,10 @@ const ListSale = () => {
                     return true;
                 }
                 return false;
+            }else {
+                return true;
             }
-            return false;
+           
         });
         if (keySearch && keySearch.length > 0) {
 
@@ -91,9 +103,11 @@ const ListSale = () => {
         } else {
             setDataSearch([...statusData]);
         }
-    }, [loadingDeleteSale, keySearch, keyStatus]);
-    const handleDelete = async (id: string | number) => {
-        await showMessageActive('Delete', 'Are you sure you want to delete?', 'warning', () => {
+
+    },[keySearch,keyStatus,data]);
+    const handleDelete = async (id:string|number) => {
+        await showMessageActive('Delete','Are you sure you want to delete?','warning',() => {
+
             setDeletedSaleID(id);
         });
 

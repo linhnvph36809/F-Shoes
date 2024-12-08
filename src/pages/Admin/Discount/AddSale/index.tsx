@@ -383,9 +383,8 @@ const AddSale = () => {
             setError({ ...error, value: 'Value is required' });
         } else if (parseInt(e.target.value) > 100) {
             setError({ ...error, value: 'Value must be less than or equal to 100' });
-        } else {
-            setDataSale({ ...dataSale, value: e.target.value });
-        }
+        } 
+        setDataSale({ ...dataSale, value: e.target.value });
     };
     const onChangeValueFixed = (e: any) => {
         if (e.target.value === '') {
@@ -405,8 +404,11 @@ const AddSale = () => {
         let hasError = false;
         if (!dataSale.value) {
             hasError = true;
-            setError({ ...error, value: 'Start date is required' });
-        } else if (dataSale.start_date === '') {
+            setError({ ...error, value: 'Value is required' });
+        } else if (error.value){
+            setError({ ...error});
+        } 
+        else if (dataSale.start_date === '') {
             hasError = true;
             setError({ ...error, start_date: 'Start date is required' });
         } else if (dataSale.end_date === '') {
