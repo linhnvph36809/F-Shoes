@@ -383,7 +383,7 @@ const AddSale = () => {
             setError({ ...error, value: 'Value is required' });
         } else if (parseInt(e.target.value) > 100) {
             setError({ ...error, value: 'Value must be less than or equal to 100' });
-        } 
+        }
         setDataSale({ ...dataSale, value: e.target.value });
     };
     const onChangeValueFixed = (e: any) => {
@@ -405,10 +405,9 @@ const AddSale = () => {
         if (!dataSale.value) {
             hasError = true;
             setError({ ...error, value: 'Value is required' });
-        } else if (error.value){
-            setError({ ...error});
-        } 
-        else if (dataSale.start_date === '') {
+        } else if (error.value) {
+            setError({ ...error });
+        } else if (dataSale.start_date === '') {
             hasError = true;
             setError({ ...error, start_date: 'Start date is required' });
         } else if (dataSale.end_date === '') {
@@ -442,12 +441,11 @@ const AddSale = () => {
             } else {
                 await createSale(dataSale);
             }
-        }else{
-            showMessageAdmin('Warning','Something is missing!Please check.','warning',5000);
+        } else {
+            showMessageAdmin('Warning', 'Something is missing!Please check.', 'warning', 5000);
         }
     };
-    
-    
+
     const optionsType = [
         { label: 'Percent', value: 'percent' },
         { label: 'Fixed', value: 'fixed' },
@@ -457,7 +455,8 @@ const AddSale = () => {
         <div className="bg-slate-50 rounded-lg p-8">
             <div className="">
                 <div>
-                    <Heading>Add Sale </Heading><BadgeCentIcon />
+                    <Heading>Add Sale </Heading>
+                    <BadgeCentIcon />
 
                     <div className="form-row my-4">
                         <span className="text-xl my-4">Name</span>

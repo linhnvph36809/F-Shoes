@@ -1,12 +1,11 @@
+import { useState } from 'react';
 import { DatePicker, Skeleton } from 'antd';
-import { Download } from 'lucide-react';
 
 import { Content } from 'antd/es/layout/layout';
 import Heading from '../components/Heading';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import { formatPrice, formatTime } from '../../../utils';
 import BrushChart from './components/BrushChart';
-import { useState } from 'react';
 import ColumnChart from './components/ColumnChart';
 import BestSellingProduct from './components/BestSellingProduct';
 
@@ -28,7 +27,7 @@ const AdminDashboard = () => {
         `/api/v1/statistics/overall?from=${dates.date_start}&to=$${dates.date_end}`,
     );
     const overall = data?.data.data;
-    const { data: chartDataCaching} = useQueryConfig(
+    const { data: chartDataCaching } = useQueryConfig(
         `statistics/data/orders/diagram/from${dates.date_start}&to=${dates.date_end}`,
         `/api/v1/statistics/data/orders/diagram?from=${dates.date_start}&to=$${dates.date_end}`,
     );
@@ -38,7 +37,7 @@ const AdminDashboard = () => {
         `statistics/revenue/year/${yearOfRevenueChart}`,
         `/api/v1/statistics/revenue/year?year=${yearOfRevenueChart}`,
     );
-    const [yearOfRevenueChart2,setYearOfRevenueChart2] = useState<number|string>(new Date().getFullYear());
+    const [yearOfRevenueChart2, setYearOfRevenueChart2] = useState<number | string>(new Date().getFullYear());
     const { data: revenueOfYearCaching2 } = useQueryConfig(
         `statistics/revenue/year/${yearOfRevenueChart2}/2`,
         `/api/v1/statistics/revenue/year?year=${yearOfRevenueChart2}`,
@@ -91,13 +90,6 @@ const AdminDashboard = () => {
                         onChange={handleChange}
                         className="active:border-[#111111] border-[#111111] hover:border-[#ccc]"
                     />
-                    <button
-                        className="flex gap-x-4 py-3 px-8 bg-primary
-                        text-white rounded-lg text-[16px] font-medium"
-                    >
-                        <Download />
-                        Export
-                    </button>
                 </div>
             </div>
             {isFetching ? (
@@ -334,21 +326,26 @@ const AdminDashboard = () => {
                 <h3 className="text-[18px] font-bold m-4 border-b-[1px]">Annual Revenue Statistics Chart</h3>
                 <div className="flex justify-end my-4">
                     <DatePicker
-                        placeholder='Select a year'
+                        placeholder="Select a year"
                         picker="year"
                         className="w-[20%] focus:border-none focus:outline-none"
                         format="YYYY"
                         onChange={onChangeYearOfRevenueStatisticsChart}
                     />
                     <DatePicker
-                        placeholder='Select a year'
+                        placeholder="Select a year"
                         picker="year"
                         className="w-[20%] focus:border-none focus:outline-none"
                         format="YYYY"
                         onChange={onChangeYearOfRevenueStatisticsChart2}
                     />
                 </div>
-                <ColumnChart data1={revenueOfYearData} year1={yearOfRevenueChart} data2={revenueOfYearData2} year2={yearOfRevenueChart2} />
+                <ColumnChart
+                    data1={revenueOfYearData}
+                    year1={yearOfRevenueChart}
+                    data2={revenueOfYearData2}
+                    year2={yearOfRevenueChart2}
+                />
             </div>
         </Content>
     );

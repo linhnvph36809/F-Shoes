@@ -37,7 +37,6 @@ const UpdateVoucher = () => {
                     loading={loading}
                 />
             )}
-            ;
         </>
     );
 };

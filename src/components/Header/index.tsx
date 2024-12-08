@@ -9,6 +9,7 @@ import useAuth from '../../hooks/useAuth.tsx';
 import { useContextClient } from '../Layouts/LayoutClient/index.tsx';
 import useQueryConfig from '../../hooks/useQueryConfig.tsx';
 import LoadingSmall from '../Loading/LoadingSmall.tsx';
+import Logo from '../Logo/index.tsx';
 
 const Header = () => {
     const [showMenu, setShowMenu] = useState<boolean>(false);
@@ -56,6 +57,21 @@ const Header = () => {
                             />
                         </svg>
                         <ul className="flex-row-center gap-x-3">
+                            <li>
+                                <Dropdown
+                                    className="hover:cursor-pointer"
+                                    overlay={
+                                        <Menu className="color-primary font-medium">
+                                            <Menu.Item key="1">Viet Nam</Menu.Item>
+                                            <Menu.Item>English</Menu.Item>
+                                        </Menu>
+                                    }
+                                    trigger={['click']}
+                                >
+                                    <p className="text-[11px] color-primary font-medium hover:opacity-70">Vỉet Nam</p>
+                                </Dropdown>
+                            </li>
+                            <li className="color-primary font-medium">|</li>
                             <li>
                                 <a href="#" className="text-[11px] color-primary font-medium hover:opacity-70">
                                     Find a Store
@@ -113,26 +129,14 @@ const Header = () => {
                     </div>
                 </div>
                 <div
-                    className={`${scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
-                        } bg-white transition-all duration-300 ease-linear`}
+                    className={`${
+                        scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
+                    } bg-white transition-all duration-300 ease-linear`}
                 >
                     <div className="container flex-row-center justify-between">
                         <div>
                             <Link to="/">
-                                <svg
-                                    width={59}
-                                    height={22}
-                                    viewBox="0 0 59 22"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        clipRule="evenodd"
-                                        d="M58.9262 0.772461L15.8854 19.0298C12.302 20.5502 9.28743 21.3087 6.85813 21.3087C4.12475 21.3087 2.13358 20.3442 0.910756 18.4184C-0.674992 15.9335 0.0181595 11.9381 2.73845 7.72033C4.35363 5.25506 6.40692 2.99251 8.40791 0.828045C7.93709 1.59313 3.78145 8.5083 8.32617 11.7648C9.22531 12.4187 10.5037 12.7391 12.0764 12.7391C13.3384 12.7391 14.7869 12.5332 16.3792 12.1179L58.9262 0.772461Z"
-                                        fill="#111111"
-                                    />
-                                </svg>
+                                <Logo />
                             </Link>
                         </div>
                         <nav>
@@ -234,8 +238,9 @@ const Header = () => {
                     <div className="absolute top-full w-full bg-white z-10">
                         <div
                             className={`w-[70%] overflow-hidden mx-auto grid grid-cols-4
-                            transition-all duration-100 ease-linear ${showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
-                                } `}
+                            transition-all duration-100 ease-linear ${
+                                showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
+                            } `}
                             onMouseLeave={() => setShowMenu(false)}
                             onMouseEnter={() => {
                                 setShowMenu(true);
