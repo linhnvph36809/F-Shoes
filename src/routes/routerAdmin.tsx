@@ -5,7 +5,7 @@ import AdminDashboard from '../pages/Admin/DashboardAdmin';
 import Discounts from '../pages/Admin/Discount';
 import UpdateSale from '../pages/Admin/Discount/UpdateSale';
 import AddSale from '../pages/Admin/Discount/AddSale';
-import DiscountList from '../pages/Admin/Discount/ListCount';
+
 import ListSale from '../pages/Admin/Discount/ListSale';
 import LoginAdmin from '../pages/Admin/Login';
 import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
@@ -35,10 +35,10 @@ import ListVouCher from '../pages/Admin/Voucher';
 import UpdateVoucher from '../pages/Admin/Voucher/UpdateVoucher';
 import UpdateAttribute from '../pages/Admin/Products/Attribute/UpdateAttribute';
 import CreateOrder from '../pages/Admin/Oder/Create';
-import ListGroups from '../pages/Admin/Groups/ListGroup';
+
 import { ACTIONS, PERMISSION } from '../constants';
 import PermissionPage from '../components/Permissions/PermissionPage';
-import AddVoucher from '../pages/Admin/Voucher/AddVoucher';
+import ListGroups from '../pages/Admin/Groups/ListGroup';
 
 const routerAdmin = [
     {
@@ -100,10 +100,6 @@ const routerAdmin = [
             {
                 path: 'listsale',
                 element: <ListSale />,
-            },
-            {
-                path: 'listcount',
-                element: <DiscountList />,
             },
             {
                 path: 'sale/update/:id?',
