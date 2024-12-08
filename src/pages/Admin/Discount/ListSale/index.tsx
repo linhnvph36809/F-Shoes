@@ -87,10 +87,9 @@ const ListSale = () => {
                     return true;
                 }
                 return false;
-            }else {
+            } else {
                 return true;
             }
-           
         });
         if (keySearch && keySearch.length > 0) {
 

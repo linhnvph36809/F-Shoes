@@ -14,8 +14,10 @@ import { BadgeCentIcon } from 'lucide-react';
 const AddSale = () => {
     const { data: productList } = useQueryConfig(`sale-list_products-add_sale_page`, `/api/products/all/summary`);
     const productListData = productList?.data?.products || [];
-    const dataSourceProductOriginList = [...productListData];
 
+
+    const dataSourceProductOriginList = JSON.parse(JSON.stringify([...productListData]));;
+    
     const [openAddProductTable, setOpenAddProductTable] = useState<boolean>(false);
     const [selectedSimpleProducts, setSelectedSimpleProducts] = useState<IProduct[]>([]);
     const [selectedVariations, setSelectedVariations] = useState<IVariation[]>([]);
@@ -383,17 +385,23 @@ const AddSale = () => {
             setError({ ...error, value: 'Value is required' });
         } else if (parseInt(e.target.value) > 100) {
             setError({ ...error, value: 'Value must be less than or equal to 100' });
-        } 
+        }else{
+            setError({ ...error, value: '' });
+        }
         setDataSale({ ...dataSale, value: e.target.value });
     };
     const onChangeValueFixed = (e: any) => {
         if (e.target.value === '') {
             setError({ ...error, value: 'Value is required' });
-        } else {
-            setDataSale({ ...dataSale, value: e.target.value });
+        } else{
+            setError({ ...error, value: '' });
         }
+        setDataSale({ ...dataSale, value: e.target.value });
     };
     const onChangeStartDate = (date: any) => {
+        if (date) {
+            setError({ ...error, start_date: '' });
+        }
         setDataSale({ ...dataSale, start_date: date.format('YYYY-MM-DD HH:mm:ss') });
     };
     const onChangeEndDate = (date: any) => {
@@ -405,10 +413,9 @@ const AddSale = () => {
         if (!dataSale.value) {
             hasError = true;
             setError({ ...error, value: 'Value is required' });
-        } else if (error.value){
-            setError({ ...error});
-        } 
-        else if (dataSale.start_date === '') {
+        } else if (error.value) {
+            setError({ ...error });
+        } else if (dataSale.start_date === '') {
             hasError = true;
             setError({ ...error, start_date: 'Start date is required' });
         } else if (dataSale.end_date === '') {
@@ -417,6 +424,7 @@ const AddSale = () => {
         } else if (dataSale.applyAll === false) {
             if (dataSourceProduct.length === 0 && dataSourceVariation.length === 0) {
                 setError({ ...error, empty: true });
+                showMessageAdmin('Warning', 'Please select a product!', 'warning', 5000);
                 hasError = true;
             }
         } else {
@@ -442,12 +450,9 @@ const AddSale = () => {
             } else {
                 await createSale(dataSale);
             }
-        }else{
-            showMessageAdmin('Warning','Something is missing!Please check.','warning',5000);
         }
     };
-    
-    
+
     const optionsType = [
         { label: 'Percent', value: 'percent' },
         { label: 'Fixed', value: 'fixed' },
@@ -457,7 +462,8 @@ const AddSale = () => {
         <div className="bg-slate-50 rounded-lg p-8">
             <div className="">
                 <div>
-                    <Heading>Add Sale </Heading><BadgeCentIcon />
+                    <Heading>Add Sale </Heading>
+                    <BadgeCentIcon />
 
                     <div className="form-row my-4">
                         <span className="text-xl my-4">Name</span>
@@ -511,7 +517,7 @@ const AddSale = () => {
                                 onChange={onChangeStartDate}
                                 className="w-full"
                                 showTime
-                                format="MM/DD/YYYY HH:mm:ss"
+                                format="YYYY/MM/DD HH:mm:ss"
                             />
                         </div>
                         {error.start_date ? <span className="text-red-600">{error.start_date}</span> : ''}
@@ -523,7 +529,7 @@ const AddSale = () => {
                                 onChange={onChangeEndDate}
                                 className="w-full"
                                 showTime
-                                format="MM/DD/YYYY HH:mm:ss"
+                                format="YYYY/MM/DD HH:mm:ss"
                             />
                         </div>
                         {error.end_date ? <span className="text-red-600">{error.end_date}</span> : ''}
@@ -620,15 +626,17 @@ const AddSale = () => {
             ) : (
                 ''
             )}
-            {loadingCreateSale ? (
-                <Button className="h-16 w-32 rounded-3xl bg-black">
-                    <LoadingSmall />
-                </Button>
-            ) : (
-                <Button className="h-16 w-32 rounded-3xl " onClick={onSubmit}>
-                    Save Sale
-                </Button>
-            )}
+            <div className='flex items-center justify-center'>
+                {loadingCreateSale ? (
+                    <Button className="h-16 w-32 rounded-3xl bg-black ">
+                        <LoadingSmall />
+                    </Button>
+                ) : (
+                    <Button className="h-16 w-32 rounded-3xl " onClick={onSubmit}>
+                        Save Sale
+                    </Button>
+                )}
+            </div>
         </div>
     );
 };
