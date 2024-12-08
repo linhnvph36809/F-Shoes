@@ -21,30 +21,6 @@ interface FormVoucherProps {
 const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherProps) => {
     const [form] = Form.useForm();
 
-    const validateDateStart = (_: any, value: Date) => {
-        const currentDate = new Date();
-        if (!value) {
-            return Promise.reject(new Error('Please select a start date and time!'));
-        }
-        if (value > currentDate) {
-            return Promise.resolve();
-        }
-        return Promise.reject(new Error('Start date must be in the future!'));
-    };
-
-    const validateDateEnd = (_: any, value: Date) => {
-        const startDate = form.getFieldValue('date_start');
-        if (!value) {
-            return Promise.reject(new Error('Please select an end date and time!'));
-        }
-        if (!startDate) {
-            return Promise.reject(new Error('Please select a start date first!'));
-        }
-        if (value > startDate) {
-            return Promise.resolve();
-        }
-        return Promise.reject(new Error('End date must be after the start date!'));
-    };
 
     const handleFinish = (values: any) => {
         onFinish({
@@ -87,7 +63,6 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                     name="date_start"
                     rules={[
                         { required: true, message: 'Please select a start date and time!' },
-                        { validator: validateDateStart },
                     ]}
                 >
                     <DatePicker format="DD/MM/YYYY HH:mm:ss" showTime className="w-full h-[56px] border-[#111111]" />
@@ -99,7 +74,6 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                     dependencies={['date_start']}
                     rules={[
                         { required: true, message: 'Please select an end date and time!' },
-                        { validator: validateDateEnd },
                     ]}
                 >
                     <DatePicker format="DD/MM/YYYY HH:mm:ss" showTime className="w-full h-[56px] border-[#111111]" />

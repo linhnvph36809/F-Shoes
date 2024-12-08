@@ -18,7 +18,11 @@ const useVoucher = () => {
             showMessageClient('Voucher Valid', '', 'success');
             setVoucher(data);
         } catch (error) {
-            console.log(error);
+            if ((error as any)?.response?.data?.message) {
+                showMessageClient((error as any).response.data.message, '', 'warning');
+            } else {
+                showMessageClient('Error', (error as any).message, 'error');
+            }
         } finally {
             setLoading(false);
         }
@@ -30,7 +34,7 @@ const useVoucher = () => {
             tokenManagerInstance('delete', `api/vouchers/forceDelete/${id}`);
             showMessageAdmin('Delete Voucher successfully', '', 'success');
         } catch (error) {
-            console.error(error);
+            showMessageClient('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }
@@ -59,7 +63,7 @@ const useVoucher = () => {
             navigate('/admin/voucher');
             showMessageAdmin('Update Voucher successfully', '', 'success');
         } catch (error) {
-            console.log(error);
+            showMessageClient('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }
@@ -70,7 +74,7 @@ const useVoucher = () => {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_VOUCHER}/${id}`);
         } catch (error) {
-            console.log(error);
+            showMessageClient('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }
@@ -81,7 +85,7 @@ const useVoucher = () => {
             setLoading(true);
             await tokenManagerInstance('post', `${API_VOUCHER}/restore/` + id);
         } catch (error) {
-            console.error(error);
+            showMessageClient('Error', (error as any).message, 'error');
         } finally {
             setLoading(false);
         }

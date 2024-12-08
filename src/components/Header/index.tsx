@@ -221,11 +221,11 @@ const Header = () => {
                             <div className="sm:w-[28px] md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
                                 <Heart className="color-primary w-[24px]" />
                             </div>
-                            <div className="sm:w-[28px] md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
-                                <Link to="/cart">
+                            <Link to="/cart">
+                                <div className="sm:w-[28px] md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
                                     <ShoppingBag className="color-primary w-[24px]" />
-                                </Link>
-                            </div>
+                                </div>
+                            </Link>
                             <div className="sm:w-[28px] md:hidden md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
                                 <MenuLucide className="color-primary w-[24px]" />
                             </div>
