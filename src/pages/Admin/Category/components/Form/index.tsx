@@ -1,5 +1,5 @@
 import { Form, Modal, Select } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import ButtonPrimary from '../../../../../components/Button';
 import '../../style.scss';
@@ -13,6 +13,7 @@ const FormCategory = ({
     setCateUpdate,
 }: any) => {
     const [form] = Form.useForm();
+    const [isLoading, setIsLoading] = useState(false); // State quản lý trạng thái loading
 
     useEffect(() => {
         if (initialValues) {
@@ -23,13 +24,17 @@ const FormCategory = ({
         }
     }, [initialValues, form]);
 
-    const handleFinish = () => {
+    const handleFinish = async () => {
+        setIsLoading(true); // Bắt đầu loading
         const newCategory = {
             name: form.getFieldValue('name'),
             parents: form.getFieldValue('parent'),
         };
 
-        onFinish(newCategory);
+        // Gọi hàm onFinish (có thể là API) và đợi xử lý xong
+        await onFinish(newCategory);
+
+        setIsLoading(false); // Kết thúc loading sau khi dữ liệu được xử lý
         setIsModalVisible(false); // Đóng modal sau khi submit
     };
 
@@ -106,6 +111,7 @@ const FormCategory = ({
                                 height="h-[56px]"
                                 htmlType="submit"
                                 className="bg-blue-500 text-white rounded hover:bg-blue-600"
+                                loading={isLoading} // Thêm thuộc tính loading
                             >
                                 Submit
                             </ButtonPrimary>

@@ -17,7 +17,10 @@ const useCategory = () => {
     const getAllCategory = async () => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('get', API_CATEGORY + '?include=parents,products&times=category');
+            const { data } = await tokenManagerInstance(
+                'get',
+                API_CATEGORY + '?include=parents,products&times=category',
+            );
             setCategories(data.categories.data);
         } catch (error) {
             console.log(error);
@@ -110,14 +113,16 @@ const useCategory = () => {
         }
     };
 
-    const deleteProductFromCategory = async (categoryId: any, productIds: (string | number)[]) => {
+    const deleteProductFromCategory = async (categoryId: any, productId: string | number | (string | number)[]) => {
         try {
-            if (!productIds?.length) throw new Error('Product IDs must not be empty.');
+            // Chuyển productId thành mảng nếu là giá trị đơn lẻ
+            const productIds = Array.isArray(productId) ? productId : [productId];
+
+            if (!productIds.length) throw new Error('Product IDs must not be empty.');
 
             const response = await tokenManagerInstance('delete', `${API_CATEGORY}/${categoryId}/products`, {
                 data: { products: productIds },
             });
-
             const message =
                 response.status === 200 || response.status === 204
                     ? 'Products deleted successfully!'
@@ -127,6 +132,7 @@ const useCategory = () => {
             showMessageAdmin('Error', error.response?.data?.message || 'Something went wrong.', 'error');
         }
     };
+
     const getCategoryById = async (id: number | string) => {
         try {
             setLoading(true);
