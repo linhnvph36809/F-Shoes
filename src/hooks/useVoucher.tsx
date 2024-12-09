@@ -21,8 +21,10 @@ const useVoucher = () => {
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
                 showMessageClient((error as any).response.data.message, '', 'warning');
+                setVoucher([]);
             } else {
                 showMessageClient('Error', (error as any).message, 'error');
+                setVoucher([]);
             }
         } finally {
             setLoading(false);
