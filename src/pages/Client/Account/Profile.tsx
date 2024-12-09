@@ -39,7 +39,7 @@ const beforeUpload = (file: FileType) => {
 const ProfilePage = () => {
     const { cookies } = useCookiesConfig(COOKIE_USER);
     const userNameCookie = cookies?.userName;
-    const { data, isFetching,refetch } = useQueryConfig(
+    const { data, isFetching, refetch } = useQueryConfig(
         'user-profile',
         'api/auth/me?include=profile,favoriteProducts&times=user',
         {
@@ -85,7 +85,7 @@ const ProfilePage = () => {
             return;
         }
         if (info.file.status === 'done') {
-         
+
             getBase64(info.file.originFileObj as FileType, (url) => {
                 setLoadingUploadImage(false);
                 setImageUrl(url);
@@ -96,16 +96,16 @@ const ProfilePage = () => {
     // Upload avatar
     const uploadButton = (
         <button style={{ border: 0, background: 'none' }} type="button">
-          {loadingUploadImage ? <LoadingOutlined /> : <PlusOutlined />}
-          <div style={{ marginTop: 8 }}>Upload</div>
+            {loadingUploadImage ? <LoadingOutlined /> : <PlusOutlined />}
+            <div style={{ marginTop: 8 }}>Upload</div>
         </button>
-      );
+    );
     return (
         <>
             <div className="bg-white w-full p-6 mt-0 rounded-lg shadow-md relative">
                 <div className="flex items-center">
                     <div className="w-40 h-40 bg-gray-200 rounded-full avatar-image">
-                        <div className={`absolute ${loadingUploadImage ? '':'opacity-0'} upload-avatar`}>
+                        <div className={`absolute ${loadingUploadImage ? '' : 'opacity-0'} upload-avatar`}>
                             <Flex gap="middle" wrap>
                                 <Upload
                                     name="avatar"
@@ -121,7 +121,7 @@ const ProfilePage = () => {
                                     }
                                     headers={{
                                         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                                      }}
+                                    }}
                                 >
                                     {imageUrl ? (
                                         ''
@@ -136,7 +136,7 @@ const ProfilePage = () => {
                             src={userD?.avatar_url}
                             alt=""
                         />
-                       
+
                     </div>
                     <div className="ml-8">
                         <Heading title={userD.name ? userD.name : userNameCookie} />
@@ -169,14 +169,14 @@ const ProfilePage = () => {
                                                         <h5 className="text-[#707072] text-15px">
                                                             {item?.categories
                                                                 ? item?.categories.map((cat, index, array) => {
-                                                                      if (array.length < 2) {
-                                                                          return ' ' + cat?.name;
-                                                                      } else {
-                                                                          if (index == 2) return;
-                                                                          if (index == 1) return ' ' + cat?.name;
-                                                                          return ' ' + cat?.name + ',';
-                                                                      }
-                                                                  })
+                                                                    if (array.length < 2) {
+                                                                        return ' ' + cat?.name;
+                                                                    } else {
+                                                                        if (index == 2) return;
+                                                                        if (index == 1) return ' ' + cat?.name;
+                                                                        return ' ' + cat?.name + ',';
+                                                                    }
+                                                                })
                                                                 : ' '}
                                                         </h5>
                                                         <h3 className="text-15px color-primary font-medium mt-3">

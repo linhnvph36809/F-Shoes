@@ -2,6 +2,7 @@ import { Dropdown, Input, Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import { Heart, Menu as MenuLucide, Search, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import HeaderCategory from './HeaderCategory.tsx';
 import { ICategory } from '../../interfaces/ICategory.ts';
@@ -10,6 +11,8 @@ import { useContextClient } from '../Layouts/LayoutClient/index.tsx';
 import useQueryConfig from '../../hooks/useQueryConfig.tsx';
 import LoadingSmall from '../Loading/LoadingSmall.tsx';
 import Logo from '../Logo/index.tsx';
+import { useContextGlobal } from '../../contexts/index.tsx';
+import { LANGUAGE_EN, LANGUAGE_VI } from '../../constants/index.ts';
 
 const Header = () => {
     const [showMenu, setShowMenu] = useState<boolean>(false);
@@ -21,6 +24,7 @@ const Header = () => {
     const [headCategories, setHeadCategories] = useState<ICategory[][]>([]);
     const { logout } = useAuth();
     const { userName } = useContextClient();
+    const { locale, changeLanguage } = useContextGlobal();
 
     const { data: dataCategories, isFetching: fetchingData } = useQueryConfig(
         'header-list-categories',
@@ -62,31 +66,34 @@ const Header = () => {
                                     className="hover:cursor-pointer"
                                     overlay={
                                         <Menu className="color-primary font-medium">
-                                            <Menu.Item key="1">Viet Nam</Menu.Item>
-                                            <Menu.Item>English</Menu.Item>
+                                            <Menu.Item onClick={() => changeLanguage(LANGUAGE_VI)}>Viet Nam</Menu.Item>
+                                            <Menu.Item onClick={() => changeLanguage(LANGUAGE_EN)}>English</Menu.Item>
                                         </Menu>
                                     }
                                     trigger={['click']}
                                 >
-                                    <p className="text-[11px] color-primary font-medium hover:opacity-70">Vỉet Nam</p>
+                                    <p className="text-[11px] color-primary font-medium hover:opacity-70">
+                                        {locale === LANGUAGE_VI ? 'Viet Nam' : 'English'}
+                                    </p>
                                 </Dropdown>
                             </li>
                             <li className="color-primary font-medium">|</li>
                             <li>
                                 <a href="#" className="text-[11px] color-primary font-medium hover:opacity-70">
-                                    Find a Store
+                                    <FormattedMessage id="header.findAStore" />
                                 </a>
                             </li>
                             <li className="color-primary font-medium">|</li>
                             <li>
                                 <a href="#" className="text-[11px] color-primary font-medium hover:opacity-70">
-                                    Help
+                                    <FormattedMessage id="header.help" />
                                 </a>
                             </li>
                             <li className="color-primary font-medium">|</li>
                             <li>
                                 <a href="#" className="text-[11px] color-primary font-medium hover:opacity-70">
-                                    Join Us
+
+                                    <FormattedMessage id="header.joinUs" />
                                 </a>
                             </li>
                             <li className="color-primary font-medium">|</li>
@@ -129,9 +136,8 @@ const Header = () => {
                     </div>
                 </div>
                 <div
-                    className={`${
-                        scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
-                    } bg-white transition-all duration-300 ease-linear`}
+                    className={`${scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
+                        } bg-white transition-all duration-300 ease-linear`}
                 >
                     <div className="container flex-row-center justify-between">
                         <div>
@@ -238,9 +244,8 @@ const Header = () => {
                     <div className="absolute top-full w-full bg-white z-10">
                         <div
                             className={`w-[70%] overflow-hidden mx-auto grid grid-cols-4
-                            transition-all duration-100 ease-linear ${
-                                showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
-                            } `}
+                            transition-all duration-100 ease-linear ${showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
+                                } `}
                             onMouseLeave={() => setShowMenu(false)}
                             onMouseEnter={() => {
                                 setShowMenu(true);

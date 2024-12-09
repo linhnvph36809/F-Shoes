@@ -32,6 +32,8 @@ const OrderDetail = () => {
 
     const order: IOrder = data?.data;
 
+    console.log(order);
+
     const handleCanCelOrder = (id: string) => {
         if (id) {
             showModal();
@@ -48,9 +50,9 @@ const OrderDetail = () => {
     };
     const status:
         | {
-            className: string;
-            text: string;
-        }
+              className: string;
+              text: string;
+          }
         | undefined = statusString(order?.status);
 
     return (

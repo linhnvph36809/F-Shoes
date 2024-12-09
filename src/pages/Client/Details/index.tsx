@@ -8,7 +8,6 @@ import { LoadingOutlined } from '@ant-design/icons';
 import SlidesImage from './SlidesImage';
 import SlidesScroll from '../../../components/SlidesScroll';
 import Heading from '../HomePages/components/Heading';
-import useProductDetail from '../../../hooks/page/useDetail.tsx';
 import Price from './Price.tsx';
 import { IImage } from '../../../interfaces/IImage.ts';
 import { formatPrice } from '../../../utils';
@@ -31,6 +30,7 @@ const Detail = () => {
     }
 
     const { data, isFetching } = useQueryConfig(`product-detail-${id}`, `/api/product/detail/${id}`);
+    const { refetch } = useQueryConfig('user-profile', 'api/auth/me?include=profile,favoriteProducts&times=user');
 
     const products = data?.data;
     const { user } = useContextGlobal();
@@ -63,6 +63,11 @@ const Detail = () => {
         });
     };
 
+    const handleAddFavourite = (id: number) => {
+        postWishlist(id);
+        refetch();
+    };
+
     const handleAddCart = () => {
         let datas;
         if (productD.variations.length) {
@@ -75,7 +80,7 @@ const Detail = () => {
         } else {
             datas = {
                 user_id: user.id,
-                product_id: productD.id,
+                product_id: productD?.id,
                 quantity: 1,
                 product_variation_id: null,
             };
@@ -142,6 +147,7 @@ const Detail = () => {
                                                       Select {item.name}
                                                   </p>
                                               </div>
+
                                               <Radio.Group onChange={(e) => onChange(e, index)}>
                                                   <div className="grid md:grid-cols-5 gap-5">
                                                       {item?.values.map((value: any, index: number) => (
@@ -166,19 +172,23 @@ const Detail = () => {
                             )}
                             <div className="my-20">
                                 <button
-                                    onClick={handleAddCart}
+                                    onClick={
+                                        productD?.variations?.length == 0 || (variant && variant?.stock_qty)
+                                            ? handleAddCart
+                                            : () => {}
+                                    }
                                     className={`${
                                         productD?.variations?.length == 0 || (variant && variant?.stock_qty)
                                             ? 'bg-primary'
-                                            : 'bg-gray-200'
-                                    }       text-16px font-medium h-[58px] text-white
-                                            rounded-[30px] w-full hover-opacity transition-global`}
+                                            : 'bg-[#f4f4f4] cursor-default'
+                                    }           text-16px font-medium h-[58px] text-white
+                                                rounded-[30px] w-full hover-opacity transition-global`}
                                 >
                                     {loadingAddCart ? <LoadingSmall /> : 'Add to Bag'}
                                 </button>
 
                                 <button
-                                    onClick={() => postWishlist(productD.id)}
+                                    onClick={() => handleAddFavourite(productD.id)}
                                     className="h-[58px] color-primary border
                                     hover:border-[#111111] rounded-[30px] w-full
                                     transition-global mt-5 flex-row-center justify-center gap-x-2"
@@ -196,18 +206,6 @@ const Detail = () => {
                                 </button>
                             </div>
                             <div>
-                                {/*<p className="color-primary text-16px">*/}
-                                {/*    The Nike Sunray Protect 2 Sandals deliver total toe coverage and outsole traction that's*/}
-                                {/*    perfect for outdoor play. Hook-and-loop straps make on and off easy, while openings on*/}
-                                {/*    the top of the shoe promote airflow when little feet get hot.*/}
-                                {/*</p>*/}
-                                {/*<ul className="list-disc list-outside pl-10 my-8">*/}
-                                {/*    <li className="color-primary text-16px">Colour Shown: Black/White</li>*/}
-                                {/*    <li className="color-primary text-16px">Style: 943827-001</li>*/}
-                                {/*    <li className="color-primary text-16px">*/}
-                                {/*        Country/Region of Origin: Indonesia, Vietnam*/}
-                                {/*    </li>*/}
-                                {/*</ul>*/}
                                 <div className="text-[18px] mb-20">{productD?.short_description}</div>
                                 <p className="color-primary text-16px font-medium underline">View Product Details</p>
                                 <Reviews productId={productD?.id} />

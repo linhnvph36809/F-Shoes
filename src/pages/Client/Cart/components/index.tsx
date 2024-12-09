@@ -4,16 +4,26 @@ import { DeleteOutlined, HeartOutlined } from '@ant-design/icons';
 import useCart from '../../../../hooks/useCart';
 import useWishlist from '../../../../hooks/useWishlist';
 import { formatPrice } from '../../../../utils';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
 
 const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
     const { putCart } = useCart();
     const { postWishlist } = useWishlist();
+    const { refetch: refetchWishlist } = useQueryConfig(
+        'user-profile',
+        'api/auth/me?include=profile,favoriteProducts&times=user',
+    );
 
     const onChange = (id: string | number, value: any) => {
         putCart(id, {
             quantity: +value,
         });
         refetch();
+    };
+
+    const handleAddFavourite = (id: number) => {
+        postWishlist(id);
+        refetchWishlist();
     };
 
     const handleSelectCart = (e: any) => {
@@ -72,7 +82,7 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
                         </div>
                     </div>
                     <div className="flex items-center space-x-2 mt-4">
-                        <Button icon={<HeartOutlined />} onClick={() => postWishlist(product.id)} />
+                        <Button icon={<HeartOutlined />} onClick={() => handleAddFavourite(product.id)} />
                         <Button icon={<DeleteOutlined />} onClick={() => handleDeleteCart(product.id)} />
                     </div>
                 </div>
@@ -83,8 +93,7 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
                 </p>
                 {product.product_variation.price || product?.price ? (
                     <p>
-                        {formatPrice(product.product_variation.sale_price) ||
-                            formatPrice(product?.product?.sale_price)}
+                        {formatPrice(product.product_variation.sale_price) || formatPrice(product?.product?.sale_price)}
                         đ
                     </p>
                 ) : (

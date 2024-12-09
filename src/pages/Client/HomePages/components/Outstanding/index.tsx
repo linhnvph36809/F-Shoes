@@ -1,10 +1,12 @@
+import { ReactNode } from "react";
+
 const Outstanding = ({
     category,
     title,
     description,
     //path,
 }: {
-    category: string;
+    category: string | ReactNode;
     title: string;
     description: string;
     path?: string;
