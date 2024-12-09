@@ -15,8 +15,7 @@ const AddSale = () => {
     const { data: productList } = useQueryConfig(`sale-list_products-add_sale_page`, `/api/products/all/summary`);
     const productListData = productList?.data?.products || [];
 
-
-    const dataSourceProductOriginList = JSON.parse(JSON.stringify([...productListData]));;
+    const dataSourceProductOriginList = JSON.parse(JSON.stringify([...productListData]));
 
     const [openAddProductTable, setOpenAddProductTable] = useState<boolean>(false);
     const [selectedSimpleProducts, setSelectedSimpleProducts] = useState<IProduct[]>([]);
@@ -286,8 +285,9 @@ const AddSale = () => {
                         <Input
                             onChange={(e) => onChangeQuantityProduct(e, record)}
                             type="number"
-                            className={`${!stock_qty ? 'border-red-400' : 'border-none'
-                                } bg-slate-100 box-border px-6 rounded-2xl `}
+                            className={`${
+                                !stock_qty ? 'border-red-400' : 'border-none'
+                            } bg-slate-100 box-border px-6 rounded-2xl `}
                             value={stock_qty}
                             min={1}
                             max={stock_qty}
@@ -625,7 +625,7 @@ const AddSale = () => {
             ) : (
                 ''
             )}
-            <div className='flex items-center justify-center'>
+            <div className="flex items-center justify-center">
                 {loadingCreateSale ? (
                     <Button className="h-16 w-32 rounded-3xl bg-black ">
                         <LoadingSmall />

@@ -33,20 +33,20 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
     let validateType: any = [];
 
     if (typeVoucher === initTypeVoucher.percentage) {
-        validateType = [...validateType,
-        {
-            validator: (_: any, value: number) =>
-                value && value > 100
-                    ? Promise.reject(new Error('Discount must not exceed 100'))
-                    : Promise.resolve(),
-        },
+        validateType = [
+            ...validateType,
+            {
+                validator: (_: any, value: number) =>
+                    value && value > 100
+                        ? Promise.reject(new Error('Discount must not exceed 100'))
+                        : Promise.resolve(),
+            },
         ];
     }
 
     const handleChangeType = (type: string) => {
         setTypeVoucher(type);
-        form.setFieldValue('discount', 1)
-    }
+    };
 
     const handleFinish = (values: any) => {
         onFinish({
@@ -54,6 +54,7 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
             date_start: `${values?.date_start?.$y}-${values?.date_start?.$M + 1}-${values?.date_start?.$D}`,
             date_end: `${values?.date_end?.$y}-${values?.date_end?.$M + 1}-${values?.date_end?.$D}`,
             status: 1,
+            type: typeVoucher
         });
         form.resetFields();
     };
@@ -90,21 +91,46 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                                     ? Promise.reject(new Error('Discount must be at least 1'))
                                     : Promise.resolve(),
                         },
-                        ...validateType
+                        ...validateType,
                     ]}
                 >
                     <div className="relative">
                         <div className="absolute mb-3 flex gap-x-2 z-10 right-5 top-5">
-                            <Button className={`${typeVoucher == initTypeVoucher.fixed ? "bg-[#111111] text-white" : "bg-white"}`} onClick={() => handleChangeType(initTypeVoucher.fixed)}>Fixed</Button>
-                            <Button className={`${typeVoucher == initTypeVoucher.percentage ? "bg-[#111111] text-white" : "bg-white"}`} onClick={() => handleChangeType(initTypeVoucher.percentage)}>Percentage</Button>
+                            <Button
+                                className={`${typeVoucher == initTypeVoucher.fixed ? 'bg-[#111111] text-white' : 'bg-white'
+                                    }`}
+                                onClick={() => handleChangeType(initTypeVoucher.fixed)}
+                            >
+                                Fixed
+                            </Button>
+                            <Button
+                                className={`${typeVoucher == initTypeVoucher.percentage ? 'bg-[#111111] text-white' : 'bg-white'
+                                    }`}
+                                onClick={() => handleChangeType(initTypeVoucher.percentage)}
+                            >
+                                Percentage
+                            </Button>
                         </div>
-                        <InputPrimary
-                            placeholder="Discount"
-                            width="100%"
-                            height="h-[56px]"
-                            margin="mb-0"
-                            type="number"
-                        />
+                        {typeVoucher === initTypeVoucher.fixed && (
+                            <InputPrimary
+                                placeholder="Discount"
+                                width="100%"
+                                height="h-[56px]"
+                                margin="mb-0"
+                                type="number"
+                                defaultValue={initialValues?.discount}
+                            />
+                        )}
+                        {typeVoucher === initTypeVoucher.percentage && (
+                            <InputPrimary
+                                placeholder="Discount"
+                                width="100%"
+                                height="h-[56px]"
+                                margin="mb-0"
+                                type="number"
+                                defaultValue={initialValues?.discount}
+                            />
+                        )}
                     </div>
                 </Form.Item>
 
@@ -120,7 +146,23 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                     label="Select Date End"
                     name="date_end"
                     dependencies={['date_start']}
-                    rules={[{ required: true, message: 'Please select an end date and time!' }]}
+                    rules={[
+                        { required: true, message: 'Please select an end date and time!' },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                const startDate = getFieldValue('date_start');
+                                if (!value || !startDate) {
+                                    return Promise.resolve();
+                                }
+                                if (value.isBefore(startDate)) {
+                                    return Promise.reject(
+                                        new Error('End date must be greater than or equal to start date!'),
+                                    );
+                                }
+                                return Promise.resolve();
+                            },
+                        }),
+                    ]}
                 >
                     <DatePicker format="DD/MM/YYYY HH:mm:ss" showTime className="w-full h-[56px] border-[#111111]" />
                 </Form.Item>
@@ -143,7 +185,7 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                 </Form.Item>
             </div>
             <Form.Item className="mt-20">
-                <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit" loading={loading}>
+                <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
                     {loading ? <LoadingSmall /> : 'Submit'}
                 </ButtonPrimary>
             </Form.Item>

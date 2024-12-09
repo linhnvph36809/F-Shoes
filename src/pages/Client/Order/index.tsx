@@ -1,5 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Form, Divider, Typography, Row, Col, Card, Progress, Radio, Select, ConfigProvider } from 'antd';
+import {
+    Form,
+    Divider,
+    Typography,
+    Row,
+    Col,
+    Card,
+    Progress,
+    Radio,
+    Select,
+    ConfigProvider,
+    Button,
+    Input,
+} from 'antd';
 import { Navigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
 
@@ -34,8 +47,6 @@ const Order = () => {
     const { user } = useContextGlobal();
     const { handleSetCookie } = useCookiesConfig('order');
 
-    console.log(user);
-
     const [province, setProvince] = useState<any>('');
     const [districtId, setDistrictId] = useState<number | null>(null);
     const [wardCode, setWardCode] = useState<string | null>(null);
@@ -44,15 +55,23 @@ const Order = () => {
     const handleCityChange = (cityId: number) => {
         getAllDistrict(cityId);
         setProvince(provinces.find((province: any) => province.ProvinceID == cityId).ProvinceName);
+        form.setFieldsValue({
+            shipping_method: null,
+            ward: null,
+            district: null,
+        });
     };
 
     const handleDistrictChange = (districtId: number) => {
         getAllWard(districtId);
         setDistrictId(districtId);
+        form.setFieldValue('shipping_method', null);
+        form.setFieldValue('shipping_method', null);
     };
 
     const handleWardChange = (code: string) => {
         setWardCode(code);
+        form.setFieldValue('shipping_method', null);
     };
 
     const handleGetVoucher = () => {
@@ -74,6 +93,23 @@ const Order = () => {
             return sum;
         }, 0);
     }, [carts, user]);
+
+    const totalAmount = useMemo(() => {
+        let sum = 0;
+        if (handleTotalPrice >= FREE_SHIP) {
+            sum = handleTotalPrice;
+        } else {
+            sum = handleTotalPrice + (fee.total || 0);
+        }
+
+        if (voucher?.type && voucher?.type === 'fixed') {
+            return sum - (+voucher?.discount || 0);
+        } else if (voucher?.type && voucher?.type === 'percentage') {
+            return sum - (sum * +voucher.discount) / 100;
+        } else {
+            return sum;
+        }
+    }, [handleTotalPrice, fee, voucher]);
 
     const handleShippingChange = (_: string | number) => {
         if (districtId && wardCode) {
@@ -105,13 +141,6 @@ const Order = () => {
             shipping_method = 'Saving shipping';
         }
 
-        const total_amount =
-            fee?.total && handleTotalPrice <= FREE_SHIP
-                ? voucher?.discount
-                    ? handleTotalPrice + fee.total - ((handleTotalPrice + fee.total) * +voucher.discount) / 100
-                    : handleTotalPrice + fee.total
-                : handleTotalPrice;
-
         const order_details = carts?.map((cart: any) => {
             if (cart?.product_variation) {
                 return {
@@ -140,12 +169,12 @@ const Order = () => {
 
         const newValues = {
             user_id: user.id,
-            total_amount,
+            total_amount: totalAmount,
             payment_method: 'cash_on_delivery',
             payment_status: 'not_yet_paid',
             shipping_method,
             phone: value.phone,
-            shipping_cost: total_amount >= FREE_SHIP ? '0' : fee?.total,
+            shipping_cost: handleTotalPrice >= FREE_SHIP ? '0' : fee?.total,
             tax_amount: null,
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
@@ -158,7 +187,7 @@ const Order = () => {
             status: 1,
             note: value.note,
             order_details,
-            amount_collected: value.payment_method !== 'cash on delivery' ? total_amount : 0,
+            amount_collected: value.payment_method !== 'cash on delivery' ? totalAmount : 0,
             cart_ids: orderId,
         };
 
@@ -173,7 +202,7 @@ const Order = () => {
         } else if (value.payment_method == 'vnpay') {
             postVNPAY(
                 {
-                    total: Math.round(total_amount),
+                    total: Math.round(totalAmount),
                     url: `${window.location.origin}/order-vnpay-complete`,
                 },
                 newValues,
@@ -181,7 +210,7 @@ const Order = () => {
         } else if (value.payment_method == 'momo') {
             postMomo(
                 {
-                    total: Math.round(total_amount),
+                    total: Math.round(totalAmount),
                     url: `${window.location.origin}/order-momo-complete`,
                 },
                 newValues,
@@ -189,14 +218,17 @@ const Order = () => {
         }
     };
 
-    if (carts && !carts.length) {
-        return <Navigate to="/" />;
-    }
+
 
     useEffect(() => {
         form.setFieldValue('receiver_full_name', user?.name);
         form.setFieldValue('receiver_email', user?.email);
     }, [user]);
+
+    if (carts && !carts.length) {
+        return <Navigate to="/" />;
+    }
+
 
     return (
         <>
@@ -308,21 +340,36 @@ const Order = () => {
                                             rows={5}
                                         />
                                     </Form.Item>
-
-                                    <Form.Item
-                                        label="Shipping method"
-                                        name="shipping_method"
-                                        rules={[{ required: true, message: 'Please select a shipping method' }]}
+                                    <ConfigProvider
+                                        theme={{
+                                            components: {
+                                                Radio: {
+                                                    colorPrimary: '#111111',
+                                                },
+                                            },
+                                        }}
                                     >
-                                        <Radio.Group
-                                            onChange={(e) => handleShippingChange(e.target.value)}
-                                            disabled={!wardCode}
+                                        <Form.Item
+                                            label="Shipping method"
+                                            name="shipping_method"
+                                            rules={[{ required: true, message: 'Please select a shipping method' }]}
                                         >
-                                            <Radio value={1}>Express Shipping</Radio>
-                                            <Radio value={2}>Standard shipping</Radio>
-                                            <Radio value={3}>Saving shipping</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
+                                            <Radio.Group
+                                                onChange={(e) => handleShippingChange(e.target.value)}
+                                                disabled={!wardCode}
+                                            >
+                                                <Radio className="font-medium" value={1}>
+                                                    Express Shipping
+                                                </Radio>
+                                                <Radio className="font-medium" value={2}>
+                                                    Standard shipping
+                                                </Radio>
+                                                <Radio className="font-medium" value={3}>
+                                                    Saving shipping
+                                                </Radio>
+                                            </Radio.Group>
+                                        </Form.Item>
+                                    </ConfigProvider>
                                 </div>
                                 {fee?.total ? (
                                     <div
@@ -347,7 +394,7 @@ const Order = () => {
                                                 Shipment One
                                             </Text>
                                             <Text style={{ fontSize: '14px', color: '#555' }}>
-                                                Arrives Mon, Nov 4 - Mon, Nov 11
+                                                Pick up available from Monday to Saturday every week.
                                             </Text>
                                         </div>
 
@@ -368,7 +415,33 @@ const Order = () => {
                             <div style={{ width: '100%', maxWidth: '800px' }}>
                                 <Card bordered={false}>
                                     <Title level={3}>Order Summary</Title>
-
+                                    <div className="flex items-center justify-end gap-x-4 mb-10">
+                                        <div>
+                                            <ConfigProvider
+                                                theme={{
+                                                    components: {
+                                                        Input: {
+                                                            hoverBorderColor: '#ccc',
+                                                            activeBorderColor: '#111111',
+                                                            activeShadow: '0 0 1px #111111',
+                                                        },
+                                                    },
+                                                }}
+                                            >
+                                                <Input
+                                                    value={code}
+                                                    placeholder="Voucher code"
+                                                    className="w-[150px]"
+                                                    onChange={(e: any) => setCode(e.target.value)}
+                                                />
+                                            </ConfigProvider>
+                                        </div>
+                                        <div>
+                                            <Button className="transition-global" onClick={handleGetVoucher}>
+                                                {loadingVoucher ? <LoadingSmall /> : 'Get'}
+                                            </Button>
+                                        </div>
+                                    </div>
                                     <div
                                         style={{
                                             display: 'flex',
@@ -411,7 +484,17 @@ const Order = () => {
                                         >
                                             <Text className="color-primary font-medium">Voucher</Text>
                                             <Text className="color-primary font-medium">
-                                                -{formatPrice((handleTotalPrice * +voucher.discount) / 100)}đ
+                                                -
+                                                {formatPrice(
+                                                    voucher.type == 'fixed'
+                                                        ? voucher.discount
+                                                        : ((handleTotalPrice >= FREE_SHIP
+                                                            ? handleTotalPrice
+                                                            : handleTotalPrice + (fee?.total || 0)) *
+                                                            +voucher.discount) /
+                                                        100,
+                                                )}
+                                                đ
                                             </Text>
                                         </div>
                                     ) : (
@@ -445,16 +528,7 @@ const Order = () => {
                                     >
                                         <Text className="color-primary font-medium text-[20px]">Total</Text>
                                         <Text className="color-primary font-medium text-[20px]">
-                                            {formatPrice(
-                                                fee?.total && handleTotalPrice <= FREE_SHIP
-                                                    ? voucher?.discount
-                                                        ? handleTotalPrice +
-                                                        fee.total -
-                                                        ((handleTotalPrice + fee.total) * +voucher.discount) / 100
-                                                        : handleTotalPrice + fee.total
-                                                    : handleTotalPrice,
-                                            )}
-                                            đ
+                                            {formatPrice(totalAmount)}đ
                                         </Text>
                                     </div>
 
@@ -501,27 +575,7 @@ const Order = () => {
                                             </div>
                                         </div>
                                     ))}
-                                    <div className="flex items-center justify-start gap-x-4 mt-10">
-                                        <div>
-                                            <InputPrimary
-                                                width={'w-[200px]'}
-                                                height={'h-[40px]'}
-                                                margin="mb-0"
-                                                value={code}
-                                                placeholder="Voucher"
-                                                onChange={(e: any) => setCode(e.target.value)}
-                                            />
-                                        </div>
-                                        <div>
-                                            <ButtonPrimary
-                                                width="w-[100px]"
-                                                height={'h-[40px]'}
-                                                onClick={handleGetVoucher}
-                                            >
-                                                {loadingVoucher ? <LoadingSmall /> : 'Submit'}
-                                            </ButtonPrimary>
-                                        </div>
-                                    </div>
+
                                     <div className="mt-10">
                                         <Title level={3}>Payment</Title>
                                         <div>
