@@ -42,3 +42,6 @@ export const STATUS_ORDER = [
 
 export const FREE_SHIP = 1000000;
 export const STREAM_SALE_LIST_URL = 'http://localhost:8000/api/sales/stream?column=id&sort=desc';
+
+export const LANGUAGE_EN = 'en' ;
+export const LANGUAGE_VI = 'vi' ;
