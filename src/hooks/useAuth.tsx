@@ -1,12 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { tokenManagerInstance } from '../api';
-import { useNavigate } from 'react-router-dom';
 import useCookiesConfig from './useCookiesConfig';
-import { COOKIE_USER } from '../constants';
+import { COOKIE_USER, TOKENS } from '../constants';
 import { useContextGlobal } from '../contexts';
 import { useContextClient } from '../components/Layouts/LayoutClient';
 import { showMessageClient } from '../utils/messages';
+import { handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
 
 const API_CHECK_EMAIL = '/api/check/email';
 
@@ -44,10 +45,10 @@ const useAuth = () => {
             setLoading(true);
             const { data } = await tokenManagerInstance('post', `/api/login`, user);
             if (data?.access_token && data?.refresh_token) {
-                localStorage.setItem('accessToken', data.access_token);
-                localStorage.setItem('refreshToken', data.refresh_token);
-                localStorage.setItem('userName', data.user.name);
-                localStorage.setItem('userId', data.user.id);
+                handleSetLocalStorage(TOKENS.ACCESS_TOKEN, data.access_token);
+                handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
+                handleSetLocalStorage('userName', data.user.name);
+                handleSetLocalStorage('userId', data.user.id);
             }
             setUserGlobal(data.user);
             navigate('/');
@@ -67,10 +68,10 @@ const useAuth = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `/api/logout`, user);
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-            localStorage.removeItem('userName');
-            localStorage.removeItem('userId');
+            handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
+            handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
+            handleRemoveLocalStorage('userName');
+            handleRemoveLocalStorage('userId');
             navigate('/');
             setUserGlobal({});
             setUserName('');
@@ -88,8 +89,8 @@ const useAuth = () => {
             setLoading(true);
             const { data } = await tokenManagerInstance('post', `/api/login`, user);
             if (data?.access_token && data?.refresh_token) {
-                localStorage.setItem('accessToken', data.access_token);
-                localStorage.setItem('refreshToken', data.refresh_token);
+                handleSetLocalStorage(TOKENS.ACCESS_TOKEN, data.access_token);
+                handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
                 handleSetCookie('adminName', data.user.name, new Date(Date.now() + 24 * 60 * 60 * 1000));
                 handleSetCookie('adminId', data.user.id, new Date(Date.now() + 24 * 60 * 60 * 1000));
             }
@@ -108,10 +109,10 @@ const useAuth = () => {
             setLoading(true);
             const { data } = await tokenManagerInstance('post', `/api/register`, user);
             if (data?.access_token && data?.refresh_token) {
-                localStorage.setItem('accessToken', data.access_token);
-                localStorage.setItem('refreshToken', data.refresh_token);
-                localStorage.setItem('userName', data.user.name);
-                localStorage.setItem('userId', data.user.id);
+                handleSetLocalStorage(TOKENS.ACCESS_TOKEN, data.access_token);
+                handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
+                handleSetLocalStorage('userName', data.user.name);
+                handleSetLocalStorage('userId', data.user.id);
                 setUserGlobal(data.user);
                 navigate('/');
                 showMessageClient('Register Successfuly', '', 'success');

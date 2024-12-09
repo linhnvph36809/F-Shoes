@@ -37,7 +37,6 @@ const HomePage = () => {
                     category={<FormattedMessage id="body.lifestyleRunningShoes" />}
                     description="Meet the latest collection of retro running inspired shoes.The unlikely heroes of your easiest styling hack."
                 />
-
                 <div className="my-20">
                     <div>
                         <Heading title="Trending This Week" />
