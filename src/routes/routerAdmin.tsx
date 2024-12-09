@@ -40,7 +40,7 @@ import { ACTIONS, PERMISSION } from '../constants';
 import PermissionPage from '../components/Permissions/PermissionPage';
 import ListGroups from '../pages/Admin/Groups/ListGroup';
 import AddVoucher from '../pages/Admin/Voucher/AddVoucher';
-    
+
 const routerAdmin = [
     {
         path: '/admin', // Đường dẫn chính cho admin

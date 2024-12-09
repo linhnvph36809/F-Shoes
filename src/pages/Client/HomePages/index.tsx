@@ -9,17 +9,21 @@ import { Link } from 'react-router-dom';
 import { formatPrice } from '../../../utils';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import { IProduct } from '../../../interfaces/IProduct.ts';
+import { FormattedMessage } from 'react-intl';
 
 const HomePage = () => {
-    const { data:thisWeek, isFetching:fetchingThisWeekProducts  } = useQueryConfig(`home-list__this__week__products`, `api/trend/this-week/products?include=categories`);
-    const { data:bySport, isFetching:fetchProductsBySport } = useQueryConfig(`home-shop__by__sports__products`, `api/shop-by-sports/products`);
+    const { data: thisWeek, isFetching: fetchingThisWeekProducts } = useQueryConfig(
+        `home-list__this__week__products`,
+        `api/trend/this-week/products?include=categories`,
+    );
+    const { data: bySport, isFetching: fetchProductsBySport } = useQueryConfig(
+        `home-shop__by__sports__products`,
+        `api/shop-by-sports/products`,
+    );
     let thisWeekProducts = thisWeek?.data?.products || [];
     let productsBySport = bySport?.data?.products || [];
-    
-    
-    
+
     return (
-        
         <>
             <section className="container">
                 <div>
@@ -30,18 +34,22 @@ const HomePage = () => {
                 </div>
                 <Outstanding
                     title="EXTRA-ORDINARY"
-                    category="Lifestyle Running Shoes"
+                    category={<FormattedMessage id="body.lifestyleRunningShoes" />}
                     description="Meet the latest collection of retro running inspired shoes.The unlikely heroes of your easiest styling hack."
                 />
-                
+
                 <div className="my-20">
                     <div>
                         <Heading title="Trending This Week" />
-                        <SlidesScroll className="slidesProducts pb-20">
+                        <SlidesScroll
+                            className="slidesProducts pb-20"
+                            nextEl="next-trending-this-week"
+                            prevEl="pre-trending-this-week"
+                        >
                             {fetchingThisWeekProducts ? (
                                 <SkeletonComponent />
                             ) : (
-                                thisWeekProducts.map((item:IProduct) => (
+                                thisWeekProducts.map((item: IProduct) => (
                                     <SwiperSlide key={item.id}>
                                         <div>
                                             <Link to={`detail/${item.slug}`}>
@@ -55,14 +63,14 @@ const HomePage = () => {
                                                     <h5 className="text-[#707072] text-15px">
                                                         {item?.categories
                                                             ? item?.categories.map((cat, index, array) => {
-                                                                  if (array.length < 2) {
-                                                                      return ' ' + cat?.name;
-                                                                  } else {
-                                                                      if (index == 2) return;
-                                                                      if (index == 1) return ' ' + cat?.name;
-                                                                      return ' ' + cat?.name + ',';
-                                                                  }
-                                                              })
+                                                                if (array.length < 2) {
+                                                                    return ' ' + cat?.name;
+                                                                } else {
+                                                                    if (index == 2) return;
+                                                                    if (index == 1) return ' ' + cat?.name;
+                                                                    return ' ' + cat?.name + ',';
+                                                                }
+                                                            })
                                                             : ' '}
                                                     </h5>
                                                     <h3 className="text-15px color-primary font-medium mt-3">
@@ -87,11 +95,15 @@ const HomePage = () => {
             <section className="container">
                 <div>
                     <Heading title="Shop By Sport" />
-                    <SlidesScroll className="slidesShopBySport pb-12 mb-20">
+                    <SlidesScroll
+                        className="slidesShopBySport pb-12 mb-20"
+                        nextEl="next-shop-by-sport"
+                        prevEl="pre-shop-by-sport"
+                    >
                         {fetchProductsBySport ? (
                             <SkeletonComponent />
                         ) : (
-                            productsBySport.map((item:IProduct, index:number) => (
+                            productsBySport.map((item: IProduct, index: number) => (
                                 <SwiperSlide key={index}>
                                     <div className="relative">
                                         <img src={item.image_url} alt="" />
@@ -129,9 +141,7 @@ const HomePage = () => {
                         description="Ground your look in earthy tones inspired by outdoor courts.
                         Details like knits, ripcords, and cargo pockets add rich texture to your fit."
                     />
-                   
                 </div>
-                
             </section>
         </>
     );

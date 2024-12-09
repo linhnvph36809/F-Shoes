@@ -76,10 +76,9 @@ export const tokenManagerInstance = async (
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
             if (error.status === 401) {
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
-                localStorage.removeItem('userName');
-                localStorage.removeItem('userId');
+                if (!localStorage.getItem('accessToken') || !localStorage.getItem('refreshToken')) {
+                    window.location.href = '/';
+                }
             }
             throw {
                 message: error.message,
