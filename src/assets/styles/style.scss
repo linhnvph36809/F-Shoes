@@ -190,7 +190,14 @@ html {
     border: none;
 }
 
+#payment_method {
+    gap: 8px;
+}
 
-#payment_method{
-    gap: 8px ;
+.message-client-text {
+    font-size: 15px !important;
+}
+
+.message-client-icon {
+    font-size: 15px;
 }
