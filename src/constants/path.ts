@@ -13,6 +13,7 @@ export const PATH_ADMIN = {
     ADD_PRODUCT: `${ADMIN}/add-product`,
     UPDATE_PRODUCT: `${ADMIN}/update-product/`,
     VOUCHER: `${ADMIN}/voucher`,
+    ADD_VOUCHER: `${ADMIN}/add-voucher`,
     TOPIC: `${ADMIN}/topic`,
     LIST_POST: `${ADMIN}/posts`,
     ADD_POST: `${ADMIN}/add-posts`,

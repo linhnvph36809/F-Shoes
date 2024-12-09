@@ -44,22 +44,6 @@ export const items: MenuProps['items'] = [
         ],
     },
     {
-        key: '3',
-        icon: <BarChartOutlined className="text-[14px]" />,
-        label: 'Statistic',
-        children: [
-            {
-                key: '3-1',
-                label: (
-                    <Link to="statistic" className="text-[14px]">
-                        Statistic List
-                    </Link>
-                ),
-                icon: <Grid2X2 className="w-[16px]" />,
-            },
-        ],
-    },
-    {
         key: '4',
         icon: <ListOrdered className="w-[18px]" />,
         label: 'Order',

@@ -6,22 +6,19 @@ import { useState } from 'react';
 import ButtonEdit from '../components/Button/ButtonEdit';
 import TableAdmin from '../components/Table';
 import LoadingBlock from '../../../components/Loading/LoadingBlock';
-import FormVoucher from './FormVoucher';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import useVoucher, { API_VOUCHER } from '../../../hooks/useVoucher';
 import { showMessageActive } from '../../../utils/messages';
+import Heading from '../components/Heading';
+import ButtonPrimary from '../../../components/Button';
+import { PATH_ADMIN } from '../../../constants/path';
 
 export const KEY = 'list-voucher';
 
-const ListVoucher = ({ initialValues }: any) => {
+const ListVoucher = () => {
     const { data, isFetching, refetch } = useQueryConfig(KEY, API_VOUCHER);
-    const { addVoucher, loading, deleteVoucher, restoreVoucher, softVocher } = useVoucher();
+    const { deleteVoucher, restoreVoucher, softVocher } = useVoucher();
     const [searchTerm, setSearchTerm] = useState('');
-
-    const onFinish = (value: any) => {
-        addVoucher(value);
-        refetch();
-    };
 
     const handleDeleteVoucher = (id?: string | number) => {
         if (id) {
@@ -61,6 +58,11 @@ const ListVoucher = ({ initialValues }: any) => {
         {
             title: 'Quantity',
             dataIndex: 'quantity',
+            key: '4',
+        },
+        {
+            title: 'Min Total Amount',
+            dataIndex: 'min_total_amount',
             key: '4',
         },
         {
@@ -114,13 +116,15 @@ const ListVoucher = ({ initialValues }: any) => {
                 <LoadingBlock />
             ) : (
                 <div>
-                    <FormVoucher
-                        title="List Topic"
-                        initialValues={initialValues}
-                        onFinish={onFinish}
-                        loading={loading}
-                    />
-                    <div className="mb-4 text-end">
+                    <Heading>List Voucher</Heading>
+                    <div className="mb-4 text-end flex justify-between">
+                        <div>
+                            <Link to={PATH_ADMIN.ADD_VOUCHER}>
+                                <ButtonPrimary width="w-[150px]" height="h-[50px]">
+                                    Add Voucher
+                                </ButtonPrimary>
+                            </Link>
+                        </div>
                         <Input
                             placeholder="Search by Code"
                             value={searchTerm}

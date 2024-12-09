@@ -48,9 +48,9 @@ const OrderDetail = () => {
     };
     const status:
         | {
-              className: string;
-              text: string;
-          }
+            className: string;
+            text: string;
+        }
         | undefined = statusString(order?.status);
 
     return (
@@ -116,7 +116,7 @@ const OrderDetail = () => {
                                                     {' '}
                                                     <p>Voucher :</p>
                                                 </p>
-                                                <p className="font-medium">{order?.voucher_id}</p>
+                                                <p className="font-medium">{1}</p>
                                             </div>
                                         ) : (
                                             ''
@@ -177,14 +177,17 @@ const OrderDetail = () => {
                                 </div>
                                 <div className="grid grid-cols-2 gap-10 mt-20 pt-10 border-t">
                                     {order?.order_details.map((orderDetail: any) => (
-                                        <div className="flex justify-between items-center bg-white p-8 rounded-xl">
+                                        <div
+                                            key={orderDetail.id}
+                                            className="flex justify-between items-center bg-white p-8 rounded-xl"
+                                        >
                                             <div className="flex items-start gap-x-5">
                                                 <div>
                                                     <img
                                                         src={
                                                             orderDetail?.product
                                                                 ? orderDetail?.product.image_url
-                                                                : orderDetail?.product_variation?.product?.image_url
+                                                                : orderDetail?.variation?.image_url
                                                         }
                                                         alt=""
                                                         className="w-[100px]"
@@ -194,7 +197,7 @@ const OrderDetail = () => {
                                                     <h3 className="font-medium text-[18px]">
                                                         {orderDetail?.product
                                                             ? orderDetail?.product.name
-                                                            : orderDetail?.product_variation?.name}
+                                                            : orderDetail?.variation?.name}
                                                     </h3>
                                                     {orderDetail?.variation?.classify ? (
                                                         <p className="font-medium color-gray text-[14px] my-2">

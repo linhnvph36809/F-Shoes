@@ -79,5 +79,5 @@ export interface IOrder {
     created_at: string;
     updated_at: string;
     user: IUser;
-    voucher_id: string|number;
+    voucher_id: string | number;
 }

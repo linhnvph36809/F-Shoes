@@ -39,3 +39,6 @@ export const STATUS_ORDER = [
     'Denied Return',
     'Returned',
 ];
+
+export const FREE_SHIP = 1000000;
+export const STREAM_SALE_LIST_URL = 'http://localhost:8000/api/sales/stream?column=id&sort=desc';
