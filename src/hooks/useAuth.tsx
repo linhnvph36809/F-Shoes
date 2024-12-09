@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { tokenManagerInstance } from '../api';
-import { useNavigate } from 'react-router-dom';
 import useCookiesConfig from './useCookiesConfig';
 import { COOKIE_USER, TOKENS } from '../constants';
 import { useContextGlobal } from '../contexts';
@@ -68,8 +68,8 @@ const useAuth = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `/api/logout`, user);
-            handleRemoveLocalStorage('accessToken');
-            handleRemoveLocalStorage('refreshToken');
+            handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
+            handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
             handleRemoveLocalStorage('userName');
             handleRemoveLocalStorage('userId');
             navigate('/');
