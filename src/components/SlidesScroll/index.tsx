@@ -58,7 +58,7 @@ export default function SlidesScroll({
                 >
                     {children}
                 </Swiper>
-                <div className="absolute right-0 -top-[70px] z-10 flex-row-center gap-x-5">
+                <div className="absolute right-0 -top-[65px] z-10 flex-row-center gap-x-5">
                     <div
                         className={`${prevEl} pre-slider md:w-[48px] sm:w-[40px] md:h-[48px] sm:h-[40px] rounded-full bg-whitesmoke 
                         flex-row-center justify-center transition-global hover:cursor-pointer hover:bg-[#e5e5e5]`}

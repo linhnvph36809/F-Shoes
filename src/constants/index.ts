@@ -50,3 +50,12 @@ export const TOKENS = {
     ACCESS_TOKEN: 'accessToken',
     REFRESH_TOKEN: 'refreshToken',
 };
+
+export const QUANTITY_CART = 'quantityCart';
+
+export const INFO_AUTH = {
+    adminId: 'adminId',
+    adminName: 'adminName',
+    userId: 'userId',
+    userName: 'userName',
+};

@@ -1,22 +1,20 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 
 import { tokenManagerInstance } from '../api';
-import useCookiesConfig from './useCookiesConfig';
-import { COOKIE_USER, TOKENS } from '../constants';
+import { INFO_AUTH, TOKENS } from '../constants';
 import { useContextGlobal } from '../contexts';
 import { useContextClient } from '../components/Layouts/LayoutClient';
 import { showMessageClient } from '../utils/messages';
 import { handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
-import { useQueryClient } from 'react-query';
 const API_CHECK_EMAIL = '/api/check/email';
 
 const useAuth = () => {
     const [page, setPage] = useState<string>('');
     const [user, setUser] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const { handleSetCookie } = useCookiesConfig(COOKIE_USER);
-    const { setUser: setUserGlobal } = useContextGlobal();
+    const { setUser: setUserGlobal, refetchQuantityCart } = useContextGlobal();
     const { setUserName } = useContextClient();
     const queryClient = useQueryClient();
 
@@ -52,6 +50,7 @@ const useAuth = () => {
                 handleSetLocalStorage('userId', data.user.id);
             }
             setUserGlobal(data.user);
+            refetchQuantityCart();
             navigate('/');
             showMessageClient('Login Successfuly', '', 'success');
         } catch (error) {
@@ -69,10 +68,8 @@ const useAuth = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `/api/logout`, user);
-            handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
-            handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
-            handleRemoveLocalStorage('userName');
-            handleRemoveLocalStorage('userId');
+            handleRemoveLocalStorage(INFO_AUTH.userName);
+            handleRemoveLocalStorage(INFO_AUTH.userId);
             navigate('/');
             setUserGlobal({});
             setUserName('');
@@ -93,8 +90,8 @@ const useAuth = () => {
             if (data?.access_token && data?.refresh_token) {
                 handleSetLocalStorage(TOKENS.ACCESS_TOKEN, data.access_token);
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
-                handleSetCookie('adminName', data.user.name, new Date(Date.now() + 24 * 60 * 60 * 1000));
-                handleSetCookie('adminId', data.user.id, new Date(Date.now() + 24 * 60 * 60 * 1000));
+                handleSetLocalStorage(INFO_AUTH.adminId, data.user.id);
+                handleSetLocalStorage(INFO_AUTH.adminName, data.user.name);
             }
             navigate('/admin');
             return data;
@@ -113,9 +110,10 @@ const useAuth = () => {
             if (data?.access_token && data?.refresh_token) {
                 handleSetLocalStorage(TOKENS.ACCESS_TOKEN, data.access_token);
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
-                handleSetLocalStorage('userName', data.user.name);
-                handleSetLocalStorage('userId', data.user.id);
+                handleSetLocalStorage(INFO_AUTH.userName, data.user.name);
+                handleSetLocalStorage(INFO_AUTH.userId, data.user.id);
                 setUserGlobal(data.user);
+                refetchQuantityCart();
                 navigate('/');
                 showMessageClient('Register Successfuly', '', 'success');
             }

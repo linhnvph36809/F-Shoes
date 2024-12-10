@@ -24,16 +24,31 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
     const [locale, setLocale] = useState<LanguageType>(languageLocal);
 
     const [user, setUser] = useState<any>();
-    const { data, refetch } = useQueryConfig('user-infor', '/api/auth/me', {
+    const [quantityCart, setQuantityCart] = useState<number>(0);
+
+    const { data, refetch: refetchUser } = useQueryConfig('user-infor', '/api/auth/me', {
         cacheTime: 1000 * 60 * 30,
         staleTime: 1000 * 60 * 30,
         enabled: false,
     });
+
+    const { data: carts, refetch: refetchQuantityCart } = useQueryConfig('cart', '/api/cart', {
+        cacheTime: 0,
+        staleTime: 0,
+        retry: false,
+        enabled: false,
+    });
+
+    useEffect(() => {
+        setQuantityCart(carts?.data.length || 0);
+    }, [carts]);
+
     const userIdLocal = localStorage.getItem('userId');
 
     useEffect(() => {
         if (localStorage.getItem('accessToken') && localStorage.getItem('refreshToken')) {
-            refetch();
+            refetchUser();
+            refetchQuantityCart();
         }
     }, []);
 
@@ -52,7 +67,19 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
     return (
         <IntlProvider locale={locale} messages={language[locale]}>
             <CookiesProvider>
-                <Context.Provider value={{ user, setUser, locale, changeLanguage }}>{children};</Context.Provider>
+                <Context.Provider
+                    value={{
+                        user,
+                        setUser,
+                        locale,
+                        changeLanguage,
+                        quantityCart,
+                        setQuantityCart,
+                        refetchQuantityCart,
+                    }}
+                >
+                    {children};
+                </Context.Provider>
             </CookiesProvider>
         </IntlProvider>
     );

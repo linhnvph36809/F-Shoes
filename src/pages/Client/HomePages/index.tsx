@@ -1,15 +1,15 @@
+import { FormattedMessage } from 'react-intl';
 import { SwiperSlide } from 'swiper/react';
+import { Link } from 'react-router-dom';
+
 import ClassicsSpotlight from './ClassicsSpotlight';
 import Heading from './components/Heading';
 import Outstanding from './components/Outstanding';
 import SlidesScroll from '../../../components/SlidesScroll';
-
 import SkeletonComponent from '../../Admin/components/Skeleton';
-import { Link } from 'react-router-dom';
 import { formatPrice } from '../../../utils';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import { IProduct } from '../../../interfaces/IProduct.ts';
-import { FormattedMessage } from 'react-intl';
 
 const HomePage = () => {
     const { data: thisWeek, isFetching: fetchingThisWeekProducts } = useQueryConfig(
@@ -108,9 +108,9 @@ const HomePage = () => {
                                         <img src={item.image_url} alt="" />
                                         <Link
                                             to={`detail/${item.slug}`}
-                                            className="absolute left-[8%] bottom-[10%] px-6 py-2
-                                bg-white rounded-[30px] color-primary text-[12px] font-semibold
-                                hover:bg-[#cacacb]"
+                                            className="absolute left-[5%] bottom-[5%] px-8 py-4
+                                            bg-white rounded-[30px] color-primary text-[12px] font-semibold
+                                            hover:bg-[#cacacb] transition-global"
                                         >
                                             Running
                                         </Link>
