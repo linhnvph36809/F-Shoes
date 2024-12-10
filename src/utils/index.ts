@@ -49,3 +49,11 @@ export const handleGetLocalStorage = (name: string) => {
 export const handleRemoveLocalStorage = (name: string) => {
     return localStorage.removeItem(name);
 };
+
+export const handleChangeTitleTab = (title: string) => {
+    document.title = title;
+};
+
+export const createTitleLoader = (title: string) => {
+    document.title = title;
+};

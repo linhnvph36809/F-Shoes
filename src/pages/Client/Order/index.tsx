@@ -46,6 +46,11 @@ const Order = () => {
     const { loading: loadingCheckOut, postVNPAY, postOrder, postMomo } = useOnlinePayment();
     const { user } = useContextGlobal();
     const { handleSetCookie } = useCookiesConfig('order');
+    const { refetch } = useQueryConfig('order-all-1-status-empty', 'api/me/orders?per_page=5&page=1&status');
+    const { refetch: refetchOrderConfirm } = useQueryConfig(
+        'order-all-1-status-1',
+        'api/me/orders?per_page=5&page=1&status=1',
+    );
 
     const [province, setProvince] = useState<any>('');
     const [districtId, setDistrictId] = useState<number | null>(null);
@@ -183,7 +188,7 @@ const Order = () => {
                 } - ${province}`,
             city: province,
             country: 'Viet Nam',
-            voucher_id: voucher?.id ? voucher?.id : null,
+            voucher_id: voucher?.id ? voucher.id : null,
             status: 1,
             note: value.note,
             order_details,
@@ -193,7 +198,15 @@ const Order = () => {
 
         handleSetCookie(
             'order',
-            { voucher_cost: (handleTotalPrice * +voucher.discount) / 100, ...newValues },
+            {
+                voucher_cost:
+                    voucher.type == 'fixed'
+                        ? voucher.discount
+                        : ((handleTotalPrice >= FREE_SHIP ? handleTotalPrice : handleTotalPrice + (fee?.total || 0)) *
+                            +voucher.discount) /
+                        100,
+                ...newValues,
+            },
             new Date(Date.now() + 20 * 60 * 1000),
         );
 
@@ -216,9 +229,9 @@ const Order = () => {
                 newValues,
             );
         }
+        refetch();
+        refetchOrderConfirm();
     };
-
-
 
     useEffect(() => {
         form.setFieldValue('receiver_full_name', user?.name);
@@ -228,7 +241,6 @@ const Order = () => {
     if (carts && !carts.length) {
         return <Navigate to="/" />;
     }
-
 
     return (
         <>
@@ -486,7 +498,7 @@ const Order = () => {
                                             <Text className="color-primary font-medium">
                                                 -
                                                 {formatPrice(
-                                                    voucher.type == 'fixed'
+                                                    voucher.type === 'fixed'
                                                         ? voucher.discount
                                                         : ((handleTotalPrice >= FREE_SHIP
                                                             ? handleTotalPrice

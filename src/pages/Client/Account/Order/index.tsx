@@ -20,6 +20,7 @@ const OrderProfile = () => {
         return s === statusQueryUrl;
     });
 
+
     useEffect(() => {
         if (!statusQueryUrl) {
             indexInArr = null;
@@ -30,6 +31,7 @@ const OrderProfile = () => {
             setIndexStatus(null);
         }
     }, [statusInArr]);
+
 
     const { data, isFetching } = useQueryConfig(
         `order-all-${page}-status-${indexStatus || indexStatus === 0 ? indexStatus : 'empty'}`,

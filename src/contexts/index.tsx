@@ -6,7 +6,7 @@ import language_en from '../translations/en.json';
 import language_vi from '../translations/vi.json';
 
 import useQueryConfig from '../hooks/useQueryConfig';
-import { LANGUAGE_EN } from '../constants';
+import { handleGetLocalStorage, handleSetLocalStorage } from '../utils';
 
 const Context = createContext<any>({});
 
@@ -20,7 +20,8 @@ const language = {
 };
 
 const ContextGlobal = ({ children }: { children: ReactNode }) => {
-    const [locale, setLocale] = useState<LanguageType>(LANGUAGE_EN);
+    const languageLocal = (handleGetLocalStorage('language') as LanguageType) || 'en';
+    const [locale, setLocale] = useState<LanguageType>(languageLocal);
 
     const [user, setUser] = useState<any>();
     const { data, refetch } = useQueryConfig('user-infor', '/api/auth/me', {
@@ -45,6 +46,7 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
 
     const changeLanguage = useCallback((selectedLocale: LanguageType) => {
         setLocale(selectedLocale);
+        handleSetLocalStorage('language', selectedLocale);
     }, []);
 
     return (

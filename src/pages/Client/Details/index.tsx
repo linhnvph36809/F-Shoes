@@ -10,7 +10,7 @@ import SlidesScroll from '../../../components/SlidesScroll';
 import Heading from '../HomePages/components/Heading';
 import Price from './Price.tsx';
 import { IImage } from '../../../interfaces/IImage.ts';
-import { formatPrice } from '../../../utils';
+import { formatPrice, handleChangeTitleTab } from '../../../utils';
 import useCart from '../../../hooks/useCart.tsx';
 import { useContextGlobal } from '../../../contexts/index.tsx';
 import LoadingSmall from '../../../components/Loading/LoadingSmall.tsx';
@@ -20,6 +20,7 @@ import Reviews from './Reviews.tsx';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 
 const Detail = () => {
+
     const { slug } = useParams();
 
     let id: string | number | undefined;
@@ -127,43 +128,43 @@ const Detail = () => {
                             <h4 className="color-primary font-medium text-16px">
                                 {productD?.categories
                                     ? productD?.categories.map((cat: any, index: number, array: any) => {
-                                          if (array.length < 2) {
-                                              return ' ' + cat?.name;
-                                          } else {
-                                              if (index == 2) return;
-                                              if (index == 1) return ' ' + cat?.name;
-                                              return ' ' + cat?.name + ',';
-                                          }
-                                      })
+                                        if (array.length < 2) {
+                                            return ' ' + cat?.name;
+                                        } else {
+                                            if (index == 2) return;
+                                            if (index == 1) return ' ' + cat?.name;
+                                            return ' ' + cat?.name + ',';
+                                        }
+                                    })
                                     : ' '}
                             </h4>
                             <Price product={variant || productD} variation={variationD} />
                             {productD?.attributes
                                 ? productD.attributes.map((item: any, index: number) => {
-                                      return (
-                                          <div key={item?.id} className="mb-6">
-                                              <div className="flex-row-center justify-between pb-5">
-                                                  <p className="text-16px font-medium color-primary">
-                                                      Select {item.name}
-                                                  </p>
-                                              </div>
+                                    return (
+                                        <div key={item?.id} className="mb-6">
+                                            <div className="flex-row-center justify-between pb-5">
+                                                <p className="text-16px font-medium color-primary">
+                                                    Select {item.name}
+                                                </p>
+                                            </div>
 
-                                              <Radio.Group onChange={(e) => onChange(e, index)}>
-                                                  <div className="grid md:grid-cols-5 gap-5">
-                                                      {item?.values.map((value: any, index: number) => (
-                                                          <Radio.Button
-                                                              key={index}
-                                                              className="font-medium h-[45px] text-[16px]"
-                                                              value={value.id}
-                                                          >
-                                                              {value.value}
-                                                          </Radio.Button>
-                                                      ))}
-                                                  </div>
-                                              </Radio.Group>
-                                          </div>
-                                      );
-                                  })
+                                            <Radio.Group onChange={(e) => onChange(e, index)}>
+                                                <div className="grid md:grid-cols-5 gap-5">
+                                                    {item?.values.map((value: any, index: number) => (
+                                                        <Radio.Button
+                                                            key={index}
+                                                            className="font-medium h-[45px] text-[16px]"
+                                                            value={value.id}
+                                                        >
+                                                            {value.value}
+                                                        </Radio.Button>
+                                                    ))}
+                                                </div>
+                                            </Radio.Group>
+                                        </div>
+                                    );
+                                })
                                 : ''}
                             {variant?.stock_qty ? (
                                 <p className="text-16px font-medium text-red-500">Quantity : {variant?.stock_qty}</p>
@@ -175,13 +176,12 @@ const Detail = () => {
                                     onClick={
                                         productD?.variations?.length == 0 || (variant && variant?.stock_qty)
                                             ? handleAddCart
-                                            : () => {}
+                                            : () => { }
                                     }
-                                    className={`${
-                                        productD?.variations?.length == 0 || (variant && variant?.stock_qty)
-                                            ? 'bg-primary'
-                                            : 'bg-[#f4f4f4] cursor-default'
-                                    }           text-16px font-medium h-[58px] text-white
+                                    className={`${productD?.variations?.length == 0 || (variant && variant?.stock_qty)
+                                        ? 'bg-primary'
+                                        : 'bg-[#f4f4f4] cursor-default'
+                                        }           text-16px font-medium h-[58px] text-white
                                                 rounded-[30px] w-full hover-opacity transition-global`}
                                 >
                                     {loadingAddCart ? <LoadingSmall /> : 'Add to Bag'}
@@ -218,39 +218,39 @@ const Detail = () => {
                             <SlidesScroll className="slidesProducts pb-20">
                                 {productD?.suggestedProduct
                                     ? productD?.suggestedProduct?.map((item: any) => (
-                                          <SwiperSlide key={item.id}>
-                                              <div>
-                                                  <a href={`${item.slug}`}>
-                                                      <div>
-                                                          <img src={item.image_url} alt={item.name} />
-                                                      </div>
-                                                      <div>
-                                                          <h3 className="text-15px color-primary font-medium pt-4">
-                                                              {item.name}
-                                                          </h3>
-                                                          <h5 className="text-[#707072] text-15px">
-                                                              {item?.categories
-                                                                  ? item?.categories.map(
-                                                                        (cat: any, index: any, array: any) => {
-                                                                            if (array.length < 2) {
-                                                                                return ' ' + cat?.name;
-                                                                            } else {
-                                                                                if (index == 2) return;
-                                                                                if (index == 1) return ' ' + cat?.name;
-                                                                                return ' ' + cat?.name + ',';
-                                                                            }
-                                                                        },
-                                                                    )
-                                                                  : ' '}
-                                                          </h5>
-                                                          <h3 className="text-15px color-primary font-medium mt-3">
-                                                              {formatPrice(item.price)} ₫
-                                                          </h3>
-                                                      </div>
-                                                  </a>
-                                              </div>
-                                          </SwiperSlide>
-                                      ))
+                                        <SwiperSlide key={item.id}>
+                                            <div>
+                                                <a href={`${item.slug}`}>
+                                                    <div>
+                                                        <img src={item.image_url} alt={item.name} />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="text-15px color-primary font-medium pt-4">
+                                                            {item.name}
+                                                        </h3>
+                                                        <h5 className="text-[#707072] text-15px">
+                                                            {item?.categories
+                                                                ? item?.categories.map(
+                                                                    (cat: any, index: any, array: any) => {
+                                                                        if (array.length < 2) {
+                                                                            return ' ' + cat?.name;
+                                                                        } else {
+                                                                            if (index == 2) return;
+                                                                            if (index == 1) return ' ' + cat?.name;
+                                                                            return ' ' + cat?.name + ',';
+                                                                        }
+                                                                    },
+                                                                )
+                                                                : ' '}
+                                                        </h5>
+                                                        <h3 className="text-15px color-primary font-medium mt-3">
+                                                            {formatPrice(item.price)} ₫
+                                                        </h3>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </SwiperSlide>
+                                    ))
                                     : 'Nothing here.'}
                             </SlidesScroll>
                         </div>
