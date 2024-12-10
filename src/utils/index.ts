@@ -43,7 +43,7 @@ export const handleSetLocalStorage = (name: string, value: any) => {
 };
 
 export const handleGetLocalStorage = (name: string) => {
-    return localStorage.getItem(name);
+    return localStorage.getItem(name) || null;
 };
 
 export const handleRemoveLocalStorage = (name: string) => {

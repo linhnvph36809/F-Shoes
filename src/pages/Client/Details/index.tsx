@@ -10,7 +10,7 @@ import SlidesScroll from '../../../components/SlidesScroll';
 import Heading from '../HomePages/components/Heading';
 import Price from './Price.tsx';
 import { IImage } from '../../../interfaces/IImage.ts';
-import { formatPrice, handleChangeTitleTab } from '../../../utils';
+import { formatPrice } from '../../../utils';
 import useCart from '../../../hooks/useCart.tsx';
 import { useContextGlobal } from '../../../contexts/index.tsx';
 import LoadingSmall from '../../../components/Loading/LoadingSmall.tsx';
@@ -18,9 +18,9 @@ import LoadingPage from '../../../components/Loading/LoadingPage.tsx';
 import useWishlist from '../../../hooks/useWishlist.tsx';
 import Reviews from './Reviews.tsx';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
+import ModalViewDetail from './ModalViewDetail.tsx';
 
 const Detail = () => {
-
     const { slug } = useParams();
 
     let id: string | number | undefined;
@@ -31,7 +31,10 @@ const Detail = () => {
     }
 
     const { data, isFetching } = useQueryConfig(`product-detail-${id}`, `/api/product/detail/${id}`);
-    const { refetch } = useQueryConfig('user-profile', 'api/auth/me?include=profile,favoriteProducts&times=user');
+    const { refetch } = useQueryConfig('user-profile', 'api/auth/me?include=profile,favoriteProducts&times=user', {
+        enabled: false,
+    });
+
 
     const products = data?.data;
     const { user } = useContextGlobal();
@@ -207,7 +210,7 @@ const Detail = () => {
                             </div>
                             <div>
                                 <div className="text-[18px] mb-20">{productD?.short_description}</div>
-                                <p className="color-primary text-16px font-medium underline">View Product Details</p>
+                                <ModalViewDetail product={products} />
                                 <Reviews productId={productD?.id} />
                             </div>
                         </div>

@@ -20,4 +20,5 @@ export const PATH_ADMIN = {
     UPDATE_POST: `${ADMIN}/admin/update-posts`,
     ADD_ATTRIBUTE: `${ADMIN}/add-attribute/`,
     UPDATE_ATTRIBUTE: `${ADMIN}/update-attribute/`,
+    LOGIN_ADMIN: '/login-admin',
 };

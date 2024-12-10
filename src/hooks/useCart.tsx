@@ -2,17 +2,19 @@ import { useState } from 'react';
 
 import { tokenManagerInstance } from '../api';
 import { showMessageClient } from '../utils/messages';
+import { useContextGlobal } from '../contexts';
 
 const API_CART = '/api/cart';
 
 const useCart = () => {
     const [loading, setLoading] = useState<boolean>(false);
-
+    const { refetchQuantityCart } = useContextGlobal();
     const postCart = async (cart: any) => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_CART, cart);
             showMessageClient('Add to cart successfully', '', 'success');
+            refetchQuantityCart();
         } catch (error) {
             showMessageClient('Error', (error as any).message, 'error');
         } finally {

@@ -4,6 +4,7 @@ import { tokenManagerInstance } from '../api';
 import { useNavigate } from 'react-router-dom';
 import { showMessageClient } from '../utils/messages';
 import useCookiesConfig from './useCookiesConfig';
+import { useContextGlobal } from '../contexts';
 
 const API = '/api/';
 const API_ORDER = '/api/orders';
@@ -12,12 +13,14 @@ const useOnlinePayment = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
     const { handleSetCookie } = useCookiesConfig('orderId');
+    const { refetchQuantityCart } = useContextGlobal();
 
     const postOrder = async (order: any) => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_ORDER, order);
             showMessageClient('Order successfully', '', 'success');
+            refetchQuantityCart();
             navigate('/order-cash-on-delivery');
         } catch (error) {
             showMessageClient('Error', (error as any).message, 'error');
@@ -37,6 +40,7 @@ const useOnlinePayment = () => {
             } else {
                 window.location.href = data;
             }
+            refetchQuantityCart();
         } catch (error) {
             showMessageClient('Error', (error as any).message, 'error');
         } finally {
@@ -53,6 +57,7 @@ const useOnlinePayment = () => {
             if (data?.payUrl) {
                 window.location.href = data.payUrl;
             }
+            refetchQuantityCart();
         } catch (error) {
             showMessageClient('Error', (error as any).message, 'error');
         } finally {
