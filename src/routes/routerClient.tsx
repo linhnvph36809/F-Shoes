@@ -1,3 +1,5 @@
+import { Helmet } from 'react-helmet';
+
 import LayoutClient from '../components/Layouts/LayoutClient';
 import HomePage from '../pages/Client/HomePages';
 import Detail from '../pages/Client/Details';
@@ -18,6 +20,7 @@ import OrderList from '../pages/Client/Account/OrderDetail';
 import OrderDetail from '../pages/Client/Account/OrderDetail';
 import LayoutOrderProfile from '../pages/Client/Account/Order/components/Layout';
 import OrderMomoComplete from '../pages/Client/OrderComplete/OrderMomoComplete';
+
 const routerClient = [
     {
         path: '',
@@ -25,30 +28,61 @@ const routerClient = [
         children: [
             {
                 path: '',
-                element: <HomePage />,
+                element: (
+                    <>
+                        <Helmet>
+                            <title>Home</title>
+                        </Helmet>
+                        <HomePage />
+                    </>
+                ),
             },
             {
                 path: '/detail/:slug',
-                element: <Detail />,
+                element: (
+                    <>
+                        <Helmet>
+                            <title>Product Detail</title>
+                        </Helmet>
+                        <Detail />
+                    </>
+                ),
             },
             {
                 path: '/category/:slug?',
-                element: <CategoryPage />,
+                element: (
+                    <>
+                        <Helmet>
+                            <title>Category</title>
+                        </Helmet>
+                        <CategoryPage />
+                    </>
+                ),
             },
             {
                 path: '/cart',
                 element: (
-                    <PrivateRoute>
-                        <Cart />
-                    </PrivateRoute>
+                    <>
+                        <Helmet>
+                            <title>Cart</title>
+                        </Helmet>
+                        <PrivateRoute>
+                            <Cart />
+                        </PrivateRoute>
+                    </>
                 ),
             },
             {
                 path: '/profile',
                 element: (
-                    <PrivateRoute>
-                        <Layout />
-                    </PrivateRoute>
+                    <>
+                        <Helmet>
+                            <title>Profile</title>
+                        </Helmet>
+                        <PrivateRoute>
+                            <Layout />
+                        </PrivateRoute>
+                    </>
                 ),
                 children: [
                     {
@@ -82,41 +116,95 @@ const routerClient = [
             {
                 path: '/order',
                 element: (
-                    <PrivateRoute>
-                        <Order />
-                    </PrivateRoute>
+                    <>
+                        <Helmet>
+                            <title>Order</title>
+                        </Helmet>
+                        <PrivateRoute>
+                            <Order />
+                        </PrivateRoute>
+                    </>
                 ),
             },
             {
                 path: '/order-vnpay-complete',
-                element: <OrderVnpayComplete />,
+                element: (
+                    <>
+                        <Helmet>
+                            <title>Order Complete</title>
+                        </Helmet>
+                        <OrderVnpayComplete />
+                    </>
+                ),
             },
             {
                 path: '/order-momo-complete',
-                element: <OrderMomoComplete />,
+                element: (
+                    <>
+                        <Helmet>
+                            <title>Order Complete</title>
+                        </Helmet>
+                        <OrderMomoComplete />
+                    </>
+                ),
             },
             {
                 path: '/orderlist',
-                element: <OrderList />,
+                element: (
+                    <>
+                        <Helmet>
+                            <title>Order Complete</title>
+                        </Helmet>{' '}
+                        <OrderList />
+                    </>
+                ),
             },
             {
                 path: '/post',
-                element: <Post />,
+                element: (
+                    <>
+                        <Helmet>
+                            <title>Post</title>
+                        </Helmet>
+                        <Post />
+                    </>
+                ),
             },
             {
                 path: '/post-detail',
-                element: <PostDetail />,
+                element: (
+                    <>
+                        <Helmet>
+                            <title>Post Detail</title>
+                        </Helmet>
+                        <PostDetail />
+                    </>
+                ),
             },
             {
                 path: '/order-cash-on-delivery',
-                element: <OrderCashOnDelivery />,
+                element: (
+                    <>
+                        <Helmet>
+                            <title>Order Complete</title>
+                        </Helmet>
+                        <OrderCashOnDelivery />
+                    </>
+                ),
             },
         ],
     },
 
     {
         path: '/authentication',
-        element: <LayoutAuthentication />,
+        element: (
+            <>
+                <Helmet>
+                    <title>Login - Register</title>
+                </Helmet>
+                <LayoutAuthentication />
+            </>
+        ),
     },
 ];
 

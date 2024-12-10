@@ -8,7 +8,7 @@ import { useContextGlobal } from '../contexts';
 import { useContextClient } from '../components/Layouts/LayoutClient';
 import { showMessageClient } from '../utils/messages';
 import { handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
-
+import { useQueryClient } from 'react-query';
 const API_CHECK_EMAIL = '/api/check/email';
 
 const useAuth = () => {
@@ -18,6 +18,7 @@ const useAuth = () => {
     const { handleSetCookie } = useCookiesConfig(COOKIE_USER);
     const { setUser: setUserGlobal } = useContextGlobal();
     const { setUserName } = useContextClient();
+    const queryClient = useQueryClient();
 
     const navigate = useNavigate();
 
@@ -76,6 +77,7 @@ const useAuth = () => {
             setUserGlobal({});
             setUserName('');
             showMessageClient('Logout Successfuly', '', 'success');
+            queryClient.clear();
         } catch (error) {
             console.log(error);
             showMessageClient('Something went wrong!', '', 'error');

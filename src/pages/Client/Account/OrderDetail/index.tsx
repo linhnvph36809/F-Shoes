@@ -1,6 +1,6 @@
 import { Skeleton, Tag } from 'antd';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ArrowLeftToLine } from 'lucide-react';
 
 import UseOrder from '../../../../hooks/profile/useOrder';
@@ -9,7 +9,7 @@ import ButtonPrimary from '../../../../components/Button';
 import NotFound from '../../../../components/NotFound';
 import ModalCancel from './components/ModalCancel';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
-import { IOrder, statusString } from '../../../../interfaces/IOrder';
+import { statusString } from '../../../../interfaces/IOrder';
 import { formatPrice, formatTime } from '../../../../utils';
 import { showMessageActive } from '../../../../utils/messages';
 
@@ -30,8 +30,7 @@ const OrderDetail = () => {
         setIsModalOpen(true);
     };
 
-    const order: IOrder = data?.data;
-
+    const order: any = data?.data;
     console.log(order);
 
     const handleCanCelOrder = (id: string) => {
@@ -48,12 +47,29 @@ const OrderDetail = () => {
             navigator('/cart');
         });
     };
+
     const status:
         | {
-              className: string;
-              text: string;
-          }
+            className: string;
+            text: string;
+        }
         | undefined = statusString(order?.status);
+
+    const voucherPrice = useMemo(() => {
+        if (order?.voucher_id) {
+            if (order?.voucher_id?.type == 'fixed') {
+                return order?.voucher_id?.discount;
+            } else if (order?.voucher_id?.type == 'percentage') {
+                return (
+                    +order.total_amount / (1 - +order?.voucher_id?.discount / 100) -
+                    (+order.total_amount / (1 - +order?.voucher_id?.discount / 100) -
+                        (+order.total_amount / (1 - +order?.voucher_id?.discount / 100)) *
+                        (+order?.voucher_id?.discount / 100))
+                );
+            }
+        }
+        return 0;
+    }, [order]);
 
     return (
         <>
@@ -108,17 +124,35 @@ const OrderDetail = () => {
                                         <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
                                             <p>
                                                 {' '}
+                                                <p>Subtotal :</p>
+                                            </p>
+                                            <p className="font-medium">
+                                                {+order?.voucher_id?.discount
+                                                    ? formatPrice(
+                                                        +order.total_amount /
+                                                        (1 - +order?.voucher_id?.discount / 100) -
+                                                        +order.shipping_cost,
+                                                    )
+                                                    : formatPrice(+order.total_amount - +order.shipping_cost)}
+                                                đ
+                                            </p>
+                                        </div>
+
+                                        <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+                                            <p>
+                                                {' '}
                                                 <p>Shipping Cost :</p>
                                             </p>
                                             <p className="font-medium">{formatPrice(order?.shipping_cost)}đ</p>
                                         </div>
+
                                         {order?.voucher_id ? (
                                             <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
                                                 <p>
                                                     {' '}
                                                     <p>Voucher :</p>
                                                 </p>
-                                                <p className="font-medium">{1}</p>
+                                                <p className="font-medium">-{formatPrice(voucherPrice)}đ</p>
                                             </div>
                                         ) : (
                                             ''

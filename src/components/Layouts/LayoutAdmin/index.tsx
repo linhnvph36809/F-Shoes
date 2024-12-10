@@ -1,8 +1,8 @@
 import { Link, Outlet } from 'react-router-dom';
-import { Avatar, Badge, ConfigProvider, Input, Layout, Menu, Space } from 'antd';
-import { UserOutlined, SettingOutlined, BellOutlined } from '@ant-design/icons';
+import { ConfigProvider, Layout, Menu } from 'antd';
 import { ref, onValue } from 'firebase/database';
 import './style.scss';
+
 import { items } from './datas';
 import { db } from '../../../../firebaseConfig';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
@@ -30,10 +30,8 @@ export const usePermissionContext = () => useContext(ContextAdmin);
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
     const { user } = useContextGlobal();
-    console.log(user);
-
     useEffect(() => {
-        const starCountRef = ref(db, `groups/1`);
+        const starCountRef = ref(db, `groups/${user?.group_id || 1}`);
         const unsubscribe = onValue(starCountRef, (snapshot) => {
             try {
                 const data = snapshot.val();
