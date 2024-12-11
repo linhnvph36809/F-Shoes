@@ -7,7 +7,7 @@ const defautConfig = {
     retry: false,
 };
 
-const useQueryConfig = (key: string, api: string, config: any = defautConfig) => {
+const useQueryConfig = (key: string|Array<string>, api: string, config: any = defautConfig) => {
     const fetchData = async () => {
         try {
             return await tokenManagerInstance('get', api);
@@ -16,7 +16,7 @@ const useQueryConfig = (key: string, api: string, config: any = defautConfig) =>
         }
     };
 
-    const { isLoading, data, error, isFetching, refetch } = useQuery([key], fetchData, config);
+    const { isLoading, data, error, isFetching, refetch } = useQuery(key, fetchData, config);
 
     return {
         isLoading,

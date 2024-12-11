@@ -17,4 +17,5 @@ export interface IProduct {
     images: IImage[];
     categories?: ICategory[];
     variations: IVariation[];
+    qty_sale:number;
 }

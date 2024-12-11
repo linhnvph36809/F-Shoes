@@ -82,7 +82,7 @@ const ListSale = () => {
             } else if (keyStatus === 'active') {
                 return start_date < now && end_date > now;
             } else if (keyStatus === 'expired') {
-                console.log('end ded');
+                
                 if (start_date < now && end_date < now) {
                     return true;
                 }
@@ -121,8 +121,6 @@ const ListSale = () => {
     const handleStatusChange = (e: any) => {
         urlQuery.set('status', e.target.value);
         navigate(`?${urlQuery.toString()}`, { replace: true });
-
-
     };
     const dataSource = [...dataSearch];
     const columns = [

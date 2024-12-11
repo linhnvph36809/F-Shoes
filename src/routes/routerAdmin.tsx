@@ -2,7 +2,7 @@ import LayoutAdmin from '../components/Layouts/LayoutAdmin';
 import ListCategory from '../pages/Admin/Category';
 import UpdateCategory from '../pages/Admin/Category/Update';
 import AdminDashboard from '../pages/Admin/DashboardAdmin';
-import Discounts from '../pages/Admin/Discount';
+
 import UpdateSale from '../pages/Admin/Discount/UpdateSale';
 import AddSale from '../pages/Admin/Discount/AddSale';
 
@@ -94,10 +94,6 @@ const routerAdmin = [
             {
                 path: 'update-variant/:slug',
                 element: <UpdateVariant />,
-            },
-            {
-                path: 'discount',
-                element: <Discounts />,
             },
             {
                 path: 'listsale',
