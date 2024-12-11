@@ -30,10 +30,12 @@ import useQueryConfig from '../../../hooks/useQueryConfig';
 import { showMessageClient } from '../../../utils/messages';
 import { FREE_SHIP } from '../../../constants';
 import { useForm } from 'antd/es/form/Form';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const { Title, Text } = Typography;
 
 const Order = () => {
+    const intl = useIntl();
     const [form] = useForm();
     const { provinces, districts, fee, wards, getAllWard, getAllDistrict, getFee } = useDelivery();
     const orderId = JSON.parse(localStorage.getItem('orderId') || '[]');
@@ -179,8 +181,9 @@ const Order = () => {
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
 
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-                } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
+                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+            } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: voucher?.id ? voucher?.id : null,
@@ -218,8 +221,6 @@ const Order = () => {
         }
     };
 
-
-
     useEffect(() => {
         form.setFieldValue('receiver_full_name', user?.name);
         form.setFieldValue('receiver_email', user?.email);
@@ -228,7 +229,6 @@ const Order = () => {
     if (carts && !carts.length) {
         return <Navigate to="/" />;
     }
-
 
     return (
         <>
@@ -240,30 +240,53 @@ const Order = () => {
                         <Col xs={24} md={12}>
                             <Card bordered={false}>
                                 <div style={{ width: '100%', maxWidth: '500px', margin: '0 auto', padding: '20px' }}>
-                                    <Title level={1}>Delivery</Title>
-                                    <Title level={4}>Enter your name and address:</Title>
+                                    <Title level={1}>{<FormattedMessage id="Order.Delivery" />}</Title>
+                                    <Title level={4}>
+                                        {<FormattedMessage id="Order.Enter your name and address:" />}
+                                    </Title>
                                     <Text type="secondary" className="mb-5 block">
-                                        If you have a promo code, you will be able to input it after filling in your
-                                        contact details.
+                                        {
+                                            <FormattedMessage id="Order.If you have a promo code, you will be able to input it after filling in your contact details." />
+                                        }
                                     </Text>
                                     <Form.Item
                                         name="receiver_full_name"
-                                        label="Receiver Name"
-                                        rules={[{ required: true, message: 'Please enter your Receiver Name' }]}
-                                    >
-                                        <InputPrimary placeholder="Receiver Name" margin="mb-0" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="receiver_email"
-                                        label="Receiver Email"
+                                        label={<FormattedMessage id="receiver_name" />}
                                         rules={[
-                                            { required: true, message: 'Please enter your Receiver Email' },
-                                            { type: 'email', message: 'Please enter a valid email address' },
+                                            {
+                                                required: true,
+                                                message: <FormattedMessage id="receiver_name_message" />,
+                                            },
                                         ]}
                                     >
-                                        <InputPrimary placeholder="Receiver Email" margin="mb-0" type="email" />
+                                        <InputPrimary
+                                            placeholder={intl.formatMessage({ id: 'receiver_name_placeholder' })}
+                                            margin="mb-0"
+                                        />
                                     </Form.Item>
-                                    <Form.Item label="Country">
+
+                                    <Form.Item
+                                        name="receiver_email"
+                                        label={<FormattedMessage id="receiver_email" />}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: <FormattedMessage id="receiver_email_message" />,
+                                            },
+                                            {
+                                                type: 'email',
+                                                message: <FormattedMessage id="receiver_email_invalid_message" />,
+                                            },
+                                        ]}
+                                    >
+                                        <InputPrimary
+                                            placeholder={intl.formatMessage({ id: 'receiver_email_placeholder' })}
+                                            margin="mb-0"
+                                            type="email"
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item label={<FormattedMessage id="country" />}>
                                         <InputPrimary
                                             value="Vietnam"
                                             readOnly
@@ -271,75 +294,104 @@ const Order = () => {
                                             suffix={<span style={{ color: 'green' }}>●</span>}
                                         />
                                     </Form.Item>
+
                                     <Form.Item
-                                        label="Select City"
+                                        label={<FormattedMessage id="city" />}
                                         name="province"
-                                        rules={[{ required: true, message: 'Please select a province' }]}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: <FormattedMessage id="city_message" />,
+                                            },
+                                        ]}
                                     >
                                         <Select
                                             onChange={handleCityChange}
-                                            placeholder="Select Province"
+                                            placeholder={intl.formatMessage({ id: 'city_placeholder' })}
                                             optionFilterProp="ProvinceName"
                                             options={provinces}
-                                            className="w-full h-[56px] border-1 border-[#111111] focus:shadow 
-                                            font-medium focus:border-[#111111] hover:border-[#111111] rounded-[8px]"
+                                            className="w-full h-[56px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] rounded-[8px]"
                                             fieldNames={{ label: 'ProvinceName', value: 'ProvinceID' }}
                                         />
                                     </Form.Item>
 
                                     <Form.Item
-                                        label="Select District"
+                                        label={<FormattedMessage id="district" />}
                                         name="district"
-                                        rules={[{ required: true, message: 'Please select a district' }]}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: <FormattedMessage id="district_message" />,
+                                            },
+                                        ]}
                                     >
                                         <Select
-                                            placeholder="Select District"
+                                            placeholder={intl.formatMessage({ id: 'district_placeholder' })}
                                             optionFilterProp="ProvinceName"
                                             options={districts}
-                                            className="w-full h-[56px] border-1 border-[#111111] focus:shadow 
-                                            font-medium focus:border-[#111111] hover:border-[#111111] rounded-[8px]"
+                                            className="w-full h-[56px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] rounded-[8px]"
                                             fieldNames={{ label: 'DistrictName', value: 'DistrictID' }}
                                             onChange={handleDistrictChange}
                                         />
                                     </Form.Item>
+
                                     <Form.Item
-                                        label="Select Ward"
+                                        label={<FormattedMessage id="ward" />}
                                         name="ward"
-                                        rules={[{ required: true, message: 'Please select a ward' }]}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: <FormattedMessage id="ward_message" />,
+                                            },
+                                        ]}
                                     >
                                         <Select
-                                            placeholder="Select Ward"
+                                            placeholder={intl.formatMessage({ id: 'ward_placeholder' })}
                                             optionFilterProp="ProvinceName"
                                             options={wards}
-                                            className="w-full h-[56px] border-1 border-[#111111] focus:shadow 
-                                            font-medium focus:border-[#111111] hover:border-[#111111] rounded-[8px]"
-                                            onChange={handleWardChange}
+                                            className="w-full h-[56px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] rounded-[8px]"
                                             fieldNames={{ label: 'WardName', value: 'WardCode' }}
+                                            onChange={handleWardChange}
                                         />
                                     </Form.Item>
+
                                     <Form.Item
                                         name="phone"
-                                        label="Phone"
-                                        rules={[{ required: true, message: 'Please enter your phone' }]}
+                                        label={<FormattedMessage id="phone" />}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: <FormattedMessage id="phone_message" />,
+                                            },
+                                        ]}
                                     >
-                                        <InputPrimary placeholder="Phone" margin="mb-0" />
+                                        <InputPrimary
+                                            placeholder={intl.formatMessage({ id: 'phone_placeholder' })}
+                                            margin="mb-0"
+                                        />
                                     </Form.Item>
 
                                     <Form.Item
                                         name="address"
-                                        label="Address"
-                                        rules={[{ required: true, message: 'Please enter your address' }]}
+                                        label={<FormattedMessage id="address" />}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: <FormattedMessage id="address_message" />,
+                                            },
+                                        ]}
                                     >
-                                        <InputPrimary placeholder="Address line" />
+                                        <InputPrimary placeholder={intl.formatMessage({ id: 'address_placeholder' })} />
                                     </Form.Item>
 
-                                    <Form.Item label="Note" name="note">
+                                    <Form.Item label={<FormattedMessage id="note" />} name="note">
                                         <TextArea
-                                            placeholder="Enter note"
+                                            placeholder={intl.formatMessage({ id: 'note_placeholder' })}
                                             className="hover:border-[#000] font-medium text-[18px]"
                                             rows={5}
                                         />
                                     </Form.Item>
+
                                     <ConfigProvider
                                         theme={{
                                             components: {
@@ -350,22 +402,27 @@ const Order = () => {
                                         }}
                                     >
                                         <Form.Item
-                                            label="Shipping method"
+                                            label={<FormattedMessage id="shipping_method" />}
                                             name="shipping_method"
-                                            rules={[{ required: true, message: 'Please select a shipping method' }]}
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: <FormattedMessage id="shipping_method_message" />,
+                                                },
+                                            ]}
                                         >
                                             <Radio.Group
                                                 onChange={(e) => handleShippingChange(e.target.value)}
                                                 disabled={!wardCode}
                                             >
                                                 <Radio className="font-medium" value={1}>
-                                                    Express Shipping
+                                                    <FormattedMessage id="shipping_express" />
                                                 </Radio>
                                                 <Radio className="font-medium" value={2}>
-                                                    Standard shipping
+                                                    <FormattedMessage id="shipping_standard" />
                                                 </Radio>
                                                 <Radio className="font-medium" value={3}>
-                                                    Saving shipping
+                                                    <FormattedMessage id="shipping_saving" />
                                                 </Radio>
                                             </Radio.Group>
                                         </Form.Item>
@@ -376,7 +433,7 @@ const Order = () => {
                                         style={{ width: '100%', maxWidth: '500px', margin: '0 auto', padding: '20px' }}
                                     >
                                         <Title level={3} style={{ marginBottom: '16px' }}>
-                                            Shipping
+                                            <FormattedMessage id="shipping" />
                                         </Title>
 
                                         <Text
@@ -391,16 +448,16 @@ const Order = () => {
                                                 strong
                                                 style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}
                                             >
-                                                Shipment One
+                                                <FormattedMessage id="shipment_one" />
                                             </Text>
                                             <Text style={{ fontSize: '14px', color: '#555' }}>
-                                                Pick up available from Monday to Saturday every week.
+                                                <FormattedMessage id="pickup_info" />
                                             </Text>
                                         </div>
 
                                         <div style={{ marginTop: '16px' }}>
                                             <Text type="secondary" style={{ fontSize: '14px' }}>
-                                                This is an international shipment requiring customs clearance
+                                                <FormattedMessage id="customs_info" />
                                             </Text>
                                         </div>
                                         <div style={{ borderTop: '1px solid #ddd', marginTop: '20px' }}></div>
@@ -414,7 +471,7 @@ const Order = () => {
                         <Col xs={24} md={12}>
                             <div style={{ width: '100%', maxWidth: '800px' }}>
                                 <Card bordered={false}>
-                                    <Title level={3}>Order Summary</Title>
+                                    <Title level={3}>{<FormattedMessage id="Order Summary" />}</Title>
                                     <div className="flex items-center justify-end gap-x-4 mb-10">
                                         <div>
                                             <ConfigProvider
@@ -430,7 +487,7 @@ const Order = () => {
                                             >
                                                 <Input
                                                     value={code}
-                                                    placeholder="Voucher code"
+                                                    placeholder={intl.formatMessage({ id: 'Voucher_code' })}
                                                     className="w-[150px]"
                                                     onChange={(e: any) => setCode(e.target.value)}
                                                 />
@@ -438,7 +495,7 @@ const Order = () => {
                                         </div>
                                         <div>
                                             <Button className="transition-global" onClick={handleGetVoucher}>
-                                                {loadingVoucher ? <LoadingSmall /> : 'Get'}
+                                                {loadingVoucher ? <LoadingSmall /> : <FormattedMessage id="Get" />}
                                             </Button>
                                         </div>
                                     </div>
@@ -449,7 +506,9 @@ const Order = () => {
                                             marginBottom: '16px',
                                         }}
                                     >
-                                        <Text className="color-primary font-medium">Subtotal</Text>
+                                        <Text className="color-primary font-medium">
+                                            {<FormattedMessage id="box.Cart.Subtotal" />}
+                                        </Text>
                                         <Text className="color-primary font-medium">
                                             {formatPrice(handleTotalPrice)}đ
                                         </Text>
@@ -489,10 +548,10 @@ const Order = () => {
                                                     voucher.type == 'fixed'
                                                         ? voucher.discount
                                                         : ((handleTotalPrice >= FREE_SHIP
-                                                            ? handleTotalPrice
-                                                            : handleTotalPrice + (fee?.total || 0)) *
-                                                            +voucher.discount) /
-                                                        100,
+                                                              ? handleTotalPrice
+                                                              : handleTotalPrice + (fee?.total || 0)) *
+                                                              +voucher.discount) /
+                                                              100,
                                                 )}
                                                 đ
                                             </Text>
@@ -503,7 +562,7 @@ const Order = () => {
 
                                     <div style={{ margin: '16px 0', fontSize: '12px' }}>
                                         <Text className="color-primary font-medium">
-                                            Add 1.000.000₫ more to earn Free Shipping!
+                                            {<FormattedMessage id="box.Add 1.000.000₫ more to earn Free Shipping!" />}
                                         </Text>
                                         <Progress
                                             percent={
@@ -526,7 +585,9 @@ const Order = () => {
                                             marginBottom: '8px',
                                         }}
                                     >
-                                        <Text className="color-primary font-medium text-[20px]">Total</Text>
+                                        <Text className="color-primary font-medium text-[20px]">
+                                            {<FormattedMessage id="box.Cart.Total" />}
+                                        </Text>
                                         <Text className="color-primary font-medium text-[20px]">
                                             {formatPrice(totalAmount)}đ
                                         </Text>
@@ -560,14 +621,15 @@ const Order = () => {
                                                         </p>
                                                     </div>
                                                     <Text className="block my-2 text-[15px] color-gray">
-                                                        Qty: {cart?.quantity}
+                                                        {<FormattedMessage id="body.Detail.Quantity" />}:{' '}
+                                                        {cart?.quantity}
                                                     </Text>
                                                     <Text className="block font-medium text-[18px] color-primary">
                                                         {formatPrice(
                                                             cart?.product
                                                                 ? cart?.product.price
                                                                 : cart?.product_variation?.sale_price ||
-                                                                cart?.product_variation?.price,
+                                                                      cart?.product_variation?.price,
                                                         )}{' '}
                                                         ₫
                                                     </Text>
@@ -577,7 +639,7 @@ const Order = () => {
                                     ))}
 
                                     <div className="mt-10">
-                                        <Title level={3}>Payment</Title>
+                                        <Title level={3}>{<FormattedMessage id="title.Payment" />}</Title>
                                         <div>
                                             <ConfigProvider
                                                 theme={{
@@ -638,7 +700,9 @@ const Order = () => {
                                                                     alt="PayPal"
                                                                     className={'w-[30px]'}
                                                                 />
-                                                                CASH ON DELIVERY
+                                                                {
+                                                                    <FormattedMessage id="title.Payment.CASH ON DELIVERY" />
+                                                                }
                                                             </div>
                                                         </Radio.Button>
                                                     </Radio.Group>
@@ -648,7 +712,11 @@ const Order = () => {
                                     </div>
                                     <div className="mt-10">
                                         <ButtonPrimary width="w-full" height="h-[56px]" htmlType="submit">
-                                            {loadingCheckOut ? <LoadingSmall /> : 'Checkout'}
+                                            {loadingCheckOut ? (
+                                                <LoadingSmall />
+                                            ) : (
+                                                <FormattedMessage id="box.Cart.Checkout" />
+                                            )}
                                         </ButtonPrimary>
                                     </div>
                                 </Card>

@@ -1,14 +1,15 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const Outstanding = ({
     category,
     title,
     description,
-    //path,
-}: {
+}: //path,
+{
     category: string | ReactNode;
-    title: string;
-    description: string;
+    title: string | ReactNode;
+    description: string | ReactNode;
     path?: string;
 }) => {
     return (
@@ -23,7 +24,7 @@ const Outstanding = ({
                         className="md:px-8 sm:px-5 py-2 bg-primary text-white font-medium
                         text-[15px] rounded-[30px] hover:opacity-60"
                     >
-                        Shop
+                        {<FormattedMessage id="body.Shop" />}
                     </a>
                 </div>
             </div>

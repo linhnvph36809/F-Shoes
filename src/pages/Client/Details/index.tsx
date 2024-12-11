@@ -18,6 +18,7 @@ import LoadingPage from '../../../components/Loading/LoadingPage.tsx';
 import useWishlist from '../../../hooks/useWishlist.tsx';
 import Reviews from './Reviews.tsx';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
+import { FormattedMessage } from 'react-intl';
 
 const Detail = () => {
     const { slug } = useParams();
@@ -121,7 +122,9 @@ const Detail = () => {
                             )}
                         </div>
                         <div className="flex-1">
-                            <p className="text-[#d33918] text-16px font-medium">Sustainable Materials</p>
+                            <p className="text-[#d33918] text-16px font-medium">
+                                {<FormattedMessage id="title.Detail.Sustainable Materials" />}
+                            </p>
                             <h1 className="color-primary font-medium text-24px leading-normal">{productD?.name}</h1>
 
                             <h4 className="color-primary font-medium text-16px">
@@ -144,7 +147,7 @@ const Detail = () => {
                                           <div key={item?.id} className="mb-6">
                                               <div className="flex-row-center justify-between pb-5">
                                                   <p className="text-16px font-medium color-primary">
-                                                      Select {item.name}
+                                                      {<FormattedMessage id="body.Detail.Select" />} {item.name}
                                                   </p>
                                               </div>
 
@@ -166,7 +169,9 @@ const Detail = () => {
                                   })
                                 : ''}
                             {variant?.stock_qty ? (
-                                <p className="text-16px font-medium text-red-500">Quantity : {variant?.stock_qty}</p>
+                                <p className="text-16px font-medium text-red-500">
+                                    {<FormattedMessage id="body.Detail.Quantity" />} : {variant?.stock_qty}
+                                </p>
                             ) : (
                                 ''
                             )}
@@ -184,7 +189,7 @@ const Detail = () => {
                                     }           text-16px font-medium h-[58px] text-white
                                                 rounded-[30px] w-full hover-opacity transition-global`}
                                 >
-                                    {loadingAddCart ? <LoadingSmall /> : 'Add to Bag'}
+                                    {loadingAddCart ? <LoadingSmall /> : <FormattedMessage id="body.Detail.addtobag" />}
                                 </button>
 
                                 <button
@@ -200,7 +205,7 @@ const Detail = () => {
                                         />
                                     ) : (
                                         <div className="flex gap-x-5 items-center text-16px font-medium">
-                                            <Heart /> Favourite
+                                            <Heart /> {<FormattedMessage id="body.Detail.Favourite" />}
                                         </div>
                                     )}
                                 </button>
@@ -214,7 +219,7 @@ const Detail = () => {
                     </div>
                     <div className="my-20">
                         <div>
-                            <Heading title="YOU MIGHT ALSO LIKE" />
+                            <Heading title={<FormattedMessage id="body.Detail.YOU MIGHT ALSO LIKE" />} />
                             <SlidesScroll className="slidesProducts pb-20">
                                 {productD?.suggestedProduct
                                     ? productD?.suggestedProduct?.map((item: any) => (

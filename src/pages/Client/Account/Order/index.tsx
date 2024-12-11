@@ -6,6 +6,7 @@ import Heading from './components/Heading';
 import ListOrder from './components/ListOrder';
 import { useNavigate } from 'react-router-dom';
 import { statusArr } from '../../../../interfaces/IOrder';
+import { FormattedMessage } from 'react-intl';
 
 const OrderProfile = () => {
     const navigate = useNavigate();
@@ -36,8 +37,6 @@ const OrderProfile = () => {
         `/api/me/orders?per_page=5&page=${page}&status=${indexStatus || indexStatus === 0 ? indexStatus : ''}`,
     );
 
-
-
     const handlePageChange = (page: number) => {
         params.set('page', `${page}`);
         navigate(`?${params.toString()}`, { replace: true });
@@ -48,7 +47,7 @@ const OrderProfile = () => {
 
     return (
         <section>
-            <Heading>All Order</Heading>
+            <Heading>{<FormattedMessage id="All Order" />}</Heading>
             {isFetching ? <Skeleton /> : <ListOrder data={data?.data?.data || []} />}
             <ConfigProvider
                 theme={{

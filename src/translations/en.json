@@ -2,5 +2,220 @@
     "header.findAStore": "Find a Store",
     "header.help": "Help",
     "header.joinUs": "Join Us",
-    "body.lifestyleRunningShoes": "Lifestyle Running Shoes"
+    "header.signin": "Sign In",
+    "header.search": "Search",
+    "search.placeholder": "Search",
+
+    "menu.New & Featured": "New & Featured",
+    "menu.Men": "Men",
+    "menu.Women": "Women",
+    "menu.Kids": "Kids",
+
+    "banner.New Styles On Sale: Up To 40% Off": "New Styles On Sale: Up To 40% Off",
+    "banner.Shop All Our New Markdowns": "Shop All Our New Markdowns",
+
+    "body.lifestyleRunningShoes": "Lifestyle Running Shoes",
+    "body.EXTRA-ORDINARY": "EXTRA-ORDINARY",
+    "body.Shop": "Shop",
+    "body.Meet the latest collection of retro running inspired shoes.The unlikely heroes of your easiest styling hack.": "Meet the latest collection of retro running inspired shoes.The unlikely heroes of your easiest styling hack.",
+
+    "body.EARTH TONES": "EARTH TONES",
+    "body.Jordan Apparel": "Jordan Apparel",
+    "body.Ground your look in earthy tones inspired by outdoor courts. Details like knits, ripcords, and cargo pockets add rich texture to your fit.": "Ground your look in earthy tones inspired by outdoor courts. Details like knits, ripcords, and cargo pockets add rich texture to your fit.",
+
+    "title.Trending This Week": "Trending This Week",
+    "title.Best Selling": "Best Selling",
+    "title.Shop By Sport": "Shop By Sport",
+    "title.Don't Miss": "Don't Miss",
+
+    "box.Running": "Running",
+
+    "footer.Resources": "Resources",
+    "footer.Resources.Find A Store": "Find A Store",
+    "footer.Resources.Become A Member": "Become A Member",
+    "footer.Resources.Send Us Feedback": "Send Us Feedback",
+    "footer.Resources.Nike Journal": "Nike Journal",
+    "footer.Resources.Gift Cards": "Gift Cards",
+
+    "footer.Help": "Help",
+    "footer.Help.Get Help": "Get Help",
+    "footer.Help.Order Status": "Order Status",
+    "footer.Help.Delivery": "Delivery",
+    "footer.Help.Returns": "Returns",
+    "footer.Help.Payment Options": "Payment Options",
+    "footer.Help.Contact Us": "Contact Us",
+
+    "footer.About Nike": "About Nike",
+    "footer.About Nike.Purpose": "Purpose",
+    "footer.About Nike.News": "News",
+    "footer.About Nike.Careers": "Careers",
+    "footer.About Nike.Investors": "Investors",
+    "footer.About Nike.Sustainability": "Sustainability",
+
+    "footer.© 2024 Nike, Inc. All rights reserved": "© 2024 Nike, Inc. All rights reserved",
+    "footer.Terms of Sale": "Terms of Sale",
+    "footer.Terms of Use": "Terms of Use",
+    "footer.Nike Privacy Policy": "Nike Privacy Policy",
+
+    "body.category.Sort By": "Sort By",
+    "body.category.All": "All",
+    "body.category.There are too few products in this category! Please check out products in other categories below.": "There are too few products in this category! Please check out products in other categories below.",
+
+    "filters.hide": "Hide Filters",
+    "filters.show": "Show Filters",
+
+    "filter.category.lowToHigh": "Low To High",
+    "filter.category.High To Low": "High To Low",
+    "filter.category.Newest": "Newest",
+    "filter.category.Best Selling": "Best Selling",
+
+    "body.category.List": "List",
+
+    "title.Detail.Sustainable Materials": "Sustainable Materials",
+    "body.Detail.Select": "Select",
+    "body.Detail.Quantity": "Quantity",
+    "body.Detail.addtobag": "Add to Bag",
+    "body.Detail.Favourite": "Favourite",
+
+    "body.Detail.Free Delivery and Returns": "Free Delivery and Returns",
+    "body.Detail.Your order of 5.000.000₫ or more gets free standard delivery.": "Your order of 5.000.000₫ or more gets free standard delivery.",
+    "body.Detail.Standard delivered 4-5 Business Days": "Standard delivered 4-5 Business Days",
+    "body.Detail.Express delivered 2-4 Business Days": "Express delivered 2-4 Business Days",
+    "body.Detail.Orders are processed and delivered Monday-Friday (excluding public holidays)": "Orders are processed and delivered Monday-Friday (excluding public holidays)",
+    "body.Detail.YOU MIGHT ALSO LIKE": "YOU MIGHT ALSO LIKE",
+    "body.Detail.Reviews": "Reviews",
+    "body.Reviews.Delete": "Delete",
+
+    "box.Cart.Summary": "Summary",
+    "box.Cart.Subtotal": "Subtotal",
+    "box.Cart.Total": "Total",
+    "box.Cart.Checkout": "Checkout",
+    "box.Cart.Bag": "Bag",
+    "box.Cart.Estimated Delivery & Handling": "Estimated Delivery & Handling",
+
+    "Order.Delivery": "Delivery",
+    "Order.Enter your name and address:": "Enter your name and address:",
+    "Order.If you have a promo code, you will be able to input it after filling in your contact details.": "If you have a promo code, you will be able to input it after filling in your contact details.",
+
+    "receiver_name": "Receiver Name",
+    "receiver_name_placeholder": "Receiver Name",
+    "receiver_name_message": "Please enter your Receiver Name",
+
+    "receiver_email": "Receiver Email",
+    "receiver_email_placeholder": "Receiver Email",
+    "receiver_email_message": "Please enter your Receiver Email",
+    "receiver_email_invalid": "Please enter a valid email address",
+
+    "country": "Country",
+    "city": "Select City",
+    "city_placeholder": "Select Province",
+    "city_message": "Please select a province",
+
+    "district": "Select District",
+    "district_placeholder": "Select District",
+    "district_message": "Please select a district",
+
+    "ward": "Select Ward",
+    "ward_placeholder": "Select Ward",
+    "ward_message": "Please select a ward",
+
+    "phone": "Phone",
+    "phone_placeholder": "Phone",
+    "phone_message": "Please enter your phone",
+
+    "address": "Address",
+    "address_placeholder": "Address line",
+    "address_message": "Please enter your address",
+
+    "note": "Note",
+    "note_placeholder": "Enter note",
+
+    "shipping_method": "Shipping Method",
+    "shipping_method_message": "Please select a shipping method",
+    "shipping_express": "Express Shipping",
+    "shipping_standard": "Standard Shipping",
+    "shipping_saving": "Saving Shipping",
+
+    "shipping": "Shipping",
+    "shipment_one": "Shipment One",
+    "pickup_info": "Pick up available from Monday to Saturday every week.",
+    "customs_info": "This is an international shipment requiring customs clearance.",
+
+    "Order Summary": "Order Summary",
+    "Voucher_code": "Voucher code",
+    "Get": "Get",
+    "box.Add 1.000.000₫ more to earn Free Shipping!": "Add 1.000.000₫ more to earn Free Shipping!",
+
+    "title.Payment": "Payment",
+    "title.Payment.CASH ON DELIVERY": "CASH ON DELIVERY",
+
+    "thank_you_purchase": "Thank you for your purchase",
+    "order_received_message": "We've received your order and it will ship in 5-7 business days.",
+    "back_to_home": "Back to Home",
+    "voucher": "Voucher",
+
+    "Post_Press Releases": "Press Releases",
+    "Post_Collections": "Collections",
+
+    "Profile": "Profile",
+    "Orders": "Orders",
+    "Setting": "Setting",
+
+    "Profile.Fshoes Member Since": "Fshoes Member Since",
+    "noFavorites": "You don't have any favorite products yet!",
+    "addFavorites": "Add ones",
+
+    "Member Benefits (Coming Soon)": "Member Benefits (Coming Soon)",
+    "Member-Only Products": "Member-Only Products",
+    "Free Returns With Every Order": "Free Returns With Every Order",
+    "Exclusive Deals": "Exclusive Deals",
+    "Free Running and Training Apps": "Free Running and Training Apps",
+    "Fshoes Events": "Fshoes Events",
+
+    "All Order": "All Order",
+    "totalAmount": "Total Amount",
+    "paymentMethod": "Payment Method",
+    "status": "Status",
+    "viewDetails": "View Details",
+    "No data": "No data",
+
+    "allOrders": "All Orders",
+    "cancelled": "Cancelled",
+    "waitingConfirm": "Waiting Confirm",
+    "confirmed": "Confirmed",
+    "delivering": "Delivering",
+    "delivered": "Delivered",
+    "returnProcessing": "Return Processing",
+    "deniedReturn": "Denied Return",
+    "returned": "Returned",
+
+    "accountDetails": "Account Details",
+    "givenName": "Given Name",
+    "givenNamePlaceholder": "Given name",
+    "familyName": "Family Name",
+    "familyNamePlaceholder": "Family name",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "enterPassword": "Enter your password",
+    "edit": "Edit",
+    "dateOfBirth": "Date of Birth",
+    "choosingAddress": "Choosing Address",
+    "location": "Location",
+    "save": "Save",
+    "validTimeMessage": "Please enter valid time",
+
+    "Country/Region": "Country/Region",
+    "Province": "Province",
+
+    "currentPassword": "Current Password",
+    "currentPasswordPlaceholder": "Current password",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "New password",
+    "confirmNewPassword": "Confirm New Password",
+    "confirmNewPasswordPlaceholder": "Confirm new password",
+    "pleaseEnterPassword": "Please enter your password",
+    "minimumCharacters": "Minimum of 8 characters",
+    "passwordsDoNotMatch": "Passwords do not match!",
+    "submit": "Submit"
 }

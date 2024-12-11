@@ -9,23 +9,24 @@ import FilterByCategory from './components/Fiter/FilterByCategory.tsx';
 import { ICategory } from '../../../interfaces/ICategory.ts';
 import FilterBox from './components/Fiter';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
+import { FormattedMessage } from 'react-intl';
 
 const sortKeysArray = [
     {
         key: 'lowToHigh',
-        name: 'Low To High',
+        name: <FormattedMessage id="filter.category.lowToHigh" />,
     },
     {
         key: 'highToLow',
-        name: 'High To Low ',
+        name: <FormattedMessage id="filter.category.High To Low" />,
     },
     {
         key: 'newest',
-        name: 'Newest',
+        name: <FormattedMessage id="filter.category.Newest" />,
     },
     {
         key: 'bestSelling',
-        name: 'Best Selling',
+        name: <FormattedMessage id="filter.category.Best Selling" />,
     },
 ];
 
@@ -92,7 +93,7 @@ const CategoryPage = () => {
         <Menu>
             {sortKeysArray.map((item, index) => (
                 <Menu.Item key={index}>
-                    <div onClick={() => changeSort(item.key)}> Sort by {item.name}</div>
+                    <div onClick={() => changeSort(item.key)}> {item.name}</div>
                 </Menu.Item>
             ))}
         </Menu>
@@ -103,11 +104,15 @@ const CategoryPage = () => {
             <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center space-x-4">
                     <Button icon={<FilterOutlined />} onClick={toggleFilters}>
-                        {filtersVisible ? 'Hide Filters' : 'Show Filters'}
+                        {filtersVisible ? (
+                            <FormattedMessage id="filters.hide" />
+                        ) : (
+                            <FormattedMessage id="filters.show" />
+                        )}
                     </Button>
                     <Dropdown overlay={sortMenu} trigger={['click']}>
                         <Button>
-                            Sort By <DownOutlined />
+                            {<FormattedMessage id="body.category.Sort By" />} <DownOutlined />
                         </Button>
                     </Dropdown>
                 </div>
@@ -128,7 +133,7 @@ const CategoryPage = () => {
                             overflowY: 'auto',
                         }}
                     >
-                        <Heading title="List" />
+                        <Heading title={<FormattedMessage id="body.category.List" />} />
                         <FilterByCategory categories={listCategories} />
                         <div className="my-4">
                             <FilterBox />
@@ -141,8 +146,9 @@ const CategoryPage = () => {
                     {slug && listProducts.length === 0 && (
                         <div className="flex items-center justify-center w-full h-[40ppx] border mb-8">
                             <p className="text-center text-xl my-4 font-sans text-[14px] text-gray-400">
-                                There are too few products in this category! Please check out products in other
-                                categories below.
+                                {
+                                    <FormattedMessage id="body.category.There are too few products in this category! Please check out products in other categories below." />
+                                }
                             </p>
                         </div>
                     )}

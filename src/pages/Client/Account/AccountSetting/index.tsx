@@ -11,6 +11,7 @@ import { geonameCountry, geonameProvince } from '../../../../interfaces/GeoNames
 import useQueryConfig from '../../../../hooks/useQueryConfig.tsx';
 import ButtonPrimary from '../../../../components/Button/index.tsx';
 import { showMessageClient } from '../../../../utils/messages.ts';
+import { FormattedMessage, useIntl } from 'react-intl';
 interface DataChangePassword {
     password: string;
     newPassword: string;
@@ -27,6 +28,7 @@ interface DataUpdateProfile {
 const { Option } = Select;
 
 const AccountSetting = () => {
+    const intl = useIntl();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [updateProfileForm] = Form.useForm();
@@ -216,53 +218,58 @@ const AccountSetting = () => {
                             onFinish={onFinishChangePassword}
                             name="change-password"
                         >
+                            {/* Current Password Field */}
                             <div className="my-8">
                                 <Form.Item
-                                    label="Current password"
+                                    label={<FormattedMessage id="currentPassword" />}
                                     name="password"
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please enter your password',
+                                            message: <FormattedMessage id="pleaseEnterPassword" />,
                                         },
                                     ]}
                                 >
                                     <Input.Password
-                                        placeholder="Current password"
+                                        placeholder={intl.formatMessage({ id: 'currentPasswordPlaceholder' })}
                                         className="w-full border border-black h-20"
                                     />
                                 </Form.Item>
                             </div>
+
+                            {/* New Password Field */}
                             <div className="my-8">
                                 <Form.Item
-                                    label="New password"
+                                    label={<FormattedMessage id="newPassword" />}
                                     name="newPassword"
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please enter your password',
+                                            message: <FormattedMessage id="pleaseEnterPassword" />,
                                         },
                                         {
                                             min: 8,
-                                            message: 'Minimum of 8 characters',
+                                            message: <FormattedMessage id="minimumCharacters" />,
                                         },
                                     ]}
                                 >
                                     <Input.Password
-                                        placeholder="New password"
+                                        placeholder={intl.formatMessage({ id: 'newPasswordPlaceholder' })}
                                         className="w-full border border-black h-20"
                                     />
                                 </Form.Item>
                             </div>
+
+                            {/* Confirm New Password Field */}
                             <div className="my-8">
                                 <Form.Item
-                                    label="Confirm new password"
+                                    label={<FormattedMessage id="confirmNewPassword" />}
                                     dependencies={['newPassword']}
                                     name="confirmedPassword"
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please enter your password',
+                                            message: <FormattedMessage id="pleaseEnterPassword" />,
                                         },
                                         ({ getFieldValue }) => ({
                                             validator(_, value) {
@@ -275,19 +282,17 @@ const AccountSetting = () => {
                                     ]}
                                 >
                                     <Input.Password
-                                        placeholder="Confirm new password"
+                                        placeholder={intl.formatMessage({ id: 'confirmNewPasswordPlaceholder' })}
                                         className="w-full border border-black h-20"
                                     />
                                 </Form.Item>
                             </div>
+
+                            {/* Submit Button */}
                             <div className="flex justify-end">
                                 <Form.Item>
-                                    <Button
-                                        className="rounded-3xl bg-black w-32 h-16 "
-                                        type="primary"
-                                        htmlType="submit"
-                                    >
-                                        {loading ? <LoadingSmall /> : 'Submit'}
+                                    <Button className="rounded-3xl bg-black w-32 h-16" type="primary" htmlType="submit">
+                                        {loading ? <LoadingSmall /> : <FormattedMessage id="submit" />}
                                     </Button>
                                 </Form.Item>
                             </div>
@@ -307,7 +312,9 @@ const AccountSetting = () => {
                             X
                         </button>
                         <div className="mb-4">
-                            <label className="block text-gray-700 mb-2 text-2xl">Country/Region</label>
+                            <label className="block text-gray-700 mb-2 text-2xl">
+                                {<FormattedMessage id="Country/Region" />}
+                            </label>
                             <Select
                                 showSearch={true}
                                 className="w-full h-20 "
@@ -338,7 +345,9 @@ const AccountSetting = () => {
 
                         {provinces && provinces.length > 0 ? (
                             <div className="mb-4">
-                                <label className="block text-gray-700 mb-2 text-2xl">Province</label>
+                                <label className="block text-gray-700 mb-2 text-2xl">
+                                    {<FormattedMessage id="Province" />}
+                                </label>
                                 <Select
                                     showSearch={true}
                                     className="w-full h-20"
@@ -429,7 +438,9 @@ const AccountSetting = () => {
                 ''
             )}
             <div className="w-full md:w-1/2 bg-white p-6 shadow-md rounded-lg">
-                <h1 className="text-[32px] font-semibold mb-4">Account Details</h1>
+                <h1 className="text-[32px] font-semibold mb-4">
+                    <FormattedMessage id="accountDetails" />
+                </h1>
 
                 <Form
                     labelCol={{ span: 24 }}
@@ -440,70 +451,92 @@ const AccountSetting = () => {
                     key={JSON.stringify(initialValues)}
                     initialValues={initialValues}
                 >
-                    {/* Các trường nhập */}
-                    <div></div>
+                    {/* Given Name Field */}
                     <div className="my-8">
-                        <Form.Item label="Given Name" name="given_name">
-                            <Input type="text" placeholder="Given name" className="w-full border border-black h-20" />
+                        <Form.Item label={<FormattedMessage id="givenName" />} name="given_name">
+                            <Input
+                                type="text"
+                                placeholder={intl.formatMessage({ id: 'givenNamePlaceholder' })}
+                                className="w-full border border-black h-20"
+                            />
                         </Form.Item>
                     </div>
+
+                    {/* Family Name Field */}
                     <div className="my-8">
-                        <Form.Item label="Family Name" name="family_name">
-                            <Input type="text" placeholder="Family name" className="w-full border border-black h-20" />
+                        <Form.Item label={<FormattedMessage id="familyName" />} name="family_name">
+                            <Input
+                                type="text"
+                                placeholder={intl.formatMessage({ id: 'familyNamePlaceholder' })}
+                                className="w-full border border-black h-20"
+                            />
                         </Form.Item>
                     </div>
+
+                    {/* Email Field */}
                     <div className="my-8">
-                        <label className="block text-gray-700 mb-6">Email</label>
+                        <label className="block text-gray-700 mb-6">
+                            <FormattedMessage id="email" />
+                        </label>
                         <Input
                             value={userD.email}
                             readOnly
                             className="w-full border border-none h-20"
-                            placeholder="Enter your email"
+                            placeholder={intl.formatMessage({ id: 'emailPlaceholder' })}
                         />
                     </div>
+
+                    {/* Password Field */}
                     <div className="my-8">
-                        <label className="block text-gray-700 mb-4">Password</label>
+                        <label className="block text-gray-700 mb-4">
+                            <FormattedMessage id="password" />
+                        </label>
                         <div className="flex">
                             <Input
                                 type="password"
                                 value="12345678"
                                 readOnly={true}
                                 className="w-full border border-none h-20"
-                                placeholder="Enter your password"
+                                placeholder={intl.formatMessage({ id: 'enterPassword' })}
                             />
                             <Button
-                                onClick={() => {
-                                    setDisplayPasswordForm(!displayPasswordForm);
-                                }}
+                                onClick={() => setDisplayPasswordForm(!displayPasswordForm)}
                                 className="mt-2 text-black bg-white border border-black"
                             >
-                                Edit
+                                <FormattedMessage id="edit" />
                             </Button>
                         </div>
                     </div>
+
+                    {/* Date of Birth Field */}
                     <div className="my-8">
                         <Form.Item
-                            label="Date of Birth"
+                            label={<FormattedMessage id="dateOfBirth" />}
                             name="birth_date"
-                            rules={[{ type: 'object', message: 'Please enter valid time' }]}
+                            rules={[{ type: 'object', message: <FormattedMessage id="validTimevMessage" /> }]}
                         >
                             <DatePicker className="w-full border border-black h-20" />
                         </Form.Item>
                     </div>
 
-                    <h3 className="text-3xl font-semibold mb-2">Location</h3>
+                    {/* Location Section */}
+                    <h3 className="text-3xl font-semibold mb-2">
+                        <FormattedMessage id="location" />
+                    </h3>
                     <div className="my-8">
-                        <Form.Item label="Address " name="detail_address">
-                            <Input type="text" placeholder="Address" className="w-full border border-black h-20" />
+                        <Form.Item label={<FormattedMessage id="address" />} name="detail_address">
+                            <Input
+                                type="text"
+                                placeholder={intl.formatMessage({ id: 'address' })}
+                                className="w-full border border-black h-20"
+                            />
                         </Form.Item>
                         <div className="flex justify-end">
                             <Button
-                                onClick={() => {
-                                    setDisplayAddressForm(!displayPasswordForm);
-                                }}
-                                className=" h-10 text-black bg-white rounded-3xl border border-black "
+                                onClick={() => setDisplayAddressForm(!displayPasswordForm)}
+                                className="h-10 text-black bg-white rounded-3xl border border-black"
                             >
-                                Choosing Address
+                                <FormattedMessage id="choosingAddress" />
                             </Button>
                         </div>
                     </div>
@@ -512,7 +545,7 @@ const AccountSetting = () => {
                     <div className="flex mt-4 justify-end">
                         <Form.Item className="mt-10">
                             <ButtonPrimary htmlType="submit" width="w-[120px] h-[56px]">
-                                {loadingUpdate ? <LoadingSmall /> : 'Save'}
+                                {loadingUpdate ? <LoadingSmall /> : <FormattedMessage id="save" />}
                             </ButtonPrimary>
                         </Form.Item>
                     </div>
