@@ -20,6 +20,8 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
         }
     };
 
+    console.log(orderDetail);
+
     return (
         <>
             <Modal width={600} footer={''} title="Order Detail" open={orderDetail.isModalOpen} onCancel={handleCancel}>
@@ -114,16 +116,19 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                         {orderDetail?.orderDetail?.order_details?.map((orderDetail: any) => (
                             <Link to={`/detail/${orderDetail?.product?.slug}`} key={orderDetail?.orderDetail?.id}>
                                 <div className="flex gap-x-5 h-[80px] my-5 border-b pb-3">
-                                    <img src={orderDetail.product?.image_url} alt="Product Image" />
+                                    <img src={orderDetail?.variation?.image_url} alt="Product Image" />
                                     <div>
                                         <div className="flex justify-between items-center gap-x-2 mt-2">
                                             <h3 className="text-[16px] color-primary font-medium">
-                                                {orderDetail?.product?.name}
+                                                {orderDetail?.variation?.name}
                                             </h3>
                                             <span className="text-[12px] color-gray font-medium">
                                                 x{orderDetail?.quantity}
                                             </span>
                                         </div>
+                                        <p className="text-[12px] color-gray font-medium">
+                                            {orderDetail?.variation?.classify}
+                                        </p>
                                         <p className="text-[12px] color-primary font-medium mt-2">
                                             {formatPrice(orderDetail?.price)} đ
                                         </p>

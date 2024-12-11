@@ -19,6 +19,7 @@ export default function ClassicsSpotlight() {
             retry: false,
         },
     );
+
     let bestSellingProducts = bestSelling?.data?.products || [];
     return (
         <>

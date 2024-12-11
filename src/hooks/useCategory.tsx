@@ -21,6 +21,8 @@ const useCategory = () => {
                 'get',
                 API_CATEGORY + '?include=parents,products&times=category',
             );
+            console.log(data);
+
             setCategories(data.categories.data);
         } catch (error) {
             console.log(error);

@@ -13,16 +13,22 @@ import Heading from '../components/Heading';
 import SkeletonComponent from '../components/Skeleton';
 import TableAdmin from '../components/Table';
 import { columnsAttribute } from '../Products/datas';
+import useQueryConfig from '../../../hooks/useQueryConfig';
 
 const UpdateCategory = () => {
     const { id } = useParams<{ id: string }>();
-    const { categories, mainCategories, loading, putCategory, addProductsToCategory, deleteProductFromCategory } =
-        useCategory();
+    const { categories, loading, addProductsToCategory, deleteProductFromCategory } = useCategory();
     const [initialValues, setInitialValues] = useState<ICategory | null>(null);
     const [categoryId, setCategoryId] = useState<string | number | null>(null);
     const [products, setProducts] = useState<IProduct[]>([]);
     const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
-    const { products: allProducts } = useProduct();
+
+    const { data } = useQueryConfig(
+        `all-product-admin-1`,
+        `/api/product?per_page=8&page=1&include=categories,sale_price,variations`,
+    );
+
+    const allProducts = data?.data.data || [];
 
     const handleDeleteProduct = async (productId: string | number) => {
         showMessageActive('Are you sure you want to delete this product?', '', 'warning', async () => {
@@ -110,7 +116,7 @@ const UpdateCategory = () => {
                                 placeholder="Select products"
                                 style={{ width: '360px', height: '50px', marginRight: '10px' }}
                             >
-                                {allProducts.map((product) => (
+                                {allProducts?.map((product: any) => (
                                     <Select.Option key={product.id} value={String(product.id)}>
                                         {product.name}
                                     </Select.Option>

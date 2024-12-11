@@ -50,7 +50,6 @@ const Cart = () => {
         }
     }, [carts, user, cartId]);
 
-
     return (
         <div className="container">
             <div className="container mx-auto" style={{ width: '1100px' }}>
@@ -69,7 +68,9 @@ const Cart = () => {
                                     />
                                 ))
                             ) : (
-                                <p className="text-center color-primary text-[16px]">Emty</p>
+                                <p className="text-center color-primary text-[16px]">
+                                    <FormattedMessage id="box.Cart.Emty" />
+                                </p>
                             )}
                             {isFetching && <LoadingPage />}
                         </div>

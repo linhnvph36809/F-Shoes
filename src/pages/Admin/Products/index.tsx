@@ -30,7 +30,6 @@ const ListProduct = () => {
         `all-product-admin-${page}`,
         API_PRODUCT + `?per_page=8&page=${page}&include=categories,sale_price,variations`,
     );
-    console.log(products);
     const handleDeleteProduct = (id: string | number) => {
         showMessageActive('Are you sure you want to delete this product', '', 'warning', () => {
             deleteProduct(id);
@@ -55,8 +54,9 @@ const ListProduct = () => {
                 <div className="flex-row-center gap-x-3">
                     <Link
                         state={{ prevUrl: currentUrl }}
-                        to={`/admin/${values?.variations && values.variations.length ? 'update-variant' : 'add-variant'
-                            }/${slug}`}
+                        to={`/admin/${
+                            values?.variations && values.variations.length ? 'update-variant' : 'add-variant'
+                        }/${slug}`}
                     >
                         <ButtonEdit>
                             <CopyPlus />

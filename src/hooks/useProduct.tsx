@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { IProduct } from '../interfaces/IProduct';
 import { tokenManagerInstance } from '../api';
 import { PATH_LIST_PRODUCT } from '../constants';
+import { showMessageAdmin } from '../utils/messages';
 
 export const API_PRODUCT = '/api/product';
 
 const useProduct = () => {
-    const [products, setProducts] = useState<IProduct[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
     const navigate = useNavigate();
@@ -21,27 +21,13 @@ const useProduct = () => {
         id = slug.substring(index + 1);
     }
 
-    const getAllProduct = async () => {
-        try {
-            setLoading(true);
-            const {
-                data: { data },
-            } = await tokenManagerInstance('get', API_PRODUCT + '?include=images,categories,sale_price,variations');
-            setProducts(data);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     const deleteProduct = async (id?: string | number) => {
         try {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_PRODUCT}/${id}`);
-            getAllProduct();
+            showMessageAdmin('Delete Product Sussccess', '', 'success');
         } catch (error) {
-            console.log(error);
+            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }
@@ -52,8 +38,9 @@ const useProduct = () => {
             setLoading(true);
             await tokenManagerInstance('post', API_PRODUCT, product);
             navigate(PATH_LIST_PRODUCT);
+            showMessageAdmin('Add Product Sussccess', '', 'success');
         } catch (error) {
-            console.log(error);
+            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }
@@ -64,22 +51,17 @@ const useProduct = () => {
             setLoading(true);
             await tokenManagerInstance('put', `${API_PRODUCT}/${id}`, product);
             navigate(PATH_LIST_PRODUCT);
+            showMessageAdmin('Update Product Sussccess', '', 'success');
         } catch (error) {
-            console.log(error);
+            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
-        getAllProduct();
-    }, [id]);
-
     return {
-        products,
         loading,
         postProduct,
-        getAllProduct,
         putProduct,
         deleteProduct,
     };
