@@ -30,6 +30,8 @@ export const usePermissionContext = () => useContext(ContextAdmin);
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
     const { user } = useContextGlobal();
+    
+    
 
     useEffect(() => {
         const starCountRef = ref(db, `groups/1`);

@@ -10,4 +10,5 @@ export interface IVariation {
     status:boolean;
     stock_qty: number;
     qty_sold:number;
+    qty_sale:number;
 }

@@ -51,7 +51,7 @@ const AddSale = () => {
             }
         }
     };
-    const selectAllProduct = (checked: boolean, products: IProduct[]) => {
+    const selectAllProduct = (_: any, products: IProduct[]) => {
         let variantsInProducts: IVariation[] = [];
         let simpleProductInProducts: IProduct[] = [];
         products.map((p) => {
@@ -89,7 +89,7 @@ const AddSale = () => {
             setArrSelectOneSelectedProduct([...filtered]);
         }
     };
-    const onSelectMultipleSelectedSimpleProduct = (checked: boolean, products: IProduct[]) => {
+    const onSelectMultipleSelectedSimpleProduct = (_: boolean, products: IProduct[]) => {
         const filterArrOneProduct = arrSelectOneSelectedProduct.filter((item) => {
             return !products.find((product) => item.id === product.id);
         });
@@ -105,14 +105,13 @@ const AddSale = () => {
             setArrSelectVariationsOfOneSelectedProduct([...filtered]);
         }
     };
-    const onSelectMultipleSelectedVariation = (checked: boolean, variations: IVariation[]) => {
+    const onSelectMultipleSelectedVariation = (_: boolean, variations: IVariation[]) => {
         const filterArrOneVariation = arrSelectVariationsOfOneSelectedProduct.filter((item) => {
             return !variations.find((variant) => item.id === variant.id);
         });
         setArrSelectVariationsOfOneSelectedProduct([...filterArrOneVariation]);
         setArrSelectedVariationsOfMultipleSelectedProduct([...variations]);
     };
-
     const onDeleteSimpleProduct = (record?: IProduct) => {
         showMessageActive('Delete', 'Are you sure you want to delete', 'warning', () => {
             const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
@@ -220,7 +219,7 @@ const AddSale = () => {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
-            render: (action: any, record: any) => {
+            render: (_: any, record: any) => {
                 return <Button onClick={() => onDeleteVariation(record)}>Delete</Button>;
             },
         },
@@ -301,16 +300,27 @@ const AddSale = () => {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
-            render: (action: any, record: any) => {
+            render: (_: any, record: any) => {
                 return <Button onClick={() => onDeleteSimpleProduct(record)}>Delete</Button>;
             },
         },
     ];
+    const [searchKeyListProduct,setSearchKeyProduct] = useState('');
+    const onSearchKeyListProduct = (e:any) => {
+        setSearchKeyProduct(e.target.value);
+    }
     const columns = [
         {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
+            filteredValue: [searchKeyListProduct],
+            onFilter: (value:any, record:IVariation) => {
+               if(value){
+                return record.name.toLowerCase().includes(value.toLowerCase()) || record.id.toString().includes(value.toLowerCase());
+               }
+                return true;
+            }
         },
         {
             title: 'Image',
@@ -353,14 +363,14 @@ const AddSale = () => {
 
     useEffect(() => {
         const formatDataProduct: { [key: string]: object } = {};
-        for (let i = 0; i < dataSourceProduct.length - 1; i++) {
+        for (let i = 0; i < dataSourceProduct.length; i++) {
             const model: { [key: string]: number } = {
                 quantity: dataSourceProduct[i].stock_qty,
             };
             formatDataProduct[dataSourceProduct[i].id] = model;
         }
         const formatDataVariation: { [key: string]: object } = {};
-        for (let i = 0; i < dataSourceVariation.length - 1; i++) {
+        for (let i = 0; i < dataSourceVariation.length; i++) {
             const model: { [key: string]: number } = {
                 quantity: dataSourceVariation[i].stock_qty,
             };
@@ -451,7 +461,7 @@ const AddSale = () => {
             }
         }
     };
-
+    
     const optionsType = [
         { label: 'Percent', value: 'percent' },
         { label: 'Fixed', value: 'fixed' },
@@ -565,7 +575,7 @@ const AddSale = () => {
                     >
                         <div>
                             <div className="my-4">
-                                <Input placeholder="Search a name" />
+                                <Input onChange={onSearchKeyListProduct} placeholder="Search a name or an id" />
                             </div>
                             <Table
                                 rowKey={(record) => `table1-${record.id}`}
@@ -577,7 +587,7 @@ const AddSale = () => {
                                         selectAllProduct(selected, records),
                                 }}
                                 dataSource={dataSourceProductOriginList}
-                                columns={columns}
+                                columns={columns as any}
                                 pagination={{ pageSize: 5 }}
                             />
                         </div>
