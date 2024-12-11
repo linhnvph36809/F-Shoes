@@ -91,6 +91,7 @@
     "box.Cart.Total": "Total",
     "box.Cart.Checkout": "Checkout",
     "box.Cart.Bag": "Bag",
+    "box.Cart.Emty": "Empty",
     "box.Cart.Estimated Delivery & Handling": "Estimated Delivery & Handling",
 
     "Order.Delivery": "Delivery",

@@ -6,15 +6,21 @@ import { useParams } from 'react-router-dom';
 import useGroups from '../../../../hooks/useGroup';
 import ButtonPrimary from '../../../../components/Button';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
-import { ACTIONS_LIST, PERMISSION } from '../../../../constants';
+import { ACTIONS, ACTIONS_LIST, PERMISSION } from '../../../../constants';
 import LoadingPage from '../../../../components/Loading/LoadingPage';
 
 const { Title } = Typography;
 
 const permissionList = [
-    { name: 'Products', key: PERMISSION.PERMISSION_PRODUCT, actions: ACTIONS_LIST },
+    { name: 'Dashboard', key: PERMISSION.PERMISSION_DASHBOARD, actions: ACTIONS.ACTIONS_VIEW },
     { name: 'Categories', key: PERMISSION.PERMISSION_CATEGORY, actions: ACTIONS_LIST },
+    { name: 'Products', key: PERMISSION.PERMISSION_PRODUCT, actions: ACTIONS_LIST },
     { name: 'Users', key: PERMISSION.PERMISSION_USER, actions: ACTIONS_LIST },
+    { name: 'Topic', key: PERMISSION.PERMISSION_TOPIC, actions: ACTIONS_LIST },
+    { name: 'Post', key: PERMISSION.PERMISSION_POST, actions: ACTIONS_LIST },
+    { name: 'Media', key: PERMISSION.PERMISSION_MEDIA, actions: ACTIONS_LIST },
+    { name: 'Voucher', key: PERMISSION.PERMISSION_VOUCHER, actions: ACTIONS_LIST },
+    { name: 'Review', key: PERMISSION.PERMISSION_REVIEW, actions: ACTIONS_LIST },
 ];
 
 const Authorization = () => {
@@ -73,8 +79,6 @@ const Authorization = () => {
         (async function () {
             if (id) {
                 const data = await getOneGroup(id);
-                console.log(data);
-
                 setPermissions(JSON.parse(data.permissions) || {});
                 setGroupName(data.group_name);
             }
@@ -90,21 +94,31 @@ const Authorization = () => {
             </Title>
             <div className="min-h-[200px] relative">
                 {permissions ? (
-                    permissionList.map((item) => (
+                    permissionList.map((item: any) => (
                         <div key={item.name} style={{ marginBottom: 32 }}>
                             <Title level={5} style={{ marginBottom: '8px' }}>
                                 {item.name} :
                             </Title>
                             <Row gutter={[16, 8]}>
-                                {item.actions.map((action: any) => (
-                                    <Col key={action} style={{ display: 'flex', alignItems: 'center' }}>
+                                {Array.isArray(item.actions) ? (
+                                    item?.actions?.map((action: any) => (
+                                        <Col key={action} style={{ display: 'flex', alignItems: 'center' }}>
+                                            <Switch
+                                                checked={permissions?.[item.key]?.includes(action)}
+                                                onChange={(checked) => handleSwitchChange(checked, item.key, action)}
+                                            />
+                                            <span style={{ marginLeft: 8 }}>{action}</span>
+                                        </Col>
+                                    ))
+                                ) : (
+                                    <Col key={item.actions} style={{ display: 'flex', alignItems: 'center' }}>
                                         <Switch
-                                            checked={permissions?.[item.key]?.includes(action)}
-                                            onChange={(checked) => handleSwitchChange(checked, item.key, action)}
+                                            checked={permissions?.[item.key]?.includes(item.actions)}
+                                            onChange={(checked) => handleSwitchChange(checked, item.key, item.actions)}
                                         />
-                                        <span style={{ marginLeft: 8 }}>{action}</span>
+                                        <span style={{ marginLeft: 8 }}>{item.actions}</span>
                                     </Col>
-                                ))}
+                                )}
                                 <Checkbox
                                     onChange={(e) => handleChooseAll(e.target.checked, item.key, item.actions)}
                                     className="font-medium text-[16px]"

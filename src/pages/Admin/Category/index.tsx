@@ -1,13 +1,14 @@
+import { Table } from 'antd';
 import { CopyPlus, SquarePen, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+import './style.scss';
 
 import useCategory from '../../../hooks/useCategory';
 import { ICategory } from '../../../interfaces/ICategory';
 import ButtonEdit from '../components/Button/ButtonEdit';
 import Heading from '../components/Heading';
-import SkeletonComponent from '../components/Skeleton';
-import TableAdmin from '../components/Table';
 import FormCategory from './components/Form';
 import { columns } from './datas';
 import { showMessageActive } from '../../../utils/messages';
@@ -15,8 +16,7 @@ import { ACTIONS, PERMISSION } from '../../../constants';
 import PermissionElement from '../../../components/Permissions/PermissionElement';
 
 const ListCategory = () => {
-    const { loading, deleteCategory, categories, mainCategories, postCategory, getAllCategory, putCategory } =
-        useCategory();
+    const { deleteCategory, categories, mainCategories, postCategory, getAllCategory, putCategory } = useCategory();
 
     const [cateUpdate, setCateUpdate] = useState<any>();
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -156,7 +156,7 @@ const ListCategory = () => {
 
                 {/* Bảng dữ liệu */}
                 <div className="w-full">
-                    <TableAdmin columns={[columMain, ...columns, columnDelete]} datas={[{}, ...filteredCategories]} />
+                    <Table columns={[columMain, ...columns, columnDelete]} dataSource={[...filteredCategories]} />
                 </div>
             </section>
             {/* )} */}

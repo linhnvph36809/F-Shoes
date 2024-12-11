@@ -64,16 +64,18 @@ const ModalImage = ({ images, handleSetImages, indexVariant, setImagesVariants }
                 Choose Image
             </Button>
             <Modal
-                title="Image Product"
+                title={<h3 className='font-medium text-[28px] mb-10'>Image Product</h3>}
                 width={1200}
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                okText={'Save'}
+                okText={
+                    "Save"
+                }
             >
                 <UploadImage imagesObj={images} handleCheckboxChange={handleCheckboxChange} />
-            </Modal>
-        </section>
+            </Modal >
+        </section >
     );
 };
 

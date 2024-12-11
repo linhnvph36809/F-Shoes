@@ -1,7 +1,6 @@
-import { memo } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
-const EditorComponent = memo(({ initialValues, setDescription }: { initialValues?: string; setDescription: any }) => {
+const EditorComponent = ({ initialValues, setDescription }: { initialValues?: string; setDescription: any }) => {
     const handleDescription = (content: string) => {
         setDescription(content);
     };
@@ -24,6 +23,6 @@ const EditorComponent = memo(({ initialValues, setDescription }: { initialValues
             onEditorChange={handleDescription}
         />
     );
-});
+};
 
 export default EditorComponent;

@@ -45,12 +45,17 @@ const UpdateProduct = () => {
     });
 
     const { putProduct, loading } = useProduct();
-    const { data: product, isFetching } = useQueryConfig(KEY + id, `${API_PRODUCT}/${id}?include=categories,images`);
+    const {
+        data: product,
+        isFetching,
+        refetch: refetchUpdate,
+    } = useQueryConfig(KEY + id, `${API_PRODUCT}/${id}?include=categories,images`);
 
     const onFinish = useCallback(
         async (values: any) => {
             putProduct(values);
             refetch();
+            refetchUpdate();
         },
         [images],
     );

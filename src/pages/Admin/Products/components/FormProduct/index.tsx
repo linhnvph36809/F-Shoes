@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Checkbox, ConfigProvider, Form, Radio } from 'antd';
+import { Checkbox, ConfigProvider, Form, Radio, Switch } from 'antd';
 import { X } from 'lucide-react';
 import '../../style.scss';
 
@@ -35,13 +35,15 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
             const datas = {
                 ...values,
                 description,
-                short_description: shortDescription,
+                short_description: shortDescription || initialValues.shortDescription,
                 images: imageArray,
+                status: values.status ? 1 : 0,
+                image_url: images.images.length == 1 ? images.images[0].url : values.image_url,
             };
 
             onFinish(datas);
         },
-        [images, description, shortDescription],
+        [images, description, shortDescription, initialValues],
     );
 
     useEffect(() => {
@@ -80,8 +82,8 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
                 </Form.Item>
                 <Categories />
             </div>
-            <Form.Item name="status" valuePropName="checked" initialValue={false}>
-                <Checkbox className="w- text-16px font-medium">Status</Checkbox>
+            <Form.Item label="Status" name="status">
+                <Switch className="w- text-16px font-medium" />
             </Form.Item>
             <ModalImage images={images} handleSetImages={setImages} />
             {images.isShow && (
@@ -100,23 +102,31 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
                         <Radio.Group buttonStyle="solid" defaultValue={initialValues?.image_url}>
                             <div className="grid grid-cols-12 gap-x-6 mt-10">
                                 {images.images.map((image: any, index: number) => (
-                                    <Radio.Button value={image.url} key={index}>
-                                        <div className="relative">
-                                            <img src={image.url} alt="" className="rounded-lg w-[70px]" />
-                                            <X
-                                                className="absolute -top-6 -right-4 w-6
-                                                hover:cursor-pointer hover:opacity-50 transition-global"
-                                                onClick={() => handleDeleteImage(image.id)}
+                                    <Radio.Button
+                                        value={image.url}
+                                        className="relative"
+                                        key={index}
+                                        style={{ width: '100px', height: '100px' }}
+                                    >
+                                        <div>
+                                            <img
+                                                src={image.url}
+                                                alt=""
+                                                className="rounded-lg w-[80px] h-[80px] object-cover"
                                             />
                                         </div>
+                                        <X
+                                            className="absolute -top-6 -right-4 w-6
+                                                hover:cursor-pointer hover:opacity-50 transition-global"
+                                            onClick={() => handleDeleteImage(image.id)}
+                                        />
                                     </Radio.Button>
                                 ))}
                             </div>
                         </Radio.Group>
                     </Form.Item>
                 </ConfigProvider>
-            )
-            }
+            )}
 
             <div className="my-20">
                 <h5 className="text-[18px] font-medium color-primary mb-5">Short Description</h5>
@@ -143,7 +153,7 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
                     {loading ? <LoadingSmall /> : 'Submit'}
                 </ButtonPrimary>
             </div>
-        </Form >
+        </Form>
     );
 };
 

@@ -5,14 +5,21 @@ import { useMemo, useState } from 'react';
 import Heading from '../../components/Heading';
 import ButtonComponent from '../../../Client/Authtication/components/Button';
 import useUser from '../../../../hooks/useUser';
-import useProduct from '../../../../hooks/useProduct';
 import useDelivery from '../../../../hooks/useDelivery';
 import useOrder from '../../../../hooks/useOrder';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import { formatPrice } from '../../../../utils';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
 
 const Addorder = () => {
-    const { products } = useProduct();
+    const { data } = useQueryConfig(
+        `all-product-admin-1`,
+        `/api/product?per_page=8&page=1&include=categories,sale_price,variations`,
+    );
+
+    const { refetch } = useQueryConfig('order-admin', '/api/orders')
+
+    const products = data?.data.data;
     const { users } = useUser();
     const { postOrder, loading } = useOrder();
     const [productSelected, setProductSelected] = useState<any>([]);
@@ -75,26 +82,28 @@ const Addorder = () => {
         const newValues = {
             user_id: value.user_id,
             total_amount,
-            payment_method: value.payment_method,
-            payment_status: '1',
+            payment_method: 'cash_on_delivery',
+            payment_status: 'not_yet_paid',
             shipping_method,
             phone: value.phone,
             shipping_cost: fee?.total || '',
             tax_amount: null,
             amount_collected: value.amount_collected,
+            receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
-                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-            } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+                } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: null,
-            status: '1',
+            status: 1,
             note: value.note,
             order_details,
+            cart_ids: [],
         };
 
         postOrder(newValues);
+        refetch();
     };
 
     const handleCityChange = (cityId: number) => {
@@ -160,7 +169,6 @@ const Addorder = () => {
                     rules={[{ required: true, message: 'Please select a user' }]}
                 >
                     <Select
-                        mode="multiple"
                         placeholder="Select User"
                         optionFilterProp="email"
                         allowClear
@@ -254,6 +262,13 @@ const Addorder = () => {
                 >
                     <Input placeholder="Enter recipient name" />
                 </Form.Item>
+                <Form.Item
+                    label="Recipient Email"
+                    name="receiver_email"
+                    rules={[{ required: true, message: 'Please enter email' }]}
+                >
+                    <Input placeholder="Enter recipient email" type="email" />
+                </Form.Item>
 
                 <Form.Item
                     label="Phone"
@@ -274,9 +289,6 @@ const Addorder = () => {
                         optionFilterProp="ProvinceName"
                         options={provinces}
                         fieldNames={{ label: 'ProvinceName', value: 'ProvinceID' }}
-                        style={{
-                            height: '56px',
-                        }}
                     />
                 </Form.Item>
 
@@ -342,7 +354,7 @@ const Addorder = () => {
                     <TextArea placeholder="Enter note" rows={9} />
                 </Form.Item>
 
-                {fee.service_fee && totalAmount && (
+                {fee.service_fee && totalAmount ? (
                     <div className="text-end my-10">
                         <p className="font-medium text-[16px] color-gray">
                             Shipping Fee: {formatPrice(fee.service_fee)} VND
@@ -352,7 +364,7 @@ const Addorder = () => {
                             Total: {formatPrice(totalAmount + +fee.service_fee)} VND
                         </h1>
                     </div>
-                )}
+                ) : ''}
 
                 <Form.Item className="text-end">
                     <ButtonComponent htmlType="submit">{loading ? <LoadingSmall /> : 'Submit'}</ButtonComponent>

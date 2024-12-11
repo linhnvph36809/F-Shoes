@@ -89,7 +89,8 @@
     "box.Cart.Subtotal": "Tổng phụ",
     "box.Cart.Total": "Tổng cộng",
     "box.Cart.Checkout": "Thanh toán",
-    "box.Cart.Bag": "Cái túi",
+    "box.Cart.Bag": "Giỏ hàng",
+    "box.Cart.Emty": "Trống",
     "box.Cart.Estimated Delivery & Handling": "Ước tính giao hàng và xử lý",
 
     "Order.Delivery": "Vận chuyển",

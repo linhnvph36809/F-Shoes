@@ -8,10 +8,25 @@ import ButtonPrimary from '../../../../components/Button';
 import ModalImage from '../AddProduct/ModalImage';
 import InputPrimary from '../../../../components/Input';
 import { IImage } from '../../../../interfaces/IImage';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
+import { useParams } from 'react-router-dom';
 
 const UpdateVariant = () => {
     const [form] = Form.useForm();
-    const { loading, variantByIds, putVariant } = useVariant();
+    const { slug } = useParams();
+
+    let id: string | number | undefined;
+
+    if (slug) {
+        const index = slug.lastIndexOf('.');
+        id = slug.substring(index + 1);
+    }
+
+    const { loading, putVariant } = useVariant();
+    const { data } = useQueryConfig(`update-product-variant-${id}`, `/api/product/${id}}/variation`);
+    const variantByIds = data?.data.data || [];
+    console.log(variantByIds);
+
     const [idVariant, setIdVariant] = useState([]);
     const [images, setImages] = useState<{
         isShow: boolean;
@@ -27,12 +42,12 @@ const UpdateVariant = () => {
     }, [variantByIds]);
 
     const onFinish = (values: any, i: number, id: string | number) => {
-        const variantIds = variantByIds.variations[i].values.map((value: any) => value.id);
+        const variantIds = variantByIds?.variations[i]?.values?.map((value: any) => value.id);
         const newValues = {
             ...values,
             status: true,
             values: variantIds,
-            images: imagesVariants[i] || variantByIds.variations[i].images.map((image: any) => image.id),
+            images: imagesVariants[i] || variantByIds?.variations[i]?.images?.map((image: any) => image.id),
         };
 
         putVariant(newValues, id);
@@ -98,7 +113,7 @@ const UpdateVariant = () => {
                             </div>
                         </div>
                         <div>
-                            {variantByIds?.variations.map((variation: any, i: number) => (
+                            {variantByIds?.variations?.map((variation: any, i: number) => (
                                 <Form
                                     form={form}
                                     onFinish={(value: any) => onFinish(value, i, variation.id)}

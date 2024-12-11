@@ -1,17 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Table, Input, Select, Card, Col, Row } from 'antd';
-import {
-    SearchOutlined,
-    ExclamationCircleOutlined,
-    CalendarOutlined,
-    CreditCardOutlined,
-    CheckOutlined,
-} from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import Heading from '../../components/Heading';
 import { columns } from './datas';
 import { API_ORDER } from '../../../../hooks/useOrder';
 import ModalOrder from './ModalOrder';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
+import TableAdmin from '../../components/Table';
 
 const { Option } = Select;
 
@@ -23,9 +18,10 @@ const OrderList = () => {
         orderDetail: null,
     });
 
+
+
     const { data: orders } = useQueryConfig('order-admin', API_ORDER);
 
-    console.log(orders);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -73,64 +69,6 @@ const OrderList = () => {
     return (
         <div>
             <Heading>Order List</Heading>
-
-            {/* Phần Badge */}
-            <div style={{ padding: '20px' }}>
-                <Row gutter={16} justify="space-around">
-                    {/* Pending Payment */}
-                    <Col span={6}>
-                        <Card>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={{ flex: 1 }}>
-                                    <h2>56</h2>
-                                    <p>Pending Payment</p>
-                                </div>
-                                <CalendarOutlined style={{ fontSize: '36px' }} />
-                            </div>
-                        </Card>
-                    </Col>
-
-                    {/* Completed */}
-                    <Col span={6}>
-                        <Card>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={{ flex: 1 }}>
-                                    <h2>12,689</h2>
-                                    <p>Completed</p>
-                                </div>
-                                <CheckOutlined style={{ fontSize: '36px' }} />
-                            </div>
-                        </Card>
-                    </Col>
-
-                    {/* Refunded */}
-                    <Col span={6}>
-                        <Card>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={{ flex: 1 }}>
-                                    <h2>124</h2>
-                                    <p>Refunded</p>
-                                </div>
-                                <CreditCardOutlined style={{ fontSize: '36px' }} />
-                            </div>
-                        </Card>
-                    </Col>
-
-                    {/* Failed */}
-                    <Col span={6}>
-                        <Card>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={{ flex: 1 }}>
-                                    <h2>32</h2>
-                                    <p>Failed</p>
-                                </div>
-                                <ExclamationCircleOutlined style={{ fontSize: '36px' }} />
-                            </div>
-                        </Card>
-                    </Col>
-                </Row>
-            </div>
-            {/* Tìm kiếm và các chức năng */}
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16, marginTop: '10px' }}>
                 <Input
                     placeholder="Search Order"
@@ -148,12 +86,12 @@ const OrderList = () => {
             </div>
 
             {/* Bảng hiển thị đơn hàng */}
-            <Table
+            <TableAdmin
                 columns={columns}
                 rowKey="id"
                 dataSource={filteredData}
                 className="hover:cursor-pointer"
-                onRow={(record) => ({
+                onRow={(record: any) => ({
                     onClick: () => handleRowClick(record),
                 })}
             />
