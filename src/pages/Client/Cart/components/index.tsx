@@ -5,6 +5,7 @@ import useCart from '../../../../hooks/useCart';
 import useWishlist from '../../../../hooks/useWishlist';
 import { formatPrice } from '../../../../utils';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
+import { FormattedMessage } from 'react-intl';
 
 const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
     const { putCart } = useCart();
@@ -70,7 +71,7 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
 
                     <div className="flex items-center space-x-4 mt-2 text-[15px] color-gray">
                         <div>
-                            Quantity:
+                            {<FormattedMessage id="body.Detail.Quantity" />}:
                             <InputNumber
                                 className="w-[60px] text-center ml-5"
                                 min={1}

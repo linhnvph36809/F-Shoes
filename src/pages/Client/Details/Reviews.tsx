@@ -12,7 +12,7 @@ import ReviewForm from '../../../components/FormReview';
 import { useContextGlobal } from '../../../contexts';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import { formatTime } from '../../../utils';
-
+import { FormattedMessage } from 'react-intl';
 
 const Reviews = ({ productId }: { productId?: string | number }) => {
     const { slug } = useParams();
@@ -68,7 +68,7 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
                             className="flex-row-center justify-between color-primary text-[18px]
                             font-medium"
                         >
-                            Free Delivery and Returns
+                            {<FormattedMessage id="body.Detail.Free Delivery and Returns" />}
                             <div className="flex-row-center gap-x-4">
                                 <ChevronDown />
                             </div>
@@ -78,14 +78,23 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
                 >
                     <div>
                         <p className="color-primary text-[16px] font-medium my-8">
-                            Your order of 5.000.000₫ or more gets free standard delivery.
+                            {
+                                <FormattedMessage id="body.Detail.Your order of 5.000.000₫ or more gets free standard delivery." />
+                            }
                         </p>
                         <ul className="list-disc list-outside pl-10 my-8">
-                            <li className="color-primary text-16px">Standard delivered 4-5 Business Days</li>
-                            <li className="color-primary text-16px">Express delivered 2-4 Business Days</li>
+                            <li className="color-primary text-16px">
+                                {<FormattedMessage id="body.Detail.Standard delivered 4-5 Business Days" />}
+                            </li>
+                            <li className="color-primary text-16px">
+                                {' '}
+                                {<FormattedMessage id="body.Detail.Express delivered 2-4 Business Days" />}
+                            </li>
                         </ul>
                         <p className="color-primary font-medium text-[16px] my-8">
-                            Orders are processed and delivered Monday-Friday (excluding public holidays)
+                            {
+                                <FormattedMessage id="body.Detail.Orders are processed and delivered Monday-Friday (excluding public holidays)" />
+                            }
                         </p>
                     </div>
                 </Panel>
@@ -96,7 +105,7 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
                             className="flex-row-center justify-between color-primary text-[18px]
                             font-medium"
                         >
-                            Reviews {data?.data?.reviews?.length}
+                            {<FormattedMessage id="body.Detail.Reviews" />} {data?.data?.reviews?.length}
                             <div className="flex-row-center gap-x-4">
                                 <span className="flex-row-center gap-x-1">
                                     {starElements(isNaN(averageRating) ? 0 : Math.floor(averageRating))}
@@ -159,7 +168,9 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
                                                                                 handleDeleteReview(review?.id)
                                                                             }
                                                                         >
-                                                                            Delete
+                                                                            {
+                                                                                <FormattedMessage id="body.Reviews.Delete" />
+                                                                            }
                                                                         </Menu.Item>
                                                                     </Menu>
                                                                 }
@@ -189,4 +200,3 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
     );
 };
 export default Reviews;
-

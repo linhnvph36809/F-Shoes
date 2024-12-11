@@ -5,8 +5,7 @@ const TableAdmin = ({ columns, datas, ...props }: any) => {
         <ConfigProvider
             theme={{
                 components: {
-                    Table: {
-                    },
+                    Table: {},
                 },
             }}
         >

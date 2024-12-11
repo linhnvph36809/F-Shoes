@@ -2,7 +2,7 @@ import { Dropdown, Input, Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import { Heart, Menu as MenuLucide, Search, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import HeaderCategory from './HeaderCategory.tsx';
 import { ICategory } from '../../interfaces/ICategory.ts';
@@ -15,6 +15,7 @@ import { useContextGlobal } from '../../contexts/index.tsx';
 import { LANGUAGE_EN, LANGUAGE_VI } from '../../constants/index.ts';
 
 const Header = () => {
+    const intl = useIntl();
     const [showMenu, setShowMenu] = useState<boolean>(false);
     const [headCates, setHeadCates] = useState([]);
     const [scrollPosition, setScrollPosition] = useState<{ isFixed: boolean; position: number }>({
@@ -127,7 +128,7 @@ const Header = () => {
                                         to="/authentication"
                                         className="text-[11px] color-primary font-medium hover:opacity-70"
                                     >
-                                        Sign In
+                                        <FormattedMessage id="header.signin" />
                                     </Link>
                                 )}
                             </li>
@@ -135,8 +136,9 @@ const Header = () => {
                     </div>
                 </div>
                 <div
-                    className={`${scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
-                        } bg-white transition-all duration-300 ease-linear`}
+                    className={`${
+                        scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
+                    } bg-white transition-all duration-300 ease-linear`}
                 >
                     <div className="container flex-row-center justify-between">
                         <div>
@@ -158,7 +160,7 @@ const Header = () => {
                                             setHeadCates(categories[0]?.children);
                                         }}
                                     >
-                                        New & Featured
+                                        <FormattedMessage id="menu.New & Featured" />
                                     </a>
                                 </li>
                                 <li>
@@ -173,7 +175,7 @@ const Header = () => {
                                             setHeadCates(categories[1]?.children);
                                         }}
                                     >
-                                        Men
+                                        <FormattedMessage id="menu.Men" />
                                     </a>
                                 </li>
                                 <li>
@@ -188,7 +190,7 @@ const Header = () => {
                                             setHeadCates(categories[2]?.children);
                                         }}
                                     >
-                                        Women
+                                        <FormattedMessage id="menu.Women" />
                                     </a>
                                 </li>
                                 <li>
@@ -203,7 +205,7 @@ const Header = () => {
                                             setHeadCates(categories[3]?.children);
                                         }}
                                     >
-                                        Kids
+                                        <FormattedMessage id="menu.Kids" />
                                     </a>
                                 </li>
                             </ul>
@@ -211,7 +213,7 @@ const Header = () => {
                         <div className="flex-row-center sm:gap-x-3 md:gap-x-6">
                             <form action="" className="sm:hidden md:block">
                                 <Input
-                                    placeholder="Search"
+                                    placeholder={intl.formatMessage({ id: 'header.search' })}
                                     className="w-[180px] h-[36px] rounded-[100px] bg-whitesmoke 
                                 color-primary font-medium border-0 pl-0 hover:bg-[#e5e5e5] focus:shadow-none"
                                     prefix={
@@ -248,8 +250,9 @@ const Header = () => {
                     <div className="absolute top-full w-full bg-white z-10">
                         <div
                             className={`w-[70%] overflow-hidden mx-auto grid grid-cols-4
-                            transition-all duration-100 ease-linear ${showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
-                                } `}
+                            transition-all duration-100 ease-linear ${
+                                showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
+                            } `}
                             onMouseLeave={() => setShowMenu(false)}
                             onMouseEnter={() => {
                                 setShowMenu(true);
@@ -268,9 +271,11 @@ const Header = () => {
                 </div>
                 <div className="bg-whitesmoke">
                     <div className="container text-center py-5 font-medium">
-                        <h3 className="text-[15px] color-primary mb-2">New Styles On Sale: Up To 40% Off</h3>
+                        <h3 className="text-[15px] color-primary mb-2">
+                            <FormattedMessage id="banner.New Styles On Sale: Up To 40% Off" />
+                        </h3>
                         <a href="#" className="text-[12px] color-primary underline">
-                            Shop All Our New Markdowns
+                            <FormattedMessage id="banner.Shop All Our New Markdowns" />
                         </a>
                     </div>
                 </div>

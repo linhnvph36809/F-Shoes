@@ -16,6 +16,7 @@ import React, { useState } from 'react';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Flex, message, Upload } from 'antd';
 import type { GetProp, UploadProps } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -85,7 +86,6 @@ const ProfilePage = () => {
             return;
         }
         if (info.file.status === 'done') {
-
             getBase64(info.file.originFileObj as FileType, (url) => {
                 setLoadingUploadImage(false);
                 setImageUrl(url);
@@ -109,45 +109,34 @@ const ProfilePage = () => {
                             <Flex gap="middle" wrap>
                                 <Upload
                                     name="avatar"
-                                    accept='.jpg,.jpeg,.png'
+                                    accept=".jpg,.jpeg,.png"
                                     listType="picture-circle"
                                     className="avatar-uploader"
                                     showUploadList={false}
                                     action="http://127.0.0.1:8000/api/update/user/avatar"
                                     beforeUpload={beforeUpload}
                                     onChange={handleChange}
-                                    disabled={
-                                        loadingUploadImage
-                                    }
+                                    disabled={loadingUploadImage}
                                     headers={{
                                         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                                     }}
                                 >
-                                    {imageUrl ? (
-                                        ''
-                                    ) : (
-                                        uploadButton
-                                    )}
+                                    {imageUrl ? '' : uploadButton}
                                 </Upload>
                             </Flex>
                         </div>
-                        <img
-                            className="w-full h-full object-cover rounded-full"
-                            src={userD?.avatar_url}
-                            alt=""
-                        />
-
+                        <img className="w-full h-full object-cover rounded-full" src={userD?.avatar_url} alt="" />
                     </div>
                     <div className="ml-8">
                         <Heading title={userD.name ? userD.name : userNameCookie} />
                         <p className="text-[16px] font-medium text-gray-500">
-                            Fshoes Member Since {formatTime(userD?.created_at)}
+                            {<FormattedMessage id="Profile.Fshoes Member Since" />} {formatTime(userD?.created_at)}
                         </p>
                     </div>
                 </div>
                 <div className="my-20">
                     <div>
-                        <Heading title="Favourites" />
+                        <Heading title={<FormattedMessage id="body.Detail.Favourite" />} />
                         {isFetching ? (
                             <div className="py-8">
                                 <SkeletonComponent />
@@ -169,14 +158,14 @@ const ProfilePage = () => {
                                                         <h5 className="text-[#707072] text-15px">
                                                             {item?.categories
                                                                 ? item?.categories.map((cat, index, array) => {
-                                                                    if (array.length < 2) {
-                                                                        return ' ' + cat?.name;
-                                                                    } else {
-                                                                        if (index == 2) return;
-                                                                        if (index == 1) return ' ' + cat?.name;
-                                                                        return ' ' + cat?.name + ',';
-                                                                    }
-                                                                })
+                                                                      if (array.length < 2) {
+                                                                          return ' ' + cat?.name;
+                                                                      } else {
+                                                                          if (index == 2) return;
+                                                                          if (index == 1) return ' ' + cat?.name;
+                                                                          return ' ' + cat?.name + ',';
+                                                                      }
+                                                                  })
                                                                 : ' '}
                                                         </h5>
                                                         <h3 className="text-15px color-primary font-medium mt-3">
@@ -189,10 +178,10 @@ const ProfilePage = () => {
                                     ))
                                 ) : (
                                     <p className="text-center text-[16px] font-medium">
-                                        You don't have any favorite products yet!.{' '}
+                                        {<FormattedMessage id="noFavorites" />}{' '}
                                         <Link className="underline" to="/category">
                                             {' '}
-                                            Add ones
+                                            {<FormattedMessage id="addFavorites" />}
                                         </Link>
                                     </p>
                                 )}

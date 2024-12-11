@@ -1,3 +1,5 @@
+import { FormattedMessage } from 'react-intl';
+
 const Footer = () => {
     return (
         <>
@@ -6,101 +8,102 @@ const Footer = () => {
                     <div className="flex py-20 border-t">
                         <div className="w-10/12 grid grid-cols-3">
                             <div>
-                                <h4 className="color-primary mb-10 font-medium text-[1.4rem]">Resources</h4>
+                                <h4 className="color-primary mb-10 font-medium text-[1.4rem]">
+                                    {<FormattedMessage id="footer.Resources" />}
+                                </h4>
                                 <ul>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Find A Store
+                                            {<FormattedMessage id="footer.Resources.Find A Store" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Become A Member
+                                            {<FormattedMessage id="footer.Resources.Become A Member" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Send Us Feedback
+                                            {<FormattedMessage id="footer.Resources.Send Us Feedback" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Send Us Feedback
+                                            {<FormattedMessage id="footer.Resources.Nike Journal" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Find A Store
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Become A Member
+                                            {<FormattedMessage id="footer.Resources.Gift Cards" />}
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                             <div>
-                                <h4 className="color-primary mb-10 font-medium text-[1.4rem]">Help</h4>
+                                <h4 className="color-primary mb-10 font-medium text-[1.4rem]">
+                                    {<FormattedMessage id="footer.Help" />}
+                                </h4>
                                 <ul>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Get Help
+                                            {<FormattedMessage id="footer.Help.Get Help" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Order Status
+                                            {<FormattedMessage id="footer.Help.Order Status" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Delivery
+                                            {<FormattedMessage id="footer.Help.Delivery" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Returns
+                                            {<FormattedMessage id="footer.Help.Returns" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Payment Options
+                                            {<FormattedMessage id="footer.Help.Payment Options" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Contact Us
+                                            {<FormattedMessage id="footer.Help.Contact Us" />}
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                             <div>
-                                <h4 className="color-primary mb-10 font-medium text-[1.4rem]">About Nike</h4>
+                                <h4 className="color-primary mb-10 font-medium text-[1.4rem]">
+                                    {<FormattedMessage id="footer.About Nike" />}
+                                </h4>
                                 <ul>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            About Nike
+                                            {<FormattedMessage id="footer.About Nike.Purpose" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            News
+                                            {<FormattedMessage id="footer.About Nike.News" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Careers
+                                            {<FormattedMessage id="footer.About Nike.Careers" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Investors
+                                            {<FormattedMessage id="footer.About Nike.Investors" />}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            Sustainability
+                                            {<FormattedMessage id="footer.About Nike.Sustainability" />}
                                         </a>
                                     </li>
                                 </ul>
@@ -141,7 +144,7 @@ const Footer = () => {
                                     href="#"
                                     className="inline-block text-[1.4rem] font-medium color-gray hover:text-[#111111]"
                                 >
-                                    © 2024 Nike, Inc. All rights reserved
+                                    {<FormattedMessage id="footer.© 2024 Nike, Inc. All rights reserved" />}
                                 </a>
                             </li>
                             <li>
@@ -149,7 +152,7 @@ const Footer = () => {
                                     href="#"
                                     className="inline-block text-[1.4rem] font-medium color-gray hover:text-[#111111]"
                                 >
-                                    Terms of Sale
+                                    {<FormattedMessage id="footer.Terms of Sale" />}
                                 </a>
                             </li>
                             <li>
@@ -157,7 +160,7 @@ const Footer = () => {
                                     href="#"
                                     className="inline-block text-[1.4rem] font-medium color-gray hover:text-[#111111]"
                                 >
-                                    Terms of Use
+                                    {<FormattedMessage id="footer.Terms of Use" />}
                                 </a>
                             </li>
                             <li>
@@ -165,7 +168,7 @@ const Footer = () => {
                                     href="#"
                                     className="inline-block text-[1.4rem] font-medium color-gray hover:text-[#111111]"
                                 >
-                                    Nike Privacy Policy
+                                    {<FormattedMessage id="footer.Nike Privacy Policy" />}
                                 </a>
                             </li>
                         </ul>

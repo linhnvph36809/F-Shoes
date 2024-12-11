@@ -23,8 +23,6 @@ const ListCategory = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [filteredCategories, setFilteredCategories] = useState<ICategory[]>(categories);
 
-    console.log(cateUpdate);
-
     const handleUpdate = (value: ICategory) => {
         setIsModalVisible(true);
         setCateUpdate(value);
@@ -93,11 +91,11 @@ const ListCategory = () => {
                                 <CopyPlus />
                             </ButtonEdit>
                         </Link>
-                        <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}>
-                            <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
-                                <Trash2 />
-                            </ButtonEdit>
-                        </PermissionElement>
+                        {/* <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}> */}
+                        <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
+                            <Trash2 />
+                        </ButtonEdit>
+                        {/* </PermissionElement> */}
                     </div>
                 );
             } else {
@@ -108,63 +106,60 @@ const ListCategory = () => {
 
     return (
         <>
-            {loading ? (
+            {/* {loading ? (
                 <SkeletonComponent />
-            ) : (
-                <section>
-                    <Heading>List Category</Heading>
+            ) : ( */}
+            <section>
+                <Heading>List Category</Heading>
 
-                    {/* Thanh công cụ chứa Form và ô tìm kiếm */}
-                    <div className="flex justify-between items-center mb-6">
-                        {/* Form thêm danh mục */}
-                        <FormCategory
-                            onFinish={handleSubmit}
-                            mainCategories={mainCategories}
-                            isModalVisible={isModalVisible}
-                            setIsModalVisible={setIsModalVisible}
-                            className="flex-1"
-                            initialValues={cateUpdate}
-                            setCateUpdate={setCateUpdate}
-                        />
+                {/* Thanh công cụ chứa Form và ô tìm kiếm */}
+                <div className="flex justify-between items-center mb-6">
+                    {/* Form thêm danh mục */}
+                    <FormCategory
+                        onFinish={handleSubmit}
+                        mainCategories={mainCategories}
+                        isModalVisible={isModalVisible}
+                        setIsModalVisible={setIsModalVisible}
+                        className="flex-1"
+                        initialValues={cateUpdate}
+                        setCateUpdate={setCateUpdate}
+                    />
 
-                        {/* Ô tìm kiếm */}
-                        <div className="relative w-full max-w-[300px]">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
+                    {/* Ô tìm kiếm */}
+                    <div className="relative w-full max-w-[300px]">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
 
-                            {/* Input tìm kiếm */}
-                            <input
-                                type="text"
-                                placeholder="    Search by category name"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full h-[48px] border border-gray-300 rounded-lg pl-10 pr-4 shadow-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-blue-400 transition duration-200"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Bảng dữ liệu */}
-                    <div className="w-full">
-                        <TableAdmin
-                            columns={[columMain, ...columns, columnDelete]}
-                            datas={[{}, ...filteredCategories]}
+                        {/* Input tìm kiếm */}
+                        <input
+                            type="text"
+                            placeholder="    Search by category name"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full h-[48px] border border-gray-300 rounded-lg pl-10 pr-4 shadow-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-blue-400 transition duration-200"
                         />
                     </div>
-                </section>
-            )}
+                </div>
+
+                {/* Bảng dữ liệu */}
+                <div className="w-full">
+                    <TableAdmin columns={[columMain, ...columns, columnDelete]} datas={[{}, ...filteredCategories]} />
+                </div>
+            </section>
+            {/* )} */}
         </>
     );
 };

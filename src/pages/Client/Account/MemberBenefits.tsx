@@ -3,13 +3,16 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
+import { FormattedMessage } from 'react-intl';
 
 const MemberBenefits = () => {
     return (
         <div className="my-20">
             <div>
                 {/* Centered Heading */}
-                <h2 className="text-[24px] font-semibold mb-8">Member Benefits (Coming Soon)</h2>
+                <h2 className="text-[24px] font-semibold mb-8">
+                    {<FormattedMessage id="Member Benefits (Coming Soon)" />}
+                </h2>
 
                 {/* Slider Component */}
                 <Swiper
@@ -33,7 +36,9 @@ const MemberBenefits = () => {
                                     />
                                 </div>
                                 <div className="text-left">
-                                    <h3 className="text-[16px] text-black font-medium pt-4">Member-Only Products</h3>
+                                    <h3 className="text-[16px] text-black font-medium pt-4">
+                                        {<FormattedMessage id="Member-Only Products" />}
+                                    </h3>
                                 </div>
                             </a>
                         </div>
@@ -52,7 +57,7 @@ const MemberBenefits = () => {
                                 </div>
                                 <div className="text-left">
                                     <h3 className="text-[16px] text-black font-medium pt-4">
-                                        Free Returns With Every Order
+                                        {<FormattedMessage id="Free Returns With Every Order" />}
                                     </h3>
                                 </div>
                             </a>
@@ -71,7 +76,9 @@ const MemberBenefits = () => {
                                     />
                                 </div>
                                 <div className="text-left">
-                                    <h3 className="text-[16px] text-black font-medium pt-4">Exclusive Deals</h3>
+                                    <h3 className="text-[16px] text-black font-medium pt-4">
+                                        {<FormattedMessage id="Exclusive Deals" />}
+                                    </h3>
                                 </div>
                             </a>
                         </div>
@@ -90,7 +97,7 @@ const MemberBenefits = () => {
                                 </div>
                                 <div className="text-left">
                                     <h3 className="text-[16px] text-black font-medium pt-4">
-                                        Free Running and Training Apps
+                                        {<FormattedMessage id="Free Running and Training Apps" />}
                                     </h3>
                                 </div>
                             </a>
@@ -109,7 +116,9 @@ const MemberBenefits = () => {
                                     />
                                 </div>
                                 <div className="text-left">
-                                    <h3 className="text-[16px] text-black font-medium pt-4">Fshoes Events</h3>
+                                    <h3 className="text-[16px] text-black font-medium pt-4">
+                                        {<FormattedMessage id="Fshoes Events" />}
+                                    </h3>
                                 </div>
                             </a>
                         </div>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { IOrder, statusString } from '../../../../../../interfaces/IOrder';
 import { formatPrice, timeToNow } from '../../../../../../utils';
+import { FormattedMessage } from 'react-intl';
 
 const OrderItem = ({ order }: { order: IOrder }) => {
     const status:
@@ -49,19 +50,19 @@ const OrderItem = ({ order }: { order: IOrder }) => {
                 </svg>
             </div>
             <div>
-                <p className="color-primary text-[18px] font-medium mb-3">Total Amount</p>
+                <p className="color-primary text-[18px] font-medium mb-3">{<FormattedMessage id="totalAmount" />}</p>
                 <span className="color-gray text-[18px] font-medium">{formatPrice(order.total_amount)}đ</span>
             </div>
             <div>
-                <p className="color-primary text-[18px] font-medium mb-3">Payment Method</p>
+                <p className="color-primary text-[18px] font-medium mb-3">{<FormattedMessage id="paymentMethod" />}</p>
                 <span className="color-gray text-[15px]">{order.payment_method}</span>
             </div>
             <div>
-                <p className="color-primary text-[18px] font-medium mb-3">Status</p>
+                <p className="color-primary text-[18px] font-medium mb-3">{<FormattedMessage id="status" />}</p>
                 <Tag className={`text-[13px] rounded-lg px-3 py-1 ${status.className}`}>{status.text}</Tag>
             </div>
             <div>
-                <p className="color-primary text-[18px] font-medium mb-3">Address</p>
+                <p className="color-primary text-[18px] font-medium mb-3">{<FormattedMessage id="address" />}</p>
                 <span className="color-gray text-[13px]">{order.address}</span>
             </div>
             <div>
@@ -74,7 +75,7 @@ const OrderItem = ({ order }: { order: IOrder }) => {
                         color-primary border border-[#111111] rounded-[50px] 
                         hover:bg-[#111111] hover:text-white transition-global"
                     >
-                        View Details
+                        {<FormattedMessage id="viewDetails" />}
                     </button>
                 </Link>
             </div>

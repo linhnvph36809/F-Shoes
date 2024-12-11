@@ -33,13 +33,15 @@ const HomePage = () => {
                     />
                 </div>
                 <Outstanding
-                    title="EXTRA-ORDINARY"
+                    title={<FormattedMessage id="body.EXTRA-ORDINARY" />}
                     category={<FormattedMessage id="body.lifestyleRunningShoes" />}
-                    description="Meet the latest collection of retro running inspired shoes.The unlikely heroes of your easiest styling hack."
+                    description={
+                        <FormattedMessage id="body.Meet the latest collection of retro running inspired shoes.The unlikely heroes of your easiest styling hack." />
+                    }
                 />
                 <div className="my-20">
                     <div>
-                        <Heading title="Trending This Week" />
+                        <Heading title={<FormattedMessage id="title.Trending This Week" />} />
                         <SlidesScroll
                             className="slidesProducts pb-20"
                             nextEl="next-trending-this-week"
@@ -62,14 +64,14 @@ const HomePage = () => {
                                                     <h5 className="text-[#707072] text-15px">
                                                         {item?.categories
                                                             ? item?.categories.map((cat, index, array) => {
-                                                                if (array.length < 2) {
-                                                                    return ' ' + cat?.name;
-                                                                } else {
-                                                                    if (index == 2) return;
-                                                                    if (index == 1) return ' ' + cat?.name;
-                                                                    return ' ' + cat?.name + ',';
-                                                                }
-                                                            })
+                                                                  if (array.length < 2) {
+                                                                      return ' ' + cat?.name;
+                                                                  } else {
+                                                                      if (index == 2) return;
+                                                                      if (index == 1) return ' ' + cat?.name;
+                                                                      return ' ' + cat?.name + ',';
+                                                                  }
+                                                              })
                                                             : ' '}
                                                     </h5>
                                                     <h3 className="text-15px color-primary font-medium mt-3">
@@ -87,13 +89,13 @@ const HomePage = () => {
             </section>
             <section className="my-20">
                 <div className="container">
-                    <Heading title="Best Selling" />
+                    <Heading title={<FormattedMessage id="title.Best Selling" />} />
                 </div>
                 <ClassicsSpotlight />
             </section>
             <section className="container">
                 <div>
-                    <Heading title="Shop By Sport" />
+                    <Heading title={<FormattedMessage id="title.Shop By Sport" />} />
                     <SlidesScroll
                         className="slidesShopBySport pb-12 mb-20"
                         nextEl="next-shop-by-sport"
@@ -112,7 +114,7 @@ const HomePage = () => {
                                             bg-white rounded-[30px] color-primary text-[12px] font-semibold
                                             hover:bg-[#cacacb] transition-global"
                                         >
-                                            Running
+                                            {<FormattedMessage id="box.Running" />}
                                         </Link>
                                     </div>
                                 </SwiperSlide>
@@ -135,10 +137,11 @@ const HomePage = () => {
                 </div>
                 <div>
                     <Outstanding
-                        title="EARTH TONES"
-                        category="Jordan Apparel"
-                        description="Ground your look in earthy tones inspired by outdoor courts.
-                        Details like knits, ripcords, and cargo pockets add rich texture to your fit."
+                        title={<FormattedMessage id="body.EARTH TONES" />}
+                        category={<FormattedMessage id="body.Jordan Apparel" />}
+                        description={
+                            <FormattedMessage id="body.Ground your look in earthy tones inspired by outdoor courts. Details like knits, ripcords, and cargo pockets add rich texture to your fit." />
+                        }
                     />
                 </div>
             </section>

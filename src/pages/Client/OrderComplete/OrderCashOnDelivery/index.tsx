@@ -4,6 +4,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { formatPrice } from '../../../../utils';
 import useCookiesConfig from '../../../../hooks/useCookiesConfig';
+import { FormattedMessage } from 'react-intl';
 
 const OrderCashOnDelivery = () => {
     const {
@@ -20,9 +21,11 @@ const OrderCashOnDelivery = () => {
                             <div className="bg-green-100 p-4 rounded-full mb-10">
                                 <CheckCircleOutlined className="text-[50px] text-green-500" />
                             </div>
-                            <h1 className="text-[25px] font-bold mb-4 color-primary">Thank you for your purchase</h1>
+                            <h1 className="text-[25px] font-bold mb-4 color-primary">
+                                {<FormattedMessage id="thank_you_purchase" />}
+                            </h1>
                             <h3 className="text-[14px] text-gray-600 mb-8">
-                                We've received your order and it will ship in 5-7 business days.
+                                {<FormattedMessage id="order_received_message" />}
                                 <br />
                             </h3>
                         </div>
@@ -41,7 +44,9 @@ const OrderCashOnDelivery = () => {
                                                   {order?.product_name}
                                               </p>
                                               <p className="text-[13px] color-gray font-medium">{order?.classify}</p>
-                                              <p className="color-primary text-[13px]">Qty: {order?.quantity}</p>
+                                              <p className="color-primary text-[13px]">
+                                                  {<FormattedMessage id="body.Detail.Quantity" />}: {order?.quantity}
+                                              </p>
                                           </div>
                                           <p className="font-semibold text-gray-800 text-2xl">
                                               {' '}
@@ -53,12 +58,16 @@ const OrderCashOnDelivery = () => {
 
                             <div className="mt-20">
                                 <div className="flex justify-between items-center mt-6 pt-4">
-                                    <span className="text-[14px] font-medium color-primary">Address : </span>
+                                    <span className="text-[14px] font-medium color-primary">
+                                        {<FormattedMessage id="address" />}:
+                                    </span>
                                     <span className="text-[13px] color-gray"> {order?.address}</span>
                                 </div>
 
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
-                                    <span className="text-[14px] font-medium color-primary">Payment</span>
+                                    <span className="text-[14px] font-medium color-primary">
+                                        {<FormattedMessage id="title.Payment" />}
+                                    </span>
                                     <span className="font-semibold text-xl text-gray-800">
                                         {' '}
                                         {order?.payment_method}
@@ -66,14 +75,18 @@ const OrderCashOnDelivery = () => {
                                 </div>
 
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
-                                    <span className="text-[14px] font-medium color-primary">Shipping</span>
+                                    <span className="text-[14px] font-medium color-primary">
+                                        {<FormattedMessage id="shipping" />}
+                                    </span>
                                     <span className="font-semibold text-xl text-gray-800">
-                                        {order.shipping_method}-{formatPrice(+order.shipping_cost)}đ
+                                        {order.shipping_method}: {formatPrice(+order.shipping_cost)}đ
                                     </span>
                                 </div>
                                 {order?.voucher_cost ? (
                                     <div className="flex justify-between items-center mt-6 border-t pt-4">
-                                        <span className="text-[14px] font-medium color-primary">Voucher</span>
+                                        <span className="text-[14px] font-medium color-primary">
+                                            {<FormattedMessage id="voucher" />}
+                                        </span>
                                         <span className="font-semibold text-xl text-gray-800">
                                             {' '}
                                             {formatPrice(+order.voucher_cost)} đ
@@ -84,7 +97,9 @@ const OrderCashOnDelivery = () => {
                                 )}
 
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
-                                    <span className="font-semibold text-[18px] color-primary">Total</span>
+                                    <span className="font-semibold text-[18px] color-primary">
+                                        {<FormattedMessage id="box.Cart.Total" />}
+                                    </span>
                                     <span className="font-semibold text-[18px] text-gray-800">
                                         {' '}
                                         {formatPrice(order.total_amount)}đ
@@ -96,7 +111,7 @@ const OrderCashOnDelivery = () => {
                         {/* Nút quay lại trang chủ */}
                         <Link to="/" type="primary">
                             <div className="flex justify-center items-center gap-x-2 text-[16px] hover:opacity-70">
-                                <ArrowLeft className="w-6" /> Back to Home
+                                <ArrowLeft className="w-6" /> {<FormattedMessage id="back_to_home" />}
                             </div>
                         </Link>
                     </div>

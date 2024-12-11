@@ -13,7 +13,6 @@ import Heading from '../components/Heading';
 import SkeletonComponent from '../components/Skeleton';
 import TableAdmin from '../components/Table';
 import { columnsAttribute } from '../Products/datas';
-// import './style.scss';
 
 const UpdateCategory = () => {
     const { id } = useParams<{ id: string }>();
@@ -21,20 +20,23 @@ const UpdateCategory = () => {
         useCategory();
     const [initialValues, setInitialValues] = useState<ICategory | null>(null);
     const [categoryId, setCategoryId] = useState<string | number | null>(null);
-    const [products, setProducts] = useState<any[]>([]);
-
+    const [products, setProducts] = useState<IProduct[]>([]);
     const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
     const { products: allProducts } = useProduct();
 
-    const handleDeleteProduct = (productId: string | number) => {
+    const handleDeleteProduct = async (productId: string | number) => {
         showMessageActive('Are you sure you want to delete this product?', '', 'warning', async () => {
             try {
                 await deleteProductFromCategory(categoryId, [productId]);
+                // Loại bỏ sản phẩm khỏi danh sách hiển thị
+                setProducts((prev) => prev.filter((product) => product.id !== productId));
+                message.success('Product removed successfully!');
             } catch (error) {
                 message.error('Failed to delete product. Please try again.');
             }
         });
     };
+
     const handleAddProducts = async () => {
         try {
             const result = await addProductsToCategory(id, selectedProducts, allProducts);
@@ -67,38 +69,19 @@ const UpdateCategory = () => {
         }
     }, [id, categories]);
 
-    // const handleFinish = useCallback(
-    //     async (updatedCategory: ICategory) => {
-    //         try {
-    //             if (categoryId) {
-    //                 // await putCategory({
-    //                 //     ...updatedCategory,
-    //                 //     id: categoryId,
-    //                 //     products,
-    //                 // });
-    //                 message.success('Category updated successfully!');
-    //             }
-    //         } catch (error) {
-    //             message.error('Failed to update category. Please try again.');
-    //             console.error('Error updating category:', error);
-    //         }
-    //     },
-    //     [categoryId, putCategory, products],
-    // );
-
     const columnDelete = {
         title: 'Action',
         dataIndex: 'slug',
         key: '8',
-        render: (slug: string | number, values: IProduct) => {
+        render: (_: string | number, values: IProduct) => {
             return (
                 <div className="flex-row-center gap-x-3">
-                    <Link to={`/admin/add-variant/${slug}`}>
+                    <Link to={`/admin/add-variant/${values.slug}`}>
                         <ButtonEdit>
                             <CopyPlus />
                         </ButtonEdit>
                     </Link>
-                    <Link to={`/admin/update-product/${slug}`}>
+                    <Link to={`/admin/update-product/${values.slug}`}>
                         <ButtonEdit>
                             <SquarePen />
                         </ButtonEdit>
@@ -118,11 +101,6 @@ const UpdateCategory = () => {
             ) : (
                 <section>
                     <Heading>Add Category For Product</Heading>
-                    {/* <FormCategory
-                        mainCategories={mainCategories}
-                        onFinish={handleFinish}
-                        initialValues={initialValues}
-                    /> */}
                     <section>
                         <div className="my-4">
                             <Select

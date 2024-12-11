@@ -1,22 +1,23 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 interface PropsItem {
-    name: string;
+    name: string | ReactNode;
     url: string;
 }
 
 const Item = [
     {
-        name: 'Profile',
+        name: <FormattedMessage id="Profile" />,
         url: '/profile',
     },
     {
-        name: 'Orders',
+        name: <FormattedMessage id="Orders" />,
         url: '/profile/orders',
     },
     {
-        name: 'Setting',
+        name: <FormattedMessage id="Setting" />,
         url: '/profile/setting',
     },
 ];
