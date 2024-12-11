@@ -1,7 +1,10 @@
+import { Navigate } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import CheckEmail from './CheckEmail';
 import Password from './Password';
 import Register from './Register';
+import { handleGetLocalStorage } from '../../../utils';
+import { INFO_AUTH, TOKENS } from '../../../constants';
 
 const LayoutAuthentication = () => {
     const { loading, user, page, postCheckEmail, login, register } = useAuth();
@@ -11,6 +14,14 @@ const LayoutAuthentication = () => {
         Content = <Password handleLogin={login} email={user} loading={loading} />;
     } else if (page == 'register') {
         Content = <Register handleRegister={register} email={user} loading={loading} />;
+    }
+
+    if (
+        handleGetLocalStorage(TOKENS.ACCESS_TOKEN) &&
+        handleGetLocalStorage(TOKENS.REFRESH_TOKEN) &&
+        handleGetLocalStorage(INFO_AUTH.userId)
+    ) {
+        return <Navigate to="/" />;
     }
 
     return (

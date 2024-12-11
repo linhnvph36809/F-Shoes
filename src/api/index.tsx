@@ -1,22 +1,25 @@
 import TokenManager from 'brainless-token-manager';
 import axios from 'axios';
 
+import { handleGetLocalStorage, handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
+import { TOKENS } from '../constants';
+
 const tokenManager = new TokenManager({
     getAccessToken: async () => {
-        const token = localStorage.getItem('accessToken');
+        const token = handleGetLocalStorage(TOKENS.ACCESS_TOKEN);
         return token ? token : '';
     },
     getRefreshToken: async () => {
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = handleGetLocalStorage(TOKENS.REFRESH_TOKEN);
         return refreshToken ? refreshToken : '';
     },
     onInvalidRefreshToken: () => {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
+        handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
     },
 
     executeRefreshToken: async () => {
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = handleGetLocalStorage(TOKENS.REFRESH_TOKEN);
 
         if (!refreshToken) {
             return {
@@ -37,8 +40,8 @@ const tokenManager = new TokenManager({
     },
     onRefreshTokenSuccess: ({ token, refresh_token }) => {
         if (token && refresh_token) {
-            localStorage.setItem('accessToken', token);
-            localStorage.setItem('refreshToken', refresh_token);
+            handleSetLocalStorage(TOKENS.ACCESS_TOKEN, token);
+            handleSetLocalStorage(TOKENS.REFRESH_TOKEN, refresh_token);
         }
     },
 });
@@ -76,7 +79,7 @@ export const tokenManagerInstance = async (
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
             if (error.status === 401) {
-                if (!localStorage.getItem('accessToken') || !localStorage.getItem('refreshToken')) {
+                if (!handleGetLocalStorage(TOKENS.ACCESS_TOKEN) || !handleGetLocalStorage(TOKENS.REFRESH_TOKEN)) {
                     window.location.href = '/';
                 }
             }

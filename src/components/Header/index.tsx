@@ -25,7 +25,7 @@ const Header = () => {
     const [headCategories, setHeadCategories] = useState<ICategory[][]>([]);
     const { logout } = useAuth();
     const { userName } = useContextClient();
-    const { locale, changeLanguage } = useContextGlobal();
+    const { locale, changeLanguage, quantityCart } = useContextGlobal();
 
     const { data: dataCategories, isFetching: fetchingData } = useQueryConfig(
         'header-list-categories',
@@ -229,12 +229,17 @@ const Header = () => {
                             <div className="sm:w-[28px] md:hidden md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
                                 <Search className="color-primary w-[24px]" />
                             </div>
-                            <div className="sm:w-[28px] md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
-                                <Heart className="color-primary w-[24px]" />
-                            </div>
-                            <Link to="/cart">
+                            <Link to="/profile">
+                                <div className="sm:w-[28px] md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
+                                    <Heart className="color-primary w-[24px]" />
+                                </div>
+                            </Link>
+                            <Link to="/cart" className="relative">
                                 <div className="sm:w-[28px] md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
                                     <ShoppingBag className="color-primary w-[24px]" />
+                                    <div className="absolute right-0 -top-1 flex items-center justify-center w-[18px] h-[18px] text-white font-medium text-[12px] rounded-full bg-[#d33918]">
+                                        {quantityCart}
+                                    </div>
                                 </div>
                             </Link>
                             <div className="sm:w-[28px] md:hidden md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">

@@ -32,9 +32,28 @@ export const formatTime = (time: string | undefined): string => {
 
     return formattedDate;
 };
-export const oneMonthAgo = ():Date => {
+export const oneMonthAgo = (): Date => {
     const date = new Date();
     date.setMonth(date.getMonth() - 1);
     return date;
-}
+};
 
+export const handleSetLocalStorage = (name: string, value: any) => {
+    localStorage.setItem(name, value);
+};
+
+export const handleGetLocalStorage = (name: string) => {
+    return localStorage.getItem(name) || null;
+};
+
+export const handleRemoveLocalStorage = (name: string) => {
+    return localStorage.removeItem(name);
+};
+
+export const handleChangeTitleTab = (title: string) => {
+    document.title = title;
+};
+
+export const createTitleLoader = (title: string) => {
+    document.title = title;
+};

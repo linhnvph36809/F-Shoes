@@ -50,6 +50,7 @@ const Cart = () => {
         }
     }, [carts, user, cartId]);
 
+
     return (
         <div className="container">
             <div className="container mx-auto" style={{ width: '1100px' }}>

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CircleX, RefreshCcw, SquarePen, Trash2 } from 'lucide-react';
+import { SquarePen, Trash2 } from 'lucide-react';
 import { Input } from 'antd';
 import { useState } from 'react';
 
@@ -12,31 +12,22 @@ import { showMessageActive } from '../../../utils/messages';
 import Heading from '../components/Heading';
 import ButtonPrimary from '../../../components/Button';
 import { PATH_ADMIN } from '../../../constants/path';
+import { formatPrice } from '../../../utils';
 
 export const KEY = 'list-voucher';
 
 const ListVoucher = () => {
     const { data, isFetching, refetch } = useQueryConfig(KEY, API_VOUCHER);
-    const { deleteVoucher, restoreVoucher, softVocher } = useVoucher();
+    const { softVocher } = useVoucher();
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleDeleteVoucher = (id?: string | number) => {
         if (id) {
             showMessageActive('Are you sure you want to delete the voucher?', '', 'warning', () => {
-                deleteVoucher(id);
+                softVocher(id);
                 refetch();
             });
         }
-    };
-
-    const handleRestoreVoucher = (id: string | number) => {
-        restoreVoucher(id);
-        refetch();
-    };
-
-    const handleSoftVoucher = (id: string | number) => {
-        softVocher(id);
-        refetch();
     };
 
     const columns = [
@@ -49,11 +40,25 @@ const ListVoucher = () => {
             title: 'Code',
             dataIndex: 'code',
             key: '2',
+            render: (_: any, { code }: any) => {
+                return <>{<p className="font-medium">{code}</p>}</>;
+            },
         },
         {
             title: 'Discount',
             dataIndex: 'discount',
             key: '3',
+            render: (_: any, discount: any) => {
+                return (
+                    <>
+                        {discount.type == 'fixed' ? (
+                            <p className="font-medium">{formatPrice(discount.discount)}đ</p>
+                        ) : (
+                            <p className="font-medium">{discount.discount}%</p>
+                        )}
+                    </>
+                );
+            },
         },
         {
             title: 'Quantity',
@@ -63,22 +68,22 @@ const ListVoucher = () => {
         {
             title: 'Min Total Amount',
             dataIndex: 'min_total_amount',
-            key: '4',
+            key: '5',
         },
         {
             title: 'Date Start',
             dataIndex: 'date_start',
-            key: '5',
+            key: '6',
         },
         {
             title: 'Date End',
             dataIndex: 'date_end',
-            key: '6',
+            key: '7',
         },
         {
             title: 'Actions',
             dataIndex: 'id',
-            key: '7',
+            key: '8',
             render: (_: any, voucher: any) => (
                 <div className="flex gap-2">
                     <Link to={`/admin/voucher/${voucher.id}`}>
@@ -86,20 +91,8 @@ const ListVoucher = () => {
                             <SquarePen />
                         </ButtonEdit>
                     </Link>
-                    {voucher.deleted_at ? (
-                        <ButtonEdit onClick={() => handleRestoreVoucher(voucher.id)}>
-                            <RefreshCcw />
-                        </ButtonEdit>
-                    ) : (
-                        <ButtonEdit onClick={() => handleSoftVoucher(voucher.id)}>
-                            <CircleX />
-                        </ButtonEdit>
-                    )}
-                    {voucher.deleted_at ? (
-                        ''
-                    ) : (
-                        <ButtonEdit onClick={() => handleDeleteVoucher(voucher.id)}>{<Trash2 />}</ButtonEdit>
-                    )}
+
+                    <ButtonEdit onClick={() => handleDeleteVoucher(voucher.id)}>{<Trash2 />}</ButtonEdit>
                 </div>
             ),
         },

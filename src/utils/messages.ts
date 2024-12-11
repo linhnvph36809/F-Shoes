@@ -14,7 +14,7 @@ export const showMessageClient = (title: string, text: string, type: 'success' |
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
-        timer: 3000,
+        timer: 2000,
         timerProgressBar: true,
         didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
@@ -25,6 +25,10 @@ export const showMessageClient = (title: string, text: string, type: 'success' |
         icon: type,
         title: title,
         text: text,
+        customClass: {
+            title: 'message-client-text',
+            icon: 'message-client-icon',
+        },
     });
 };
 
