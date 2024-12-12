@@ -1,18 +1,11 @@
-import { Button } from 'antd';
+import ButtonPrimary from '../../../../components/Button';
+import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 
-const ButtonSubmit = ({
-    children,
-    width = 'w-[200px]',
-    height = 'h-[56px]',
-}: {
-    children: string;
-    width?: string;
-    height?: string;
-}) => {
+const ButtonSubmit = ({ width = 'w-[120px]', height = 'h-[56px]', loading, children = "Submit" }: any) => {
     return (
-        <Button className={`${width} ${height} bg-primary text-[18px] font-medium text-white rounded-[8px]`}>
-            {children}
-        </Button>
+        <ButtonPrimary width={width} height={height} htmlType="submit">
+            {loading ? <LoadingSmall /> : children}
+        </ButtonPrimary>
     );
 };
 

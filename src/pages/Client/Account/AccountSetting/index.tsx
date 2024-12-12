@@ -33,7 +33,7 @@ const AccountSetting = () => {
     const [loading, setLoading] = useState(false);
     const [updateProfileForm] = Form.useForm();
     const { updateProfile, loadingUpdate } = useProfile();
-    const { data, isFetching, refetch } = useQueryConfig([QUERY_KEY_PROFILE,'user-setting'], 'api/auth/me?include=profile,times=user');
+    const { data, isFetching, refetch } = useQueryConfig([QUERY_KEY_PROFILE, 'user-setting'], 'api/auth/me?include=profile,times=user');
     const [userD, setUserD] = useState<IUser>();
 
     useEffect(() => {
@@ -329,16 +329,16 @@ const AccountSetting = () => {
                             >
                                 {countries
                                     ? countries.map((country: geonameCountry, index) => (
-                                          <Option key={index} value={country?.geonameId}>
-                                              <div className="flex items-center">
-                                                  {country?.countryName}
-                                                  <img
-                                                      src={`https://flagsapi.com/${country?.countryCode}/flat/64.png`}
-                                                      className="mx-4 size-6"
-                                                  />
-                                              </div>
-                                          </Option>
-                                      ))
+                                        <Option key={index} value={country?.geonameId}>
+                                            <div className="flex items-center">
+                                                {country?.countryName}
+                                                <img
+                                                    src={`https://flagsapi.com/${country?.countryCode}/flat/64.png`}
+                                                    className="mx-4 size-6"
+                                                />
+                                            </div>
+                                        </Option>
+                                    ))
                                     : ''}
                             </Select>
                         </div>
@@ -362,10 +362,10 @@ const AccountSetting = () => {
                                 >
                                     {provinces
                                         ? provinces.map((province: geonameProvince, index) => (
-                                              <Option key={index} value={province?.geonameId}>
-                                                  <div className="flex items-center">{province?.toponymName}</div>
-                                              </Option>
-                                          ))
+                                            <Option key={index} value={province?.geonameId}>
+                                                <div className="flex items-center">{province?.toponymName}</div>
+                                            </Option>
+                                        ))
                                         : ''}
                                 </Select>
                             </div>
@@ -390,10 +390,10 @@ const AccountSetting = () => {
                                 >
                                     {districts
                                         ? districts.map((district: geonameProvince, index) => (
-                                              <Option key={index} value={district?.geonameId}>
-                                                  <div className="flex items-center">{district?.toponymName}</div>
-                                              </Option>
-                                          ))
+                                            <Option key={index} value={district?.geonameId}>
+                                                <div className="flex items-center">{district?.toponymName}</div>
+                                            </Option>
+                                        ))
                                         : ''}
                                 </Select>
                             </div>
@@ -417,10 +417,10 @@ const AccountSetting = () => {
                                 >
                                     {communes
                                         ? communes.map((district: geonameProvince, index) => (
-                                              <Option key={index} value={district?.geonameId}>
-                                                  <div className="flex items-center">{district?.toponymName}</div>
-                                              </Option>
-                                          ))
+                                            <Option key={index} value={district?.geonameId}>
+                                                <div className="flex items-center">{district?.toponymName}</div>
+                                            </Option>
+                                        ))
                                         : ''}
                                 </Select>
                             </div>

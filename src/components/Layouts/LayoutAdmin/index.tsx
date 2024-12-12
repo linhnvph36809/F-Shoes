@@ -30,8 +30,8 @@ export const usePermissionContext = () => useContext(ContextAdmin);
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
     const { user } = useContextGlobal();
-    
-    
+
+
 
     useEffect(() => {
         const starCountRef = ref(db, `groups/1`);
@@ -92,11 +92,15 @@ const LayoutAdmin: React.FC = () => {
                     </ConfigProvider>
                 </Sider>
                 <Layout className="ml-[250px] relative min-h-[100vh]">
-                    <Header className="bg-white shadow p-5 flex justify-between items-center">
-                        <h3 className="ml-5 text-[32px] font-semibold">Overview</h3>
+                    <Header className="bg-white px-5 py-10 flex justify-between items-center h-[70px]">
+                        <h3 className='text-[32px] font-semibold pl-5'>
+                            Overview
+                        </h3>
                     </Header>
                     <Content className=" my-4 p-10 bg-[#F5F6FA]">
-                        <Outlet />
+                        <div className='bg-white p-10 rounded-[14px] min-h-[100vh]'>
+                            <Outlet />
+                        </div>
                     </Content>
                 </Layout>
             </Layout>

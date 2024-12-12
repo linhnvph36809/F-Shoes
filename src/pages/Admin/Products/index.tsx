@@ -1,8 +1,8 @@
-import { CopyPlus, SquarePen, Trash2 } from 'lucide-react';
+import { CopyPlus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { columnsAttribute } from './datas';
-import useProduct, { API_PRODUCT } from '../../../hooks/useProduct';
+import useProduct, { API_PRODUCT, QUERY_KEY } from '../../../hooks/useProduct';
 import { IProduct } from '../../../interfaces/IProduct';
 import Heading from '../components/Heading';
 import TableAdmin from '../components/Table';
@@ -11,6 +11,9 @@ import SkeletonComponent from '../components/Skeleton';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import PaginationComponent from '../../../components/Pagination';
 import { showMessageActive } from '../../../utils/messages';
+import ButtonDelete from '../components/Button/ButtonDelete';
+import ButtonUpdate from '../components/Button/ButtonUpdate';
+import ButtonAdd from '../components/Button/ButtonAdd';
 
 const ListProduct = () => {
     const queryString = window.location.search;
@@ -25,15 +28,15 @@ const ListProduct = () => {
     const {
         data: products,
         isFetching,
-        refetch,
     } = useQueryConfig(
-        `all-product-admin-${page}`,
+        [QUERY_KEY, `all-product-admin-${page}`],
         API_PRODUCT + `?per_page=8&page=${page}&include=categories,sale_price,variations`,
     );
+
+
     const handleDeleteProduct = (id: string | number) => {
         showMessageActive('Are you sure you want to delete this product', '', 'warning', () => {
             deleteProduct(id);
-            refetch();
         });
     };
 
@@ -54,22 +57,15 @@ const ListProduct = () => {
                 <div className="flex-row-center gap-x-3">
                     <Link
                         state={{ prevUrl: currentUrl }}
-                        to={`/admin/${
-                            values?.variations && values.variations.length ? 'update-variant' : 'add-variant'
-                        }/${slug}`}
+                        to={`/admin/${values?.variations && values.variations.length ? 'update-variant' : 'add-variant'
+                            }/${slug}`}
                     >
                         <ButtonEdit>
                             <CopyPlus />
                         </ButtonEdit>
                     </Link>
-                    <Link state={{ prevUrl: currentUrl }} to={`/admin/update-product/${slug}`}>
-                        <ButtonEdit>
-                            <SquarePen />
-                        </ButtonEdit>
-                    </Link>
-                    <ButtonEdit onClick={() => handleDeleteProduct(values.id)}>
-                        <Trash2 />
-                    </ButtonEdit>
+                    <ButtonUpdate state={{ prevUrl: currentUrl }} to={`/admin/update-product/${slug}`} />
+                    <ButtonDelete onClick={() => handleDeleteProduct(values.id)} />
                 </div>
             );
         },
@@ -81,6 +77,7 @@ const ListProduct = () => {
             ) : (
                 <section>
                     <Heading>List Product</Heading>
+                    <ButtonAdd to="/admin/add-product" title={'Add Product'} />
                     <div>
                         <TableAdmin
                             scroll={{ x: 'max-content' }}
