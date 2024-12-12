@@ -41,9 +41,7 @@ const routerClient = [
                 path: '/detail/:slug',
                 element: (
                     <>
-                        <Helmet>
-                            <title>Product Detail</title>
-                        </Helmet>
+                        
                         <Detail />
                     </>
                 ),
@@ -52,9 +50,7 @@ const routerClient = [
                 path: '/category/:slug?',
                 element: (
                     <>
-                        <Helmet>
-                            <title>Category</title>
-                        </Helmet>
+                        
                         <CategoryPage />
                     </>
                 ),

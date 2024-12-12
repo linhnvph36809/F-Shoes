@@ -10,6 +10,8 @@ import { ICategory } from '../../../interfaces/ICategory.ts';
 import FilterBox from './components/Fiter';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import { FormattedMessage } from 'react-intl';
+import { Helmet } from 'react-helmet';
+
 
 const sortKeysArray = [
     {
@@ -38,6 +40,9 @@ const CategoryPage = () => {
     const [totalItemPage, setTotalItemPage] = useState<number | undefined>();
 
     const { slug } = useParams();
+
+    const idCategory = slug ? slug.substring(slug.lastIndexOf('.') + 1) : '';
+    
     const [searchParams] = useSearchParams();
     const sortOption = searchParams.get('sort');
 
@@ -46,17 +51,6 @@ const CategoryPage = () => {
     const listCategories: ICategory[] | [] = dataCachingCategories?.data?.categories?.data || [];
 
     const [listProducts, setListProduct] = useState<IProduct[] | []>([]);
-
-    const [idCategory, setIdCategory] = useState<number | string | undefined>();
-    useEffect(() => {
-        if (slug !== undefined) {
-            const index = slug.lastIndexOf('.');
-            const id = slug.substring(index + 1);
-            setIdCategory(id);
-        } else {
-            setIdCategory('');
-        }
-    }, [slug]);
 
     const variationsQuery = newQuery.get('attributes');
     const searchKey = newQuery.get('search');
@@ -71,14 +65,13 @@ const CategoryPage = () => {
             variationsQuery ? variationsQuery : ''
         }&per_page=12&page=${page}&search=${searchKey ? searchKey : ''}`,
     );
-
+    const category = dataProduct?.data?.products?.category;
     useEffect(() => {
         if (dataProduct?.data?.products?.data) {
             setListProduct(dataProduct?.data?.products?.data);
             setTotalItemPage(dataProduct?.data?.products?.paginator?.total_item);
         }
     }, [dataProduct?.data?.products?.data, slug, newQuery]);
-   
 
     const toggleFilters = () => {
         setFiltersVisible(!filtersVisible);
@@ -105,6 +98,9 @@ const CategoryPage = () => {
 
     return (
         <div className="container mx-auto py-6">
+            <Helmet>
+                <title>{category ? category?.name : 'Category'}</title>
+            </Helmet>
             <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center space-x-4">
                     <Button icon={<FilterOutlined />} onClick={toggleFilters}>

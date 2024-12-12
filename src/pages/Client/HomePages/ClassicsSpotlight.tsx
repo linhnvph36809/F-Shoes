@@ -10,17 +10,17 @@ import { IProduct } from '../../../interfaces/IProduct.ts';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function ClassicsSpotlight() {
-    const { data: bestSelling, isFetching: fetchBestSellingProducts } = useQueryConfig(
-        `home-best__selling__products`,
-        `api/best-selling/products`,
+    const { data: bestSelling, isFetching: fetchingDisplay3 } = useQueryConfig(
+        ['products',`list-products-display-3`],
+        `api/display/home-page/products?serial=3`,
         {
             cacheTime: 1000 * 60 * 10,
             staleTime: 1000 * 60 * 10,
             retry: false,
         },
     );
-
-    let bestSellingProducts = bestSelling?.data?.products || [];
+    const category = bestSelling?.data?.category;
+    const listProducts = bestSelling?.data?.category?.products || [];
     return (
         <>
             <div className="relative">
@@ -57,10 +57,10 @@ export default function ClassicsSpotlight() {
                     }}
                     className="classicsSpotlight"
                 >
-                    {fetchBestSellingProducts ? (
+                    {fetchingDisplay3 ? (
                         <SkeletonComponent />
                     ) : (
-                        bestSellingProducts.map((item: IProduct) => (
+                        listProducts.map((item: IProduct) => (
                             <SwiperSlide key={item.id}>
                                 <Link to={`detail/${item.slug}`}>
                                     <img src={item.image_url} alt="" className="w-[500px]" />

@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Heart, Menu as MenuLucide, Search, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-
+import './style.scss';
 import HeaderCategory from './HeaderCategory.tsx';
 import { ICategory } from '../../interfaces/ICategory.ts';
 import useAuth from '../../hooks/useAuth.tsx';
@@ -13,6 +13,9 @@ import LoadingSmall from '../Loading/LoadingSmall.tsx';
 import Logo from '../Logo/index.tsx';
 import { useContextGlobal } from '../../contexts/index.tsx';
 import { LANGUAGE_EN, LANGUAGE_VI } from '../../constants/index.ts';
+import { QUERY_KEY as QUERY_KEY_CATEGORY } from '../../hooks/useCategory.tsx';
+import { QUERY_KEY as QUERY_KEY_PRODUCT } from '../../hooks/useProduct.tsx';
+import { IProduct } from '../../interfaces/IProduct.ts';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -28,9 +31,13 @@ const Header = () => {
     const { logout } = useAuth();
     const { userName } = useContextClient();
     const { locale, changeLanguage, quantityCart } = useContextGlobal();
-
+    const { data: dataAllProduct } = useQueryConfig(
+        [QUERY_KEY_PRODUCT, 'header-list-all-products'],
+        'api/products/all/summary',
+    );
+    
     const { data: dataCategories, isFetching: fetchingData } = useQueryConfig(
-        'header-list-categories',
+        [QUERY_KEY_CATEGORY, 'header-list-categories'],
         'api/main/categories?include=children',
     );
     useEffect(() => {
@@ -51,16 +58,30 @@ const Header = () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, [scrollPosition]);
+    
     const [errorSearchKey, setErrorSearchKey] = useState(false);
     const [searchKey, setSearchKey] = useState('');
+    const listOriginAllProducts = JSON.parse(JSON.stringify([...(dataAllProduct?.data?.products || [])]));
+    const [allProducts, setAllProducts] = useState<IProduct[]>([]);
+    useEffect(() => {
+        if(searchKey !== ''){
+            const filtered = listOriginAllProducts.filter((item:IProduct) => {
+                return item.name.toLowerCase().includes(searchKey.toLowerCase());
+            });
+            setAllProducts([...filtered]);
+        }else{
+            setAllProducts([...listOriginAllProducts]);
+        }
+    }, [listOriginAllProducts,searchKey]);
     const handleSearch = () => {
         if (searchKey === '') {
             setErrorSearchKey(true);
             return;
         }
-        urlQuery.set('search',searchKey);
+        urlQuery.set('search', searchKey);
         navigate(`/category?${urlQuery.toString()}`, { replace: true });
     };
+
     return (
         <>
             <header>
@@ -111,7 +132,7 @@ const Header = () => {
                             <li>
                                 {userName ? (
                                     <Dropdown
-                                        className="hover:cursor-pointer"
+                                        className="hover:cursor-pointer w-full"
                                         overlay={
                                             <Menu className="color-primary w-[80px] font-medium">
                                                 <Menu.Item key="1">
@@ -222,26 +243,51 @@ const Header = () => {
                             </ul>
                         </nav>
                         <div className="flex-row-center sm:gap-x-3 md:gap-x-6">
-                            <form action="" onSubmit={(e) => {
-                                e.preventDefault();
-                                handleSearch();
-                            }} className="sm:hidden md:block">
-                                <Input
-                                    
-                                    onChange={(e) => setSearchKey(e.target.value)}
-                                    value={searchKey}
-                                    placeholder={intl.formatMessage({ id: 'header.search' })}
-                                    className={`w-[180px] h-[36px] rounded-[100px] bg-whitesmoke 
-                                color-primary font-medium  pl-0 hover:bg-[#e5e5e5] focus:shadow-none ${errorSearchKey ? 'border border-red-500' : 'border-0'}`}
-                                    prefix={
-                                        <div
-                                            className="rounded-full flex-row-center justify-center
-                                        w-[36px] h-[36px] bg-whitesmoke hover:bg-[#cacacb] hover:cursor-pointer"
-                                        >
-                                            <Search onClick={() => handleSearch()} className="color-primary w-[16px]" />
-                                        </div>
+                            <form
+                                action=""
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    handleSearch();
+                                }}
+                                className="sm:hidden md:block"
+                            >
+                                <Dropdown
+                                    trigger={['click']}
+                                    overlay={
+                                        allProducts && allProducts.length > 0 ? (
+                                            <Menu className="color-primary  font-medium custom-scroll-container">
+                                                {allProducts.map((item: IProduct) => (
+                                                    <Menu.Item key={item?.id}>
+                                                        <Link to={`/detail/${item?.slug}`} className='flex items-center gap-2'><img src={item?.image_url} className='w-[20px] h-[20px]' alt={item?.name} /> {item?.name.length > 30 ? item?.name.substring(0, 30) + '...' : item?.name}</Link>
+                                                    </Menu.Item>
+                                                ))}
+                                            </Menu>
+                                        ) : (
+                                            <div></div>
+                                        )
                                     }
-                                />
+                                >
+                                    <Input
+                                        onChange={(e) => setSearchKey(e.target.value)}
+                                        value={searchKey}
+                                        placeholder={intl.formatMessage({ id: 'header.search' })}
+                                        className={`w-[180px] h-[36px] rounded-[100px] bg-whitesmoke 
+                                color-primary font-medium  pl-0 hover:bg-[#e5e5e5] focus:shadow-none ${
+                                    errorSearchKey ? 'border border-red-500' : 'border-0'
+                                }`}
+                                        prefix={
+                                            <div
+                                                className="rounded-full flex-row-center justify-center
+                                        w-[36px] h-[36px] bg-whitesmoke hover:bg-[#cacacb] hover:cursor-pointer"
+                                            >
+                                                <Search
+                                                    onClick={() => handleSearch()}
+                                                    className="color-primary w-[16px]"
+                                                />
+                                            </div>
+                                        }
+                                    />
+                                </Dropdown>
                             </form>
                             <div className="sm:w-[28px] md:hidden md:w-[36px] md:h-[36px] p-2 rounded-full flex-row-center justify-center hover:bg-[#e5e5e5] hover:cursor-pointer">
                                 <Search className="color-primary w-[24px]" />

@@ -1,5 +1,5 @@
 import { Input, Select, DatePicker, Button, Form, Skeleton } from 'antd';
-import useProfile from '../../../../hooks/page/useProfile.tsx';
+import useProfile, { QUERY_KEY as QUERY_KEY_PROFILE } from '../../../../hooks/page/useProfile.tsx';
 import dayjs from 'dayjs';
 import { IUser } from '../../../../interfaces/IUser.ts';
 import { useEffect, useState } from 'react';
@@ -33,7 +33,7 @@ const AccountSetting = () => {
     const [loading, setLoading] = useState(false);
     const [updateProfileForm] = Form.useForm();
     const { updateProfile, loadingUpdate } = useProfile();
-    const { data, isFetching, refetch } = useQueryConfig('user-setting', 'api/auth/me?include=profile,times=user');
+    const { data, isFetching, refetch } = useQueryConfig([QUERY_KEY_PROFILE,'user-setting'], 'api/auth/me?include=profile,times=user');
     const [userD, setUserD] = useState<IUser>();
 
     useEffect(() => {

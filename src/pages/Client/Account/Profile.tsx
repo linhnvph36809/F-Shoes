@@ -11,12 +11,13 @@ import { COOKIE_USER } from '../../../constants';
 import { IUser } from '../../../interfaces/IUser.ts';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
+import  { useState } from 'react';
 
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Flex, message, Upload } from 'antd';
 import type { GetProp, UploadProps } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import { QUERY_KEY as QUERY_KEY_PROFILE } from '../../../hooks/page/useProfile.tsx';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -41,7 +42,7 @@ const ProfilePage = () => {
     const { cookies } = useCookiesConfig(COOKIE_USER);
     const userNameCookie = cookies?.userName;
     const { data, isFetching, refetch } = useQueryConfig(
-        'user-profile',
+        [QUERY_KEY_PROFILE,'user-profile'],
         'api/auth/me?include=profile,favoriteProducts&times=user',
         {
             cacheTime: 1000 * 60 * 10,
