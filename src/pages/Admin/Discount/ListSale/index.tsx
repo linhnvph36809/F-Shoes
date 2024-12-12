@@ -45,8 +45,10 @@ const ListSale = () => {
                 const {data} = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
                 showMessageClient('Success','Sale deleted successfully!','success');
             }catch(error){  
-
-                console.log(error);
+                if((error as any)?.response?.data?.message){
+                    showMessageClient('Error',(error as any)?.response?.data?.message,'error');
+                    return;
+                }
                 showMessageClient('Error', 'Something went wrong!', 'error');
             } finally {
                 setLoadingDeleteSale(false);
@@ -71,7 +73,6 @@ const ListSale = () => {
     useEffect(() => {
         
         const statusData = data.filter((item:ISale) => {
-
             const start_date = new Date(item.start_date);
             const end_date = new Date(item.end_date);
             const now = new Date();
@@ -102,11 +103,9 @@ const ListSale = () => {
         } else {
             setDataSearch([...statusData]);
         }
-
     },[keySearch,keyStatus,data]);
     const handleDelete = async (id:string|number) => {
         await showMessageActive('Delete','Are you sure you want to delete?','warning',() => {
-
             setDeletedSaleID(id);
         });
 
@@ -166,10 +165,8 @@ const ListSale = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            render: (status: string, record: ISale) => {
-                if (status) {
-                    console.log(status);
-                }
+            render: (_: any, record: ISale) => {
+                
                 const start_date = new Date(record.start_date);
                 const end_date = new Date(record.end_date);
                 const now = new Date();

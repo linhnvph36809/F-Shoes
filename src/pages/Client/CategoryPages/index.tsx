@@ -59,14 +59,17 @@ const CategoryPage = () => {
     }, [slug]);
 
     const variationsQuery = newQuery.get('attributes');
-
+    const searchKey = newQuery.get('search');
     const { data: dataProduct, isFetching: productFetching } = useQueryConfig(
-        `category-list-products-${idCategory ? `${slug}` : 'empty'}-${
-            variationsQuery ? `${variationsQuery}` : 'empty'
-        }-page-${page}-total-${totalItemPage ? totalItemPage : 'all'}`,
+        [
+            'products',
+            `category-list-products-search-${searchKey ? searchKey : 'empty'}-${idCategory ? `${slug}` : 'empty'}-${
+                variationsQuery ? `${variationsQuery}` : 'empty'
+            }-page-${page}-total-${totalItemPage ? totalItemPage : 'all'}`,
+        ],
         `api/product/by/attribute-values?categoryId=${idCategory ? idCategory : ''}&attributes=${
             variationsQuery ? variationsQuery : ''
-        }&per_page=12&page=${page}`,
+        }&per_page=12&page=${page}&search=${searchKey ? searchKey : ''}`,
     );
 
     useEffect(() => {
@@ -75,6 +78,7 @@ const CategoryPage = () => {
             setTotalItemPage(dataProduct?.data?.products?.paginator?.total_item);
         }
     }, [dataProduct?.data?.products?.data, slug, newQuery]);
+   
 
     const toggleFilters = () => {
         setFiltersVisible(!filtersVisible);
