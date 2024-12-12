@@ -1,5 +1,5 @@
 import { Dropdown, Input, Menu } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Heart, Menu as MenuLucide, Search, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -15,6 +15,8 @@ import { useContextGlobal } from '../../contexts/index.tsx';
 import { LANGUAGE_EN, LANGUAGE_VI } from '../../constants/index.ts';
 
 const Header = () => {
+    const navigate = useNavigate();
+    const urlQuery = new URLSearchParams(useLocation().search);
     const intl = useIntl();
     const [showMenu, setShowMenu] = useState<boolean>(false);
     const [headCates, setHeadCates] = useState([]);
@@ -49,7 +51,16 @@ const Header = () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, [scrollPosition]);
-
+    const [errorSearchKey, setErrorSearchKey] = useState(false);
+    const [searchKey, setSearchKey] = useState('');
+    const handleSearch = () => {
+        if (searchKey === '') {
+            setErrorSearchKey(true);
+            return;
+        }
+        urlQuery.set('search',searchKey);
+        navigate(`/category?${urlQuery.toString()}`, { replace: true });
+    };
     return (
         <>
             <header>
@@ -211,17 +222,23 @@ const Header = () => {
                             </ul>
                         </nav>
                         <div className="flex-row-center sm:gap-x-3 md:gap-x-6">
-                            <form action="" className="sm:hidden md:block">
+                            <form action="" onSubmit={(e) => {
+                                e.preventDefault();
+                                handleSearch();
+                            }} className="sm:hidden md:block">
                                 <Input
+                                    
+                                    onChange={(e) => setSearchKey(e.target.value)}
+                                    value={searchKey}
                                     placeholder={intl.formatMessage({ id: 'header.search' })}
-                                    className="w-[180px] h-[36px] rounded-[100px] bg-whitesmoke 
-                                color-primary font-medium border-0 pl-0 hover:bg-[#e5e5e5] focus:shadow-none"
+                                    className={`w-[180px] h-[36px] rounded-[100px] bg-whitesmoke 
+                                color-primary font-medium  pl-0 hover:bg-[#e5e5e5] focus:shadow-none ${errorSearchKey ? 'border border-red-500' : 'border-0'}`}
                                     prefix={
                                         <div
                                             className="rounded-full flex-row-center justify-center
                                         w-[36px] h-[36px] bg-whitesmoke hover:bg-[#cacacb] hover:cursor-pointer"
                                         >
-                                            <Search className="color-primary w-[16px]" />
+                                            <Search onClick={() => handleSearch()} className="color-primary w-[16px]" />
                                         </div>
                                     }
                                 />
