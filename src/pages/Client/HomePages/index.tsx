@@ -10,18 +10,22 @@ import SkeletonComponent from '../../Admin/components/Skeleton';
 import { formatPrice } from '../../../utils';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import { IProduct } from '../../../interfaces/IProduct.ts';
+import { ICategory } from '../../../interfaces/ICategory.ts';
+import { QUERY_KEY as QUERY_KEY_PRODUCT } from '../../../hooks/useProduct.tsx';
 
 const HomePage = () => {
-    const { data: thisWeek, isFetching: fetchingThisWeekProducts } = useQueryConfig(
-        `home-list__this__week__products`,
-        `api/trend/this-week/products?include=categories`,
+    const { data: data1, isFetching: fetchingDisplay1 } = useQueryConfig(
+        [QUERY_KEY_PRODUCT,`list-products-display-1`],
+        `api/display/home-page/products?serial=1`,
     );
-    const { data: bySport, isFetching: fetchProductsBySport } = useQueryConfig(
-        `home-shop__by__sports__products`,
-        `api/shop-by-sports/products`,
+    const { data: data2, isFetching: fetchingDisplay2 } = useQueryConfig(
+        [QUERY_KEY_PRODUCT,`list-products-display-2`],
+        `api/display/home-page/products?serial=2`,
     );
-    let thisWeekProducts = thisWeek?.data?.products || [];
-    let productsBySport = bySport?.data?.products || [];
+    const category1:ICategory =data1?.data?.category;
+    const category2:ICategory =data2?.data?.category;
+    const productsDisplay1 = category1?.products || [];
+    const productsDisplay2 = category2?.products || [];
 
     return (
         <>
@@ -47,10 +51,10 @@ const HomePage = () => {
                             nextEl="next-trending-this-week"
                             prevEl="pre-trending-this-week"
                         >
-                            {fetchingThisWeekProducts ? (
+                            {fetchingDisplay1 ? (
                                 <SkeletonComponent />
                             ) : (
-                                thisWeekProducts.map((item: IProduct) => (
+                                productsDisplay1.map((item: IProduct) => (
                                     <SwiperSlide key={item.id}>
                                         <div>
                                             <Link to={`detail/${item.slug}`}>
@@ -89,22 +93,22 @@ const HomePage = () => {
             </section>
             <section className="my-20">
                 <div className="container">
-                    <Heading title={<FormattedMessage id="title.Best Selling" />} />
+                    <Heading title={category1?.name} />
                 </div>
                 <ClassicsSpotlight />
             </section>
             <section className="container">
                 <div>
-                    <Heading title={<FormattedMessage id="title.Shop By Sport" />} />
+                    <Heading title={category2?.name} />
                     <SlidesScroll
                         className="slidesShopBySport pb-12 mb-20"
                         nextEl="next-shop-by-sport"
                         prevEl="pre-shop-by-sport"
                     >
-                        {fetchProductsBySport ? (
+                        {fetchingDisplay2 ? (
                             <SkeletonComponent />
                         ) : (
-                            productsBySport.map((item: IProduct, index: number) => (
+                            productsDisplay2.map((item: IProduct, index: number) => (
                                 <SwiperSlide key={index}>
                                     <div className="relative">
                                         <img src={item.image_url} alt="" />

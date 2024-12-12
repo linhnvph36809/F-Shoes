@@ -5,10 +5,12 @@ import { IProduct } from '../interfaces/IProduct';
 import { tokenManagerInstance } from '../api';
 import { PATH_LIST_PRODUCT } from '../constants';
 import { showMessageAdmin } from '../utils/messages';
-
+import { useQueryClient } from 'react-query';
+export const QUERY_KEY = 'products';
 export const API_PRODUCT = '/api/product';
 
 const useProduct = () => {
+     const queryClient = useQueryClient();
     const [loading, setLoading] = useState<boolean>(false);
 
     const navigate = useNavigate();
@@ -25,6 +27,7 @@ const useProduct = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_PRODUCT}/${id}`);
+            queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
             showMessageAdmin('Delete Product Sussccess', '', 'success');
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
@@ -38,6 +41,7 @@ const useProduct = () => {
             setLoading(true);
             await tokenManagerInstance('post', API_PRODUCT, product);
             navigate(PATH_LIST_PRODUCT);
+            queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
             showMessageAdmin('Add Product Sussccess', '', 'success');
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
@@ -51,6 +55,7 @@ const useProduct = () => {
             setLoading(true);
             await tokenManagerInstance('put', `${API_PRODUCT}/${id}`, product);
             navigate(PATH_LIST_PRODUCT);
+            queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
             showMessageAdmin('Update Product Sussccess', '', 'success');
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');

@@ -1,9 +1,11 @@
+import { Helmet } from 'react-helmet';
 import { Radio, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SwiperSlide } from 'swiper/react';
 import { LoadingOutlined } from '@ant-design/icons';
+
 
 import SlidesImage from './SlidesImage';
 import SlidesScroll from '../../../components/SlidesScroll';
@@ -112,6 +114,9 @@ const Detail = () => {
 
     return (
         <>
+            <Helmet>
+                <title>{productD?.name}</title>
+            </Helmet>
             {isFetching ? (
                 <LoadingPage />
             ) : (
