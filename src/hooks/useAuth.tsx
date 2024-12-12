@@ -8,7 +8,6 @@ import { useContextGlobal } from '../contexts';
 import { useContextClient } from '../components/Layouts/LayoutClient';
 import { showMessageClient } from '../utils/messages';
 import { handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
-import { log } from 'node:console';
 const API_CHECK_EMAIL = '/api/check/email';
 
 const useAuth = () => {
@@ -84,8 +83,6 @@ const useAuth = () => {
             navigate('/');
             showMessageClient('Login Successfuly', '', 'success');
         } catch (error) {
-            
-            
             if ((error as any)?.response?.data?.message) {
                 console.log(error as any);
                 showMessageClient((error as any).response.data.message, '', 'error');
