@@ -5,7 +5,7 @@ const InputPrimary = ({
     type = 'text',
     width = 'w-full',
     height = 'sm:h-[45px] md:h-[56px]',
-    margin = 'sm:mb-6 md:mb-10',
+    margin = 'sm:mb-2 md:mb-3',
     textSize = 'sm:text-[15px] md:text-[18px]',
     ...props
 }: any) => {

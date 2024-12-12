@@ -14,6 +14,7 @@ const useAuth = () => {
     const [page, setPage] = useState<string>('');
     const [user, setUser] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const [timeSendEmail, setTimeSendEmail] = useState<number>(0);
     const { setUser: setUserGlobal, refetchQuantityCart } = useContextGlobal();
     const { setUserName } = useContextClient();
     const queryClient = useQueryClient();
@@ -36,6 +37,34 @@ const useAuth = () => {
         } finally {
             setLoading(false);
             setUser(email);
+        }
+    };
+
+    const postForgotPassword = async (email: string) => {
+        try {
+            await tokenManagerInstance('post', '/api/forgot/password', email);
+            setTimeSendEmail(60);
+        } catch (error) {
+            setTimeSendEmail(0);
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            throw new Error((error as any)?.response?.data?.message);
+        } finally {
+            setUser(email);
+            setPage('forgotPassword');
+        }
+    };
+
+    const resetForgotPassword = async (values: any) => {
+        try {
+            setLoading(true);
+            const { data } = await tokenManagerInstance('post', '/api/reset/password', values);
+            showMessageClient(data?.message, '', 'success');
+            setPage('login');
+        } catch (error) {
+            console.log(error);
+            showMessageClient((error as any)?.response?.data?.message, '', 'error');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -130,7 +159,10 @@ const useAuth = () => {
         user,
         page,
         loading,
+        timeSendEmail,
         postCheckEmail,
+        postForgotPassword,
+        resetForgotPassword,
         login,
         loginAdmin,
         register,
