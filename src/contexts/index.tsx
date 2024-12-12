@@ -7,6 +7,7 @@ import language_vi from '../translations/vi.json';
 
 import useQueryConfig from '../hooks/useQueryConfig';
 import { handleGetLocalStorage, handleSetLocalStorage } from '../utils';
+import { INFO_AUTH, TOKENS } from '../constants';
 
 const Context = createContext<any>({});
 
@@ -26,7 +27,11 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<any>();
     const [quantityCart, setQuantityCart] = useState<number>(0);
 
-    const { data, refetch: refetchUser } = useQueryConfig('user-infor', '/api/auth/me', {
+    const {
+        data,
+        refetch: refetchUser,
+        isFetching,
+    } = useQueryConfig('user-infor', '/api/auth/me', {
         cacheTime: 1000 * 60 * 30,
         staleTime: 1000 * 60 * 30,
         enabled: false,
@@ -43,19 +48,21 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
         setQuantityCart(carts?.data.length || 0);
     }, [carts]);
 
-    const userIdLocal = localStorage.getItem('userId');
+    const userIdLocal = handleGetLocalStorage(INFO_AUTH.userId);
+    const adminId = handleGetLocalStorage(INFO_AUTH.adminId);
 
     useEffect(() => {
-        if (localStorage.getItem('accessToken') && localStorage.getItem('refreshToken')) {
+        if (handleGetLocalStorage(TOKENS.ACCESS_TOKEN) && handleGetLocalStorage(TOKENS.REFRESH_TOKEN)) {
             refetchUser();
             refetchQuantityCart();
         }
     }, []);
 
     useEffect(() => {
-        if (userIdLocal && data?.data.user) {
+        if (userIdLocal || (adminId && data?.data.user)) {
             setUser(data?.data.user);
-            localStorage.setItem('userName', data?.data.user.name);
+            handleSetLocalStorage(INFO_AUTH.userName, data?.data.user.name);
+            handleSetLocalStorage(INFO_AUTH.adminName, data?.data.user.name);
         }
     }, [data]);
 
@@ -64,12 +71,15 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
         handleSetLocalStorage('language', selectedLocale);
     }, []);
 
+    console.log(user);
+
     return (
         <IntlProvider locale={locale} messages={language[locale]}>
             <CookiesProvider>
                 <Context.Provider
                     value={{
                         user,
+                        isFetching,
                         setUser,
                         locale,
                         changeLanguage,

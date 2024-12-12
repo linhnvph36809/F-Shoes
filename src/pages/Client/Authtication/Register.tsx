@@ -1,4 +1,4 @@
-import { Form } from 'antd';
+import { Form, Input } from 'antd';
 import Title from './components/Title';
 import InputPrimary from '../../../components/Input';
 import ButtonComponent from './components/Button';
@@ -7,7 +7,6 @@ import LoadingSmall from '../../../components/Loading/LoadingSmall';
 const Register = ({ handleRegister, email, loading }: any) => {
     const onFinish = async (values: any) => {
         await handleRegister({
-            name: values.name,
             ...email,
             password: values.password,
             profile: {
@@ -15,6 +14,7 @@ const Register = ({ handleRegister, email, loading }: any) => {
                 family_name: values.family_name,
                 birth_date: `${values.year}-${values.month}-${values.day}`,
             },
+            name: `${values.family_name} ${values.given_name}`,
             verify_code: values.verify_code,
         });
     };
@@ -26,16 +26,8 @@ const Register = ({ handleRegister, email, loading }: any) => {
             </div>
             <div>
                 <Form onFinish={onFinish} layout="vertical">
-                    {/* <Form.Item name="code" rules={[{ required: true, message: 'Please enter your code!' }]}>
-                        <InputPrimary placeholder="Code" />
-                    </Form.Item> */}
-
                     <Form.Item name="verify_code" rules={[{ required: true, message: 'Please enter code!' }]}>
                         <InputPrimary placeholder=" Code" />
-                    </Form.Item>
-
-                    <Form.Item name="name" rules={[{ required: true, message: 'Please enter your name!' }]}>
-                        <InputPrimary placeholder=" Name" />
                     </Form.Item>
 
                     <Form.Item name="given_name" rules={[{ required: true, message: 'Please enter your given name!' }]}>
@@ -56,7 +48,11 @@ const Register = ({ handleRegister, email, loading }: any) => {
                             { min: 6, message: 'Password must be at least 6 characters!' },
                         ]}
                     >
-                        <InputPrimary placeholder="Password" type="password" />
+                        <Input.Password
+                            placeholder="Password"
+                            type="password"
+                            className={`w-full h-[56px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] px-8 rounded-[8px] text-[18px]`}
+                        />
                     </Form.Item>
 
                     <label htmlFor="" className="mb-3 block color-primary text-[14px] font-medium">
