@@ -5,7 +5,7 @@ import "./style.scss";
 import { IProduct } from '../../../../interfaces/IProduct.ts';
 import { IVariation } from '../../../../interfaces/IVariation.ts';
 import useQueryConfig from '../../../../hooks/useQueryConfig.tsx';
-import { showMessageActive, showMessageAdmin } from '../../../../utils/messages.ts';
+import { showMessageActive, showMessageAdmin, showMessageClient } from '../../../../utils/messages.ts';
 import useSale, { QUERY_KEY } from '../../../../hooks/useSale.tsx';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall.tsx';
 import { BadgeCentIcon, CircleX, Filter } from 'lucide-react';
@@ -21,6 +21,9 @@ const UpdateSale = () => {
         `api/sale/${id}?include=products,variations`,
     );
     const theSale: ISale = dataCachingSale?.data?.discount;
+    const timeNow = new Date().getTime();
+    const saleStartDate = new Date(theSale?.start_date).getTime();
+    const saleEndDate = new Date(theSale?.end_date).getTime();
     const [dataSourceVariation, setDataSourceVariation] = useState<IVariation[]>([]);
     const [dataSourceProduct, setDataSourceProduct] = useState<IProduct[]>([]);
     const [arrSelectOneSelectedProduct, setArrSelectOneSelectedProduct] = useState<IProduct[]>([]);
@@ -28,9 +31,11 @@ const UpdateSale = () => {
     const [arrSelectVariationsOfOneSelectedProduct, setArrSelectVariationsOfOneSelectedProduct] = useState<
         IVariation[]
     >([]);
+
     const [arrSelectedVariationsOfMultipleSelectedProduct, setArrSelectedVariationsOfMultipleSelectedProduct] =
         useState<IVariation[]>([]);
     const onSelectSelectedSimpleProduct = (product: IProduct, checked: boolean) => {
+        
         if (checked) {
             const filtered = arrSelectOneSelectedProduct.filter((item) => item.id !== product.id);
             setArrSelectOneSelectedProduct([...filtered, product]);
@@ -63,6 +68,10 @@ const UpdateSale = () => {
         setArrSelectedVariationsOfMultipleSelectedProduct([...variations]);
     };
     const onDeleteSimpleProduct = (record?: IProduct) => {
+        if(saleEndDate < timeNow){
+            showMessageClient('This sale has expired, you can not modifier anymore.','','warning');
+            return;
+        }
         showMessageActive('Delete', 'Are you sure you want to delete', 'warning', () => {
             const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
 
@@ -73,6 +82,10 @@ const UpdateSale = () => {
         });
     };
     const onFilterSimpleProduct = (record?: IProduct) => {
+        if(saleEndDate < timeNow){
+            showMessageClient('This sale has expired, you can not modifier anymore.','','warning');
+            return;
+        }
         showMessageActive(
             'Delete',
             'Are you sure you only want to keep these products and delete the others?',
@@ -87,6 +100,10 @@ const UpdateSale = () => {
         );
     };
     const onDeleteVariation = (record?: IVariation) => {
+        if(saleEndDate < timeNow){
+            showMessageClient('This sale has expired, you can not modifier anymore.','','warning');
+            return;
+        }
         showMessageActive('Delete', 'Are you sure you want to delete', 'warning', () => {
             const arrSelect = [
                 ...arrSelectVariationsOfOneSelectedProduct,
@@ -100,6 +117,10 @@ const UpdateSale = () => {
         });
     };
     const onFilterVariation = (record?: IVariation) => {
+        if(saleEndDate < timeNow){
+            showMessageClient('This sale has expired, you can not modifier anymore.','','warning');
+            return;
+        }
         showMessageActive(
             'Delete',
             'Are you sure you only want to keep these products and delete the others?',
@@ -118,6 +139,7 @@ const UpdateSale = () => {
         );
     };
     const onChangeQuantityVariation = (e: any, record: IVariation) => {
+        
         const arrSelected: IVariation[] = [
             ...arrSelectVariationsOfOneSelectedProduct,
             ...arrSelectedVariationsOfMultipleSelectedProduct,
@@ -160,6 +182,7 @@ const UpdateSale = () => {
     const onSearchProduct = (e:any) => {
         setSearchKeyProduct(e.target.value);
     }
+    
     const columnsVariations = [
         {
             title: 'ID',
@@ -186,7 +209,6 @@ const UpdateSale = () => {
             render: (name: string) => {
                 return name.length > 26 ? name.slice(0, 26) + '...' : name;
             },
-            
         },
         {
             title: 'Price',
@@ -201,6 +223,7 @@ const UpdateSale = () => {
                 return (
                     <div>
                         <Input
+                            disabled={saleEndDate < timeNow}
                             onChange={(e) => onChangeQuantityVariation(e, record)}
                             type="number"
                             className="border-none bg-gray-200 box-border px-6 rounded-2xl"
@@ -303,6 +326,7 @@ const UpdateSale = () => {
                 return (
                     <div>
                         <Input
+                             disabled={saleEndDate < timeNow}
                             onChange={(e) => onChangeQuantityProduct(e, record)}
                             type="number"
                             className={`${
@@ -390,6 +414,8 @@ const UpdateSale = () => {
         setDataSale({ ...dataSale, name: e.target.value });
     };
     const onChangeValuePercent = (e: any) => {
+        
+        
         if (e.target.value === '') {
             setError({ ...error, value: 'Value is required' });
         } else if (parseInt(e.target.value) > 100) {
@@ -417,6 +443,9 @@ const UpdateSale = () => {
         setDataSale({ ...dataSale, end_date: date.format('YYYY-MM-DD HH:mm:ss') });
     };
     const onChangeType = (type: 'percent' | 'fixed') => {
+        if(saleEndDate < timeNow){ 
+            return;
+        }
         if (type === theSale?.type) {
             setDataSale({ ...dataSale, type: type, value: theSale?.value });
         } else {
@@ -448,6 +477,8 @@ const UpdateSale = () => {
             });
         }
         if (!hasError) {
+            
+            
             if (id) {
                 await updateSale(id, dataSale);
             } else {
@@ -460,7 +491,7 @@ const UpdateSale = () => {
         { label: 'Percent', value: 'percent' },
         { label: 'Fixed', value: 'fixed' },
     ];
-
+    
     return (
         <div className="bg-slate-50 rounded-lg p-8">
             <div className="">
@@ -475,6 +506,7 @@ const UpdateSale = () => {
                     <div className="form-row my-4">
                         <span className="text-xl mb-4">Type</span>
                         <Flex
+                            aria-disabled={saleEndDate < timeNow}
                             onChange={(e: any) => onChangeType(e.target.value)}
                             vertical
                             gap="middle"
@@ -493,6 +525,7 @@ const UpdateSale = () => {
                         <span className="text-xl my-4">Value</span>
                         {dataSale.type === 'fixed' ? (
                             <Input
+                                disabled={saleEndDate < timeNow}
                                 value={dataSale.value}
                                 min={0}
                                 type="number"
@@ -502,6 +535,7 @@ const UpdateSale = () => {
                         ) : (
                             <Input
                                 value={dataSale.value}
+                                disabled={saleEndDate < timeNow}
                                 type="number"
                                 max={100}
                                 min={0}
@@ -517,6 +551,7 @@ const UpdateSale = () => {
                         <span className="text-xl my-4">Start date</span>
                         <div>
                             <DatePicker
+                                disabled={timeNow > saleStartDate}
                                 value={dataSale.start_date ? dayjs(dataSale.start_date) : ''}
                                 onChange={onChangeStartDate}
                                 className="w-full"
@@ -530,6 +565,7 @@ const UpdateSale = () => {
                         <span className="text-xl my-4">End date</span>
                         <div>
                             <DatePicker
+                                disabled={saleEndDate < timeNow}
                                 value={dataSale.end_date ? dayjs(dataSale.end_date) : ''}
                                 onChange={onChangeEndDate}
                                 className="w-full"
@@ -574,7 +610,7 @@ const UpdateSale = () => {
                                 columnWidth: 50,
                             }}
                             dataSource={dataSourceProduct}
-                            columns={columnsProduct}
+                            columns={columnsProduct as any}
                             pagination={{ pageSize: 5 }}
                         />
                     </div>

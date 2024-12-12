@@ -8,6 +8,7 @@ import { useContextGlobal } from '../contexts';
 import { useContextClient } from '../components/Layouts/LayoutClient';
 import { showMessageClient } from '../utils/messages';
 import { handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
+import { log } from 'node:console';
 const API_CHECK_EMAIL = '/api/check/email';
 
 const useAuth = () => {
@@ -54,7 +55,10 @@ const useAuth = () => {
             navigate('/');
             showMessageClient('Login Successfuly', '', 'success');
         } catch (error) {
+            
+            
             if ((error as any)?.response?.data?.message) {
+                console.log(error as any);
                 showMessageClient((error as any).response.data.message, '', 'error');
             } else {
                 showMessageClient('Something went wrong!', '', 'error');
@@ -76,8 +80,12 @@ const useAuth = () => {
             showMessageClient('Logout Successfuly', '', 'success');
             queryClient.clear();
         } catch (error) {
-            console.log(error);
-            showMessageClient('Something went wrong!', '', 'error');
+            if ((error as any)?.response?.data?.message) {
+                console.log(error as any);
+                showMessageClient((error as any).response.data.message, '', 'error');
+            } else {
+                showMessageClient('Something went wrong!', '', 'error');
+            }
         } finally {
             setLoading(false);
         }
@@ -96,8 +104,12 @@ const useAuth = () => {
             navigate('/admin');
             return data;
         } catch (error) {
-            showMessageClient('Something went wrong!', '', 'error');
-            return null;
+            if ((error as any)?.response?.data?.message) {
+                console.log(error as any);
+                showMessageClient((error as any).response.data.message, '', 'error');
+            } else {
+                showMessageClient('Something went wrong!', '', 'error');
+            }
         } finally {
             setLoading(false);
         }
@@ -119,8 +131,12 @@ const useAuth = () => {
             }
             return data;
         } catch (error) {
-            console.log(error);
-            showMessageClient('Something went wrong!', '', 'error');
+            if ((error as any)?.response?.data?.message) {
+                console.log(error as any);
+                showMessageClient((error as any).response.data.message, '', 'error');
+            } else {
+                showMessageClient('Something went wrong!', '', 'error');
+            }
         } finally {
             setLoading(false);
         }
