@@ -18,7 +18,7 @@ const PrivateRoute = ({ children }: { children: ReactNode }) => {
                     <div className="flex justify-center">
                         <img
                             className="w-[600px]"
-                            src="./public/images/Capture d’écran 2024-04-09 à 11.33.56.png"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQapgOuAoFQ8eZJXjFpp9jLmkPbt9N8CzR8hg&s"
                             alt=""
                         />
                     </div>

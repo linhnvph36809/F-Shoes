@@ -59,4 +59,5 @@ export const INFO_AUTH = {
     adminName: 'adminName',
     userId: 'userId',
     userName: 'userName',
+    isAdmin: 'isAdmin'
 };

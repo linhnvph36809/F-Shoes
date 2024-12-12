@@ -30,6 +30,7 @@ const useAuth = () => {
                 return;
             }
             localStorage.setItem('code', data.code);
+            showMessageClient('Verify code has been sent to your email.', '', 'success');
             setPage('register');
         } catch (error) {
             console.log(error);
@@ -75,8 +76,9 @@ const useAuth = () => {
             if (data?.access_token && data?.refresh_token) {
                 handleSetLocalStorage(TOKENS.ACCESS_TOKEN, data.access_token);
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
-                handleSetLocalStorage('userName', data.user.name);
-                handleSetLocalStorage('userId', data.user.id);
+                handleSetLocalStorage(INFO_AUTH.userName, data.user.name);
+                handleSetLocalStorage(INFO_AUTH.userId, data.user.id);
+                handleSetLocalStorage(INFO_AUTH.isAdmin, data.user.is_admin);
             }
             setUserGlobal(data.user);
             refetchQuantityCart();
@@ -100,6 +102,7 @@ const useAuth = () => {
             await tokenManagerInstance('post', `/api/logout`, user);
             handleRemoveLocalStorage(INFO_AUTH.userName);
             handleRemoveLocalStorage(INFO_AUTH.userId);
+            handleRemoveLocalStorage(INFO_AUTH.isAdmin);
             navigate('/');
             setUserGlobal({});
             setUserName('');
@@ -124,9 +127,10 @@ const useAuth = () => {
             if (data?.access_token && data?.refresh_token) {
                 handleSetLocalStorage(TOKENS.ACCESS_TOKEN, data.access_token);
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
-                handleSetLocalStorage(INFO_AUTH.adminId, data.user.id);
+                handleSetLocalStorage(INFO_AUTH.isAdmin, data.user.is_admin);
                 handleSetLocalStorage(INFO_AUTH.adminName, data.user.name);
             }
+            setUserGlobal(data.user);
             navigate('/admin');
             return data;
         } catch (error) {
@@ -150,6 +154,7 @@ const useAuth = () => {
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
                 handleSetLocalStorage(INFO_AUTH.userName, data.user.name);
                 handleSetLocalStorage(INFO_AUTH.userId, data.user.id);
+                handleSetLocalStorage(INFO_AUTH.isAdmin, data.user.is_admin);
                 setUserGlobal(data.user);
                 refetchQuantityCart();
                 navigate('/');
@@ -158,7 +163,6 @@ const useAuth = () => {
             return data;
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
-                console.log(error as any);
                 showMessageClient((error as any).response.data.message, '', 'error');
             } else {
                 showMessageClient('Something went wrong!', '', 'error');

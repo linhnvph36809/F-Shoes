@@ -12,7 +12,8 @@ import useQueryConfig from '../../hooks/useQueryConfig.tsx';
 import LoadingSmall from '../Loading/LoadingSmall.tsx';
 import Logo from '../Logo/index.tsx';
 import { useContextGlobal } from '../../contexts/index.tsx';
-import { LANGUAGE_EN, LANGUAGE_VI } from '../../constants/index.ts';
+import { INFO_AUTH, LANGUAGE_EN, LANGUAGE_VI } from '../../constants/index.ts';
+import { handleGetLocalStorage } from '../../utils/index.ts';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -28,11 +29,12 @@ const Header = () => {
     const { logout } = useAuth();
     const { userName } = useContextClient();
     const { locale, changeLanguage, quantityCart } = useContextGlobal();
-
     const { data: dataCategories, isFetching: fetchingData } = useQueryConfig(
         'header-list-categories',
         'api/main/categories?include=children',
     );
+
+    const isAdmin = handleGetLocalStorage(INFO_AUTH.isAdmin) || 0;
     useEffect(() => {
         setHeadCategories(dataCategories?.data?.categories?.data);
     }, [dataCategories?.data?.categories?.data]);
@@ -58,7 +60,7 @@ const Header = () => {
             setErrorSearchKey(true);
             return;
         }
-        urlQuery.set('search',searchKey);
+        urlQuery.set('search', searchKey);
         navigate(`/category?${urlQuery.toString()}`, { replace: true });
     };
     return (
@@ -108,17 +110,25 @@ const Header = () => {
                                 </a>
                             </li>
                             <li className="color-primary font-medium">|</li>
-                            <li>
+                            <li className="relative">
                                 {userName ? (
                                     <Dropdown
-                                        className="hover:cursor-pointer"
+                                        className="hover:cursor-pointer "
                                         overlay={
-                                            <Menu className="color-primary w-[80px] font-medium">
+                                            <Menu className="color-primary absolute left-0 right-0 font-medium">
                                                 <Menu.Item key="1">
                                                     <Link to="/profile">Profile</Link>
                                                 </Menu.Item>
+                                                {+isAdmin ? (
+                                                    <Menu.Item key="2">
+                                                        <Link to="/admin">Admin</Link>
+                                                    </Menu.Item>
+                                                ) : (
+                                                    ''
+                                                )}
+
                                                 <Menu.Item
-                                                    key="2"
+                                                    key="3"
                                                     className="hover:cursor-pointer"
                                                     onClick={async () => {
                                                         logout();
@@ -147,9 +157,8 @@ const Header = () => {
                     </div>
                 </div>
                 <div
-                    className={`${
-                        scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
-                    } bg-white transition-all duration-300 ease-linear`}
+                    className={`${scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
+                        } bg-white transition-all duration-300 ease-linear`}
                 >
                     <div className="container flex-row-center justify-between">
                         <div>
@@ -222,17 +231,21 @@ const Header = () => {
                             </ul>
                         </nav>
                         <div className="flex-row-center sm:gap-x-3 md:gap-x-6">
-                            <form action="" onSubmit={(e) => {
-                                e.preventDefault();
-                                handleSearch();
-                            }} className="sm:hidden md:block">
+                            <form
+                                action=""
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    handleSearch();
+                                }}
+                                className="sm:hidden md:block"
+                            >
                                 <Input
-                                    
                                     onChange={(e) => setSearchKey(e.target.value)}
                                     value={searchKey}
                                     placeholder={intl.formatMessage({ id: 'header.search' })}
                                     className={`w-[180px] h-[36px] rounded-[100px] bg-whitesmoke 
-                                color-primary font-medium  pl-0 hover:bg-[#e5e5e5] focus:shadow-none ${errorSearchKey ? 'border border-red-500' : 'border-0'}`}
+                                color-primary font-medium  pl-0 hover:bg-[#e5e5e5] focus:shadow-none ${errorSearchKey ? 'border border-red-500' : 'border-0'
+                                        }`}
                                     prefix={
                                         <div
                                             className="rounded-full flex-row-center justify-center
@@ -267,9 +280,8 @@ const Header = () => {
                     <div className="absolute top-full w-full bg-white z-10">
                         <div
                             className={`w-[70%] overflow-hidden mx-auto grid grid-cols-4
-                            transition-all duration-100 ease-linear ${
-                                showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
-                            } `}
+                            transition-all duration-100 ease-linear ${showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
+                                } `}
                             onMouseLeave={() => setShowMenu(false)}
                             onMouseEnter={() => {
                                 setShowMenu(true);
