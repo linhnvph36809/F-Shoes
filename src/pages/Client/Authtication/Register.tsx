@@ -15,6 +15,7 @@ const Register = ({ handleRegister, email, loading }: any) => {
                 family_name: values.family_name,
                 birth_date: `${values.year}-${values.month}-${values.day}`,
             },
+            verify_code: values.verify_code,
         });
     };
 
@@ -28,6 +29,10 @@ const Register = ({ handleRegister, email, loading }: any) => {
                     {/* <Form.Item name="code" rules={[{ required: true, message: 'Please enter your code!' }]}>
                         <InputPrimary placeholder="Code" />
                     </Form.Item> */}
+
+                    <Form.Item name="verify_code" rules={[{ required: true, message: 'Please enter code!' }]}>
+                        <InputPrimary placeholder=" Code" />
+                    </Form.Item>
 
                     <Form.Item name="name" rules={[{ required: true, message: 'Please enter your name!' }]}>
                         <InputPrimary placeholder=" Name" />

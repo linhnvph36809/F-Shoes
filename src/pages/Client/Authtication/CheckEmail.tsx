@@ -17,16 +17,21 @@ const CheckEmail = ({ handleCheckEmail, loading }: any) => {
                     }}
                 >
                     <Form.Item
-                        name={'email'}
+                        name="email"
                         rules={[
                             {
                                 required: true,
                                 message: 'Please enter email',
                             },
+                            {
+                                type: 'email',
+                                message: 'Please enter a valid email address!',
+                            },
                         ]}
                     >
                         <InputPrimary placeholder="Email" type="email" />
                     </Form.Item>
+
                     <p className="w-[80%] text-[#757575] sm:text-[12px] md:text-base font-medium sm:my-5 md:my-10">
                         By continuing, I agree to Nike's
                         <a href="#" className="underline">

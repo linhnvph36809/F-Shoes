@@ -1,10 +1,9 @@
-import { Form } from 'antd';
+import { Form, Input } from 'antd';
 import Title from './components/Title';
-import InputPrimary from '../../../components/Input';
 import ButtonComponent from './components/Button';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
 
-const Password = ({ handleLogin, email, loading }: any) => {
+const Password = ({ handleLogin, handleForgotPassword, email, loading }: any) => {
     const onFinish = async (values: { password: string }) => {
         handleLogin({
             ...email,
@@ -24,17 +23,23 @@ const Password = ({ handleLogin, email, loading }: any) => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please enter your first name!',
+                                message: 'Please enter your password!',
                             },
                         ]}
                     >
-                        <InputPrimary placeholder="Password" type="password" />
+                        <Input.Password
+                            placeholder="Password"
+                            type="password"
+                            className={`w-full h-[56px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] px-8 rounded-[8px] text-[18px]`}
+                        />
                     </Form.Item>
 
-                    <p className="w-[80%] text-[#757575] md:text-base font-medium sm:my-5 md:my-10">
-                        <a href="#" className="underline">
-                            Forgotten password ?
-                        </a>
+                    <p
+                        className="w-[80%] text-[#757575] md:text-base font-medium sm:my-5 md:my-10
+                    underline hover:cursor-pointer hover:text-gray-400 transition-global"
+                        onClick={() => handleForgotPassword(email)}
+                    >
+                        Forgotten password ?
                     </p>
 
                     <div className="flex justify-end">

@@ -8,13 +8,13 @@ import { useContextGlobal } from '../contexts';
 import { useContextClient } from '../components/Layouts/LayoutClient';
 import { showMessageClient } from '../utils/messages';
 import { handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
-import { log } from 'node:console';
 const API_CHECK_EMAIL = '/api/check/email';
 
 const useAuth = () => {
     const [page, setPage] = useState<string>('');
     const [user, setUser] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const [timeSendEmail, setTimeSendEmail] = useState<number>(0);
     const { setUser: setUserGlobal, refetchQuantityCart } = useContextGlobal();
     const { setUserName } = useContextClient();
     const queryClient = useQueryClient();
@@ -40,6 +40,34 @@ const useAuth = () => {
         }
     };
 
+    const postForgotPassword = async (email: string) => {
+        try {
+            await tokenManagerInstance('post', '/api/forgot/password', email);
+            setTimeSendEmail(60);
+        } catch (error) {
+            setTimeSendEmail(0);
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            throw new Error((error as any)?.response?.data?.message);
+        } finally {
+            setUser(email);
+            setPage('forgotPassword');
+        }
+    };
+
+    const resetForgotPassword = async (values: any) => {
+        try {
+            setLoading(true);
+            const { data } = await tokenManagerInstance('post', '/api/reset/password', values);
+            showMessageClient(data?.message, '', 'success');
+            setPage('login');
+        } catch (error) {
+            console.log(error);
+            showMessageClient((error as any)?.response?.data?.message, '', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const login = async (user: { email: string; password: string }) => {
         try {
             setLoading(true);
@@ -55,8 +83,6 @@ const useAuth = () => {
             navigate('/');
             showMessageClient('Login Successfuly', '', 'success');
         } catch (error) {
-            
-            
             if ((error as any)?.response?.data?.message) {
                 console.log(error as any);
                 showMessageClient((error as any).response.data.message, '', 'error');
@@ -146,7 +172,10 @@ const useAuth = () => {
         user,
         page,
         loading,
+        timeSendEmail,
         postCheckEmail,
+        postForgotPassword,
+        resetForgotPassword,
         login,
         loginAdmin,
         register,
