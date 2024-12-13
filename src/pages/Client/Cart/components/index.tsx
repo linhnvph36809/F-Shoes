@@ -88,19 +88,33 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
                     </div>
                 </div>
             </div>
-            <div className="text-[16px] font-medium flex items-center gap-x-3">
-                <p className="color-gray text-[14px] font-normal line-through">
-                    {formatPrice(product.product_variation.price) || formatPrice(product?.product?.price)}đ
-                </p>
-                {product.product_variation.price || product?.price ? (
-                    <p>
-                        {formatPrice(product.product_variation.sale_price) || formatPrice(product?.product?.sale_price)}
-                        đ
-                    </p>
+
+            {product?.product_variation ? (
+                product.product_variation.sale_price ? (
+                    <div className="text-[16px] font-medium flex items-center gap-x-3">
+                        <p className="color-gray text-[14px] font-normal line-through">
+                            {formatPrice(product.product_variation.price)}đ
+                        </p>
+                        <p>{formatPrice(product.product_variation?.sale_price)}đ</p>
+                    </div>
                 ) : (
-                    ''
-                )}
-            </div>
+                    <div className="text-[16px] font-medium flex items-center gap-x-3">
+                       
+                        <p>{formatPrice(product.product_variation?.price)}đ</p>
+                    </div>
+                )
+            ) : product?.product?.sale_price ? (
+                <div className="text-[16px] font-medium flex items-center gap-x-3">
+                    <p className="color-gray text-[14px] font-normal line-through">
+                        {formatPrice(product.product.price)}đ
+                    </p>
+                    <p>{formatPrice(product.product?.sale_price)}đ</p>
+                </div>
+            ) : (
+                <div className="text-[16px] font-medium flex items-center gap-x-3">
+                    <p>{formatPrice(product.product?.price)}đ</p>
+                </div>
+            )}
 
             <input
                 onChange={handleSelectCart}

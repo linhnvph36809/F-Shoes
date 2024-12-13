@@ -137,7 +137,8 @@ const UpdateSale = () => {
                 setDataSourceVariation([...filtered]);
             },
         );
-    };
+    }
+    console.log(dataSourceVariation);
     const [searchKeyVariation,setSearchKeyVariation] = useState('');
     const onSearchVariation = (e:any) => {
         setSearchKeyVariation(e.target.value);

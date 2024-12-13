@@ -36,7 +36,7 @@ const Header = () => {
         [QUERY_KEY_PRODUCT, 'header-list-all-products'],
         'api/products/all/summary',
     );
-    
+
     const { data: dataCategories, isFetching: fetchingData } = useQueryConfig(
         [QUERY_KEY_CATEGORY, 'header-list-categories'],
         'api/main/categories?include=children',
@@ -61,18 +61,18 @@ const Header = () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, [scrollPosition]);
-    
+
     const [errorSearchKey, setErrorSearchKey] = useState(false);
     const [searchKey, setSearchKey] = useState('');
     const listOriginAllProducts = JSON.parse(JSON.stringify([...(dataAllProduct?.data?.products || [])]));
     const [allProducts, setAllProducts] = useState<IProduct[]>([]);
     useEffect(() => {
-        if(searchKey !== ''){
-            const filtered = listOriginAllProducts.filter((item:IProduct) => {
+        if (searchKey !== '') {
+            const filtered = listOriginAllProducts.filter((item: IProduct) => {
                 return item.name.toLowerCase().includes(searchKey.toLowerCase());
             });
             setAllProducts([...filtered]);
-        }else{
+        } else {
             setAllProducts([...listOriginAllProducts]);
         }
     }, [dataAllProduct?.data?.products,searchKey]);
@@ -259,16 +259,28 @@ const Header = () => {
                                     e.preventDefault();
                                     handleSearch();
                                 }}
-                                className="sm:hidden md:block"
+                                className="sm:hidden md:block relative"
                             >
                                 <Dropdown
                                     trigger={['click']}
                                     overlay={
                                         allProducts && allProducts.length > 0 ? (
-                                            <Menu className="color-primary  font-medium custom-scroll-container">
+                                            <Menu className="color-primary font-medium custom-scroll-container absolute -left-[40px] top-0">
                                                 {allProducts.map((item: IProduct) => (
                                                     <Menu.Item key={item?.id}>
-                                                        <Link to={`/detail/${item?.slug}`} className='flex items-center gap-2'><img src={item?.image_url} className='w-[20px] h-[20px]' alt={item?.name} /> {item?.name.length > 30 ? item?.name.substring(0, 30) + '...' : item?.name}</Link>
+                                                        <Link
+                                                            to={`/detail/${item?.slug}`}
+                                                            className="flex items-center gap-2"
+                                                        >
+                                                            <img
+                                                                src={item?.image_url}
+                                                                className="w-[20px] h-[20px]"
+                                                                alt={item?.name}
+                                                            />{' '}
+                                                            {item?.name.length > 30
+                                                                ? item?.name.substring(0, 30) + '...'
+                                                                : item?.name}
+                                                        </Link>
                                                     </Menu.Item>
                                                 ))}
                                             </Menu>
@@ -281,14 +293,13 @@ const Header = () => {
                                         onChange={(e) => setSearchKey(e.target.value)}
                                         value={searchKey}
                                         placeholder={intl.formatMessage({ id: 'header.search' })}
-                                        className={`w-[180px] h-[36px] rounded-[100px] bg-whitesmoke 
-                                color-primary font-medium  pl-0 hover:bg-[#e5e5e5] focus:shadow-none ${
-                                    errorSearchKey ? 'border border-red-500' : 'border-0'
-                                }`}
+                                        className={`w-[180px] h-[36px] rounded-[100px] bg-whitesmoke
+                                         color-primary font-medium  pl-0 hover:bg-[#e5e5e5] focus:shadow-none ${errorSearchKey ? 'border border-red-500' : 'border-0'
+                                            }`}
                                         prefix={
                                             <div
                                                 className="rounded-full flex-row-center justify-center
-                                        w-[36px] h-[36px] bg-whitesmoke hover:bg-[#cacacb] hover:cursor-pointer"
+                                         w-[36px] h-[36px] bg-whitesmoke hover:bg-[#cacacb] hover:cursor-pointer"
                                             >
                                                 <Search
                                                     onClick={() => handleSearch()}

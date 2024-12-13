@@ -9,10 +9,13 @@ import useQueryConfig from '../../../../hooks/useQueryConfig.tsx';
 import { showMessageActive, showMessageAdmin } from '../../../../utils/messages.ts';
 import useSale from '../../../../hooks/useSale.tsx';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall.tsx';
-import { BadgeCentIcon } from 'lucide-react';
+import { BadgeCentIcon, CircleX, Filter } from 'lucide-react';
 
 const AddSale = () => {
-    const { data: productList } = useQueryConfig(`sale-list_products-add_sale_page`, `/api/products/all/summary?include=variations`);
+    const { data: productList } = useQueryConfig(
+        `sale-list_products-add_sale_page`,
+        `/api/products/all/summary?include=variations`,
+    );
     const productListData = productList?.data?.products || [];
 
     const dataSourceProductOriginList = JSON.parse(JSON.stringify([...productListData]));
@@ -141,26 +144,63 @@ const AddSale = () => {
         setDataSourceProduct(selectedSimpleProducts);
         setOpenAddProductTable(false);
     };
-     const [searchKeyDataSouceVariation,setSearchKeyDataSouceVariation] = useState('');
-    const onSearchVariation = (e:any) => {
+    const [searchKeyDataSouceVariation, setSearchKeyDataSouceVariation] = useState('');
+    const onSearchVariation = (e: any) => {
         setSearchKeyDataSouceVariation(e.target.value);
-    }
-    const [searchKeyDataSouceProduct,setSearchKeyDataSouceProduct] = useState('');
-    const onSearchProduct = (e:any) => {
+    };
+    const [searchKeyDataSouceProduct, setSearchKeyDataSouceProduct] = useState('');
+    const onSearchProduct = (e: any) => {
         setSearchKeyDataSouceProduct(e.target.value);
+    };
+    const onFilterSimpleProduct = (record?: IProduct) => {
+        showMessageActive(
+            'Delete',
+            'Are you sure you only want to keep these products and delete the others?',
+            'warning',
+            () => {
+                const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
+                const filtered = dataSourceProduct.filter((product) => {
+                    return arrSelect.find((p) => p?.id === product.id);
+                });
+                setDataSourceProduct([...filtered]);
+            },
+        );
     }
+   
+    
+    const onFilterVariation = (record?: IVariation) => {
+        showMessageActive(
+            'Delete',
+            'Are you sure you only want to keep these products and delete the others?',
+            'warning',
+            () => {
+                const arrSelect = [
+                    ...arrSelectVariationsOfOneSelectedProduct,
+                    ...arrSelectedVariationsOfMultipleSelectedProduct,
+                    record,
+                ];
+                const filtered = dataSourceVariation.filter((variant) => {
+                    return arrSelect.find((v) => v?.id === variant.id);
+                });
+                setDataSourceVariation([...filtered]);
+            },
+        );
+    };
     const columnsVariations = [
         {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
             filteredValue: [searchKeyDataSouceVariation],
-            onFilter: (value:any, record:IVariation) => {
-               if(value){
-                return record.name.toLowerCase().includes(value.toLowerCase()) || record.id.toString().includes(value.toLowerCase());
-               }
+            onFilter: (value: any, record: IVariation) => {
+                if (value) {
+                    return (
+                        record.name.toLowerCase().includes(value.toLowerCase()) ||
+                        record.id.toString().includes(value.toLowerCase())
+                    );
+                }
                 return true;
-            }
+            },
         },
         {
             title: 'Image',
@@ -185,18 +225,25 @@ const AddSale = () => {
             title: 'Quantity',
             dataIndex: 'stock_qty',
             key: 'stock_qty',
-            
         },
         {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
             render: (_: any, record: any) => {
-                return <Button onClick={() => onDeleteVariation(record)}>Delete</Button>;
+                return (
+                    <div className="flex space-x-2">
+                        <Button className="p-2" onClick={() => onDeleteVariation(record)}>
+                            <CircleX />
+                        </Button>
+                        <Button className="p-2" onClick={() => onFilterVariation(record)}>
+                            <Filter />
+                        </Button>
+                    </div>
+                );
             },
         },
     ];
-    
 
     const columnsProduct = [
         {
@@ -204,12 +251,15 @@ const AddSale = () => {
             dataIndex: 'id',
             key: 'id',
             filteredValue: [searchKeyDataSouceProduct],
-            onFilter: (value:any, record:IVariation) => {
-               if(value){
-                return record.name.toLowerCase().includes(value.toLowerCase()) || record.id.toString().includes(value.toLowerCase());
-               }
+            onFilter: (value: any, record: IVariation) => {
+                if (value) {
+                    return (
+                        record.name.toLowerCase().includes(value.toLowerCase()) ||
+                        record.id.toString().includes(value.toLowerCase())
+                    );
+                }
                 return true;
-            }
+            },
         },
         {
             title: 'Image',
@@ -234,33 +284,45 @@ const AddSale = () => {
             title: 'Quantity',
             dataIndex: 'stock_qty',
             key: 'stock_qty',
-           
         },
         {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
             render: (_: any, record: any) => {
-                return <Button onClick={() => onDeleteSimpleProduct(record)}>Delete</Button>;
+                return (
+                    <div className="flex space-x-2">
+                        <Button className="p-2" onClick={() => onDeleteSimpleProduct(record)}>
+                            <CircleX />
+                        </Button>
+
+                        <Button className="p-2" onClick={() => onFilterSimpleProduct(record)}>
+                            <Filter />
+                        </Button>
+                    </div>
+                );
             },
         },
     ];
-    const [searchKeyListProduct,setSearchKeyProduct] = useState('');
-    const onSearchKeyListProduct = (e:any) => {
+    const [searchKeyListProduct, setSearchKeyProduct] = useState('');
+    const onSearchKeyListProduct = (e: any) => {
         setSearchKeyProduct(e.target.value);
-    }
+    };
     const columns = [
         {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
             filteredValue: [searchKeyListProduct],
-            onFilter: (value:any, record:IVariation) => {
-               if(value){
-                return record.name.toLowerCase().includes(value.toLowerCase()) || record.id.toString().includes(value.toLowerCase());
-               }
+            onFilter: (value: any, record: IVariation) => {
+                if (value) {
+                    return (
+                        record.name.toLowerCase().includes(value.toLowerCase()) ||
+                        record.id.toString().includes(value.toLowerCase())
+                    );
+                }
                 return true;
-            }
+            },
         },
         {
             title: 'Image',
@@ -401,7 +463,7 @@ const AddSale = () => {
             }
         }
     };
-    
+
     const optionsType = [
         { label: 'Percent', value: 'percent' },
         { label: 'Fixed', value: 'fixed' },
@@ -537,12 +599,12 @@ const AddSale = () => {
 
             {!dataSale.applyAll ? (
                 <div className="product-list">
-                    <div className="grid grid-cols-2 gap-8 my-8">
+                    <div className="">
                         <div>
                             <Heading>Simple Product</Heading>
                             <div>
-                            <Input onChange={onSearchProduct} placeholder="Search a product name or id" />
-                        </div>
+                                <Input onChange={onSearchProduct} placeholder="Search a product name or id" />
+                            </div>
                             <Table
                                 rowKey={(record) => `table2-${record.id}`}
                                 rowSelection={{

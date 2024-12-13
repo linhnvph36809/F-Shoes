@@ -1,5 +1,5 @@
-import { Star } from 'lucide-react';
 import { formatPrice } from '../../../utils';
+import { STAR } from '../../../constants/icons';
 
 export const columnsAttribute = [
     {
@@ -45,9 +45,9 @@ export const columnsAttribute = [
         dataIndex: 'rating',
         key: '7',
         render: (rating: string) => (
-            <p className="flex gap-x-2 items-center">
+            <p className="flex gap-x-1 items-center">
                 {rating}
-                <Star className="w-[16px] text-yellow-500" />
+                {STAR}
             </p>
         ),
     },

@@ -8,19 +8,16 @@ import { Link } from 'react-router-dom';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import { IProduct } from '../../../interfaces/IProduct.ts';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ICategory } from '../../../interfaces/ICategory.ts';
 
-export default function ClassicsSpotlight() {
-    const { data: bestSelling, isFetching: fetchingDisplay3 } = useQueryConfig(
-        ['products',`list-products-display-3`],
-        `api/display/home-page/products?serial=3`,
-        {
-            cacheTime: 1000 * 60 * 10,
-            staleTime: 1000 * 60 * 10,
-            retry: false,
-        },
-    );
-    const category = bestSelling?.data?.category;
-    const listProducts = bestSelling?.data?.category?.products || [];
+type Props = {
+    products: IProduct[] | [];
+    category?: ICategory | null;
+    loading: boolean;
+}
+export default function ClassicsSpotlight({products,loading}:Props) {
+    
+   
     return (
         <>
             <div className="relative">
@@ -57,10 +54,10 @@ export default function ClassicsSpotlight() {
                     }}
                     className="classicsSpotlight"
                 >
-                    {fetchingDisplay3 ? (
+                    {loading ? (
                         <SkeletonComponent />
                     ) : (
-                        listProducts.map((item: IProduct) => (
+                        products.map((item: IProduct) => (
                             <SwiperSlide key={item.id}>
                                 <Link to={`detail/${item.slug}`}>
                                     <img src={item.image_url} alt="" className="w-[500px]" />

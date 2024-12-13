@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import ButtonPrimary from '../../../../../components/Button';
 import '../../style.scss';
+import InputPrimary from '../../../components/Forms/InputPrimary';
 
 const FormCategory = ({
     onFinish,
@@ -81,10 +82,7 @@ const FormCategory = ({
                             labelCol={{ span: 24 }} // Căn label theo chiều ngang
                             rules={[{ required: true, message: 'Please enter category name' }]}
                         >
-                            <input
-                                className="w-[395px] h-[52px] border border-gray-300 rounded px-3 bg-[#F5F6FA] focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                placeholder="Category name"
-                            />
+                            <InputPrimary placeholder={'Category Name'} width={'w-[395px]'} />
                         </Form.Item>
 
                         {/* Select Parent Category */}

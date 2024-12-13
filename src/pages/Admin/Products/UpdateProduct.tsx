@@ -31,11 +31,6 @@ const UpdateProduct = () => {
         page = searchParams.get('page') || 1;
     }
 
-    const { refetch } = useQueryConfig(
-        `all-product-admin-${page}`,
-        API_PRODUCT + `?per_page=8&page=${page}&include=categories,sale_price,variations`,
-    );
-
     const [images, setImages] = useState<{
         isShow: boolean;
         images: IImage[];
@@ -53,8 +48,7 @@ const UpdateProduct = () => {
 
     const onFinish = useCallback(
         async (values: any) => {
-            putProduct(values);
-            refetch();
+            await putProduct(values);
             refetchUpdate();
         },
         [images],

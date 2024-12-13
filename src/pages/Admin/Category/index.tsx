@@ -1,4 +1,3 @@
-import { Table } from 'antd';
 import { CopyPlus, SquarePen, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -14,6 +13,7 @@ import { columns } from './datas';
 import { showMessageActive } from '../../../utils/messages';
 import { ACTIONS, PERMISSION } from '../../../constants';
 import PermissionElement from '../../../components/Permissions/PermissionElement';
+import TableAdmin from '../components/Table';
 
 const ListCategory = () => {
     const { deleteCategory, categories, mainCategories, postCategory, getAllCategory, putCategory } = useCategory();
@@ -146,7 +146,7 @@ const ListCategory = () => {
                         {/* Input tìm kiếm */}
                         <input
                             type="text"
-                            placeholder="    Search by category name"
+                            placeholder=" Search by category name"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full h-[48px] border border-gray-300 rounded-lg pl-10 pr-4 shadow-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-blue-400 transition duration-200"
@@ -156,7 +156,7 @@ const ListCategory = () => {
 
                 {/* Bảng dữ liệu */}
                 <div className="w-full">
-                    <Table columns={[columMain, ...columns, columnDelete]} dataSource={[...filteredCategories]} />
+                    <TableAdmin columns={[columMain, ...columns, columnDelete]} dataSource={[...filteredCategories]} />
                 </div>
             </section>
             {/* )} */}

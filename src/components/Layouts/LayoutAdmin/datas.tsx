@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PERMISSION } from '../../../constants';
-import { BarChartOutlined } from '@ant-design/icons';
 
 export const items: MenuProps['items'] = [
     {

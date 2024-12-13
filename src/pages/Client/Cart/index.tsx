@@ -33,7 +33,8 @@ const Cart = () => {
         deleteCart(idCart);
         refetch();
     };
-
+    console.log(carts);
+    
     const handleTotalPrice = useMemo(() => {
         if (cartId.length) {
             const newCarts = carts?.data.filter((cart: any) => cartId.includes(cart.id));

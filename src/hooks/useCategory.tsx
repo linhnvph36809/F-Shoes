@@ -50,7 +50,7 @@ const useCategory = () => {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_CATEGORY}/${id}`);
             getAllCategory();
-            queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin('Delete Topic successfully', '', 'success');
         } catch (error) {
             showMessageAdmin('Error', (error as any).message, 'error');
@@ -64,7 +64,7 @@ const useCategory = () => {
             setLoading(true);
             await tokenManagerInstance('post', API_CATEGORY, category);
             getAllCategory();
-            queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin('Create Topic successfully', '', 'success');
         } catch (error) {
             showMessageAdmin('Error', (error as any).message, 'error');
@@ -78,7 +78,7 @@ const useCategory = () => {
             setLoading(true);
             await tokenManagerInstance('put', `${API_CATEGORY}/${id}`, category);
             getAllCategory();
-            queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             navigate(PATH_LIST_CATEGORY);
             showMessageAdmin('Update Topic successfully', '', 'success');
         } catch (error) {
@@ -97,11 +97,11 @@ const useCategory = () => {
                 throw new Error('No products selected to add.');
             }
             const apiUrl = `${API_CATEGORY}/${id}/products?include=products`;
-            
+
             const payload = { products: productsToAdd.map((product) => product.id) };
-            
+
             const { status } = await tokenManagerInstance('post', apiUrl, payload);
-            queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             if (status === 200 || status === 201) {
                 return {
                     success: true,
@@ -111,7 +111,6 @@ const useCategory = () => {
                 throw new Error('Failed to add products.');
             }
         } catch (error: any) {
-            
             if (error.response) {
                 console.error('API Error:', error.response.data);
             } else {
@@ -123,13 +122,12 @@ const useCategory = () => {
 
     const deleteProductFromCategory = async (categoryId: any, productId: string | number | (string | number)[]) => {
         try {
-           
             const productIds = Array.isArray(productId) ? productId : [productId];
             if (!productIds.length) throw new Error('Product IDs must not be empty.');
             const response = await tokenManagerInstance('delete', `${API_CATEGORY}/${categoryId}/products`, {
                 data: { products: productIds },
             });
-            queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             const message =
                 response.status === 200 || response.status === 204
                     ? 'Products deleted successfully!'
