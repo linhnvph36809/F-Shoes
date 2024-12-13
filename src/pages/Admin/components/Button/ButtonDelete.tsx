@@ -1,10 +1,11 @@
 import { Button } from 'antd';
 import { Trash2 } from 'lucide-react';
+import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 
-const ButtonDelete = ({ children, ...props }: any) => {
+const ButtonDelete = ({ children, loading, ...props }: any) => {
     return (
         <Button {...props} className="w-[50px] h-[40px] font-medium">
-            <Trash2 />
+            {loading ? <LoadingSmall /> : <Trash2 />}
         </Button>
     );
 };

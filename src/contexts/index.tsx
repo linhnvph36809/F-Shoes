@@ -71,8 +71,6 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
         handleSetLocalStorage('language', selectedLocale);
     }, []);
 
-    console.log(user);
-
     return (
         <IntlProvider locale={locale} messages={language[locale]}>
             <CookiesProvider>

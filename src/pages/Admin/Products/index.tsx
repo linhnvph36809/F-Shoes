@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CopyPlus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -14,25 +15,23 @@ import { showMessageActive } from '../../../utils/messages';
 import ButtonDelete from '../components/Button/ButtonDelete';
 import ButtonUpdate from '../components/Button/ButtonUpdate';
 import ButtonAdd from '../components/Button/ButtonAdd';
+import InputSearch from '../components/Forms/InputSearch';
 
 const ListProduct = () => {
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
     const page = params.get('page') || 1;
 
+    const [search, setSearch] = useState('');
     const currentUrl = `${window.location.origin}${location.pathname}${location.search}`;
 
     const navigate = useNavigate();
     const { deleteProduct } = useProduct();
 
-    const {
-        data: products,
-        isFetching,
-    } = useQueryConfig(
-        [QUERY_KEY, `all-product-admin-${page}`],
-        API_PRODUCT + `?per_page=8&page=${page}&include=categories,sale_price,variations`,
+    const { data: products, isFetching } = useQueryConfig(
+        [QUERY_KEY, `all-product-admin-${page}-${search}`],
+        API_PRODUCT + `?per_page=8&page=${page}&search=${search}&include=categories,sale_price,variations`,
     );
-
 
     const handleDeleteProduct = (id: string | number) => {
         showMessageActive('Are you sure you want to delete this product', '', 'warning', () => {
@@ -42,6 +41,12 @@ const ListProduct = () => {
 
     const handlePageChange = (page: number) => {
         params.set('page', `${page}`);
+        navigate(`?${params.toString()}`, { replace: true });
+    };
+
+    const handleSearch = (searchValue: string) => {
+        setSearch(searchValue);
+        params.set('search', searchValue);
         navigate(`?${params.toString()}`, { replace: true });
     };
 
@@ -70,22 +75,28 @@ const ListProduct = () => {
             );
         },
     };
+
     return (
         <>
-            {isFetching ? (
-                <SkeletonComponent />
-            ) : (
+            {
                 <section>
                     <Heading>List Product</Heading>
-                    <ButtonAdd to="/admin/add-product" title={'Add Product'} />
+                    <div className="flex justify-between">
+                        <ButtonAdd to="/admin/add-product" title={'Add Product'} />
+                        <InputSearch placeholder={'Search Product Name'} onSearch={handleSearch} />
+                    </div>
                     <div>
-                        <TableAdmin
-                            scroll={{ x: 'max-content' }}
-                            rowKey="id"
-                            columns={[...columnsAttribute, columnDelete]}
-                            datas={products?.data.data}
-                            pagination={false}
-                        />
+                        {isFetching ? (
+                            <SkeletonComponent className="mt-10" />
+                        ) : (
+                            <TableAdmin
+                                scroll={{ x: 'max-content' }}
+                                rowKey="id"
+                                columns={[...columnsAttribute, columnDelete]}
+                                datas={products?.data.data}
+                                pagination={false}
+                            />
+                        )}
                     </div>
                     <div className="mt-8">
                         <PaginationComponent
@@ -96,7 +107,7 @@ const ListProduct = () => {
                         />
                     </div>
                 </section>
-            )}
+            }
         </>
     );
 };
