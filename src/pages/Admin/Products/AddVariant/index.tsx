@@ -1,4 +1,4 @@
-import { Collapse, ConfigProvider, Form, Select } from 'antd';
+import { ConfigProvider, Select, Table } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -8,18 +8,16 @@ import { IAttribute } from '../../../../interfaces/IAttribute';
 import Heading from '../../components/Heading';
 import FormAttribute from '../components/FormAttribute';
 import SkeletonComponent from '../../components/Skeleton';
-import InputPrimary from '../../../../components/Input';
 import { combine } from './datas';
-import ButtonPrimary from '../../../../components/Button';
-import { IImage } from '../../../../interfaces/IImage';
-import ModalImage from '../AddProduct/ModalImage';
 import useVariant from '../../../../hooks/useVariant';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
+import ModalFormVariant from './ModalFormVariant';
+import { showMessageClient } from '../../../../utils/messages';
+import ButtonSubmit from '../../components/Button/ButtonSubmit';
 
 const API_ATTRIBUTE_GET = '/api/get/attribute/values/product/';
 
 const AddVariant = () => {
-    const [form] = Form.useForm();
     const { slug } = useParams();
     let id: string | number | undefined;
     if (slug) {
@@ -31,30 +29,21 @@ const AddVariant = () => {
     const [variantId, setVariantId] = useState<number[]>([]);
     const [listAttribute, setListAttribute] = useState<any>([]);
     const { loading, postAttribute } = useAttribute();
+    const [datas, setDatas] = useState<any>([]);
+    const [errors, setError] = useState<any>([]);
     const { data: attributeByIds, refetch } = useQueryConfig('attribute', API_ATTRIBUTE_GET + id);
     const { postVariant } = useVariant();
-    const [imagesVariants, setImagesVariants] = useState<any>({});
 
-    const [images, setImages] = useState<{
-        isShow: boolean;
-        images: IImage[];
-    }>({
-        isShow: false,
-        images: [],
-    });
+    const onFinish = () => {
+        console.log(datas);
 
-    const onFinish = useCallback(
-        (value: any) => {
-            const result = value.variations.map((variant: any, i: number) => ({
-                ...variant,
-                values: listAttribute[i].ids,
-                images: imagesVariants[i],
-            }));
-            value.variations = result;
-            postVariant(value);
-        },
-        [listAttribute, imagesVariants],
-    );
+        setError(datas);
+        const isSubmit = datas.some((data: any) => data === null);
+
+        if (!isSubmit) {
+            console.log(datas);
+        }
+    };
 
     const handleChange = useCallback((listId: number[]) => {
         setVariantId([...listId]);
@@ -111,8 +100,23 @@ const AddVariant = () => {
             }
             return acc;
         }, []);
+        const variantCombine = combine(formatVariantsChanges);
 
-        setListAttribute(combine(formatVariantsChanges));
+        setDatas((preData: any) => {
+            if (preData.length) {
+                if (preData.length < variantCombine.length) {
+                    const initArray = Array(variantCombine.length - preData.length).fill(null);
+                    return [...preData, ...initArray];
+                } else {
+                    const initArray = Array(variantCombine.length).fill(null);
+                    return initArray;;
+                }
+            } else {
+                const initArray = Array(variantCombine.length).fill(null);
+                return initArray;
+            }
+        });
+        setListAttribute(variantCombine);
     }, [variantsChanges]);
 
     return (
@@ -183,102 +187,74 @@ const AddVariant = () => {
                             </div>
                         </div>
                         <div>
-                            <Form onFinish={onFinish} form={form} name="form-attribute" autoComplete="off">
-                                {listAttribute.map((attribute: any, i: number) => (
-                                    <div key={i}>
-                                        <ConfigProvider
-                                            theme={{
-                                                token: {
-                                                    borderRadiusLG: 8,
-                                                    colorBorder: '#111111',
-                                                },
-                                            }}
-                                        >
-                                            <Collapse
-                                                className="mb-5 text-16px font-medium"
-                                                expandIconPosition="end"
-                                                items={[
-                                                    {
-                                                        key: '1',
-                                                        label: (
-                                                            <div className="flex-row-center justify-center bg-primary rounded-lg text-white h-[32px]">
-                                                                {attribute.values.join('-')}
-                                                            </div>
-                                                        ),
-                                                        children: (
-                                                            <div className="grid grid-cols-2 gap-x-10">
-                                                                <Form.Item
-                                                                    name={['variations', i, 'price']}
-                                                                    rules={[
-                                                                        {
-                                                                            required: true,
-                                                                            message: 'Please enter price',
-                                                                        },
-                                                                    ]}
-                                                                >
-                                                                    <InputPrimary
-                                                                        margin="my-2"
-                                                                        placeholder="Price"
-                                                                        textSize="text-16px"
-                                                                        height="h-[40px]"
-                                                                    />
-                                                                </Form.Item>
-                                                                <Form.Item
-                                                                    name={['variations', i, 'sku']}
-                                                                    rules={[
-                                                                        {
-                                                                            required: true,
-                                                                            message: 'Please enter sale sku',
-                                                                        },
-                                                                    ]}
-                                                                >
-                                                                    <InputPrimary
-                                                                        margin="mb-2"
-                                                                        placeholder="Sku"
-                                                                        textSize="text-16px"
-                                                                        height="h-[40px]"
-                                                                    />
-                                                                </Form.Item>
-                                                                <Form.Item
-                                                                    name={['variations', i, 'stock_qty']}
-                                                                    rules={[
-                                                                        {
-                                                                            required: true,
-                                                                            message: 'Please enter stock_qty',
-                                                                        },
-                                                                    ]}
-                                                                >
-                                                                    <InputPrimary
-                                                                        margin="mb-2"
-                                                                        placeholder="Quantity"
-                                                                        textSize="text-16px"
-                                                                        height="h-[40px]"
-                                                                    />
-                                                                </Form.Item>
-                                                                <ModalImage
-                                                                    indexVariant={i}
-                                                                    setImagesVariants={setImagesVariants}
-                                                                    images={images}
-                                                                    handleSetImages={setImages}
-                                                                />
-                                                            </div>
-                                                        ),
-                                                    },
-                                                ]}
-                                            />
-                                        </ConfigProvider>
-                                    </div>
-                                ))}
-                                {listAttribute.length ? (
-                                    <div className="text-end mt-10">
-                                        <ButtonPrimary width="w-[100px]" height="h-[50px]" htmlType="submit">
-                                            Submit
-                                        </ButtonPrimary>
-                                    </div>
-                                ) : (
-                                    ''
-                                )}
-                            </Form>
+                            <ConfigProvider
+                                theme={{
+                                    components: {
+                                        Table: {
+                                            headerBg: '#e5e7eb',
+                                            headerBorderRadius: 10,
+                                            fontSize: 15,
+                                            padding: 20,
+                                        },
+                                    },
+                                }}
+                            >
+                                <Table
+                                    pagination={false}
+                                    className="font-medium"
+                                    columns={[
+                                        {
+                                            title: 'ID',
+                                            dataIndex: 'id',
+                                            key: '1',
+                                            render: (_, { id }: any) => {
+                                                return <p>{id.join(',')}</p>;
+                                            },
+                                        },
+                                        {
+                                            title: 'Variant Name',
+                                            dataIndex: 'variant_name',
+                                            key: '2',
+                                        },
+                                        {
+                                            title: 'Action',
+                                            key: '3',
+                                            render: (_, { id }: any, index: number) => {
+                                                return (
+                                                    <div className="flex items-center gap-x-4">
+                                                        <ModalFormVariant
+                                                            index={index}
+                                                            ids={id}
+                                                            setDatas={setDatas}
+                                                            setError={setError}
+                                                        />
+                                                        {errors[index] === null ? (
+                                                            <span className="text-[12px] text-red-500">
+                                                                Please enter a valid variant
+                                                            </span>
+                                                        ) : (
+                                                            ''
+                                                        )}
+                                                    </div>
+                                                );
+                                            },
+                                        },
+                                    ]}
+                                    dataSource={listAttribute.map((attribute: any) => ({
+                                        id: attribute.ids,
+                                        variant_name: attribute.values.join('-'),
+                                    }))}
+                                />
+                                <div className="text-end mt-10">
+                                    <ButtonSubmit
+                                        onClick={
+                                            listAttribute.length
+                                                ? () => onFinish()
+                                                : () => showMessageClient('Please choose variant', '', 'warning')
+                                        }
+                                    />
+                                </div>
+                            </ConfigProvider>
                         </div>
                     </div>
                 </section>

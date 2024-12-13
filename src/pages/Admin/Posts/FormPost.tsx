@@ -9,7 +9,9 @@ import useQueryConfig from '../../../hooks/useQueryConfig';
 import EditorComponent from '../Products/components/FormProduct/Editor';
 import useCookiesConfig from '../../../hooks/useCookiesConfig';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
-import { COOKIE_USER } from '../../../constants';
+import { COOKIE_USER, INFO_AUTH } from '../../../constants';
+import { handleGetLocalStorage } from '../../../utils';
+import { useContextGlobal } from '../../../contexts';
 
 const FormPost = ({
     title,
@@ -25,7 +27,7 @@ const FormPost = ({
     const [form] = Form.useForm();
     const { data } = useQueryConfig('topic-form', 'api/topics');
     const [imageFile, setImageFile] = useState(null);
-    const { cookies } = useCookiesConfig(COOKIE_USER);
+    const { user } = useContextGlobal();
 
     const handleFinish = (values: any) => {
         const formData = new FormData();
@@ -33,11 +35,11 @@ const FormPost = ({
         formData.append('title', values.title);
         formData.append('slug', values.slug);
         formData.append('content', values.content);
-        formData.append('author_id', cookies.adminId);
+        formData.append('author_id', user?.id);
         if (imageFile) {
             formData.append('theme', imageFile);
         }
-        
+
         onFinish(formData);
     };
 
