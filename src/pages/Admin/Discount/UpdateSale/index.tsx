@@ -138,42 +138,6 @@ const UpdateSale = () => {
             },
         );
     };
-    const onChangeQuantityVariation = (e: any, record: IVariation) => {
-        
-        const arrSelected: IVariation[] = [
-            ...arrSelectVariationsOfOneSelectedProduct,
-            ...arrSelectedVariationsOfMultipleSelectedProduct,
-        ];
-        const arrSelect: IVariation[] = [...arrSelected.filter((p) => p.id !== record.id), record];
-
-        const theDataSource = JSON.parse(JSON.stringify([...dataSourceVariation]));
-        if (arrSelect && arrSelect.length > 0) {
-            for (let i = 0; i < arrSelect.length; i++) {
-                const index = theDataSource.findIndex((item: IVariation) => item.id === arrSelect[i].id);
-                const data = theDataSource.find((item: IVariation) => item.id === arrSelect[i].id);
-                const listVariation =JSON.parse(JSON.stringify([...theSale.variations]));
-                const theVariation:IVariation = listVariation.find((item: IVariation) => item.id === data.id);
-                if (index > -1 && data) {
-                    if(parseInt(e.target.value) > theVariation?.stock_qty){
-                        data.qty_sale = theVariation?.stock_qty;
-                    }else {
-                        data.qty_sale = parseInt(e.target.value);
-                    }
-                    
-                    theDataSource.splice(index, 1, data);
-                }
-            }
-            setDataSourceVariation([...theDataSource]);
-        } else {
-            const index = theDataSource.findIndex((item: IVariation) => item.id === record.id);
-            const data = theDataSource.find((item: IVariation) => item.id === record.id);
-            if (index > -1 && data) {
-                data.qty_sale = parseInt(e.target.value);
-                theDataSource.splice(index, 1, data);
-            }
-            setDataSourceVariation([...theDataSource]);
-        }
-    };
     const [searchKeyVariation,setSearchKeyVariation] = useState('');
     const onSearchVariation = (e:any) => {
         setSearchKeyVariation(e.target.value);
@@ -216,25 +180,10 @@ const UpdateSale = () => {
             key: 'price',
         },
         {
-            title: 'Quantity Sale',
+            title: 'Quantity Sold',
             dataIndex: 'qty_sale',
             key: 'qty_sale',
-            render: (qty_sale: number, record: IVariation) => {
-                return (
-                    <div>
-                        <Input
-                            disabled={saleEndDate < timeNow}
-                            onChange={(e) => onChangeQuantityVariation(e, record)}
-                            type="number"
-                            className="border-none bg-gray-200 box-border px-6 rounded-2xl"
-                            value={qty_sale}
-                            min={1}
-                            max={qty_sale}
-                            placeholder="Enter quantity"
-                        />
-                    </div>
-                );
-            },
+           
         },
         {
             title: 'Action',
@@ -254,37 +203,7 @@ const UpdateSale = () => {
             },
         },
     ];
-    const onChangeQuantityProduct = (e: any, record: IProduct) => {
-        const arrSelected = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts];
-        const arrSelect = [...arrSelected.filter((p) => p.id !== record.id), record];
-        const theDataSource = JSON.parse(JSON.stringify([...dataSourceProduct]));
-        if (arrSelect && arrSelect.length > 0) {
-            for (let i = 0; i < arrSelect.length; i++) {
-                const index = theDataSource.findIndex((item: IProduct) => item.id === arrSelect[i].id);
-                const data = theDataSource.find((item: IProduct) => item.id === arrSelect[i].id);
-                const listProduct =JSON.parse(JSON.stringify([...theSale.products]));
-                const theProduct:IProduct = listProduct.find((item: IVariation) => item.id === data.id);
-                if (index > -1 && data) {
-                    if(parseInt(e.target.value) > theProduct?.stock_qty){
-                        data.qty_sale = theProduct?.stock_qty;
-                    }else {
-                        data.qty_sale = parseInt(e.target.value);
-                    }
-                    
-                    theDataSource.splice(index, 1, data);
-                }
-            }
-            setDataSourceProduct([...theDataSource]);
-        } else {
-            const index = theDataSource.findIndex((item: IProduct) => item.id === record.id);
-            const data = theDataSource.find((item: IProduct) => item.id === record.id);
-            if (index > -1 && data) {
-                data.qty_sale = parseInt(e.target.value);
-                theDataSource.splice(index, 1, data);
-            }
-            setDataSourceProduct([...theDataSource]);
-        }
-    };
+    
 
     const columnsProduct = [
         {
@@ -319,27 +238,9 @@ const UpdateSale = () => {
             key: 'price',
         },
         {
-            title: 'Quantity Sale',
+            title: 'Quantity Sold',
             dataIndex: 'qty_sale',
             key: 'qty_sale',
-            render: (qty_sale: number, record: IProduct) => {
-                return (
-                    <div>
-                        <Input
-                             disabled={saleEndDate < timeNow}
-                            onChange={(e) => onChangeQuantityProduct(e, record)}
-                            type="number"
-                            className={`${
-                                !qty_sale ? 'border-red-400' : 'border-none'
-                            } bg-slate-100 box-border px-6 rounded-2xl `}
-                            value={qty_sale}
-                            min={1}
-                            max={qty_sale}
-                            placeholder="Enter quantity"
-                        />
-                    </div>
-                );
-            },
         },
         {
             title: 'Action',
