@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Checkbox, ConfigProvider, Form, Modal, Pagination, Skeleton } from 'antd';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import { CopyPlus, X } from 'lucide-react';
@@ -7,7 +7,7 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { IImage } from '../../../../interfaces/IImage';
 import PaginationComponent from '../../../../components/Pagination';
 
-const ModalFormVariant = ({ index, ids, setDatas, setError }: any) => {
+const ModalFormVariant = ({ index, ids, setDatas, setError, initialValues }: any) => {
     const [currentPage, setCurrentPage] = useState(1);
     const { data, isFetching, refetch } = useQueryConfig('image', `/api/image?page=${currentPage}`);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,6 +75,10 @@ const ModalFormVariant = ({ index, ids, setDatas, setError }: any) => {
         refetch();
     }, [currentPage]);
 
+    useEffect(() => {
+        form.setFieldsValue({});
+    }, [initialValues]);
+
     return (
         <>
             <ButtonEdit onClick={showModal}>
@@ -106,7 +110,7 @@ const ModalFormVariant = ({ index, ids, setDatas, setError }: any) => {
                     </div>,
                 ]}
             >
-                <Form form={form} onFinish={onFinish}>
+                <Form form={form} onFinish={onFinish} initialValues={initialValues}>
                     <InputPrimary
                         label="Price"
                         placeholder="Enter Price"
@@ -165,16 +169,3 @@ const ModalFormVariant = ({ index, ids, setDatas, setError }: any) => {
 };
 
 export default ModalFormVariant;
-
-const styles = {
-    radioButton: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'start',
-        padding: '10px',
-        border: '1px solid #ddd',
-        borderRadius: '5px',
-        marginBottom: '10px',
-        width: '100%',
-    },
-};

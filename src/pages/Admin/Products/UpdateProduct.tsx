@@ -8,6 +8,7 @@ import useProduct, { API_PRODUCT } from '../../../hooks/useProduct';
 import SkeletonComponent from '../components/Skeleton';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import ButtonBack from '../components/ButtonBack';
+import { PATH_ADMIN } from '../../../constants/path';
 
 const KEY = 'product-detail-admin';
 
@@ -68,7 +69,7 @@ const UpdateProduct = () => {
                 <SkeletonComponent />
             ) : (
                 <section>
-                    <ButtonBack to={prevUrl} />
+                    <ButtonBack to={PATH_ADMIN.LIST_PRODUCT} />
                     <Heading>Update Product</Heading>
                     <FormProduct
                         setImages={setImages}
