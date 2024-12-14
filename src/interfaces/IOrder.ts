@@ -50,6 +50,21 @@ export const statusString = (id: number) => {
     }
 };
 
+export const paymentMethodString = (method:string) => {
+    switch (method.toLocaleLowerCase()) {
+        case 'cash_on_delivery':
+            return 'Cash on Delivery';
+        case 'momo': 
+            return 'Momo Wallet';
+        case 'vnpay':
+            return 'VNPAY';
+        case 'banking': 
+            return 'Banking Transfer';
+        default: return '...';
+
+    }
+}
+
 export const statusArr = [
     'cancelled',
     'waiting_confirm',

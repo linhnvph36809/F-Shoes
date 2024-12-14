@@ -3,6 +3,7 @@ import { SquarePen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { STATUS_ORDER } from '../../../../constants';
 import { formatPrice, formatTime } from '../../../../utils';
+import { paymentMethodString } from '../../../../interfaces/IOrder';
 const { Text } = Typography;
 
 export const columns = [
@@ -42,7 +43,7 @@ export const columns = [
                 | undefined,
         ) => {
             const color = payment === 'Pending' ? 'orange' : payment === 'Failed' ? 'red' : 'gray';
-            return <Tag color={color}>{payment}</Tag>;
+            return <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center ' color={color}>{paymentMethodString(payment as string)}</Tag>;
         },
     },
     {
@@ -63,7 +64,7 @@ export const columns = [
 
             const color = statusColors[status] || 'default';
 
-            return <Tag color={color}>{STATUS_ORDER[status]}</Tag>;
+            return  <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center ' color={color}>{STATUS_ORDER[status]}</Tag>;
         },
     },
     {
