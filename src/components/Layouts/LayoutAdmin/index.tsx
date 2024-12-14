@@ -8,6 +8,8 @@ import { items } from './datas';
 import { db } from '../../../../firebaseConfig';
 import { useContextGlobal } from '../../../contexts';
 import Logo from '../../Logo';
+import { Bell } from 'lucide-react';
+import useQueryConfig from '../../../hooks/useQueryConfig';
 
 const { Header, Content, Sider } = Layout;
 
@@ -61,7 +63,12 @@ const LayoutAdmin: React.FC = () => {
             }
         });
     }, [permissions]);
-
+    const  {data:countOrderWaiting} = useQueryConfig(
+        ['orders','products','count-order-waiting'],
+        'api/v1/statistics/count/order/waitings'
+    );
+    const [messageWaitingConfirm, setMessageWaitingConfirm] = useState(false);
+     
     return (
         <ContextAdmin.Provider value={{ permissions }}>
             <Layout hasSider>
@@ -96,6 +103,17 @@ const LayoutAdmin: React.FC = () => {
                         <h3 className='text-[32px] font-semibold pl-5'>
                             Overview
                         </h3>
+                        <div className='relative right-8 ' onMouseEnter={() => setMessageWaitingConfirm(true)} onMouseLeave={() => setMessageWaitingConfirm(false)}>
+                            <span className='absolute -right-3 -top-2 flex items-center justify-center w-[18px] h-[18px] text-white font-medium text-[12px] rounded-full bg-[#d33918]'>{countOrderWaiting?.data?.data ? countOrderWaiting?.data?.data : ''}</span>
+                            <Bell className='size-10' />
+                            {
+                                messageWaitingConfirm ? <div className='w-[480px] h-[40px] absolute bg-slate-200 right-0 rounded-lg flex items-center justify-center text-gray-500 transition-all'>
+                                {countOrderWaiting?.data?.data ? 
+                                    <p>{`You have ${countOrderWaiting?.data?.data} orders on waiting confirmation. `}<Link to={`/admin/orderlist?status=waiting_confirm`}>Checkout!</Link></p>
+                                : ''}
+                                </div> : ''
+                            }
+                        </div>
                     </Header>
                     <Content className=" my-4 p-10 bg-[#F5F6FA]">
                         <div className='bg-white p-10 rounded-[14px] min-h-[100vh]'>

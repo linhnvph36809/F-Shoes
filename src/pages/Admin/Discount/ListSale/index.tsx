@@ -71,7 +71,6 @@ const ListSale = () => {
 
     },[loadingDeleteSale]);
     useEffect(() => {
-        
         const statusData = data.filter((item:ISale) => {
             const start_date = new Date(item.start_date);
             const end_date = new Date(item.end_date);
@@ -142,7 +141,7 @@ const ListSale = () => {
             title: 'Type',
             dataIndex: 'type',
             key: 'type',
-            render: (type: string) => <Tag color={type === 'percent' ? 'blue' : 'red'}>{type}</Tag>,
+            render: (type: string) => <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center' color={type === 'percent' ? 'blue' : 'red'}>{type}</Tag>,
         },
         {
             title: 'Value',
@@ -171,11 +170,11 @@ const ListSale = () => {
                 const end_date = new Date(record.end_date);
                 const now = new Date();
                 if (start_date < now && end_date < now) {
-                    return <Tag color="red">Ended</Tag>;
+                    return <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center' color="red">Ended</Tag>;
                 } else if (start_date < now && end_date > now) {
-                    return <Tag color="green">On going</Tag>;
+                    return <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center' color="green">On going</Tag>;
                 } else if (start_date > now) {
-                    return <Tag color="gold">Upcomming</Tag>;
+                    return <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center' color="gold">Upcomming</Tag>;
                 }
             },
         },
@@ -183,14 +182,14 @@ const ListSale = () => {
             title: 'Active',
             key: 'is_active',
             dataIndex: 'is_active',
-            render: (is_active: boolean, record: ISale) => {
-                return is_active ? <Tag color="geekblue">Active</Tag> : <Tag color="red">Inactive</Tag>;
+            render: (is_active: boolean) => {
+                return is_active ? <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center' color="geekblue">Active</Tag> : <Tag color="red">Inactive</Tag>;
             },
         },
         {
             title: 'Action',
             key: 'actions',
-            render: (e: any, record: ISale) => {
+            render: (_: any, record: ISale) => {
                 let buttonDelete = (
                     <Button
                         onClick={() => handleDelete(record.id)}

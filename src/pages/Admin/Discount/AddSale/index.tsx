@@ -9,10 +9,13 @@ import useQueryConfig from '../../../../hooks/useQueryConfig.tsx';
 import { showMessageActive, showMessageAdmin } from '../../../../utils/messages.ts';
 import useSale from '../../../../hooks/useSale.tsx';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall.tsx';
-import { BadgeCentIcon } from 'lucide-react';
+import { BadgeCentIcon, CircleX, Filter } from 'lucide-react';
 
 const AddSale = () => {
-    const { data: productList } = useQueryConfig(`sale-list_products-add_sale_page`, `/api/products/all/summary`);
+    const { data: productList } = useQueryConfig(
+        `sale-list_products-add_sale_page`,
+        `/api/products/all/summary?include=variations`,
+    );
     const productListData = productList?.data?.products || [];
 
     const dataSourceProductOriginList = JSON.parse(JSON.stringify([...productListData]));
@@ -141,40 +144,63 @@ const AddSale = () => {
         setDataSourceProduct(selectedSimpleProducts);
         setOpenAddProductTable(false);
     };
-    const onChangeQuantityVariation = (e: any, record: IVariation) => {
-        const arrSelected: IVariation[] = [
-            ...arrSelectVariationsOfOneSelectedProduct,
-            ...arrSelectedVariationsOfMultipleSelectedProduct,
-        ];
-        const arrSelect: IVariation[] = [...arrSelected.filter((p) => p.id !== record.id), record];
-
-        const theDataSource = dataSourceVariation;
-        if (arrSelect && arrSelect.length > 0) {
-            for (let i = 0; i < arrSelect.length; i++) {
-                const index = theDataSource.findIndex((item) => item.id === arrSelect[i].id);
-                const data = theDataSource.find((item) => item.id === arrSelect[i].id);
-                if (index > -1 && data) {
-                    data.stock_qty = parseInt(e.target.value);
-                    theDataSource.splice(index, 1, data);
-                }
-            }
-            setDataSourceVariation([...theDataSource]);
-        } else {
-            const index = theDataSource.findIndex((item) => item.id === record.id);
-            const data = theDataSource.find((item) => item.id === record.id);
-            if (index > -1 && data) {
-                data.stock_qty = parseInt(e.target.value);
-                theDataSource.splice(index, 1, data);
-            }
-            setDataSourceVariation([...theDataSource]);
-        }
+    const [searchKeyDataSouceVariation, setSearchKeyDataSouceVariation] = useState('');
+    const onSearchVariation = (e: any) => {
+        setSearchKeyDataSouceVariation(e.target.value);
     };
-
+    const [searchKeyDataSouceProduct, setSearchKeyDataSouceProduct] = useState('');
+    const onSearchProduct = (e: any) => {
+        setSearchKeyDataSouceProduct(e.target.value);
+    };
+    const onFilterSimpleProduct = (record?: IProduct) => {
+        showMessageActive(
+            'Delete',
+            'Are you sure you only want to keep these products and delete the others?',
+            'warning',
+            () => {
+                const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
+                const filtered = dataSourceProduct.filter((product) => {
+                    return arrSelect.find((p) => p?.id === product.id);
+                });
+                setDataSourceProduct([...filtered]);
+            },
+        );
+    }
+   
+    
+    const onFilterVariation = (record?: IVariation) => {
+        showMessageActive(
+            'Delete',
+            'Are you sure you only want to keep these products and delete the others?',
+            'warning',
+            () => {
+                const arrSelect = [
+                    ...arrSelectVariationsOfOneSelectedProduct,
+                    ...arrSelectedVariationsOfMultipleSelectedProduct,
+                    record,
+                ];
+                const filtered = dataSourceVariation.filter((variant) => {
+                    return arrSelect.find((v) => v?.id === variant.id);
+                });
+                setDataSourceVariation([...filtered]);
+            },
+        );
+    };
     const columnsVariations = [
         {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
+            filteredValue: [searchKeyDataSouceVariation],
+            onFilter: (value: any, record: IVariation) => {
+                if (value) {
+                    return (
+                        record.name.toLowerCase().includes(value.toLowerCase()) ||
+                        record.id.toString().includes(value.toLowerCase())
+                    );
+                }
+                return true;
+            },
         },
         {
             title: 'Image',
@@ -199,61 +225,41 @@ const AddSale = () => {
             title: 'Quantity',
             dataIndex: 'stock_qty',
             key: 'stock_qty',
-            render: (stock_qty: number, record: IVariation) => {
-                return (
-                    <div>
-                        <Input
-                            onChange={(e) => onChangeQuantityVariation(e, record)}
-                            type="number"
-                            className="border-none bg-gray-200 box-border px-6 rounded-2xl"
-                            value={stock_qty}
-                            min={1}
-                            max={stock_qty}
-                            placeholder="Enter quantity"
-                        />
-                    </div>
-                );
-            },
         },
         {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
             render: (_: any, record: any) => {
-                return <Button onClick={() => onDeleteVariation(record)}>Delete</Button>;
+                return (
+                    <div className="flex space-x-2">
+                        <Button className="p-2" onClick={() => onDeleteVariation(record)}>
+                            <CircleX />
+                        </Button>
+                        <Button className="p-2" onClick={() => onFilterVariation(record)}>
+                            <Filter />
+                        </Button>
+                    </div>
+                );
             },
         },
     ];
-    const onChangeQuantityProduct = (e: any, record: IProduct) => {
-        const arrSelected = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts];
-        const arrSelect = [...arrSelected.filter((p) => p.id !== record.id), record];
-        const theDataSource = dataSourceProduct;
-        if (arrSelect && arrSelect.length > 0) {
-            for (let i = 0; i < arrSelect.length; i++) {
-                const index = theDataSource.findIndex((item) => item.id === arrSelect[i].id);
-                const data = theDataSource.find((item) => item.id === arrSelect[i].id);
-                if (index > -1 && data) {
-                    data.stock_qty = parseInt(e.target.value);
-                    theDataSource.splice(index, 1, data);
-                }
-            }
-            setDataSourceProduct([...theDataSource]);
-        } else {
-            const index = theDataSource.findIndex((item) => item.id === record.id);
-            const data = theDataSource.find((item) => item.id === record.id);
-            if (index > -1 && data) {
-                data.stock_qty = parseInt(e.target.value);
-                theDataSource.splice(index, 1, data);
-            }
-            setDataSourceProduct([...theDataSource]);
-        }
-    };
 
     const columnsProduct = [
         {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
+            filteredValue: [searchKeyDataSouceProduct],
+            onFilter: (value: any, record: IVariation) => {
+                if (value) {
+                    return (
+                        record.name.toLowerCase().includes(value.toLowerCase()) ||
+                        record.id.toString().includes(value.toLowerCase())
+                    );
+                }
+                return true;
+            },
         },
         {
             title: 'Image',
@@ -278,49 +284,45 @@ const AddSale = () => {
             title: 'Quantity',
             dataIndex: 'stock_qty',
             key: 'stock_qty',
-            render: (stock_qty: number, record: IProduct) => {
-                return (
-                    <div>
-                        <Input
-                            onChange={(e) => onChangeQuantityProduct(e, record)}
-                            type="number"
-                            className={`${
-                                !stock_qty ? 'border-red-400' : 'border-none'
-                            } bg-slate-100 box-border px-6 rounded-2xl `}
-                            value={stock_qty}
-                            min={1}
-                            max={stock_qty}
-                            placeholder="Enter quantity"
-                        />
-                    </div>
-                );
-            },
         },
         {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
             render: (_: any, record: any) => {
-                return <Button onClick={() => onDeleteSimpleProduct(record)}>Delete</Button>;
+                return (
+                    <div className="flex space-x-2">
+                        <Button className="p-2" onClick={() => onDeleteSimpleProduct(record)}>
+                            <CircleX />
+                        </Button>
+
+                        <Button className="p-2" onClick={() => onFilterSimpleProduct(record)}>
+                            <Filter />
+                        </Button>
+                    </div>
+                );
             },
         },
     ];
-    const [searchKeyListProduct,setSearchKeyProduct] = useState('');
-    const onSearchKeyListProduct = (e:any) => {
+    const [searchKeyListProduct, setSearchKeyProduct] = useState('');
+    const onSearchKeyListProduct = (e: any) => {
         setSearchKeyProduct(e.target.value);
-    }
+    };
     const columns = [
         {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
             filteredValue: [searchKeyListProduct],
-            onFilter: (value:any, record:IVariation) => {
-               if(value){
-                return record.name.toLowerCase().includes(value.toLowerCase()) || record.id.toString().includes(value.toLowerCase());
-               }
+            onFilter: (value: any, record: IVariation) => {
+                if (value) {
+                    return (
+                        record.name.toLowerCase().includes(value.toLowerCase()) ||
+                        record.id.toString().includes(value.toLowerCase())
+                    );
+                }
                 return true;
-            }
+            },
         },
         {
             title: 'Image',
@@ -365,14 +367,14 @@ const AddSale = () => {
         const formatDataProduct: { [key: string]: object } = {};
         for (let i = 0; i < dataSourceProduct.length; i++) {
             const model: { [key: string]: number } = {
-                quantity: dataSourceProduct[i].stock_qty,
+                quantity: 0,
             };
             formatDataProduct[dataSourceProduct[i].id] = model;
         }
         const formatDataVariation: { [key: string]: object } = {};
         for (let i = 0; i < dataSourceVariation.length; i++) {
             const model: { [key: string]: number } = {
-                quantity: dataSourceVariation[i].stock_qty,
+                quantity: 0,
             };
             formatDataVariation[dataSourceVariation[i].id] = model;
         }
@@ -461,7 +463,7 @@ const AddSale = () => {
             }
         }
     };
-    
+
     const optionsType = [
         { label: 'Percent', value: 'percent' },
         { label: 'Fixed', value: 'fixed' },
@@ -597,9 +599,12 @@ const AddSale = () => {
 
             {!dataSale.applyAll ? (
                 <div className="product-list">
-                    <div className="grid grid-cols-2 gap-8 my-8">
+                    <div className="">
                         <div>
                             <Heading>Simple Product</Heading>
+                            <div>
+                                <Input onChange={onSearchProduct} placeholder="Search a product name or id" />
+                            </div>
                             <Table
                                 rowKey={(record) => `table2-${record.id}`}
                                 rowSelection={{
@@ -610,12 +615,13 @@ const AddSale = () => {
                                         onSelectMultipleSelectedSimpleProduct(selected, records),
                                 }}
                                 dataSource={dataSourceProduct}
-                                columns={columnsProduct}
+                                columns={columnsProduct as any}
                                 pagination={{ pageSize: 5 }}
                             />
                         </div>
                         <div>
                             <Heading>Variation Product</Heading>
+                            <Input onChange={onSearchVariation} placeholder="Search a product name or id" />
                             <Table
                                 rowKey={(record) => `table3-${record.id}`}
                                 rowSelection={{

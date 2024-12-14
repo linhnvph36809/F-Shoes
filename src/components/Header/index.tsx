@@ -75,7 +75,7 @@ const Header = () => {
         } else {
             setAllProducts([...listOriginAllProducts]);
         }
-    }, [listOriginAllProducts, searchKey]);
+    }, [dataAllProduct?.data?.products,searchKey]);
     const handleSearch = () => {
         if (searchKey === '') {
             setErrorSearchKey(true);

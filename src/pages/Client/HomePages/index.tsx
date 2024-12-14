@@ -22,11 +22,21 @@ const HomePage = () => {
         [QUERY_KEY_PRODUCT,`list-products-display-2`],
         `api/display/home-page/products?serial=2`,
     );
+    const { data: data3, isFetching: fetchingDisplay3 } = useQueryConfig(
+        ['products',`list-products-display-3`],
+        `api/display/home-page/products?serial=3`,
+        {
+            cacheTime: 1000 * 60 * 10,
+            staleTime: 1000 * 60 * 10,
+            retry: false,
+        },
+    );
     const category1:ICategory =data1?.data?.category;
     const category2:ICategory =data2?.data?.category;
+    const category3:ICategory =data3?.data?.category;
     const productsDisplay1 = category1?.products || [];
     const productsDisplay2 = category2?.products || [];
-
+    const productsDisplay3 = category3?.products || [];
     return (
         <>
             <section className="container">
@@ -45,7 +55,7 @@ const HomePage = () => {
                 />
                 <div className="my-20">
                     <div>
-                        <Heading title={<FormattedMessage id="title.Trending This Week" />} />
+                        <Heading title={category1?.name} />
                         <SlidesScroll
                             className="slidesProducts pb-20"
                             nextEl="next-trending-this-week"
@@ -93,9 +103,9 @@ const HomePage = () => {
             </section>
             <section className="my-20">
                 <div className="container">
-                    <Heading title={category1?.name} />
+                    <Heading title={category3?.name} />
                 </div>
-                <ClassicsSpotlight />
+                <ClassicsSpotlight products={productsDisplay3} loading={fetchingDisplay3} category={category3} />
             </section>
             <section className="container">
                 <div>

@@ -37,8 +37,10 @@ const Detail = () => {
     const { refetch } = useQueryConfig('user-profile', 'api/auth/me?include=profile,favoriteProducts&times=user', {
         enabled: false,
     });
-
+  
+    
     const products = data?.data;
+    console.log(products);
     const { user } = useContextGlobal();
     const [idVariants, setIdVariants] = useState<number[]>([]);
     const [variant, setVariant] = useState<any>();
