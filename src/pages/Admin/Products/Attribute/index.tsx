@@ -13,7 +13,7 @@ import ButtonEdit from '../../components/Button/ButtonEdit';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { PATH_ADMIN } from '../../../../constants/path';
 
-export const API_ATTRIBUTE_ADD = '/api/attribute?include=values';
+export const API_ATTRIBUTE_ADD = '/api/attribute?include=values&times=attribute';
 export const KEY = 'attribute';
 
 const AddAttribute = () => {
