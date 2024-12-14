@@ -14,6 +14,8 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import ModalFormVariant from './ModalFormVariant';
 import { showMessageClient } from '../../../../utils/messages';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
+import { PATH_ADMIN } from '../../../../constants/path';
+import ButtonBack from '../../components/ButtonBack';
 
 const API_ATTRIBUTE_GET = '/api/get/attribute/values/product/';
 
@@ -32,16 +34,16 @@ const AddVariant = () => {
     const [datas, setDatas] = useState<any>([]);
     const [errors, setError] = useState<any>([]);
     const { data: attributeByIds, refetch } = useQueryConfig('attribute', API_ATTRIBUTE_GET + id);
-    const { postVariant } = useVariant();
+    const { loading: loadingPostVariant, postVariant } = useVariant();
 
     const onFinish = () => {
-        console.log(datas);
-
         setError(datas);
         const isSubmit = datas.some((data: any) => data === null);
 
         if (!isSubmit) {
-            console.log(datas);
+            postVariant({
+                variations: datas,
+            });
         }
     };
 
@@ -109,7 +111,7 @@ const AddVariant = () => {
                     return [...preData, ...initArray];
                 } else {
                     const initArray = Array(variantCombine.length).fill(null);
-                    return initArray;;
+                    return initArray;
                 }
             } else {
                 const initArray = Array(variantCombine.length).fill(null);
@@ -125,6 +127,7 @@ const AddVariant = () => {
                 <SkeletonComponent />
             ) : (
                 <section>
+                    <ButtonBack to={PATH_ADMIN.LIST_PRODUCT} />
                     <Heading>Add Variant</Heading>
                     <div className="grid grid-cols-2 gap-x-10">
                         <div>
@@ -247,6 +250,7 @@ const AddVariant = () => {
                                 />
                                 <div className="text-end mt-10">
                                     <ButtonSubmit
+                                        loading={loadingPostVariant}
                                         onClick={
                                             listAttribute.length
                                                 ? () => onFinish()

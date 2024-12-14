@@ -600,7 +600,7 @@ const UpdateSale = () => {
                                 columnWidth: 50,
                                
                             }}
-                            rowKey={(record) => `table2-${record.id}`}
+                            rowKey={(record) => `table-update-${record.id}`}
                             rowSelection={{
                                 type: 'checkbox',
                                 selections: false,

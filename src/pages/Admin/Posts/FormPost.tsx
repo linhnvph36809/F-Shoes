@@ -7,10 +7,7 @@ import ButtonPrimary from '../../../components/Button';
 import Heading from '../components/Heading';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import EditorComponent from '../Products/components/FormProduct/Editor';
-import useCookiesConfig from '../../../hooks/useCookiesConfig';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
-import { COOKIE_USER, INFO_AUTH } from '../../../constants';
-import { handleGetLocalStorage } from '../../../utils';
 import { useContextGlobal } from '../../../contexts';
 
 const FormPost = ({
