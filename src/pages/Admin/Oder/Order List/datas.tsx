@@ -64,7 +64,7 @@ export const columns = [
 
             const color = statusColors[status] || 'default';
 
-            return  <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center ' color={color}>{STATUS_ORDER[status]}</Tag>;
+            return  <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center' color={color}>{STATUS_ORDER[status]}</Tag>;
         },
     },
     {

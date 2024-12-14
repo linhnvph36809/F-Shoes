@@ -71,20 +71,18 @@ const OrderList = () => {
             const filtered = originData.filter((order:any) => {
                 return statusArr[order?.status] === searchStatus;
             });
-           
-            
             setFilteredData([...filtered]);
         }else {
             setFilteredData([...originData]);
         }
-    },[searchStatus])
+    },[searchStatus,orders])
+    
+    
     const handleRowClick = (record: any) => {
         setOrderDetail((preData: any) => ({ ...preData, isModalOpen: true, orderDetail: record }));
     };
 
-    useEffect(() => {
-        setFilteredData(orders?.data);
-    }, [orders]);
+    
 
     const handleCancel = () => {
         setOrderDetail((preData: any) => ({ ...preData, isModalOpen: false }));
