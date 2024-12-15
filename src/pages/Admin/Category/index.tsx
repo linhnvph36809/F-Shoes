@@ -56,51 +56,31 @@ const ListCategory = () => {
         [cateUpdate],
     );
 
-    const columMain = {
-        title: 'ID',
-        dataIndex: 'id',
-        key: 'id',
-        render: (text: any, _: any, index: any) => {
-            if (index === 0) {
-                return {
-                    props: {
-                        colSpan: 4,
-                    },
-                };
-            }
-            return text;
-        },
-    };
-
     // Cột xóa danh mục
     const columnDelete = {
         title: 'Action',
         dataIndex: 'id',
-        key: '8',
-        render: (_: any, values: ICategory, index: number) => {
-            if (index !== 0) {
-                return (
-                    <div className="flex-row-center gap-x-5">
-                        <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
-                            <ButtonEdit onClick={() => handleUpdate(values)}>
-                                <SquarePen />
-                            </ButtonEdit>
-                        </PermissionElement>
-                        <Link to={`/admin/update-category/${values.id}`}>
-                            <ButtonEdit>
-                                <CopyPlus />
-                            </ButtonEdit>
-                        </Link>
-                        {/* <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}> */}
-                        <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
-                            <Trash2 />
+        key: 'id',
+        render: (_: any, values: ICategory) => {
+            return (
+                <div className="flex-row-center gap-x-5">
+                    <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
+                        <ButtonEdit onClick={() => handleUpdate(values)}>
+                            <SquarePen />
                         </ButtonEdit>
-                        {/* </PermissionElement> */}
-                    </div>
-                );
-            } else {
-                return null;
-            }
+                    </PermissionElement>
+                    <Link to={`/admin/update-category/${values.id}`}>
+                        <ButtonEdit>
+                            <CopyPlus />
+                        </ButtonEdit>
+                    </Link>
+                    {/* <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}> */}
+                    <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
+                        <Trash2 />
+                    </ButtonEdit>
+                    {/* </PermissionElement> */}
+                </div>
+            );
         },
     };
 
@@ -156,7 +136,7 @@ const ListCategory = () => {
 
                 {/* Bảng dữ liệu */}
                 <div className="w-full">
-                    <TableAdmin columns={[columMain, ...columns, columnDelete]} dataSource={[...filteredCategories]} />
+                    <TableAdmin columns={[...columns, columnDelete]} dataSource={[...filteredCategories]} />
                 </div>
             </section>
             {/* )} */}

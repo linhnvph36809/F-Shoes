@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { SwiperSlide } from 'swiper/react';
 import { LoadingOutlined } from '@ant-design/icons';
 
-
 import SlidesImage from './SlidesImage';
 import SlidesScroll from '../../../components/SlidesScroll';
 import Heading from '../HomePages/components/Heading';

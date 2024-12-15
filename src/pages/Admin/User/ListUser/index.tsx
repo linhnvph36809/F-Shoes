@@ -8,23 +8,24 @@ import { IUser } from '../../../../interfaces/IUser';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import Heading from '../../components/Heading';
 import TableAdmin from '../../components/Table';
-import {useEffect, useState} from "react";
-import {tokenManagerInstance} from "../../../../api";
+import { useEffect, useState } from 'react';
+import { tokenManagerInstance } from '../../../../api';
+import { formatTime } from '../../../../utils';
 
 const { Text } = Typography;
 
 const ListUser = () => {
     const { users, loading, deleteUser } = useUser();
-    const [userHasOrderCount, setUserHasOrderCount] = useState<number[]>()
+    const [userHasOrderCount, setUserHasOrderCount] = useState<number[]>();
     useEffect(() => {
         const getUserHasOrderCount = async () => {
             try {
-                const {data} = await tokenManagerInstance('get','api/count/user/has/orders');
+                const { data } = await tokenManagerInstance('get', 'api/count/user/has/orders');
                 setUserHasOrderCount(data.count);
-            }catch (error){
+            } catch (error) {
                 console.log(error);
             }
-        }
+        };
         getUserHasOrderCount();
     }, []);
 
@@ -42,6 +43,12 @@ const ListUser = () => {
 
     // Define table columns
     const columns = [
+        {
+            title: 'ID',
+            dataIndex: 'id',
+            key: 'id',
+        },
+
         {
             title: 'User',
             dataIndex: 'name',
@@ -64,6 +71,19 @@ const ListUser = () => {
             render: (status: any) => {
                 let color = status === 'active' ? 'green' : 'gray';
                 return <Tag color={color}>{status}</Tag>;
+            },
+        },
+        {
+            title: 'Group id',
+            dataIndex: 'group_id',
+            key: 'group_id',
+        },
+        {
+            title: 'Email verified at',
+            dataIndex: 'email_verified_at',
+            key: 'email_verified_at',
+            render: (email_verified_at: string) => {
+                return <p>{formatTime(email_verified_at)}</p>;
             },
         },
         {
@@ -133,8 +153,7 @@ const ListUser = () => {
                 <Col span={6}>
                     <StatCard
                         title="Inactive Users"
-                        value={users?.filter(u => u.status !== 'active').length}
-
+                        value={users?.filter((u) => u.status !== 'active').length}
                         description="Banned or Inactive Accounts"
                         color="#ffd6d6"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#ff6666' }} />}
@@ -143,7 +162,7 @@ const ListUser = () => {
                 <Col span={6}>
                     <StatCard
                         title="Active Users"
-                        value={users?.filter(u => u.status === 'active').length}
+                        value={users?.filter((u) => u.status === 'active').length}
                         description="Active Accounts"
                         color="#d6f5e6"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#66cc99' }} />}
@@ -153,7 +172,6 @@ const ListUser = () => {
                     <StatCard
                         title="Users Ordering Number"
                         value={userHasOrderCount}
-
                         description="People have made purchases"
                         color="#ffecd6"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#ffa500' }} />}
