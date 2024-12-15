@@ -61,3 +61,4 @@ export const INFO_AUTH = {
     userName: 'userName',
     isAdmin: 'isAdmin'
 };
+export const OPENAI_API_KEY = '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';

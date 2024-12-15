@@ -1,18 +1,30 @@
 import { EyeOutlined, StarFilled } from '@ant-design/icons';
-import { message, Typography } from 'antd';
+import { Input, message, Typography } from 'antd';
 import { Trash2 } from 'lucide-react';
 import LoadingBlock from '../../../../components/Loading/LoadingBlock';
-import useReview from '../../../../hooks/useReview';
+import useReview, { QUERY_KEY } from '../../../../hooks/useReview';
 import { IReview } from '../../../../interfaces/IReview';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import Heading from '../../components/Heading';
 import TableAdmin from '../../components/Table';
 import { Link } from 'react-router-dom';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
+import { useEffect, useState } from 'react';
 
 const { Text } = Typography;
 
 const ListReview = () => {
-    const { reviews, loading, deleteReview } = useReview(); // Use the useReview hook
+    const { loading, deleteReview } = useReview(); // Use the useReview hook
+    const { data: cachingReviewsData } = useQueryConfig(
+        [QUERY_KEY, 'admin/list/all/reviews'],
+        'api/review?include=user,product',
+    );
+    const [reviews, setReviews] = useState<IReview[]>([]);
+    useEffect(() => {
+        if(cachingReviewsData?.data?.reviews?.data ){
+            setReviews([...cachingReviewsData?.data?.reviews?.data]);
+        }
+    },[cachingReviewsData]);
 
     const handleDeleteUser = async (id: string | number) => {
         if (window.confirm('Bạn có chắc chắn muốn xoá Review này không?')) {
@@ -25,7 +37,17 @@ const ListReview = () => {
             }
         }
     };
-
+    const handleSearch = (e:any) => {
+        const originData = JSON.parse(JSON.stringify([...cachingReviewsData?.data?.reviews?.data]));
+        if(e.target.value && e.target.value.length > 0) {
+            const filtered = originData.filter((item:IReview) => {
+                return item.title.toLowerCase().includes(e.target.value.toLowerCase()) || item.text.includes(e.target.value.toLowerCase());
+            });
+            setReviews([...filtered]);
+        }else{
+            setReviews([...originData]);
+        }
+    };
     const columns = [
         {
             title: 'Product',
@@ -95,6 +117,7 @@ const ListReview = () => {
     return (
         <div style={{ padding: '20px' }}>
             <Heading>List Review</Heading>
+            <div><Input  placeholder='Search a title or a text' onChange={handleSearch}/></div>
             {loading ? (
                 <LoadingBlock />
             ) : (

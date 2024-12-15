@@ -112,7 +112,6 @@ const ListSale = () => {
 
     // Search
     const searchSale = (e: any) => {
-
         urlQuery.set('search', e.target.value);
         navigate(`?${urlQuery.toString()}`, { replace: true });
     };

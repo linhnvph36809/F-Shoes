@@ -22,6 +22,7 @@ import Reviews from './Reviews.tsx';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import ModalViewDetail from './ModalViewDetail.tsx';
 import { FormattedMessage } from 'react-intl';
+import NotFound from '../../../components/NotFound/index.tsx';
 
 const Detail = () => {
     const { slug } = useParams();
@@ -40,7 +41,6 @@ const Detail = () => {
   
     
     const products = data?.data;
-    console.log(products);
     const { user } = useContextGlobal();
     const [idVariants, setIdVariants] = useState<number[]>([]);
     const [variant, setVariant] = useState<any>();
@@ -48,15 +48,14 @@ const Detail = () => {
     const { loading: loadingWishlist, postWishlist } = useWishlist();
     const navigate = useNavigate();
 
-    if (products) {
-        if (slug !== products?.slug) navigate('/');
-    }
+    
+    
     const productD = products;
     let variationD;
     let imagesD: IImage[];
 
     //to test component replace if(variationD) below into => if(product && product?.variations)
-    if (variationD) {
+    if(products && products?.variations) {
         variationD = products.variations[0];
         imagesD = products.variations[0]?.images;
     } else {
@@ -113,7 +112,20 @@ const Detail = () => {
             setVariant(results);
         }
     }, [idVariants, products]);
-
+    if(!products && !isFetching){
+        return (
+            <>
+                <NotFound/>
+            </>
+        )
+    }
+    if (products) {
+        if (slug !== products?.slug) return (
+            <>
+                <NotFound/>
+            </>
+        );
+    }
     return (
         <>
             <Helmet>

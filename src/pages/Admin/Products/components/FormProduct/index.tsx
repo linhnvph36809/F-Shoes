@@ -26,7 +26,7 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
 
     const handleFinish = useCallback(
         (values: IProduct) => {
-            console.log(description);
+            
 
             const imageArray = images.images.map((image: IImage) => image.id);
             if (!imageArray.length) {
