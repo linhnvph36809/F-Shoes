@@ -82,7 +82,7 @@ const UpdateSale = () => {
         });
     };
     const onFilterSimpleProduct = (record?: IProduct) => {
-        if(saleEndDate < timeNow){
+        if(saleStartDate < timeNow){
             showMessageClient('This sale has expired, you can not modifier anymore.','','warning');
             return;
         }
@@ -100,7 +100,7 @@ const UpdateSale = () => {
         );
     };
     const onDeleteVariation = (record?: IVariation) => {
-        if(saleEndDate < timeNow){
+        if(saleStartDate < timeNow){
             showMessageClient('This sale has expired, you can not modifier anymore.','','warning');
             return;
         }
@@ -408,7 +408,7 @@ const UpdateSale = () => {
                     <div className="form-row my-4">
                         <span className="text-xl mb-4">Type</span>
                         <Flex
-                            aria-disabled={saleEndDate < timeNow}
+                            aria-disabled={saleStartDate < timeNow}
                             onChange={(e: any) => onChangeType(e.target.value)}
                             vertical
                             gap="middle"
@@ -427,7 +427,7 @@ const UpdateSale = () => {
                         <span className="text-xl my-4">Value</span>
                         {dataSale.type === 'fixed' ? (
                             <Input
-                                disabled={saleEndDate < timeNow}
+                                disabled={saleStartDate < timeNow}
                                 value={dataSale.value}
                                 min={0}
                                 type="number"
@@ -437,7 +437,7 @@ const UpdateSale = () => {
                         ) : (
                             <Input
                                 value={dataSale.value}
-                                disabled={saleEndDate < timeNow}
+                                disabled={saleStartDate < timeNow}
                                 type="number"
                                 max={100}
                                 min={0}

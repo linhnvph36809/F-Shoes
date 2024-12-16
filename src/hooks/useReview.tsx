@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { tokenManagerInstance } from '../api';
 import { showMessageClient } from '../utils/messages';
 
+export const QUERY_KEY = 'review';
 const useReview = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const postReview = async (review: any) => {

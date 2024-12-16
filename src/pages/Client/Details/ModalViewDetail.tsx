@@ -66,9 +66,9 @@ const ModalViewDetail = ({ product }: any) => {
                         <ul className="list-disc list-outside pl-10 my-2">
                             <li className="color-primary text-[16px] font-normal">
                                 Variants :{' '}
-                                {product.variations.map((variation: any) => (
-                                    <span key={variation.id} className="font-medium">
-                                        {variation.classify},
+                                {product?.variations?.map((variation: any) => (
+                                    <span key={variation?.id} className="font-medium">
+                                        {variation?.classify},
                                     </span>
                                 ))}
                             </li>
