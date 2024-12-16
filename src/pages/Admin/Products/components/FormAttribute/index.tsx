@@ -1,8 +1,8 @@
 import { Button, Form } from 'antd';
 import { Plus, X } from 'lucide-react';
 
-import InputPrimary from '../../../../../components/Input';
 import ButtonPrimary from '../../../../../components/Button';
+import InputPrimary from '../../../components/Forms/InputPrimary';
 
 const FormAttribute = ({ handlePostAttributes, setVariantId }: { handlePostAttributes: any; setVariantId: any }) => {
     const [form] = Form.useForm();
@@ -30,14 +30,13 @@ const FormAttribute = ({ handlePostAttributes, setVariantId }: { handlePostAttri
                     <>
                         {fields.map(({ key, name, fieldKey, ...restField }: any) => (
                             <div key={key} className="bg-gray-100 p-8 rounded-[12px] mb-10 relative">
-                                <Form.Item
+                                <InputPrimary
                                     required={true}
                                     {...restField}
                                     name={[name, 'attribute']}
                                     fieldKey={[fieldKey, 'attribute']}
-                                >
-                                    <InputPrimary placeholder="Attribute Name" height="h-[50px]" margin="mb-0" />
-                                </Form.Item>
+                                    placeholder="Attribute Name"
+                                />
 
                                 <Form.List initialValue={['']} name={[name, 'values']}>
                                     {(valueFields, { add: addValue, remove: removeValue }) => (
@@ -51,20 +50,15 @@ const FormAttribute = ({ handlePostAttributes, setVariantId }: { handlePostAttri
                                                         ...valueRestField
                                                     }: any) => (
                                                         <div key={valueKey} className="flex-row-center relative">
-                                                            <Form.Item
+                                                            <InputPrimary
                                                                 required={true}
                                                                 {...valueRestField}
                                                                 name={valueName}
                                                                 fieldKey={valueFieldKey}
                                                                 className="w-full"
-                                                            >
-                                                                <InputPrimary
-                                                                    placeholder="Value"
-                                                                    width="w-full"
-                                                                    margin="mb-0"
-                                                                    height="h-[50px]"
-                                                                />
-                                                            </Form.Item>
+                                                                placeholder="Attribute Value"
+                                                            />
+
                                                             <X
                                                                 onClick={() => removeValue(name)}
                                                                 className="absolute -top-8 right-0 w-7 hover:opacity-70 cursor-pointer"

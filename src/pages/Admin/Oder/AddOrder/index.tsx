@@ -10,6 +10,7 @@ import useOrder from '../../../../hooks/useOrder';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import { formatPrice } from '../../../../utils';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
+import SelectPrimary from '../../components/Forms/SelectPrimary';
 
 const Addorder = () => {
     const { data } = useQueryConfig(
@@ -163,19 +164,18 @@ const Addorder = () => {
                 <Heading>Add Order</Heading>
 
                 {/* Select User */}
-                <Form.Item
+                <SelectPrimary
                     label="Select User"
                     name="user_id"
                     rules={[{ required: true, message: 'Please select a user' }]}
+                    placeholder="Select User"
+                    optionFilterProp="email"
+                    allowClear
+                    options={users}
+                    fieldNames={{ label: 'email', value: 'id' }}
                 >
-                    <Select
-                        placeholder="Select User"
-                        optionFilterProp="email"
-                        allowClear
-                        options={users}
-                        fieldNames={{ label: 'email', value: 'id' }}
-                    />
-                </Form.Item>
+
+                </SelectPrimary>
                 <Form.Item
                     label="Select Product"
                     name="product"

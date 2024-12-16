@@ -1,13 +1,7 @@
 import { Search } from 'lucide-react';
 import { useState } from 'react';
 
-const InputSearch = ({
-    placeholder,
-    onSearch,
-    width = 'w-[250px]',
-    height = 'h-[50px]',
-    ...props
-}: any) => {
+const InputSearch = ({ placeholder, onSearch, width = 'w-[250px]', height = 'h-[50px]', ...props }: any) => {
     const [value, setValue] = useState('');
 
     const handleSearchClick = () => {

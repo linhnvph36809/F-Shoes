@@ -122,6 +122,10 @@ const UpdateVariant = () => {
                                                         <p className="text-[14px] color-primary">Variant Name : </p>
                                                         <p>{record.classify}</p>
                                                     </div>
+                                                    <div className="flex items-center gap-x-5 pb-5 border-b">
+                                                        <p className="text-[14px] color-primary">Stock Quantity : </p>
+                                                        <p>{record.stock_qty}</p>
+                                                    </div>
                                                     <div className="flex items-center gap-x-5 py-5 border-b">
                                                         <p className="text-[14px] color-primary">Price : </p>
                                                         <p>{formatPrice(record.price)}đ</p>

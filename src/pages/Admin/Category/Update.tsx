@@ -7,7 +7,7 @@ import useCategory from '../../../hooks/useCategory';
 import useProduct from '../../../hooks/useProduct';
 import { ICategory } from '../../../interfaces/ICategory';
 import { IProduct } from '../../../interfaces/IProduct';
-import { showMessageActive } from '../../../utils/messages';
+import { showMessageActive, showMessageAdmin } from '../../../utils/messages';
 import ButtonEdit from '../components/Button/ButtonEdit';
 import Heading from '../components/Heading';
 import SkeletonComponent from '../components/Skeleton';
@@ -24,8 +24,8 @@ const UpdateCategory = () => {
     const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
 
     const { data } = useQueryConfig(
-        `all-product-admin-1`,
-        `/api/product?per_page=8&page=1&include=categories,sale_price,variations`,
+        `all-product-admin-category`,
+        `/api/product?include=categories,sale_price,variations`,
     );
 
     const allProducts = data?.data.data || [];
@@ -34,11 +34,10 @@ const UpdateCategory = () => {
         showMessageActive('Are you sure you want to delete this product?', '', 'warning', async () => {
             try {
                 await deleteProductFromCategory(categoryId, [productId]);
-                // Loại bỏ sản phẩm khỏi danh sách hiển thị
                 setProducts((prev) => prev.filter((product) => product.id !== productId));
-                message.success('Product removed successfully!');
+                showMessageAdmin('Product removed successfully!', '', 'success');
             } catch (error) {
-                message.error('Failed to delete product. Please try again.');
+                showMessageAdmin('Failed to delete product. Please try again.', '', 'error');
             }
         });
     };
@@ -102,35 +101,36 @@ const UpdateCategory = () => {
 
     return (
         <>
-            {loading ? (
-                <SkeletonComponent />
-            ) : (
+            <section>
+                <Heading>Add Category For Product</Heading>
                 <section>
-                    <Heading>Add Category For Product</Heading>
-                    <section>
-                        <div className="my-4">
-                            <Select
-                                mode="multiple"
-                                value={selectedProducts}
-                                onChange={(value) => setSelectedProducts(value)}
-                                placeholder="Select products"
-                                style={{ width: '360px', height: '50px', marginRight: '10px' }}
-                            >
-                                {allProducts?.map((product: any) => (
-                                    <Select.Option key={product.id} value={String(product.id)}>
-                                        {product.name}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                            <ButtonPrimary
-                                onClick={handleAddProducts}
-                                width="w-[120px]"
-                                height="h-[50px]"
-                                htmlType="submit"
-                            >
-                                Add Products
-                            </ButtonPrimary>
-                        </div>
+                    <div className="my-4">
+                        <Select
+                            mode="multiple"
+                            value={selectedProducts}
+                            onChange={(value) => setSelectedProducts(value)}
+                            placeholder="Select products"
+                            className="font-medium"
+                            style={{ width: '360px', height: '50px', marginRight: '10px' }}
+                        >
+                            {allProducts?.map((product: any) => (
+                                <Select.Option key={product.id} value={String(product.id)}>
+                                    {product.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                        <ButtonPrimary
+                            onClick={handleAddProducts}
+                            width="w-[150px]"
+                            height="h-[50px]"
+                            htmlType="submit"
+                        >
+                            Add Products
+                        </ButtonPrimary>
+                    </div>
+                    {loading ? (
+                        <SkeletonComponent className="mt-10" />
+                    ) : (
                         <div>
                             <TableAdmin
                                 scroll={{ x: 'max-content' }}
@@ -139,9 +139,9 @@ const UpdateCategory = () => {
                                 datas={products}
                             />
                         </div>
-                    </section>
+                    )}
                 </section>
-            )}
+            </section>
         </>
     );
 };

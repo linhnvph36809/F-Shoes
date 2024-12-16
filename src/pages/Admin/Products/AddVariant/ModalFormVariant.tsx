@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Checkbox, ConfigProvider, Form, Modal, Pagination, Skeleton } from 'antd';
+import { Checkbox, ConfigProvider, Form, Modal, Skeleton } from 'antd';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import { CopyPlus, X } from 'lucide-react';
 import InputPrimary from '../../components/Forms/InputPrimary';
@@ -7,7 +7,7 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { IImage } from '../../../../interfaces/IImage';
 import PaginationComponent from '../../../../components/Pagination';
 
-const ModalFormVariant = ({ index, ids, setDatas, setError, initialValues }: any) => {
+const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) => {
     const [currentPage, setCurrentPage] = useState(1);
     const { data, isFetching, refetch } = useQueryConfig('image', `/api/image?page=${currentPage}`);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,6 +37,10 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, initialValues }: any
             newValues[index] = null;
             return newValues;
         });
+        setImages((preImages: any) => {
+            const newImages = preImages.slice(0, index);
+            return newImages;
+        });
         form.setFieldsValue({
             price: '',
             stock_qty: '',
@@ -64,6 +68,18 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, initialValues }: any
             };
             return newValues;
         });
+
+        setImages((preImage: any) => {
+            const newValues = images.filter((image: any) => {
+                if (value.images.includes(image.id)) {
+                    return image.url;
+                }
+            });
+            const newImages = [...preImage];
+            newImages[index] = newValues;
+            return newImages;
+        });
+
         setIsModalOpen(false);
     };
 
@@ -74,10 +90,6 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, initialValues }: any
     useEffect(() => {
         refetch();
     }, [currentPage]);
-
-    useEffect(() => {
-        form.setFieldsValue({});
-    }, [initialValues]);
 
     return (
         <>
@@ -110,7 +122,7 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, initialValues }: any
                     </div>,
                 ]}
             >
-                <Form form={form} onFinish={onFinish} initialValues={initialValues}>
+                <Form form={form} onFinish={onFinish}>
                     <InputPrimary
                         label="Price"
                         placeholder="Enter Price"
