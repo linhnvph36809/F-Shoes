@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { ConfigProvider, Form, Select } from 'antd';
 import useCategory from '../../../../../hooks/useCategory';
 import SelectPrimary from '../../../components/Forms/SelectPrimary';
 
@@ -7,9 +6,9 @@ const Categories = memo(() => {
     const { categories, loading } = useCategory();
 
     return (
-
         <SelectPrimary
-            name="categories" rules={[{ required: true, message: 'Please enter quantity' }]}
+            name="categories"
+            rules={[{ required: true, message: 'Please enter quantity' }]}
             allowClear
             label="Category"
             placeholder="Category"
@@ -18,6 +17,8 @@ const Categories = memo(() => {
             options={categories}
             loading={loading}
             key={'value'}
+            mode="multiple"
+
         />
     );
 });

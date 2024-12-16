@@ -1,23 +1,23 @@
 import { Form, Input, Select, Radio } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { useMemo, useState } from 'react';
-
 import Heading from '../../components/Heading';
-import ButtonComponent from '../../../Client/Authtication/components/Button';
 import useUser from '../../../../hooks/useUser';
 import useDelivery from '../../../../hooks/useDelivery';
 import useOrder from '../../../../hooks/useOrder';
-import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import { formatPrice } from '../../../../utils';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
+import SelectPrimary from '../../components/Forms/SelectPrimary';
+import InputPrimary from '../../components/Forms/InputPrimary';
+import ButtonSubmit from '../../components/Button/ButtonSubmit';
 
 const Addorder = () => {
     const { data } = useQueryConfig(
-        `all-product-admin-1`,
+        `all-product-admin`,
         `/api/product?per_page=8&page=1&include=categories,sale_price,variations`,
     );
 
-    const { refetch } = useQueryConfig('order-admin', '/api/orders')
+    const { refetch } = useQueryConfig('order-admin', '/api/orders');
 
     const products = data?.data.data;
     const { users } = useUser();
@@ -88,7 +88,7 @@ const Addorder = () => {
             phone: value.phone,
             shipping_cost: fee?.total || '',
             tax_amount: null,
-            amount_collected: value.amount_collected,
+            amount_collected: value.amount_collected || 0,
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
             address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
@@ -163,40 +163,35 @@ const Addorder = () => {
                 <Heading>Add Order</Heading>
 
                 {/* Select User */}
-                <Form.Item
+                <SelectPrimary
                     label="Select User"
                     name="user_id"
                     rules={[{ required: true, message: 'Please select a user' }]}
-                >
-                    <Select
-                        placeholder="Select User"
-                        optionFilterProp="email"
-                        allowClear
-                        options={users}
-                        fieldNames={{ label: 'email', value: 'id' }}
-                    />
-                </Form.Item>
-                <Form.Item
+                    placeholder="Select User"
+                    optionFilterProp="email"
+                    allowClear
+                    options={users}
+                    fieldNames={{ label: 'email', value: 'id' }}
+                ></SelectPrimary>
+
+                <SelectPrimary
                     label="Select Product"
                     name="product"
                     rules={[{ required: true, message: 'Please select products' }]}
-                >
-                    <Select
-                        mode="multiple"
-                        onChange={handleProductChange}
-                        placeholder="Select Products"
-                        optionFilterProp="name"
-                        allowClear
-                        options={products}
-                        fieldNames={{ label: 'name', value: 'id' }}
-                    />
-                </Form.Item>
+                    mode="multiple"
+                    onChange={handleProductChange}
+                    placeholder="Select Products"
+                    optionFilterProp="name"
+                    allowClear
+                    options={products}
+                    fieldNames={{ label: 'name', value: 'id' }}
+                ></SelectPrimary>
 
                 {/* Display selected variants and quantities */}
                 {productSelected.map((product: any, index: number) => (
                     <div key={index} className="ml-20 mb-10">
                         <Form.Item
-                            className="mb-5"
+                            className="mb-5 font-medium"
                             label={`Select Variant :  ${product.name}`}
                             name={`variant-${index}`}
                             rules={[{ required: true, message: 'Please select a variant' }]}
@@ -212,6 +207,7 @@ const Addorder = () => {
 
                         <Form.Item
                             label="Quantity"
+                            className="font-medium"
                             name={`quantity-${index}`}
                             rules={[
                                 { required: true, message: 'Please enter a quantity' },
@@ -237,13 +233,15 @@ const Addorder = () => {
                     </div>
                 ))}
 
-                <Form.Item
+                <InputPrimary
                     label="Amount Collected"
                     name="amount_collected"
+                    placeholder="Enter Amount Collected"
+                    type="number"
                     initialValue={0}
                     rules={[
                         {
-                            validator: (_, value) => {
+                            validator: (_: any, value: number) => {
                                 if (+value < 0) {
                                     return Promise.reject(new Error('Amount must be greater than or equal to 0'));
                                 }
@@ -251,96 +249,88 @@ const Addorder = () => {
                             },
                         },
                     ]}
-                >
-                    <Input placeholder="Enter Amount Collected" type="number" />
-                </Form.Item>
+                ></InputPrimary>
 
-                <Form.Item
+                <InputPrimary
                     label="Recipient name"
                     name="receiver_full_name"
                     rules={[{ required: true, message: 'Please enter recipient name' }]}
-                >
-                    <Input placeholder="Enter recipient name" />
-                </Form.Item>
-                <Form.Item
+                    placeholder="Enter recipient name"
+                ></InputPrimary>
+                <InputPrimary
                     label="Recipient Email"
                     name="receiver_email"
                     rules={[{ required: true, message: 'Please enter email' }]}
-                >
-                    <Input placeholder="Enter recipient email" type="email" />
-                </Form.Item>
+                    placeholder="Enter recipient email"
+                    type="email"
+                ></InputPrimary>
 
-                <Form.Item
+                <InputPrimary
                     label="Phone"
                     name="phone"
                     rules={[{ required: true, message: 'Please enter phone number' }]}
-                >
-                    <Input placeholder="Enter phone number" />
-                </Form.Item>
+                    placeholder="Enter phone number"
+                ></InputPrimary>
 
-                <Form.Item
+                <SelectPrimary
                     label="Select Province"
                     name="province"
                     rules={[{ required: true, message: 'Please select a province' }]}
-                >
-                    <Select
-                        onChange={handleCityChange}
-                        placeholder="Select Province"
-                        optionFilterProp="ProvinceName"
-                        options={provinces}
-                        fieldNames={{ label: 'ProvinceName', value: 'ProvinceID' }}
-                    />
-                </Form.Item>
+                    onChange={handleCityChange}
+                    placeholder="Select Province"
+                    optionFilterProp="ProvinceName"
+                    options={provinces}
+                    fieldNames={{ label: 'ProvinceName', value: 'ProvinceID' }}
+                ></SelectPrimary>
 
-                <Form.Item
+                <SelectPrimary
                     label="Select District"
                     name="district"
                     rules={[{ required: true, message: 'Please select a district' }]}
-                >
-                    <Select
-                        placeholder="Select District"
-                        optionFilterProp="ProvinceName"
-                        options={districts}
-                        fieldNames={{ label: 'DistrictName', value: 'DistrictID' }}
-                        onChange={handleDistrictChange}
-                    />
-                </Form.Item>
+                    placeholder="Select District"
+                    optionFilterProp="ProvinceName"
+                    options={districts}
+                    fieldNames={{ label: 'DistrictName', value: 'DistrictID' }}
+                    onChange={handleDistrictChange}
+                ></SelectPrimary>
 
-                <Form.Item
+                <SelectPrimary
                     label="Select Ward"
                     name="ward"
                     rules={[{ required: true, message: 'Please select a ward' }]}
-                >
-                    <Select
-                        placeholder="Select Ward"
-                        optionFilterProp="ProvinceName"
-                        options={wards}
-                        onChange={handleWardChange}
-                        fieldNames={{ label: 'WardName', value: 'WardCode' }}
-                    />
-                </Form.Item>
+                    placeholder="Select Ward"
+                    optionFilterProp="ProvinceName"
+                    options={wards}
+                    onChange={handleWardChange}
+                    fieldNames={{ label: 'WardName', value: 'WardCode' }}
+                ></SelectPrimary>
 
-                <Form.Item label="Address" name="address" rules={[{ required: true, message: 'Please enter address' }]}>
+                <Form.Item
+                    label="Address"
+                    className="font-medium"
+                    name="address"
+                    rules={[{ required: true, message: 'Please enter address' }]}
+                >
                     <TextArea placeholder="Enter address" />
                 </Form.Item>
 
                 <Form.Item
                     label="Payment method"
                     name="payment_method"
+                    className="font-medium"
                     rules={[{ required: true, message: 'Please select a payment method' }]}
                 >
                     <Radio.Group>
                         <Radio value="COD">Cash on Delivery (COD)</Radio>
                         <Radio value="VNPAY">VNPAY</Radio>
-                        <Radio value="ZALOPAY">ZALOPAY</Radio>
                         <Radio value="MOMO">MOMO</Radio>
-                        <Radio value="PAYPAL">PAYPAL</Radio>
                     </Radio.Group>
                 </Form.Item>
 
                 <Form.Item
                     label="Shipping method"
                     name="shipping_method"
+                    className="font-medium"
                     rules={[{ required: true, message: 'Please select a shipping method' }]}
                 >
                     <Radio.Group onChange={(e) => handleShippingChange(e.target.value)} disabled={!wardCode}>
@@ -350,24 +340,26 @@ const Addorder = () => {
                     </Radio.Group>
                 </Form.Item>
 
-                <Form.Item label="Note" name="note">
+                <Form.Item label="Note" name="note" className="font-medium">
                     <TextArea placeholder="Enter note" rows={9} />
                 </Form.Item>
 
                 {fee.service_fee && totalAmount ? (
                     <div className="text-end my-10">
+                        <p className="font-medium text-[16px] color-gray">Subtotal: {formatPrice(totalAmount)} đ </p>
                         <p className="font-medium text-[16px] color-gray">
-                            Shipping Fee: {formatPrice(fee.service_fee)} VND
+                            Shipping Fee: {formatPrice(fee.service_fee)} đ
                         </p>
-                        <p className="font-medium text-[16px] color-gray">Product: {formatPrice(totalAmount)} VND</p>
                         <h1 className="font-medium text-[20px] text-red-500">
-                            Total: {formatPrice(totalAmount + +fee.service_fee)} VND
+                            Total: {formatPrice(totalAmount + +fee.service_fee)} đ
                         </h1>
                     </div>
-                ) : ''}
+                ) : (
+                    ''
+                )}
 
                 <Form.Item className="text-end">
-                    <ButtonComponent htmlType="submit">{loading ? <LoadingSmall /> : 'Submit'}</ButtonComponent>
+                    <ButtonSubmit width="w-[180px]" loading={loading} />
                 </Form.Item>
             </Form>
         </div>

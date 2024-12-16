@@ -33,16 +33,15 @@ const Cart = () => {
         deleteCart(idCart);
         refetch();
     };
-    console.log(carts);
-    
+
     const handleTotalPrice = useMemo(() => {
         if (cartId.length) {
             const newCarts = carts?.data.filter((cart: any) => cartId.includes(cart.id));
             return newCarts?.reduce((sum: any, curr: any) => {
                 if (curr?.product?.price) {
-                    return sum + (curr.product.sale_price || curr.product.price) * curr.quantity;
+                    return sum + (+curr.product.sale_price || +curr.product.price) * +curr.quantity;
                 } else if (curr?.product_variation?.price) {
-                    return sum + (curr.product_variation.sale_price || curr.product_variation.price) * curr.quantity;
+                    return sum + (+curr.product_variation.sale_price || +curr.product_variation.price) * +curr.quantity;
                 }
                 return sum;
             }, 0);

@@ -10,7 +10,7 @@ import useVariant from '../../../../hooks/useVariant';
 
 const FormUpdateVariant = ({ initialValues }: any) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const { data, isFetching, refetch } = useQueryConfig('image', `/api/image?page=${currentPage}`);
+    const { data, isFetching, refetch } = useQueryConfig('image', `/api/image?paginate=true&page=${currentPage}`);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
     const { loading, putVariant } = useVariant();
@@ -139,9 +139,9 @@ const FormUpdateVariant = ({ initialValues }: any) => {
                             )}
                         </ConfigProvider>
                         <PaginationComponent
-                            page={data?.data?.paginator.current_page || 1}
-                            totalItems={data?.data?.paginator.total_item || 0}
-                            pageSize={data?.data?.paginator.per_page || 15}
+                            page={data?.data?.paginator?.current_page || 1}
+                            totalItems={data?.data?.paginator?.total_item || 0}
+                            pageSize={data?.data?.paginator?.per_page || 15}
                             handlePageChange={handlePageChange}
                         />
                     </Form>

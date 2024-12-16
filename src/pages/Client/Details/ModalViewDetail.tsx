@@ -38,11 +38,10 @@ const ModalViewDetail = ({ product }: any) => {
                             </p>
                         </div>
                     </div>
-                    <div className="text-[14px] color-gray font-normal mt-5">
-                        <span className="font-medium">Short Desciption :</span> {product?.short_description}
+                    <div className="text-[14px] color-gray font-normal mt-5" dangerouslySetInnerHTML={{ __html: product?.short_description }} >
                     </div>
-                    <div className="text-[16px] font-normal my-5 color-primary">
-                        <span className="font-medium">Desciption :</span> {product?.description}
+                    <div className="text-[16px] font-normal my-5 color-primary" dangerouslySetInnerHTML={{ __html: product?.description }} >
+
                     </div>
                     <div className="font-medium text-[18px] pb-5 color-primary">
                         Benefits

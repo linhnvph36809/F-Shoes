@@ -33,8 +33,6 @@ const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
     const { user } = useContextGlobal();
 
-
-
     useEffect(() => {
         const starCountRef = ref(db, `groups/1`);
         const unsubscribe = onValue(starCountRef, (snapshot) => {
@@ -63,12 +61,12 @@ const LayoutAdmin: React.FC = () => {
             }
         });
     }, [permissions]);
-    const  {data:countOrderWaiting} = useQueryConfig(
-        ['orders','products','count-order-waiting'],
+    const { data: countOrderWaiting } = useQueryConfig(
+        ['orders', 'products', 'count-order-waiting'],
         'api/v1/statistics/count/order/waitings'
     );
     const [messageWaitingConfirm, setMessageWaitingConfirm] = useState(false);
-     
+
     return (
         <ContextAdmin.Provider value={{ permissions }}>
             <Layout hasSider>
@@ -108,9 +106,9 @@ const LayoutAdmin: React.FC = () => {
                             <Bell className='size-10' />
                             {
                                 messageWaitingConfirm ? <div className='w-[480px] h-[40px] absolute bg-slate-200 right-0 rounded-lg flex items-center justify-center text-gray-500 transition-all'>
-                                {countOrderWaiting?.data?.data ? 
-                                    <p>{`You have ${countOrderWaiting?.data?.data} orders on waiting confirmation. `}<Link to={`/admin/orderlist?status=waiting_confirm`}>Checkout!</Link></p>
-                                : ''}
+                                    {countOrderWaiting?.data?.data ?
+                                        <p>{`You have ${countOrderWaiting?.data?.data} orders on waiting confirmation. `}<Link to={`/admin/orderlist?status=waiting_confirm`}>Checkout!</Link></p>
+                                        : ''}
                                 </div> : ''
                             }
                         </div>
