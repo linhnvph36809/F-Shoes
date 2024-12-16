@@ -46,21 +46,13 @@ const Detail = () => {
     const { loading: loadingAddCart, postCart } = useCart();
     const { loading: loadingWishlist, postWishlist } = useWishlist();
     const navigate = useNavigate();
-
-    
+    const [imagesD, setImagesD] = useState<IImage[]>([]);
     
     const productD = products;
-    let variationD;
-    let imagesD: IImage[];
+  
 
     //to test component replace if(variationD) below into => if(product && product?.variations)
-    if(products && products?.variations) {
-        variationD = products.variations[0];
-        imagesD = products.variations[0]?.images;
-    } else {
-        imagesD = products?.images;
-    }
-
+    
     const onChange = (e: any, index: number) => {
         const id = e.target.value;
         setIdVariants((preIds: number[]) => {
@@ -111,6 +103,13 @@ const Detail = () => {
             setVariant(results);
         }
     }, [idVariants, products]);
+    useEffect(() => {
+        if (variant?.images.length > 0) {
+            setImagesD(variant?.images);
+        }else {
+            setImagesD(products?.images);
+        }
+    }, [variant]);
     if(!products && !isFetching){
         return (
             <>
@@ -161,7 +160,7 @@ const Detail = () => {
                                       })
                                     : ' '}
                             </h4>
-                            <Price product={variant || productD} variation={variationD} />
+                            <Price product={variant || productD} variation={variant} />
                             {productD?.attributes
                                 ? productD.attributes.map((item: any, index: number) => {
                                       return (
