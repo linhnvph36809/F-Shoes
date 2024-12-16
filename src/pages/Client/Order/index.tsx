@@ -206,8 +206,8 @@ const Order = () => {
                     voucher.type == 'fixed'
                         ? voucher.discount
                         : ((handleTotalPrice >= FREE_SHIP ? handleTotalPrice : handleTotalPrice + (fee?.total || 0)) *
-                            +voucher.discount) /
-                        100,
+                              +voucher.discount) /
+                          100,
                 ...newValues,
             },
             new Date(Date.now() + 20 * 60 * 1000),
@@ -290,7 +290,7 @@ const Order = () => {
                                             },
                                             {
                                                 type: 'email',
-                                                message: <FormattedMessage id="receiver_email_invalid_message" />,
+                                                message: <FormattedMessage id="receiver_email_invalid" />,
                                             },
                                         ]}
                                     >
@@ -327,6 +327,7 @@ const Order = () => {
                                             options={provinces}
                                             className="w-full h-[56px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] rounded-[8px]"
                                             fieldNames={{ label: 'ProvinceName', value: 'ProvinceID' }}
+                                            showSearch
                                         />
                                     </Form.Item>
 
@@ -342,11 +343,12 @@ const Order = () => {
                                     >
                                         <Select
                                             placeholder={intl.formatMessage({ id: 'district_placeholder' })}
-                                            optionFilterProp="ProvinceName"
+                                            optionFilterProp="DistrictName"
                                             options={districts}
                                             className="w-full h-[56px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] rounded-[8px]"
                                             fieldNames={{ label: 'DistrictName', value: 'DistrictID' }}
                                             onChange={handleDistrictChange}
+                                            showSearch
                                         />
                                     </Form.Item>
 
@@ -362,11 +364,12 @@ const Order = () => {
                                     >
                                         <Select
                                             placeholder={intl.formatMessage({ id: 'ward_placeholder' })}
-                                            optionFilterProp="ProvinceName"
+                                            optionFilterProp="WardName"
                                             options={wards}
                                             className="w-full h-[56px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] rounded-[8px]"
                                             fieldNames={{ label: 'WardName', value: 'WardCode' }}
                                             onChange={handleWardChange}
+                                            showSearch
                                         />
                                     </Form.Item>
 
@@ -430,14 +433,8 @@ const Order = () => {
                                                 onChange={(e) => handleShippingChange(e.target.value)}
                                                 disabled={!wardCode}
                                             >
-                                                <Radio className="font-medium" value={1}>
-                                                    <FormattedMessage id="shipping_express" />
-                                                </Radio>
                                                 <Radio className="font-medium" value={2}>
                                                     <FormattedMessage id="shipping_standard" />
-                                                </Radio>
-                                                <Radio className="font-medium" value={3}>
-                                                    <FormattedMessage id="shipping_saving" />
                                                 </Radio>
                                             </Radio.Group>
                                         </Form.Item>

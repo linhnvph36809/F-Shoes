@@ -19,6 +19,9 @@ const ModalCancel = ({
 
     const handleOk = () => {
         form.submit();
+    };
+
+    const onFinish = () => {
         const reason_cancelled = form.getFieldValue('reason_cancelled');
         cancelOrder(orderId, {
             reason_cancelled,
@@ -36,7 +39,7 @@ const ModalCancel = ({
             <Modal
                 okButtonProps={{ type: 'primary', style: { backgroundColor: '#ff4d4f', borderColor: '#ff4d4f' } }}
                 cancelButtonProps={{ type: 'default' }}
-                title={<h3 className="text-[22px]">Reason</h3>}
+                title={<h3 className="text-[28px]">Reason</h3>}
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
@@ -59,8 +62,13 @@ const ModalCancel = ({
                     </button>,
                 ]}
             >
-                <Form layout="vertical" form={form}>
-                    <Form.Item name="reason_cancelled" rules={[{ required: true, message: 'Required' }]}>
+                <Form layout="vertical" form={form} onFinish={onFinish}>
+                    <Form.Item
+                        label="Enter reason"
+                        className="font-medium"
+                        name="reason_cancelled"
+                        rules={[{ required: true, message: 'Please enter reason for cancellation' }]}
+                    >
                         <TextArea rows={6} />
                     </Form.Item>
                 </Form>

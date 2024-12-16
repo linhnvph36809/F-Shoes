@@ -23,10 +23,7 @@ const UpdateCategory = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
     const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
 
-    const { data } = useQueryConfig(
-        `all-product-admin-category`,
-        `/api/product?include=categories,sale_price,variations`,
-    );
+    const { data } = useQueryConfig(`all-product-admin`, `/api/product?include=categories,sale_price,variations`);
 
     const allProducts = data?.data.data || [];
 

@@ -17,6 +17,8 @@ const Categories = memo(() => {
             options={categories}
             loading={loading}
             key={'value'}
+            mode="multiple"
+
         />
     );
 });

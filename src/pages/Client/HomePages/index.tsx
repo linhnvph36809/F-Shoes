@@ -15,15 +15,15 @@ import { QUERY_KEY as QUERY_KEY_PRODUCT } from '../../../hooks/useProduct.tsx';
 
 const HomePage = () => {
     const { data: data1, isFetching: fetchingDisplay1 } = useQueryConfig(
-        [QUERY_KEY_PRODUCT,`list-products-display-1`],
+        [QUERY_KEY_PRODUCT, `list-products-display-1`],
         `api/display/home-page/products?serial=1`,
     );
     const { data: data2, isFetching: fetchingDisplay2 } = useQueryConfig(
-        [QUERY_KEY_PRODUCT,`list-products-display-2`],
+        [QUERY_KEY_PRODUCT, `list-products-display-2`],
         `api/display/home-page/products?serial=2`,
     );
     const { data: data3, isFetching: fetchingDisplay3 } = useQueryConfig(
-        ['products',`list-products-display-3`],
+        ['products', `list-products-display-3`],
         `api/display/home-page/products?serial=3`,
         {
             cacheTime: 1000 * 60 * 10,
@@ -31,9 +31,9 @@ const HomePage = () => {
             retry: false,
         },
     );
-    const category1:ICategory =data1?.data?.category;
-    const category2:ICategory =data2?.data?.category;
-    const category3:ICategory =data3?.data?.category;
+    const category1: ICategory = data1?.data?.category;
+    const category2: ICategory = data2?.data?.category;
+    const category3: ICategory = data3?.data?.category;
     const productsDisplay1 = category1?.products || [];
     const productsDisplay2 = category2?.products || [];
     const productsDisplay3 = category3?.products || [];
@@ -67,9 +67,9 @@ const HomePage = () => {
                                 productsDisplay1.map((item: IProduct) => (
                                     <SwiperSlide key={item.id}>
                                         <div>
-                                            <Link to={`detail/${item.slug}`}>
+                                            <Link to={`detail/${item.slug}`} className='flex flex-col justify-between'>
                                                 <div>
-                                                    <img src={item.image_url} alt="" />
+                                                    <img src={item.image_url} alt="" className='h-[678px] object-cover' />
                                                 </div>
                                                 <div>
                                                     <h3 className="text-15px color-primary font-medium pt-4">
@@ -78,14 +78,14 @@ const HomePage = () => {
                                                     <h5 className="text-[#707072] text-15px">
                                                         {item?.categories
                                                             ? item?.categories.map((cat, index, array) => {
-                                                                  if (array.length < 2) {
-                                                                      return ' ' + cat?.name;
-                                                                  } else {
-                                                                      if (index == 2) return;
-                                                                      if (index == 1) return ' ' + cat?.name;
-                                                                      return ' ' + cat?.name + ',';
-                                                                  }
-                                                              })
+                                                                if (array.length < 2) {
+                                                                    return ' ' + cat?.name;
+                                                                } else {
+                                                                    if (index == 2) return;
+                                                                    if (index == 1) return ' ' + cat?.name;
+                                                                    return ' ' + cat?.name + ',';
+                                                                }
+                                                            })
                                                             : ' '}
                                                     </h5>
                                                     <h3 className="text-15px color-primary font-medium mt-3">
@@ -121,7 +121,7 @@ const HomePage = () => {
                             productsDisplay2.map((item: IProduct, index: number) => (
                                 <SwiperSlide key={index}>
                                     <div className="relative">
-                                        <img src={item.image_url} alt="" />
+                                        <img src={item.image_url} alt="" className='h-[678px] object-cover' />
                                         <Link
                                             to={`detail/${item.slug}`}
                                             className="absolute left-[5%] bottom-[5%] px-8 py-4

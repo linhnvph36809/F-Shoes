@@ -7,7 +7,7 @@ import { API_ORDER } from '../../../../hooks/useOrder';
 import ModalOrder from './ModalOrder';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import TableAdmin from '../../components/Table';
-import { IOrder, statusArr } from '../../../../interfaces/IOrder';
+import { statusArr } from '../../../../interfaces/IOrder';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
@@ -23,7 +23,7 @@ const OrderList = () => {
     });
 
     const { data: orders } = useQueryConfig('order-admin', API_ORDER);
-    
+
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchText(value);
@@ -31,12 +31,12 @@ const OrderList = () => {
         if (value.trim() === '') {
             setFilteredData(orders?.data);
         } else {
-            const filtered = orders?.data.filter(
-                (order: any) => {
-                    return order?.user?.name.toLowerCase().includes(value.toLowerCase()) || order.id.toString().includes(value.toLowerCase());
-                    
-                },
-            );
+            const filtered = orders?.data.filter((order: any) => {
+                return (
+                    order?.user?.name.toLowerCase().includes(value.toLowerCase()) ||
+                    order.id.toString().includes(value.toLowerCase())
+                );
+            });
             setFilteredData(filtered);
         }
     };
@@ -57,32 +57,28 @@ const OrderList = () => {
             });
         }
     };
-   
+
     const searchStatus = urlQuery.get('status') || '';
-    const onChangeStatus = (e:any) => {
+    const onChangeStatus = (e: any) => {
         urlQuery.set('status', e);
         navigate(`?${urlQuery.toString()}`, { replace: true });
-    }
-   
-    
+    };
+
     useEffect(() => {
         const originData = orders?.data ? JSON.parse(JSON.stringify([...orders.data])) : [];
-        if(searchStatus !== '' && searchStatus !== 'all'){
-            const filtered = originData.filter((order:any) => {
+        if (searchStatus !== '' && searchStatus !== 'all') {
+            const filtered = originData.filter((order: any) => {
                 return statusArr[order?.status] === searchStatus;
             });
             setFilteredData([...filtered]);
-        }else {
+        } else {
             setFilteredData([...originData]);
         }
-    },[searchStatus,orders])
-    
-    
+    }, [searchStatus, orders]);
+
     const handleRowClick = (record: any) => {
         setOrderDetail((preData: any) => ({ ...preData, isModalOpen: true, orderDetail: record }));
     };
-
-    
 
     const handleCancel = () => {
         setOrderDetail((preData: any) => ({ ...preData, isModalOpen: false }));
@@ -106,7 +102,12 @@ const OrderList = () => {
                     </Select>
                 </div>
                 <div>
-                    <Select defaultValue={searchStatus ? searchStatus : 'all'} style={{ width: 250, marginRight: 8 }} placeholder="Select a status" onChange={onChangeStatus}>
+                    <Select
+                        defaultValue={searchStatus ? searchStatus : 'all'}
+                        style={{ width: 250, marginRight: 8 }}
+                        placeholder="Select a status"
+                        onChange={onChangeStatus}
+                    >
                         <Option value="all">All</Option>
                         <Option value={statusArr[0]}>Cancelled</Option>
                         <Option value={statusArr[1]}>Waiting Confirm</Option>
@@ -122,7 +123,6 @@ const OrderList = () => {
                 columns={columns}
                 rowKey="id"
                 dataSource={filteredData}
-                className="hover:cursor-pointer"
                 onRow={(record: any) => ({
                     onClick: () => handleRowClick(record),
                 })}

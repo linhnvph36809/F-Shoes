@@ -11,7 +11,7 @@ import { COOKIE_USER } from '../../../constants';
 import { IUser } from '../../../interfaces/IUser.ts';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import { Link } from 'react-router-dom';
-import  { useState } from 'react';
+import { useState } from 'react';
 
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Flex, message, Upload } from 'antd';
@@ -42,7 +42,7 @@ const ProfilePage = () => {
     const { cookies } = useCookiesConfig(COOKIE_USER);
     const userNameCookie = cookies?.userName;
     const { data, isFetching, refetch } = useQueryConfig(
-        [QUERY_KEY_PROFILE,'user-profile'],
+        [QUERY_KEY_PROFILE, 'user-profile'],
         'api/auth/me?include=profile,favoriteProducts&times=user',
         {
             cacheTime: 1000 * 60 * 10,
@@ -148,9 +148,16 @@ const ProfilePage = () => {
                                     listFavoriteProducts.map((item: IProduct) => (
                                         <SwiperSlide>
                                             <div>
-                                                <a href={`detail/${item.slug}`}>
+                                                <Link
+                                                    to={`detail/${item.slug}`}
+                                                    className="flex flex-col justify-between"
+                                                >
                                                     <div>
-                                                        <img src={item.image_url} alt="" />
+                                                        <img
+                                                            src={item.image_url}
+                                                            alt=""
+                                                            className="h-[678px] object-cover"
+                                                        />
                                                     </div>
                                                     <div>
                                                         <h3 className="text-15px color-primary font-medium pt-4">
@@ -159,21 +166,21 @@ const ProfilePage = () => {
                                                         <h5 className="text-[#707072] text-15px">
                                                             {item?.categories
                                                                 ? item?.categories.map((cat, index, array) => {
-                                                                      if (array.length < 2) {
-                                                                          return ' ' + cat?.name;
-                                                                      } else {
-                                                                          if (index == 2) return;
-                                                                          if (index == 1) return ' ' + cat?.name;
-                                                                          return ' ' + cat?.name + ',';
-                                                                      }
-                                                                  })
+                                                                    if (array.length < 2) {
+                                                                        return ' ' + cat?.name;
+                                                                    } else {
+                                                                        if (index == 2) return;
+                                                                        if (index == 1) return ' ' + cat?.name;
+                                                                        return ' ' + cat?.name + ',';
+                                                                    }
+                                                                })
                                                                 : ' '}
                                                         </h5>
                                                         <h3 className="text-15px color-primary font-medium mt-3">
                                                             {formatPrice(item.price)} ₫
                                                         </h3>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </SwiperSlide>
                                     ))
