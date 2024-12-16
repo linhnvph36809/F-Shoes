@@ -31,8 +31,16 @@ const ListUser = () => {
         }
     }, [dataUser]);
     const userHasOrderCount = dataCountHasOrder?.data?.count || 0;
-    const filterUser = (e) => {
-        
+    const filterUser = (e:any) => {
+        const dataOrigin = JSON.parse(JSON.stringify([...dataUser?.data.users.data]));
+        if(e.target.value !== ''){
+            const filtered = dataOrigin.filter((item: IUser) => {
+                return item.name.toLowerCase().includes(e.target.value.toLowerCase()) || item.email.toLowerCase().includes(e.target.value.toLowerCase()) || item.id.toString().includes(e.target.value.toLowerCase());
+            });
+            setUsers([...filtered]);
+        }else {
+            setUsers([...dataUser?.data.users.data]);
+        }
     }
     // Define table columns
     const columns = [
@@ -184,7 +192,7 @@ const ListUser = () => {
                 ) : (
                     <section>
                         <div className="my-6">
-                            <Input placeholder="Search an id user or name or email." />
+                            <Input onChange={filterUser} placeholder="Search an id user or name or email." />
                         </div>
                         <TableAdmin columns={columns} dataSource={users} pagination={{ pageSize: 8 }} />
                     </section>
