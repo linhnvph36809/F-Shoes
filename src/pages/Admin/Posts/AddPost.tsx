@@ -2,6 +2,7 @@ import FormPost from './FormPost';
 import usePost, { API_POST } from '../../../hooks/usePosts';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import { KEY } from './index';
+import ButtonBack from '../components/ButtonBack';
 
 const AddPost = () => {
     const { loading, addPost } = usePost();
@@ -12,7 +13,10 @@ const AddPost = () => {
         refetch();
     };
 
-    return <FormPost title="Add Post" onFinish={onFinish} loading={loading} />;
+    return <div>
+        <ButtonBack to="/admin/posts" />
+        <FormPost title="Add Post" onFinish={onFinish} loading={loading} />
+    </div>;
 };
 
 export default AddPost;

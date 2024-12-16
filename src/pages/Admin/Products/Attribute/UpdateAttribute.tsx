@@ -1,5 +1,5 @@
 import { CircleX } from 'lucide-react';
-import { Button, Form, Space } from 'antd';
+import { Button, Form, Input, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
@@ -7,15 +7,15 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { KEY, API_ATTRIBUTE_ADD } from './index';
 import { PATH_ADMIN } from '../../../../constants/path';
 import Heading from '../../components/Heading';
-import InputPrimary from '../../../../components/Input';
-import ButtonPrimary from '../../../../components/Button';
 import useAttribute from '../../../../hooks/useAttribute';
+import ButtonBack from '../../components/ButtonBack';
+import ButtonSubmit from '../../components/Button/ButtonSubmit';
 
 const UpdateAttribute = () => {
     const [form] = Form.useForm();
     const { id } = useParams();
     const { data, refetch } = useQueryConfig(KEY, API_ATTRIBUTE_ADD);
-    const { postAttributeValue, deleteAttributeValue } = useAttribute();
+    const { loading, postAttributeValue, deleteAttributeValue } = useAttribute();
     const [attributeValues, setAttributeValues] = useState<any>([]);
     const initialValues = data?.data[0]?.data?.find((item: any) => item.id == id);
 
@@ -60,6 +60,7 @@ const UpdateAttribute = () => {
     return (
         <>
             <section>
+                <ButtonBack to="/admin/add-attribute" />
                 <Heading>Update Attribute</Heading>
                 <Form form={form} layout="vertical" onFinish={onFinish}>
                     <div className="my-4 w-6/12">
@@ -68,14 +69,13 @@ const UpdateAttribute = () => {
                                 label="Attribute Value"
                                 name={`attribute_value-${index}`}
                                 initialValue={item.value}
-                                className="relative"
+                                className="relative font-medium"
                                 rules={[{ required: true, message: 'Please enter Attribute Value' }]}
                             >
-                                <InputPrimary
+                                <Input
                                     placeholder="Attribute Value"
                                     width="100%"
-                                    height="h-[56px]"
-                                    margin="mb-0"
+                                    className={`h-[56px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                                     defaultValue={item.value}
                                     onChange={(e: any) => handleChangeAttribute(index, e.target.value)}
                                 />
@@ -99,11 +99,10 @@ const UpdateAttribute = () => {
                                                 fieldKey={fieldKey}
                                                 rules={[{ required: true, message: 'Please enter a value' }]}
                                             >
-                                                <InputPrimary
+                                                <Input
                                                     placeholder="Attribute Value"
                                                     width="100%"
-                                                    height="h-[56px]"
-                                                    margin="mb-0"
+                                                    className={`h-[56px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                                                 />
                                             </Form.Item>
                                             <Button type="text" onClick={() => remove(name)} danger>
@@ -121,9 +120,7 @@ const UpdateAttribute = () => {
                         </Form.List>
                     </div>
                     <Form.Item className="mt-20">
-                        <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
-                            Submit
-                        </ButtonPrimary>
+                        <ButtonSubmit loading={loading} />
                     </Form.Item>
                 </Form>
             </section>

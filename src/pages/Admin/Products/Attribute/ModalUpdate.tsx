@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import useAttribute from '../../../../hooks/useAttribute';
 import { Plus, X } from 'lucide-react';
 import InputPrimary from '../../../../components/Input';
+import { showMessageAdmin } from '../../../../utils/messages';
 
 const ModalAUpdate = ({ isModalOpen, setIsModalOpen }: any) => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -29,12 +30,11 @@ const ModalAUpdate = ({ isModalOpen, setIsModalOpen }: any) => {
                 try {
                     setLoading(true);
                     const res = await getValueAttributeById(isModalOpen.id);
-                    console.log(res);
                     form.setFieldsValue({
                         inputs: res.values.map((valueAttribute: any) => valueAttribute.value), // Thiết lập giá trị mặc định cho từng input
                     });
                 } catch (error) {
-                    console.error('Failed to fetch attribute values', error);
+                    showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
                 } finally {
                     setLoading(false);
                 }

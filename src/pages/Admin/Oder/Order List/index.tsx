@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Input, Select } from 'antd';
+import { ConfigProvider, Input, Select } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import Heading from '../../components/Heading';
 import { columns } from './datas';
@@ -9,6 +9,8 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import TableAdmin from '../../components/Table';
 import { statusArr } from '../../../../interfaces/IOrder';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Search } from 'lucide-react';
+import ButtonAdd from '../../components/Button/ButtonAdd';
 
 const { Option } = Select;
 
@@ -87,34 +89,67 @@ const OrderList = () => {
     return (
         <div>
             <Heading>Order List</Heading>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16, marginTop: '10px' }}>
-                <Input
-                    placeholder="Search Order"
-                    prefix={<SearchOutlined />}
-                    style={{ width: 300 }}
-                    value={searchText}
-                    onChange={handleSearch}
-                />
-                <div>
-                    <Select style={{ width: 250, marginRight: 8 }} placeholder="Please select" onChange={handleSort}>
-                        <Option value={1}>Sort ascending by date</Option>
-                        <Option value={2}>Sort descending by date</Option>
-                    </Select>
-                </div>
-                <div>
-                    <Select
-                        defaultValue={searchStatus ? searchStatus : 'all'}
-                        style={{ width: 250, marginRight: 8 }}
-                        placeholder="Select a status"
-                        onChange={onChangeStatus}
-                    >
-                        <Option value="all">All</Option>
-                        <Option value={statusArr[0]}>Cancelled</Option>
-                        <Option value={statusArr[1]}>Waiting Confirm</Option>
-                        <Option value={statusArr[2]}>Confirmed</Option>
-                        <Option value={statusArr[3]}>Delivering</Option>
-                        <Option value={statusArr[4]}>Delivered</Option>
-                    </Select>
+            <div className='flex justify-between'>
+                <ButtonAdd title="Add Order" to="/admin/orderadd" />
+                <div className="flex justify-end items-center gap-x-5">
+                    <div className="relative">
+                        <Input
+                            placeholder="Search Order"
+                            className={`w-[250px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                            value={searchText}
+                            onChange={handleSearch}
+                        />
+                        <Search className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
+                    </div>
+                    <div>
+                        <ConfigProvider
+                            theme={{
+                                components: {
+                                    Select: {
+                                        multipleSelectorBgDisabled: '#fff',
+                                        optionFontSize: 16,
+                                    },
+                                },
+                            }}
+                        >
+                            <Select
+                                className="font-medium"
+                                style={{ width: 250, height: '52px' }}
+                                placeholder="Please select"
+                                onChange={handleSort}
+                            >
+                                <Option value={1}>Sort ascending by date</Option>
+                                <Option value={2}>Sort descending by date</Option>
+                            </Select>
+                        </ConfigProvider>
+                    </div>
+                    <div>
+                        <ConfigProvider
+                            theme={{
+                                components: {
+                                    Select: {
+                                        multipleSelectorBgDisabled: '#fff',
+                                        optionFontSize: 16,
+                                    },
+                                },
+                            }}
+                        >
+                            <Select
+                                className="font-medium"
+                                defaultValue={searchStatus ? searchStatus : 'all'}
+                                style={{ width: 250, height: '52px' }}
+                                placeholder="Select a status"
+                                onChange={onChangeStatus}
+                            >
+                                <Option value="all">All</Option>
+                                <Option value={statusArr[0]}>Cancelled</Option>
+                                <Option value={statusArr[1]}>Waiting Confirm</Option>
+                                <Option value={statusArr[2]}>Confirmed</Option>
+                                <Option value={statusArr[3]}>Delivering</Option>
+                                <Option value={statusArr[4]}>Delivered</Option>
+                            </Select>
+                        </ConfigProvider>
+                    </div>
                 </div>
             </div>
 

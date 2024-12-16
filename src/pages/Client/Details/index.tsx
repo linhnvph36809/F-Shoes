@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet';
 import { Radio, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { SwiperSlide } from 'swiper/react';
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -22,6 +22,7 @@ import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import ModalViewDetail from './ModalViewDetail.tsx';
 import { FormattedMessage } from 'react-intl';
 import NotFound from '../../../components/NotFound/index.tsx';
+import { showMessageClient } from '../../../utils/messages.ts';
 
 const Detail = () => {
     const { slug } = useParams();
@@ -200,6 +201,12 @@ const Detail = () => {
                                     {<FormattedMessage id="body.Detail.Quantity" />} : {productD?.stock_qty}
                                 </p>
                             )}
+
+                            {
+                                user ? "" : <Link to="/authentication" className="text-16px font-medium mt-10 block underline">
+                                    Login & Register
+                                </Link >
+                            }
                             <div className="my-20">
                                 <button
                                     onClick={
@@ -207,7 +214,10 @@ const Detail = () => {
                                             ? productD?.variations?.length == 0 || (variant && variant?.stock_qty)
                                                 ? handleAddCart
                                                 : () => { }
-                                            : () => { }
+                                            : () => {
+                                                showMessageClient('Login before adding products to cart', '', 'warning');
+                                                navigate("/authentication")
+                                            }
                                     }
                                     className={`${user
                                         ? productD?.variations?.length == 0 || (variant && variant?.stock_qty)
@@ -221,7 +231,11 @@ const Detail = () => {
                                 </button>
 
                                 <button
-                                    onClick={() => handleAddFavourite(productD.id)}
+                                    onClick={() => {
+                                        user ? handleAddFavourite(productD.id) :
+                                            showMessageClient('Log in before adding products to your favorites list', '', 'warning');
+                                        navigate("/authentication")
+                                    }}
                                     className="h-[58px] color-primary border
                                     hover:border-[#111111] rounded-[30px] w-full
                                     transition-global mt-5 flex-row-center justify-center gap-x-2"

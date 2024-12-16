@@ -1,20 +1,21 @@
 import { Form } from 'antd';
 import { Link } from 'react-router-dom';
-import { CircleX, Hand, RefreshCcw, SquarePen, Trash2 } from 'lucide-react';
+import { CircleX, Hand, RefreshCcw } from 'lucide-react';
 
-import InputPrimary from '../../../../components/Input';
-import ButtonPrimary from '../../../../components/Button';
 import Heading from '../../components/Heading';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import TableAdmin from '../../components/Table';
 import useGroups from '../../../../hooks/useGroup';
-import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import { IGroup } from '../../../../interfaces/IGroup';
 import LoadingPage from '../../../../components/Loading/LoadingPage';
+import InputPrimary from '../../components/Forms/InputPrimary';
+import ButtonSubmit from '../../components/Button/ButtonSubmit';
+import ButtonUpdate from '../../components/Button/ButtonUpdate';
+import ButtonDelete from '../../components/Button/ButtonDelete';
 
 const ListGroups = ({ initialValues }: any) => {
     const [form] = Form.useForm();
-    const { loading, loadingDelete, groups, postGroup, deleteGroup, softGroup, restoreGroup } = useGroups();
+    const { loading, groups, postGroup, deleteGroup, softGroup, restoreGroup } = useGroups();
 
     const onFinish = (value: any) => {
         postGroup(value);
@@ -43,11 +44,7 @@ const ListGroups = ({ initialValues }: any) => {
             key: '4',
             render: (_: any, group: IGroup) => (
                 <div className="flex gap-2">
-                    <Link to={`/admin/update-product/${group.id}`}>
-                        <ButtonEdit>
-                            <SquarePen />
-                        </ButtonEdit>
-                    </Link>
+                    <ButtonUpdate to={`/admin/update-group/${group.id}`}></ButtonUpdate>
                     {group.deleted_at ? (
                         ''
                     ) : (
@@ -57,16 +54,16 @@ const ListGroups = ({ initialValues }: any) => {
                             </ButtonEdit>
                         </Link>
                     )}
-                    <ButtonEdit>
-                        {group.deleted_at ? (
+                    {group.deleted_at ? (
+                        <ButtonEdit onClick={() => restoreGroup(group.id)}>
                             <RefreshCcw onClick={() => restoreGroup(group.id)} />
-                        ) : (
-                            <CircleX onClick={() => softGroup(group.id)} />
-                        )}
-                    </ButtonEdit>
-                    <ButtonEdit onClick={() => handleDeleteGroup(group.id)}>
-                        {loadingDelete ? <LoadingSmall /> : <Trash2 />}
-                    </ButtonEdit>
+                        </ButtonEdit>
+                    ) : (
+                        <ButtonEdit onClick={() => softGroup(group.id)}>
+                            <CircleX />
+                        </ButtonEdit>
+                    )}
+                    <ButtonDelete onClick={() => handleDeleteGroup(group.id)}></ButtonDelete>
                 </div>
             ),
         },
@@ -80,18 +77,15 @@ const ListGroups = ({ initialValues }: any) => {
                 <Form form={form} initialValues={initialValues} onFinish={onFinish} layout="vertical">
                     <Heading>List Groups</Heading>
                     <div className="my-4 w-6/12">
-                        <Form.Item
+                        <InputPrimary
                             label="Group Name"
                             name="group_name"
                             rules={[{ required: true, message: 'Please enter group name' }]}
-                        >
-                            <InputPrimary placeholder="Group name" width="100%" height="h-[56px]" margin="mb-0" />
-                        </Form.Item>
+                            placeholder="Group name"
+                        ></InputPrimary>
 
                         <Form.Item>
-                            <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
-                                {loading ? <LoadingSmall /> : 'Submit'}
-                            </ButtonPrimary>
+                            <ButtonSubmit loading={loading} />
                         </Form.Item>
                     </div>
                     <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={groups} />

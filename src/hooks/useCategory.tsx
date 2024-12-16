@@ -26,7 +26,7 @@ const useCategory = () => {
 
             setCategories(data.categories.data);
         } catch (error) {
-            console.log(error);
+            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }
@@ -38,7 +38,7 @@ const useCategory = () => {
             const { data } = await tokenManagerInstance('get', 'api/main/categories?include=children');
             setMainCategoires(data.categories.data);
         } catch (error) {
-            console.log(error);
+            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }
@@ -143,7 +143,7 @@ const useCategory = () => {
             const { data } = await tokenManagerInstance('get', `${API_CATEGORY}/${id}`);
             return data.category; // Assuming the response has a `category` field
         } catch (error) {
-            console.error('Failed to fetch category:', error);
+            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
             throw error;
         } finally {
             setLoading(false);

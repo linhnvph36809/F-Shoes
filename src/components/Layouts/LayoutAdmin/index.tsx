@@ -8,8 +8,9 @@ import { items } from './datas';
 import { db } from '../../../../firebaseConfig';
 import { useContextGlobal } from '../../../contexts';
 import Logo from '../../Logo';
-import { Bell } from 'lucide-react';
+import { Bell, LogOut } from 'lucide-react';
 import useQueryConfig from '../../../hooks/useQueryConfig';
+import useAuth from '../../../hooks/useAuth';
 
 const { Header, Content, Sider } = Layout;
 
@@ -32,6 +33,7 @@ export const usePermissionContext = () => useContext(ContextAdmin);
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
     const { user } = useContextGlobal();
+    const { logout } = useAuth();
 
     useEffect(() => {
         const starCountRef = ref(db, `groups/1`);
@@ -63,7 +65,7 @@ const LayoutAdmin: React.FC = () => {
     }, [permissions]);
     const { data: countOrderWaiting } = useQueryConfig(
         ['orders', 'products', 'count-order-waiting'],
-        'api/v1/statistics/count/order/waitings'
+        'api/v1/statistics/count/order/waitings',
     );
     const [messageWaitingConfirm, setMessageWaitingConfirm] = useState(false);
 
@@ -98,23 +100,39 @@ const LayoutAdmin: React.FC = () => {
                 </Sider>
                 <Layout className="ml-[250px] relative min-h-[100vh]">
                     <Header className="bg-white px-5 py-10 flex justify-between items-center h-[70px]">
-                        <h3 className='text-[32px] font-semibold pl-5'>
-                            Overview
-                        </h3>
-                        <div className='relative right-8 ' onMouseEnter={() => setMessageWaitingConfirm(true)} onMouseLeave={() => setMessageWaitingConfirm(false)}>
-                            <span className='absolute -right-3 -top-2 flex items-center justify-center w-[18px] h-[18px] text-white font-medium text-[12px] rounded-full bg-[#d33918]'>{countOrderWaiting?.data?.data ? countOrderWaiting?.data?.data : ''}</span>
-                            <Bell className='size-10' />
-                            {
-                                messageWaitingConfirm ? <div className='w-[480px] h-[40px] absolute bg-slate-200 right-0 rounded-lg flex items-center justify-center text-gray-500 transition-all'>
-                                    {countOrderWaiting?.data?.data ?
-                                        <p>{`You have ${countOrderWaiting?.data?.data} orders on waiting confirmation. `}<Link to={`/admin/orderlist?status=waiting_confirm`}>Checkout!</Link></p>
-                                        : ''}
-                                </div> : ''
-                            }
+                        <h3 className="text-[32px] font-semibold pl-5">Overview</h3>
+                        <div
+                            className="flex items-center gap-x-12"
+                            onMouseEnter={() => setMessageWaitingConfirm(true)}
+                            onMouseLeave={() => setMessageWaitingConfirm(false)}
+                        >
+                            <div className="relative">
+                                <span className="absolute -right-3 -top-2 flex items-center justify-center w-[18px] h-[18px] text-white font-medium text-[12px] rounded-full bg-[#d33918]">
+                                    {countOrderWaiting?.data?.data ? countOrderWaiting?.data?.data : ''}
+                                </span>
+                                <Bell className="size-10" />
+                                {messageWaitingConfirm ? (
+                                    <div className="w-[480px] h-[40px] absolute bg-slate-200 right-0 rounded-lg flex items-center justify-center text-gray-500 transition-all">
+                                        {countOrderWaiting?.data?.data ? (
+                                            <p>
+                                                {`You have ${countOrderWaiting?.data?.data} orders on waiting confirmation. `}
+                                                <Link to={`/admin/orderlist?status=waiting_confirm`}>Checkout!</Link>
+                                            </p>
+                                        ) : (
+                                            ''
+                                        )}
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
+                            </div>
+                            <div className="flex items-center gap-x-2 text-[16px] font-medium hover:cursor-pointer hover:opacity-50 transition-global" onClick={() => logout()}>
+                                Logout <LogOut />
+                            </div>
                         </div>
                     </Header>
                     <Content className=" my-4 p-10 bg-[#F5F6FA]">
-                        <div className='bg-white p-10 rounded-[14px] min-h-[100vh]'>
+                        <div className="bg-white p-10 rounded-[14px] min-h-[100vh]">
                             <Outlet />
                         </div>
                     </Content>

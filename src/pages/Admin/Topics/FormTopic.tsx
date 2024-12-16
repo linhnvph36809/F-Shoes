@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { ConfigProvider, Form, Select } from 'antd';
 
-import InputPrimary from '../../../components/Input';
-import ButtonPrimary from '../../../components/Button';
 import Heading from '../components/Heading';
 import { ITopic } from '../../../interfaces/ITopic';
 import useQueryConfig from '../../../hooks/useQueryConfig';
+import InputPrimary from '../components/Forms/InputPrimary';
+import ButtonSubmit from '../components/Button/ButtonSubmit';
 
 const FormTopic = ({ title, initialValues, onFinish }: { title: string; initialValues: any; onFinish: any }) => {
     const [form] = Form.useForm();
@@ -43,6 +43,7 @@ const FormTopic = ({ title, initialValues, onFinish }: { title: string; initialV
                     <Form.Item
                         label="Parent Topic"
                         name="parent_topic_id"
+                        className='font-medium'
                         rules={[{ required: true, message: 'Please enter parent topic' }]}
                     >
                         <Select
@@ -56,22 +57,22 @@ const FormTopic = ({ title, initialValues, onFinish }: { title: string; initialV
                         />
                     </Form.Item>
                 </ConfigProvider>
-                <Form.Item
+                <InputPrimary
                     label="Topic Name"
                     name="topic_name"
                     rules={[{ required: true, message: 'Please enter group name' }]}
-                >
-                    <InputPrimary placeholder="Group name" width="100%" height="h-[56px]" margin="mb-0" />
-                </Form.Item>
+                    placeholder="Group name"
+                ></InputPrimary>
 
-                <Form.Item label="Slug" name="slug" rules={[{ required: true, message: 'Please enter slug' }]}>
-                    <InputPrimary placeholder="Group name" width="100%" height="h-[56px]" margin="mb-0" />
-                </Form.Item>
+                <InputPrimary
+                    label="Slug"
+                    name="slug"
+                    placeholder="Group name"
+                    rules={[{ required: true, message: 'Please enter slug' }]}
+                ></InputPrimary>
 
                 <Form.Item className="mt-20">
-                    <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
-                        Submit
-                    </ButtonPrimary>
+                    <ButtonSubmit />
                 </Form.Item>
             </div>
         </Form>

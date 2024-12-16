@@ -38,11 +38,14 @@ const ModalViewDetail = ({ product }: any) => {
                             </p>
                         </div>
                     </div>
-                    <div className="text-[14px] color-gray font-normal mt-5" dangerouslySetInnerHTML={{ __html: product?.short_description }} >
-                    </div>
-                    <div className="text-[16px] font-normal my-5 color-primary" dangerouslySetInnerHTML={{ __html: product?.description }} >
-
-                    </div>
+                    <div
+                        className="text-[14px] color-gray font-normal mt-5"
+                        dangerouslySetInnerHTML={{ __html: product?.short_description }}
+                    ></div>
+                    <div
+                        className="text-[16px] font-normal my-5 color-primary"
+                        dangerouslySetInnerHTML={{ __html: product?.description }}
+                    ></div>
                     <div className="font-medium text-[18px] pb-5 color-primary">
                         Benefits
                         <ul className="list-disc list-outside pl-10 my-2">
@@ -63,14 +66,18 @@ const ModalViewDetail = ({ product }: any) => {
                     <div className="font-medium text-[18px] pb-5 color-primary">
                         Product details
                         <ul className="list-disc list-outside pl-10 my-2">
-                            <li className="color-primary text-[16px] font-normal">
-                                Variants :{' '}
-                                {product?.variations?.map((variation: any) => (
-                                    <span key={variation?.id} className="font-medium">
-                                        {variation?.classify},
-                                    </span>
-                                ))}
-                            </li>
+                            {product?.variations.length ? (
+                                <li className="color-primary text-[16px] font-normal">
+                                    Variants :{' '}
+                                    {product?.variations?.map((variation: any) => (
+                                        <span key={variation?.id} className="font-medium">
+                                            {variation?.classify},
+                                        </span>
+                                    ))}
+                                </li>
+                            ) : (
+                                ''
+                            )}
                             <li className="color-primary text-[16px] font-normal">
                                 Stock Quantity : <span className="font-medium">{product?.stock_qty}</span>
                             </li>

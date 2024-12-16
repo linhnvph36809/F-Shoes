@@ -10,6 +10,7 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import SelectPrimary from '../../components/Forms/SelectPrimary';
 import InputPrimary from '../../components/Forms/InputPrimary';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
+import ButtonBack from '../../components/ButtonBack';
 
 const Addorder = () => {
     const { data } = useQueryConfig(
@@ -160,6 +161,7 @@ const Addorder = () => {
     return (
         <div style={{ fontSize: '20px' }}>
             <Form onFinish={onFinish} layout="vertical" style={{ fontSize: '18px' }}>
+                <ButtonBack to="/admin/orderlist" />
                 <Heading>Add Order</Heading>
 
                 {/* Select User */}
