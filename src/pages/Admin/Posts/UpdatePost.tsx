@@ -8,6 +8,7 @@ import LoadingBlock from '../../../components/Loading/LoadingBlock';
 import { PATH_ADMIN } from '../../../constants/path';
 import { KEY } from './index';
 import { COOKIE_USER } from '../../../constants';
+import ButtonBack from '../components/ButtonBack';
 
 const UpdatePost = () => {
     const { id } = useParams();
@@ -32,7 +33,10 @@ const UpdatePost = () => {
             {isFetching ? (
                 <LoadingBlock />
             ) : (
-                <FormPost title="Update Post" onFinish={onFinish} initialValues={initialValues} loading={loading} />
+                <div>
+                    <ButtonBack to="/admin/posts" />
+                    <FormPost title="Update Post" onFinish={onFinish} initialValues={initialValues} loading={loading} />
+                </div>
             )}
         </>
     );

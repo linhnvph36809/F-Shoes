@@ -4,10 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import useGroups from '../../../../hooks/useGroup';
-import ButtonPrimary from '../../../../components/Button';
-import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import { ACTIONS, ACTIONS_LIST, PERMISSION } from '../../../../constants';
 import LoadingPage from '../../../../components/Loading/LoadingPage';
+import ButtonSubmit from '../../components/Button/ButtonSubmit';
+import ButtonBack from '../../components/ButtonBack';
 
 const { Title } = Typography;
 
@@ -86,7 +86,8 @@ const Authorization = () => {
     }, []);
 
     return (
-        <Card title="" bordered={false} style={{ margin: '20px' }}>
+        <div>
+            <ButtonBack to="/admin/groups" />
             <Heading>Authorization : Customer</Heading>
             <hr className="my-4" />
             <Title level={2} style={{ fontSize: '24px', color: '#595959', marginBottom: '20px' }}>
@@ -132,10 +133,8 @@ const Authorization = () => {
                     <LoadingPage />
                 )}
             </div>
-            <ButtonPrimary onClick={handleSubmit} width="w-[100px]" height="h-[40px]">
-                {loadingDelete ? <LoadingSmall /> : 'Submit'}
-            </ButtonPrimary>
-        </Card>
+            <ButtonSubmit loading={loadingDelete} onClick={handleSubmit} />
+        </div>
     );
 };
 

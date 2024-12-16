@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { ConfigProvider, Form, Select, Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
-import InputPrimary from '../../../components/Input';
 import ButtonPrimary from '../../../components/Button';
 import Heading from '../components/Heading';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import EditorComponent from '../Products/components/FormProduct/Editor';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
 import { useContextGlobal } from '../../../contexts';
+import InputPrimary from '../components/Forms/InputPrimary';
+import ButtonSubmit from '../components/Button/ButtonSubmit';
 
 const FormPost = ({
     title,
@@ -79,11 +80,12 @@ const FormPost = ({
                     <Form.Item
                         label="Topic"
                         name="topic_id"
+                        className="font-medium"
                         rules={[{ required: true, message: 'Please enter parent topic' }]}
                     >
                         <Select
                             allowClear
-                            className="text-20px font-medium w-full sm:h-[45px] md:h-[56px] border-1 border-[#111111]"
+                            className="font-medium w-full sm:h-[45px] md:h-[50px] border-1 border-[#111111]"
                             placeholder="Please select"
                             optionFilterProp="name"
                             fieldNames={{ label: 'topic_name', value: 'id' }}
@@ -93,16 +95,14 @@ const FormPost = ({
                     </Form.Item>
                 </ConfigProvider>
 
-                <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Please enter Title' }]}>
-                    <InputPrimary placeholder="Title" width="100%" height="h-[56px]" margin="mb-0" />
-                </Form.Item>
+                <InputPrimary label="Title" name="title" placeholder="Title" rules={[{ required: true, message: 'Please enter Title' }]}>
+                </InputPrimary>
 
-                <Form.Item label="Slug" name="slug" rules={[{ required: true, message: 'Please enter slug' }]}>
-                    <InputPrimary placeholder="Group name" width="100%" height="h-[56px]" margin="mb-0" />
-                </Form.Item>
+                <InputPrimary label="Slug" placeholder="Slug" name="slug" rules={[{ required: true, message: 'Please enter slug' }]}>
+                </InputPrimary>
             </div>
 
-            <Form.Item label="Content" name="content" rules={[{ required: true, message: 'Please enter content' }]}>
+            <Form.Item label="Content" className='font-medium' name="content" rules={[{ required: true, message: 'Please enter content' }]}>
                 <EditorComponent
                     initialValues={initialValues?.content}
                     setDescription={(content: string) => {
@@ -119,6 +119,7 @@ const FormPost = ({
             )}
             <Form.Item
                 label="Image"
+                className='font-medium'
                 name="theme"
                 rules={initialValues?.theme ? [] : [{ required: true, message: 'Please upload an image' }]}
             >
@@ -128,9 +129,7 @@ const FormPost = ({
             </Form.Item>
 
             <Form.Item className="mt-20">
-                <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
-                    {loading ? <LoadingSmall /> : 'Submit'}
-                </ButtonPrimary>
+                <ButtonSubmit loading={loading} />
             </Form.Item>
         </Form>
     );

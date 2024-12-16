@@ -1,29 +1,33 @@
 import { Form } from 'antd';
 import { Link } from 'react-router-dom';
-import { SquarePen, Trash2 } from 'lucide-react';
+import { SquarePen } from 'lucide-react';
 
-import InputPrimary from '../../../../components/Input';
 import Heading from '../../components/Heading';
-import ButtonPrimary from '../../../../components/Button';
 import TableAdmin from '../../components/Table';
 import { columnsAttribute } from './datas';
-import useAttribute from '../../../../hooks/useAttribute';
+import useAttribute, { QUERY_KEY } from '../../../../hooks/useAttribute';
 import SkeletonComponent from '../../components/Skeleton';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { PATH_ADMIN } from '../../../../constants/path';
+import ButtonDelete from '../../components/Button/ButtonDelete';
+import { showMessageActive } from '../../../../utils/messages';
+import InputPrimary from '../../components/Forms/InputPrimary';
+import ButtonSubmit from '../../components/Button/ButtonSubmit';
 
 export const API_ATTRIBUTE_ADD = '/api/attribute?include=values&times=attribute';
 export const KEY = 'attribute';
 
 const AddAttribute = () => {
     const [form] = Form.useForm();
-    const { data, refetch } = useQueryConfig(KEY, API_ATTRIBUTE_ADD);
-    const { loading, postAttributeName, deleteAttribute } = useAttribute();
+    const { data, refetch, isFetching } = useQueryConfig([QUERY_KEY, KEY], API_ATTRIBUTE_ADD);
+    const { postAttributeName, deleteAttribute } = useAttribute();
     const handleDeleteAttribute = (id: string | number) => {
         if (id) {
-            deleteAttribute(id);
-            refetch();
+            showMessageActive('Are you sure you want to delete Attribute?', '', 'warning', () => {
+                deleteAttribute(id);
+                refetch();
+            });
         }
     };
 
@@ -39,9 +43,7 @@ const AddAttribute = () => {
                             <SquarePen />
                         </ButtonEdit>
                     </Link>
-                    <ButtonEdit onClick={() => handleDeleteAttribute(id)}>
-                        <Trash2 />
-                    </ButtonEdit>
+                    <ButtonDelete onClick={() => handleDeleteAttribute(id)} />
                 </div>
             );
         },
@@ -55,32 +57,36 @@ const AddAttribute = () => {
         refetch();
     };
 
-
-
     return (
         <>
-            {loading ? (
-                <SkeletonComponent />
-            ) : (
-                <section>
-                    <Heading>Attribute</Heading>
-                    <Form form={form} name="basic" onFinish={onFinish} autoComplete="off">
-                        <Form.Item name="name" rules={[{ required: true, message: 'Please input Attribute Name!' }]}>
-                            <InputPrimary placeholder="Attribute Name" width="w-1/2" />
-                        </Form.Item>
-                        <Form.Item>
-                            <div className="text-start">
-                                <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
-                                    Submit
-                                </ButtonPrimary>
-                            </div>
-                        </Form.Item>
-                    </Form>
-                    <div>
+
+            <section>
+                <Heading>Attribute</Heading>
+                <Form form={form} name="basic" onFinish={onFinish} autoComplete="off">
+                    <InputPrimary
+                        label="Attribute Name"
+                        name="name"
+                        rules={[{ required: true, message: 'Please enter Attribute Name!' }]}
+                        placeholder="Enter attribute Name"
+                        width="w-1/2"
+                    />
+
+                    <Form.Item>
+                        <div className="text-start">
+                            <ButtonSubmit />
+                        </div>
+                    </Form.Item>
+                </Form>
+                <div>
+                    {isFetching ? (
+                        <SkeletonComponent />
+                    ) :
                         <TableAdmin columns={[...columnsAttribute, Edit]} rowKey="id" datas={data?.data[0].data} />
-                    </div>
-                </section>
-            )}
+                    }
+                </div>
+
+            </section>
+
         </>
     );
 };
