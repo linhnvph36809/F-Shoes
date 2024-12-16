@@ -51,6 +51,7 @@ const usePost = () => {
             });
             navigate('/admin/posts');
         } catch (error: any) {
+            console.log(error);
             if (error?.response?.data?.message && error?.response?.status) {
                 alert(error?.response?.data?.message as any);
             } else {

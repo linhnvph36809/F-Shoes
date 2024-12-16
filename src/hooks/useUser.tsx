@@ -28,7 +28,7 @@ const useUser = () => {
     const addUser = async (userData: IUser) => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('post', API_USER, userData);
+            const { data } = await tokenManagerInstance('post', `${API_USER}?time=user`, userData);
             navigate(PATH_LIST_USER);
             setUsers((prevUsers) => [...prevUsers, data.user]);
         } catch (error) {
