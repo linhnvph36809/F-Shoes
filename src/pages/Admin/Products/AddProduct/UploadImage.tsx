@@ -24,7 +24,7 @@ const UploadImage = ({
     handleCheckboxChange: (image: IImage) => void;
 }) => {
     const [page, setPage] = useState(1);
-    const { data, isFetching, refetch } = useQueryConfig(`image-${page}`, `/api/image?page=${page}`);
+    const { data, isFetching, refetch } = useQueryConfig(`image-${page}`, `/api/image?paginate=true&page=${page}`);
     const images = data?.data.data || [];
 
     const [previewOpen, setPreviewOpen] = useState(false);
