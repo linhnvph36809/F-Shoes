@@ -248,14 +248,6 @@ const AddVariant = () => {
                                     rowKey={(record) => `table2-${record.id}`}
                                     columns={[
                                         {
-                                            title: 'ID',
-                                            dataIndex: 'id',
-                                            key: '1',
-                                            render: (_, { id }: any) => {
-                                                return <p>{id.join(',')}</p>;
-                                            },
-                                        },
-                                        {
                                             title: 'Variant Name',
                                             dataIndex: 'variant_name',
                                             key: '2',
