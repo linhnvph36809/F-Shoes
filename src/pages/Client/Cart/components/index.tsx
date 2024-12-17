@@ -16,8 +16,6 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
         'api/auth/me?include=profile,favoriteProducts&times=user',
     );
 
-    console.log(product);
-
     const onChange = (id: string | number, value: any) => {
         if (value) {
             putCart(id, {
