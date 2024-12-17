@@ -107,11 +107,11 @@ const useAuth = () => {
             handleRemoveLocalStorage(INFO_AUTH.adminId);
             handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
             handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
-            navigate('/');
-            setUserGlobal({});
+            setUserGlobal(undefined);
             setUserName('');
             showMessageClient('Logout Successfuly', '', 'success');
             queryClient.clear();
+            navigate('/');
         } catch (error) {
             showMessageClient((error as any).response.data.message || 'Something went wrong!', '', 'error');
         } finally {

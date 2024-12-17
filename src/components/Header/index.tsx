@@ -75,7 +75,7 @@ const Header = () => {
         } else {
             setAllProducts([...listOriginAllProducts]);
         }
-    }, [dataAllProduct?.data?.products,searchKey]);
+    }, [dataAllProduct?.data?.products, searchKey]);
     const handleSearch = () => {
         if (searchKey === '') {
             setErrorSearchKey(true);
@@ -179,8 +179,9 @@ const Header = () => {
                     </div>
                 </div>
                 <div
-                    className={`${scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
-                        } bg-white transition-all duration-300 ease-linear`}
+                    className={`${
+                        scrollPosition.isFixed ? 'is-fixed' : 'relative top-0'
+                    } bg-white transition-all duration-300 ease-linear`}
                 >
                     <div className="container flex-row-center justify-between">
                         <div>
@@ -294,8 +295,9 @@ const Header = () => {
                                         value={searchKey}
                                         placeholder={intl.formatMessage({ id: 'header.search' })}
                                         className={`w-[180px] h-[36px] rounded-[100px] bg-whitesmoke
-                                         color-primary font-medium  pl-0 hover:bg-[#e5e5e5] focus:shadow-none ${errorSearchKey ? 'border border-red-500' : 'border-0'
-                                            }`}
+                                         color-primary font-medium  pl-0 hover:bg-[#e5e5e5] focus:shadow-none ${
+                                             errorSearchKey ? 'border border-red-500' : 'border-0'
+                                         }`}
                                         prefix={
                                             <div
                                                 className="rounded-full flex-row-center justify-center
@@ -334,8 +336,9 @@ const Header = () => {
                     <div className="absolute top-full w-full bg-white z-10">
                         <div
                             className={`w-[70%] overflow-hidden mx-auto grid grid-cols-4
-                            transition-all duration-100 ease-linear ${showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
-                                } `}
+                            transition-all duration-100 ease-linear ${
+                                showMenu ? 'h-auto opacity-1 py-20' : 'h-0 opacity-0 py-0'
+                            } `}
                             onMouseLeave={() => setShowMenu(false)}
                             onMouseEnter={() => {
                                 setShowMenu(true);
