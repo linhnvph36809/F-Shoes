@@ -8,6 +8,7 @@ import { formatPrice, formatTime } from '../../../utils';
 import BrushChart from './components/BrushChart';
 import ColumnChart from './components/ColumnChart';
 import BestSellingProduct from './components/BestSellingProduct';
+import { FormattedMessage } from 'react-intl';
 
 const { RangePicker } = DatePicker;
 
@@ -84,7 +85,9 @@ const AdminDashboard = () => {
     return (
         <Content>
             <div className="flex justify-between items-center">
-                <Heading>Dashboard</Heading>
+                <Heading>
+                    <FormattedMessage id="admin.dashboard" />
+                </Heading>
                 <div className="flex gap-x-5 mb-10">
                     <RangePicker
                         onChange={handleChange}
