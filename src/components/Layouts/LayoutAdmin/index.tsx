@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { ConfigProvider, Layout, Menu } from 'antd';
+import { ConfigProvider, Dropdown, Layout, Menu } from 'antd';
 import { ref, onValue } from 'firebase/database';
 import './style.scss';
 
@@ -8,9 +8,10 @@ import { items } from './datas';
 import { db } from '../../../../firebaseConfig';
 import { useContextGlobal } from '../../../contexts';
 import Logo from '../../Logo';
-import { Bell, LogOut } from 'lucide-react';
+import { Bell, Globe, LogOut } from 'lucide-react';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import useAuth from '../../../hooks/useAuth';
+import { LANGUAGE_EN, LANGUAGE_VI } from '../../../constants';
 
 const { Header, Content, Sider } = Layout;
 
@@ -32,11 +33,11 @@ export const usePermissionContext = () => useContext(ContextAdmin);
 
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
-    const { user } = useContextGlobal();
+    const { locale, changeLanguage, user } = useContextGlobal();
     const { logout } = useAuth();
 
     useEffect(() => {
-        const starCountRef = ref(db, `groups/1`);
+        const starCountRef = ref(db, `groups/${user?.group_id}`);
         const unsubscribe = onValue(starCountRef, (snapshot) => {
             try {
                 const data = snapshot.val();
@@ -110,6 +111,21 @@ const LayoutAdmin: React.FC = () => {
                             }}
                             onMouseLeave={() => setMessageWaitingConfirm(false)}
                         >
+                            <Dropdown
+                                className="hover:cursor-pointer"
+                                overlay={
+                                    <Menu className="color-primary font-medium">
+                                        <Menu.Item onClick={() => changeLanguage(LANGUAGE_VI)}>Viet Nam</Menu.Item>
+                                        <Menu.Item onClick={() => changeLanguage(LANGUAGE_EN)}>English</Menu.Item>
+                                    </Menu>
+                                }
+                                trigger={['click']}
+                            >
+                                <p className="text-[14px] color-primary font-medium hover:opacity-70 flex items-center gap-x-3">
+                                    <Globe className="w-8" />
+                                    {locale === LANGUAGE_VI ? 'Viet Nam' : 'English'}
+                                </p>
+                            </Dropdown>
                             <div className="relative">
                             {countOrderWaiting?.data?.data ?
                                 <span className="absolute -right-3 -top-2 flex items-center justify-center w-[18px] h-[18px] text-white font-medium text-[12px] rounded-full bg-[#d33918]">
@@ -132,7 +148,10 @@ const LayoutAdmin: React.FC = () => {
                                     ''
                                 )}
                             </div>
-                            <div className="flex items-center gap-x-2 text-[16px] font-medium hover:cursor-pointer hover:opacity-50 transition-global" onClick={() => logout()}>
+                            <div
+                                className="flex items-center gap-x-2 text-[16px] font-medium hover:cursor-pointer hover:opacity-50 transition-global"
+                                onClick={() => logout()}
+                            >
                                 Logout <LogOut />
                             </div>
                         </div>

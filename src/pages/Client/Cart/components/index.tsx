@@ -6,7 +6,6 @@ import useWishlist from '../../../../hooks/useWishlist';
 import { formatPrice } from '../../../../utils';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { FormattedMessage } from 'react-intl';
-import { showMessageClient } from '../../../../utils/messages';
 
 const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
     const { putCart } = useCart();
@@ -16,7 +15,6 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
         'api/auth/me?include=profile,favoriteProducts&times=user',
     );
 
-    console.log(product);
 
     const onChange = (id: string | number, value: any) => {
         if (value) {
@@ -25,13 +23,16 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
             });
             refetch();
         } else {
-            showMessageClient('The quantity must be greater than 0', '', 'warning');
+            putCart(id, {
+                quantity: product.quantity,
+            });
+            refetch();
+
+
         }
     };
 
     const handleAddFavourite = (id: number) => {
-        console.log(id);
-
         postWishlist(id);
         refetchWishlist();
     };
@@ -51,6 +52,8 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
             });
         }
     };
+
+
 
     return (
         <>

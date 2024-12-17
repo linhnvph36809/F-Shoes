@@ -50,6 +50,7 @@ const Detail = () => {
 
     const productD = products;
 
+    console.log(user);
 
     //to test component replace if(variationD) below into => if(product && product?.variations)
 
@@ -85,6 +86,11 @@ const Detail = () => {
         }
         postCart(datas);
     };
+
+    const handleNotLogin = () => {
+        showMessageClient('Log in before adding products to your favorites list', '', 'warning');
+        navigate("/authentication")
+    }
 
     useEffect(() => {
         if (idVariants.length == products?.attributes.length) {
@@ -126,7 +132,6 @@ const Detail = () => {
             );
     }
 
-    console.log(variant);
 
     return (
         <>
@@ -233,8 +238,7 @@ const Detail = () => {
                                 <button
                                     onClick={() => {
                                         user ? handleAddFavourite(productD.id) :
-                                            showMessageClient('Log in before adding products to your favorites list', '', 'warning');
-                                        navigate("/authentication")
+                                            handleNotLogin()
                                     }}
                                     className="h-[58px] color-primary border
                                     hover:border-[#111111] rounded-[30px] w-full

@@ -9,7 +9,7 @@ import PaginationComponent from '../../../../components/Pagination';
 
 const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const { data, isFetching, refetch } = useQueryConfig('image', `/api/image?paginate=true&page=${currentPage}`);
+    const { data, isFetching, refetch } = useQueryConfig('image-add-product', `/api/image?paginate=true&page=${currentPage}`);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
     const images = data?.data.data || [];
@@ -71,7 +71,7 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) =>
 
         setImages((preImage: any) => {
             const newValues = images.filter((image: any) => {
-                if (value.images.includes(image.id)) {
+                if (value?.images?.includes(image.id)) {
                     return image.url;
                 }
             });

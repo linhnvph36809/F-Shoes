@@ -5,6 +5,7 @@ import { showMessageClient } from '../utils/messages';
 
 const API_WISHLIST = 'api/user/add-favorite/product/';
 
+export const QUERY_KEY = 'favorites';
 const useWishlist = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
