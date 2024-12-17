@@ -49,7 +49,7 @@ const LayoutAdmin: React.FC = () => {
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [user]);
 
     const itemsPermission = useMemo(() => {
         return items?.filter((item: any) => {
@@ -63,7 +63,7 @@ const LayoutAdmin: React.FC = () => {
                 return true;
             }
         });
-    }, [permissions]);
+    }, [permissions, user]);
     const { data: countOrderWaiting } = useQueryConfig(
         ['orders', 'products', 'count-order-waiting'],
         'api/v1/statistics/count/order/waitings',
