@@ -23,7 +23,7 @@ export const items: MenuProps['items'] = [
     {
         key: '1',
         icon: <House className="w-[18px]" />,
-        label: <Link to="">Dashboard</Link>,
+        label: <Link to="">Home</Link>,
     },
     {
         key: '2',

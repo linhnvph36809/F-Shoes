@@ -1,4 +1,4 @@
-import { ConfigProvider, Table } from 'antd';
+import { Button, ConfigProvider, Table } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -7,17 +7,19 @@ import { IAttribute } from '../../../../interfaces/IAttribute';
 
 import Heading from '../../components/Heading';
 import FormAttribute from '../components/FormAttribute';
-import SkeletonComponent from '../../components/Skeleton';
+
 import { combine } from './datas';
 import useVariant from '../../../../hooks/useVariant';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import ModalFormVariant from './ModalFormVariant';
-import { showMessageClient } from '../../../../utils/messages';
+import { showMessageActive, showMessageClient } from '../../../../utils/messages';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import { PATH_ADMIN } from '../../../../constants/path';
 import ButtonBack from '../../components/ButtonBack';
 import { formatPrice } from '../../../../utils';
 import SelectPrimary from '../../components/Forms/SelectPrimary';
+
+import ButtonDelete from '../../components/Button/ButtonDelete';
 
 const API_ATTRIBUTE_GET = '/api/get/attribute/values/product/';
 
@@ -32,7 +34,7 @@ const AddVariant = () => {
     const [variantsChanges, setVariantsChanges] = useState<IAttribute[]>([]);
     const [variantId, setVariantId] = useState<number[]>([]);
     const [listAttribute, setListAttribute] = useState<any>([]);
-    const { loading, postAttribute } = useAttribute();
+    const { loading:loadingPostAttribute, postAttribute } = useAttribute();
     const [datas, setDatas] = useState<any>([]);
     const [errors, setError] = useState<any>([]);
     const { data: attributeByIds, refetch } = useQueryConfig('attribute', API_ATTRIBUTE_GET + id);
@@ -49,14 +51,15 @@ const AddVariant = () => {
             });
         }
     };
-
+    
     const handleChange = useCallback((listId: number[]) => {
         setVariantId([...listId]);
         setVariantsChanges((preVariantChanges) =>
             preVariantChanges.filter((preVariantChange) => listId.includes(+preVariantChange.id)),
         );
     }, []);
-
+    
+    
     const handleChangeItem = useCallback(
         (values: number[], id: number) => {
             const attribute = attributeByIds?.data?.find((attribute: any) => attribute.id === id);
@@ -106,7 +109,6 @@ const AddVariant = () => {
             return acc;
         }, []);
         const variantCombine = combine(formatVariantsChanges);
-
         setDatas((preData: any) => {
             if (preData.length) {
                 if (preData.length < variantCombine.length) {
@@ -123,12 +125,23 @@ const AddVariant = () => {
         });
         setListAttribute(variantCombine);
     }, [variantsChanges]);
-
+   
+    const deleteVariations = (i:any) => {
+        showMessageActive('Are you sure you want to delete?','','warning',() => {
+            const listOriginAttribute = JSON.parse(JSON.stringify([...listAttribute]));
+            listOriginAttribute.splice(i,1);
+            setListAttribute([...listOriginAttribute]);
+            const listOriginData = JSON.parse(JSON.stringify([...datas]));
+            listOriginData.splice(i,1);
+            
+            setDatas([...listOriginData]);
+            console.log(listOriginData,'data');
+            
+        })
+        
+    }
     return (
         <>
-            {loading ? (
-                <SkeletonComponent />
-            ) : (
                 <section>
                     <ButtonBack to={PATH_ADMIN.LIST_PRODUCT} />
                     <Heading>Add Variant</Heading>
@@ -180,7 +193,8 @@ const AddVariant = () => {
                                 ))}
                             </div>
                             <div className="mt-10">
-                                <FormAttribute
+                                <FormAttribute 
+                                    loading={loadingPostAttribute}
                                     handlePostAttributes={handlePostAttributes}
                                     setVariantId={setVariantId}
                                 />
@@ -248,7 +262,7 @@ const AddVariant = () => {
                                     rowKey={(record) => `table2-${record.id}`}
                                     columns={[
                                         {
-                                            title: 'Variant Name',
+                                            title: 'Variant Name ',
                                             dataIndex: 'variant_name',
                                             key: '2',
                                         },
@@ -272,6 +286,8 @@ const AddVariant = () => {
                                                         ) : (
                                                             ''
                                                         )}
+                                                        <ButtonDelete onClick={() => deleteVariations(index)
+                                                        } />
                                                     </div>
                                                 );
                                             },
@@ -298,7 +314,7 @@ const AddVariant = () => {
                         </div>
                     </div>
                 </section>
-            )}
+           
         </>
     );
 };

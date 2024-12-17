@@ -104,7 +104,11 @@ const LayoutAdmin: React.FC = () => {
                         <h3 className="text-[32px] font-semibold pl-5">Overview</h3>
                         <div
                             className="flex items-center gap-x-12"
-                            onMouseEnter={() => setMessageWaitingConfirm(true)}
+                            onMouseEnter={() => {
+                                if(countOrderWaiting?.data?.data > 0){
+                                    setMessageWaitingConfirm(true)
+                                }
+                            }}
                             onMouseLeave={() => setMessageWaitingConfirm(false)}
                         >
                             <Dropdown
@@ -123,9 +127,11 @@ const LayoutAdmin: React.FC = () => {
                                 </p>
                             </Dropdown>
                             <div className="relative">
+                            {countOrderWaiting?.data?.data ?
                                 <span className="absolute -right-3 -top-2 flex items-center justify-center w-[18px] h-[18px] text-white font-medium text-[12px] rounded-full bg-[#d33918]">
-                                    {countOrderWaiting?.data?.data ? countOrderWaiting?.data?.data : ''}
+                                     {countOrderWaiting?.data?.data }
                                 </span>
+                                : ''}
                                 <Bell className="size-10" />
                                 {messageWaitingConfirm ? (
                                     <div className="w-[480px] h-[40px] absolute bg-slate-200 right-0 rounded-lg flex items-center justify-center text-gray-500 transition-all">

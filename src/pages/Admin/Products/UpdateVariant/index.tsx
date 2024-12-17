@@ -2,7 +2,7 @@ import { ConfigProvider, Select, Table } from 'antd';
 import { useEffect, useState } from 'react';
 
 import Heading from '../../components/Heading';
-import SkeletonComponent from '../../components/Skeleton';
+
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { useParams } from 'react-router-dom';
 import FormUpdateVariant from './FormUpdateVariant';
@@ -11,6 +11,7 @@ import ButtonDelete from '../../components/Button/ButtonDelete';
 import useVariant from '../../../../hooks/useVariant';
 import ButtonBack from '../../components/ButtonBack';
 import { PATH_ADMIN } from '../../../../constants/path';
+import ButtonSubmit from '../../components/Button/ButtonSubmit';
 
 const UpdateVariant = () => {
     const { slug } = useParams();
@@ -19,18 +20,43 @@ const UpdateVariant = () => {
         const index = slug.lastIndexOf('.');
         id = slug.substring(index + 1);
     }
-
+    
     const { data, isFetching, refetch } = useQueryConfig(
         `update-product-variant-${id}`,
         `/api/product/${id}}/variation`,
     );
-    const { deleteVariant } = useVariant();
+    const [variantDeleteId,setVariantDeleteId] = useState<number>(0);
+    useEffect(() => {
+        if(variantDeleteId !== 0 ){
+            deleteVariant(variantDeleteId);
+            
+        }
+    },[variantDeleteId]);
+   
+    const { deleteVariant,loading:loadingDeleteVariant } = useVariant();
+    useEffect(() => {
+        if(!loadingDeleteVariant){
+            setVariantDeleteId(0);
+            const originListVariations = JSON.parse(JSON.stringify([...listVariations]));
+            const filtered = originListVariations.filter((v:any) => {
+                return v.id!== variantDeleteId;
+            });
+            setListVariations([...filtered]);
+        }
+    },[loadingDeleteVariant]);
+    const [listVariations,setListVariations] = useState<any>([]);
+    useEffect(() => {
+        if(data?.data?.data?.variations){
+            setListVariations([...data?.data?.data?.variations]);
+        }
+    },[data]);
     const variantByIds = data?.data.data || [];
-
+    
+    
     const [idVariant, setIdVariant] = useState([]);
 
     const handleDeleteVariant = (id: number) => {
-        deleteVariant(id);
+        setVariantDeleteId(id);
         refetch();
     };
 
@@ -40,9 +66,7 @@ const UpdateVariant = () => {
 
     return (
         <>
-            {isFetching ? (
-                <SkeletonComponent />
-            ) : (
+        
                 <section>
                     <ButtonBack to={PATH_ADMIN.LIST_PRODUCT} />
                     <Heading>Update Variant</Heading>
@@ -166,6 +190,10 @@ const UpdateVariant = () => {
                                                 title: 'Action',
                                                 key: '3',
                                                 render: (_, { id, stock_qty, price, sku, images, values }: any) => {
+                                                    let buttonDelete = <ButtonDelete onClick={() => handleDeleteVariant(id)} />;
+                                                    if(loadingDeleteVariant && id === variantDeleteId){
+                                                        buttonDelete = <ButtonSubmit loading={true} />
+                                                    }
                                                     return (
                                                         <div className="flex items-center gap-x-4">
                                                             <FormUpdateVariant
@@ -178,20 +206,20 @@ const UpdateVariant = () => {
                                                                     values: values.map((value: any) => value.id),
                                                                 }}
                                                             />
-                                                            <ButtonDelete onClick={() => handleDeleteVariant(id)} />
+                                                            {buttonDelete}
                                                         </div>
                                                     );
                                                 },
                                             },
                                         ]}
-                                        dataSource={variantByIds?.variations || []}
+                                        dataSource={listVariations}
                                     />
                                 </ConfigProvider>
                             </div>
                         </div>
                     </div>
                 </section>
-            )}
+           
         </>
     );
 };
