@@ -11,13 +11,16 @@ import { COOKIE_USER } from '../../../constants';
 import { IUser } from '../../../interfaces/IUser.ts';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import { Link } from 'react-router-dom';
-import  { useState } from 'react';
+import { useState } from 'react';
 
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Flex, message, Upload } from 'antd';
 import type { GetProp, UploadProps } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { QUERY_KEY as QUERY_KEY_PROFILE } from '../../../hooks/page/useProfile.tsx';
+import axios from 'axios';
+import { tokenManagerInstance } from '../../../api/index.tsx';
+import { showMessageActive, showMessageAdmin, showMessageClient } from '../../../utils/messages.ts';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -42,7 +45,7 @@ const ProfilePage = () => {
     const { cookies } = useCookiesConfig(COOKIE_USER);
     const userNameCookie = cookies?.userName;
     const { data, isFetching, refetch } = useQueryConfig(
-        [QUERY_KEY_PROFILE,'user-profile'],
+        [QUERY_KEY_PROFILE, 'user-profile'],
         'api/auth/me?include=profile,favoriteProducts&times=user',
         {
             cacheTime: 1000 * 60 * 10,
@@ -101,6 +104,22 @@ const ProfilePage = () => {
             <div style={{ marginTop: 8 }}>Upload</div>
         </button>
     );
+    const handleRemoveFavorite = async (id: any) => {
+        showMessageActive(
+            'Bạn có chắc chắn muốn xoá sản phẩm này khỏi danh sách yêu thích?',
+            '',
+            'warning',
+            async () => {
+                try {
+                    await tokenManagerInstance('delete', `/api/user/remove-favorite/product/${id}`);
+                    showMessageClient('Đã xoá sản phẩm khỏi danh sách yêu thích.', '', 'success');
+                    refetch();
+                } catch (error) {
+                    showMessageClient('Error', (error as any).message, 'error');
+                }
+            },
+        );
+    };
     return (
         <>
             <div className="bg-white w-full p-6 mt-0 rounded-lg shadow-md relative">
@@ -139,41 +158,58 @@ const ProfilePage = () => {
                     <div>
                         <Heading title={<FormattedMessage id="body.Detail.Favourite" />} />
                         {isFetching ? (
-                            <div className="py-8">
+                            <div className="py-10">
                                 <SkeletonComponent />
                             </div>
                         ) : (
-                            <SlidesScroll className="slidesProducts pb-20 mt-[50px]">
+                            <SlidesScroll className="slidesProducts pb-40 mt-[50px]">
                                 {listFavoriteProducts.length ? (
                                     listFavoriteProducts.map((item: IProduct) => (
                                         <SwiperSlide>
-                                            <div>
-                                                <a href={`detail/${item.slug}`}>
-                                                    <div>
-                                                        <img src={item.image_url} alt="" />
+                                            <div className="p-6 relative">
+                                                <div className="relative h-[500px] group">
+                                                    <img
+                                                        src={item.image_url}
+                                                        alt={item.name}
+                                                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                    />
+                                                    {/* Icon Xoá Chỉ Hiển Thị Trên Ảnh */}
+                                                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                        <DeleteOutlined
+                                                            onClick={() => handleRemoveFavorite(item.id)}
+                                                            className="text-white text-40px cursor-pointer"
+                                                        />
                                                     </div>
-                                                    <div>
-                                                        <h3 className="text-15px color-primary font-medium pt-4">
-                                                            {item.name}
-                                                        </h3>
-                                                        <h5 className="text-[#707072] text-15px">
-                                                            {item?.categories
-                                                                ? item?.categories.map((cat, index, array) => {
-                                                                      if (array.length < 2) {
-                                                                          return ' ' + cat?.name;
-                                                                      } else {
-                                                                          if (index == 2) return;
-                                                                          if (index == 1) return ' ' + cat?.name;
-                                                                          return ' ' + cat?.name + ',';
-                                                                      }
-                                                                  })
-                                                                : ' '}
-                                                        </h5>
-                                                        <h3 className="text-15px color-primary font-medium mt-3">
-                                                            {formatPrice(item.price)} ₫
-                                                        </h3>
-                                                    </div>
+                                                </div>
+                                                <div className="p-3 flex justify-between items-center">
+                                                    <h3 className="text-[18px] text-primary font-medium">
+                                                        {item.name}
+                                                    </h3>
+                                                    <h3 className="text-[15px] text-primary font-medium">
+                                                        {formatPrice(item.price)} ₫
+                                                    </h3>
+                                                </div>
+                                                <a
+                                                    href={`detail/${item.slug}`}
+                                                    className="inline-block border rounded-full px-6 py-2 text-15px font-medium text-gray-700 hover:bg-gray-100"
+                                                >
+                                                    Xem sản phẩm
                                                 </a>
+                                                <div className="px-3 pb-3">
+                                                    <h5 className="text-[#707072] text-[14px]">
+                                                        {item?.categories
+                                                            ? item?.categories.map((cat, index, array) => {
+                                                                  if (array.length < 2) {
+                                                                      return ' ' + cat?.name;
+                                                                  } else {
+                                                                      if (index === 2) return;
+                                                                      if (index === 1) return ' ' + cat?.name;
+                                                                      return ' ' + cat?.name + ',';
+                                                                  }
+                                                              })
+                                                            : ' '}
+                                                    </h5>
+                                                </div>
                                             </div>
                                         </SwiperSlide>
                                     ))

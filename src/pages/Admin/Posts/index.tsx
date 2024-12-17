@@ -56,18 +56,18 @@ const ListPost = () => {
             key: '2',
         },
         {
-            title: 'Theme',
+            title: 'Image',
             dataIndex: 'theme',
             key: '3',
             render: (_: any, { theme }: { theme: string }) => (
                 <img src={theme} alt="" className="w-[60px] h-[80px] object-cover" />
             ),
         },
-        {
-            title: 'Slug',
-            dataIndex: 'slug',
-            key: '4',
-        },
+        // {
+        //     title: 'Slug',
+        //     dataIndex: 'slug',
+        //     key: '4',
+        // },
         {
             title: 'Author',
             dataIndex: 'topic_id',
@@ -143,7 +143,7 @@ const ListPost = () => {
                             />
                         </div>
                     </div>
-                    <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={filteredData} />
+                    <TableAdmin scroll={{ x: '' }} rowKey="id" columns={columns} datas={filteredData} />
                 </div>
             )}
         </>

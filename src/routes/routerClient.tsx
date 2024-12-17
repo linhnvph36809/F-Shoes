@@ -41,7 +41,6 @@ const routerClient = [
                 path: '/detail/:slug',
                 element: (
                     <>
-                        
                         <Detail />
                     </>
                 ),
@@ -50,7 +49,6 @@ const routerClient = [
                 path: '/category/:slug?',
                 element: (
                     <>
-                        
                         <CategoryPage />
                     </>
                 ),
@@ -167,7 +165,7 @@ const routerClient = [
                 ),
             },
             {
-                path: '/post-detail',
+                path: '/post-detail/:slug?',
                 element: (
                     <>
                         <Helmet>

@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { tokenManagerInstance } from '../api';
 import { IPost } from '../interfaces/IPost';
-
+export const QUERY_KEY = 'posts';
 export const API_POST = '/api/posts';
-
 const usePost = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -82,6 +81,7 @@ const usePost = () => {
         loading,
         deletePost,
         softPost,
+
         addPost,
         patchPost,
         restorePost,
