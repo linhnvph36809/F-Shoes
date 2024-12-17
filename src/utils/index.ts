@@ -1,14 +1,20 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
+import { useContextGlobal } from '../contexts';
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
+import "dayjs/locale/vi";
+
 export const formatPrice = (price: number): string => {
     const intPart = Math.floor(price);
     return intPart.toLocaleString('vi-VN');
 };
 
 export const timeToNow = (time: string) => {
+    
+    const { locale } = useContextGlobal();
+    dayjs.locale(locale || 'vi');
     return dayjs(time).fromNow();
 };
 

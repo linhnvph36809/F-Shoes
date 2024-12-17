@@ -64,8 +64,8 @@
     "filters.hide": "Ẩn Bộ Lọc",
     "filters.show": "Hiện Bộ Lọc",
 
-    "filter.category.lowToHigh": "Thấp đến cao",
-    "filter.category.High To Low": "Cao đến thấp",
+    "filter.category.lowToHigh": "Giá từ thấp đến cao",
+    "filter.category.High To Low": "Giá từ cao đến thấp",
     "filter.category.Newest": "Mới nhất",
     "filter.category.Best Selling": "Bán chạy nhất",
 

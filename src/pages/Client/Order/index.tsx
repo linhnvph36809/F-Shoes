@@ -48,11 +48,8 @@ const Order = () => {
     const { loading: loadingCheckOut, postVNPAY, postOrder, postMomo } = useOnlinePayment();
     const { user } = useContextGlobal();
     const { handleSetCookie } = useCookiesConfig('order');
-    const { refetch } = useQueryConfig('order-all-1-status-empty', 'api/me/orders?per_page=5&page=1&status');
-    const { refetch: refetchOrderConfirm } = useQueryConfig(
-        'order-all-1-status-1',
-        'api/me/orders?per_page=5&page=1&status=1',
-    );
+   
+   
 
     const [province, setProvince] = useState<any>('');
     const [districtId, setDistrictId] = useState<number | null>(null);
@@ -232,8 +229,7 @@ const Order = () => {
                 newValues,
             );
         }
-        refetch();
-        refetchOrderConfirm();
+    
     };
 
     useEffect(() => {

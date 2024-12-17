@@ -84,7 +84,7 @@ const AdminDashboard = () => {
     return (
         <Content>
             <div className="flex justify-between items-center">
-                <Heading>Dashboard</Heading>
+                <Heading>Statistics</Heading>
                 <div className="flex gap-x-5 mb-10">
                     <RangePicker
                         onChange={handleChange}

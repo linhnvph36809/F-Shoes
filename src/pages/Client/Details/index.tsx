@@ -109,7 +109,7 @@ const Detail = () => {
         } else {
             setImagesD(products?.images);
         }
-    }, [variant]);
+    }, [variant,productD]);
     if (!products && !isFetching) {
         return (
             <>
