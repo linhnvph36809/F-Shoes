@@ -15,7 +15,6 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
         'api/auth/me?include=profile,favoriteProducts&times=user',
     );
 
-
     const onChange = (id: string | number, value: any) => {
         if (value) {
             putCart(id, {
@@ -27,8 +26,6 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
                 quantity: product.quantity,
             });
             refetch();
-
-
         }
     };
 
@@ -52,8 +49,6 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
             });
         }
     };
-
-
 
     return (
         <>
