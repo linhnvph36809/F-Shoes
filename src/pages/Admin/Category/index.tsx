@@ -1,4 +1,4 @@
-import { CopyPlus, Search, SquarePen, Trash2 } from 'lucide-react';
+import { CopyPlus, Search, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
