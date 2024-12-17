@@ -218,5 +218,6 @@
     "pleaseEnterPassword": "Please enter your password",
     "minimumCharacters": "Minimum of 8 characters",
     "passwordsDoNotMatch": "Passwords do not match!",
-    "submit": "Submit"
+    "submit": "Submit",
+    "admin.dashboard": "Dashboard"
 }

@@ -1,4 +1,4 @@
-import { ConfigProvider, Select, Table } from 'antd';
+import { ConfigProvider, Table } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -16,6 +16,8 @@ import { showMessageClient } from '../../../../utils/messages';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import { PATH_ADMIN } from '../../../../constants/path';
 import ButtonBack from '../../components/ButtonBack';
+import { formatPrice } from '../../../../utils';
+import SelectPrimary from '../../components/Forms/SelectPrimary';
 
 const API_ATTRIBUTE_GET = '/api/get/attribute/values/product/';
 
@@ -35,6 +37,7 @@ const AddVariant = () => {
     const [errors, setError] = useState<any>([]);
     const { data: attributeByIds, refetch } = useQueryConfig('attribute', API_ATTRIBUTE_GET + id);
     const { loading: loadingPostVariant, postVariant } = useVariant();
+    const [images, setImages] = useState<any>([]);
 
     const onFinish = () => {
         setError(datas);
@@ -131,31 +134,26 @@ const AddVariant = () => {
                     <Heading>Add Variant</Heading>
                     <div className="grid grid-cols-2 gap-x-10">
                         <div>
-                            <ConfigProvider
-                                theme={{
-                                    components: {
-                                        Select: {
-                                            multipleItemHeight: 40,
-                                        },
-                                    },
+                            <SelectPrimary
+                                mode="multiple"
+                                allowClear
+                                className="text-20px font-medium w-full"
+                                style={{
+                                    height: '64px',
                                 }}
-                            >
-                                <Select
-                                    mode="multiple"
-                                    allowClear
-                                    className="text-20px font-medium w-full sm:h-[45px] md:h-[56px] border-1 border-[#111111] mb-5"
-                                    placeholder="Please select"
-                                    onChange={handleChange}
-                                    optionFilterProp="name"
-                                    fieldNames={{ label: 'name', value: 'id' }}
-                                    options={attributeByIds?.data}
-                                    value={variantId}
-                                />
-                            </ConfigProvider>
+                                placeholder="Please select attributes"
+                                onChange={handleChange}
+                                optionFilterProp="name"
+                                fieldNames={{ label: 'name', value: 'id' }}
+                                options={attributeByIds?.data}
+                                value={variantId}
+                            />
                             <div>
                                 {variants?.map((variant) => (
                                     <div className="p-5 bg-gray-200 rounded-lg mb-10 relative" key={variant.id}>
-                                        <h3 className="color-primary text-16px font-medium mb-5">{variant.name}</h3>
+                                        <h3 className="color-primary text-16px font-medium mb-5 uppercase">
+                                            {variant.name}
+                                        </h3>
                                         <div>
                                             <ConfigProvider
                                                 theme={{
@@ -166,15 +164,15 @@ const AddVariant = () => {
                                                     },
                                                 }}
                                             >
-                                                <Select
+                                                <SelectPrimary
                                                     mode="multiple"
                                                     allowClear
                                                     className="text-20px font-medium w-full sm:h-[35px] md:h-[40px] border-1 border-[#111111] mb-5"
-                                                    placeholder="Please select"
+                                                    placeholder="Please select variant"
                                                     optionFilterProp="value"
                                                     fieldNames={{ label: 'value', value: 'id' }}
                                                     options={variant.values}
-                                                    onChange={(value) => handleChangeItem(value, +variant.id)}
+                                                    onChange={(value: any) => handleChangeItem(value, +variant.id)}
                                                 />
                                             </ConfigProvider>
                                         </div>
@@ -182,7 +180,6 @@ const AddVariant = () => {
                                 ))}
                             </div>
                             <div className="mt-10">
-                                <h5 className="text-20px font-medium mb-3">Add variant</h5>
                                 <FormAttribute
                                     handlePostAttributes={handlePostAttributes}
                                     setVariantId={setVariantId}
@@ -205,15 +202,51 @@ const AddVariant = () => {
                                 <Table
                                     pagination={false}
                                     className="font-medium"
-                                    columns={[
-                                        {
-                                            title: 'ID',
-                                            dataIndex: 'id',
-                                            key: '1',
-                                            render: (_, { id }: any) => {
-                                                return <p>{id.join(',')}</p>;
-                                            },
+                                    expandable={{
+                                        expandedRowRender: (record: any) => {
+                                            const values = datas[record.index];
+                                            return (
+                                                <>
+                                                    {values ? (
+                                                        <div>
+                                                            <div className="flex items-center gap-x-5 pb-5 border-b">
+                                                                <p className="text-[14px] color-primary">
+                                                                    Variant Name :{' '}
+                                                                </p>
+                                                                <p>{record.variant_name}</p>
+                                                            </div>
+                                                            <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                <p className="text-[14px] color-primary">Price : </p>
+                                                                <p>{formatPrice(values.price)}đ</p>
+                                                            </div>
+                                                            <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                <p className="text-[14px] color-primary">SKU : </p>
+                                                                <p>{values.sku}</p>
+                                                            </div>
+                                                            <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                <p className="text-[14px] color-primary">Images : </p>
+                                                                <div className="grid grid-cols-6 gap-5">
+                                                                    {images[record.index].map((image: any) => (
+                                                                        <img
+                                                                            src={image.url}
+                                                                            alt=""
+                                                                            className="w-[80px] object-cover h-[80px] border"
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="text-center color-gray text-[14px]">Empty</div>
+                                                    )}
+                                                </>
+                                            );
                                         },
+
+                                        rowExpandable: (record) => record.id !== '',
+                                    }}
+                                    rowKey={(record) => `table2-${record.id}`}
+                                    columns={[
                                         {
                                             title: 'Variant Name',
                                             dataIndex: 'variant_name',
@@ -230,6 +263,7 @@ const AddVariant = () => {
                                                             ids={id}
                                                             setDatas={setDatas}
                                                             setError={setError}
+                                                            setImages={setImages}
                                                         />
                                                         {errors[index] === null ? (
                                                             <span className="text-[12px] text-red-500">
@@ -243,11 +277,13 @@ const AddVariant = () => {
                                             },
                                         },
                                     ]}
-                                    dataSource={listAttribute.map((attribute: any) => ({
+                                    dataSource={listAttribute.map((attribute: any, index: number) => ({
                                         id: attribute.ids,
                                         variant_name: attribute.values.join('-'),
+                                        index,
                                     }))}
                                 />
+
                                 <div className="text-end mt-10">
                                     <ButtonSubmit
                                         loading={loadingPostVariant}

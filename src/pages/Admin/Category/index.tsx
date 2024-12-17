@@ -1,4 +1,4 @@
-import { CopyPlus, SquarePen, Trash2 } from 'lucide-react';
+import { CopyPlus, Search, SquarePen, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -14,6 +14,7 @@ import { showMessageActive } from '../../../utils/messages';
 import { ACTIONS, PERMISSION } from '../../../constants';
 import PermissionElement from '../../../components/Permissions/PermissionElement';
 import TableAdmin from '../components/Table';
+import ButtonUpdate from '../components/Button/ButtonUpdate';
 
 const ListCategory = () => {
     const { deleteCategory, categories, mainCategories, postCategory, getAllCategory, putCategory } = useCategory();
@@ -65,9 +66,7 @@ const ListCategory = () => {
             return (
                 <div className="flex-row-center gap-x-5">
                     <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
-                        <ButtonEdit onClick={() => handleUpdate(values)}>
-                            <SquarePen />
-                        </ButtonEdit>
+                        <ButtonUpdate onClick={() => handleUpdate(values)}></ButtonUpdate>
                     </PermissionElement>
                     <Link to={`/admin/update-category/${values.id}`}>
                         <ButtonEdit>
@@ -124,13 +123,16 @@ const ListCategory = () => {
                         </svg>
 
                         {/* Input tìm kiếm */}
-                        <input
-                            type="text"
-                            placeholder=" Search by category name"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full h-[48px] border border-gray-300 rounded-lg pl-10 pr-4 shadow-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-blue-400 transition duration-200"
-                        />
+                        <div className="relative">
+                            <input
+                                type="text"
+                                placeholder=" Search by category name"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className={`w-full h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                            />
+                            <Search className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
+                        </div>
                     </div>
                 </div>
 

@@ -26,7 +26,7 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
 
     const handleFinish = useCallback(
         (values: IProduct) => {
-            
+
 
             const imageArray = images.images.map((image: IImage) => image.id);
             if (!imageArray.length) {
@@ -35,7 +35,7 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
             }
             const datas = {
                 ...values,
-                description,
+                description: description || initialValues?.description,
                 short_description: shortDescription || initialValues?.shortDescription,
                 images: imageArray,
                 status: values.status ? 1 : 0,
@@ -140,7 +140,7 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
             <div className="my-20">
                 <h5 className="text-[14px] font-medium color-primary mb-5">Short Description</h5>
                 <EditorComponent
-                    initialValues={initialValues?.short_description}
+                    initialValues={initialValues?.description}
                     setDescription={(content: string) => {
                         setDescription(content);
                     }}

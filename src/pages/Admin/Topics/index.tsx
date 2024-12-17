@@ -11,7 +11,7 @@ import LoadingBlock from '../../../components/Loading/LoadingBlock';
 import useTopic, { API_TOPIC } from '../../../hooks/useTopic';
 import FormTopic from './FormTopic';
 import { showMessageActive } from '../../../utils/messages';
-import Swal from 'sweetalert2';
+import ButtonDelete from '../components/Button/ButtonDelete';
 
 export const KEY = 'list-topic';
 
@@ -99,7 +99,7 @@ const ListTopic = ({ initialValues }: any) => {
                     {topic.deleted_at ? (
                         ''
                     ) : (
-                        <ButtonEdit onClick={() => handleDeleteTopic(topic.id)}>{<Trash2 />}</ButtonEdit>
+                        <ButtonDelete onClick={() => handleDeleteTopic(topic.id)}></ButtonDelete>
                     )}
                 </div>
             ),
@@ -119,9 +119,7 @@ const ListTopic = ({ initialValues }: any) => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             allowClear
-                            className="w-3/12 h-[40px]
-                            border-1 border-[#111111] focus:shadow
-                            font-medium focus:border-[#111111] hover:border-[#111111] px-5"
+                            className={`w-[250px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                         />
                     </div>
                     <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={filteredData} />

@@ -1,46 +1,47 @@
 import { UserOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col, message, Row, Tag, Typography } from 'antd';
-import { SquarePen, Trash2 } from 'lucide-react';
+import { Avatar, Card, Col, Input, Row, Tag, Typography } from 'antd';
+import { SquarePen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LoadingBlock from '../../../../components/Loading/LoadingBlock';
-import useUser from '../../../../hooks/useUser';
+import { QUERY_KEY } from '../../../../hooks/useUser';
 import { IUser } from '../../../../interfaces/IUser';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import Heading from '../../components/Heading';
 import TableAdmin from '../../components/Table';
 import { useEffect, useState } from 'react';
-import { tokenManagerInstance } from '../../../../api';
 import { formatTime } from '../../../../utils';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
 
 const { Text } = Typography;
 
 const ListUser = () => {
-    const { users, loading, deleteUser } = useUser();
-    const [userHasOrderCount, setUserHasOrderCount] = useState<number[]>();
+    
+    const { data:dataCountHasOrder } = useQueryConfig([QUERY_KEY, 'count/has/order'], `api/count/user/has/orders`);
+    const [users,setUsers] = useState<IUser[]>([]);
+    const { data: dataUser, isFetching: loading } = useQueryConfig(
+        [QUERY_KEY, 'list/user'],
+        'api/user?include=profile,group&times=user',
+    );
+ 
     useEffect(() => {
-        const getUserHasOrderCount = async () => {
-            try {
-                const { data } = await tokenManagerInstance('get', 'api/count/user/has/orders');
-                setUserHasOrderCount(data.count);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        getUserHasOrderCount();
-    }, []);
-
-    const handleDeleteUser = async (id: string | number) => {
-        if (window.confirm('Bạn có chắc chắn muốn xoá người dùng này không?')) {
-            try {
-                await deleteUser(id); // Giả sử deleteUser trả về kết quả thành công hoặc lỗi
-
-                message.success('Xóa người dùng thành công!');
-            } catch (error) {
-                message.error('Đã xảy ra lỗi khi xóa người dùng. Vui lòng thử lại.');
-            }
+        if(dataUser?.data.users.data){
+            setUsers(dataUser?.data.users.data);
+        }else {
+            setUsers([]);
         }
-    };
-
+    }, [dataUser]);
+    const userHasOrderCount = dataCountHasOrder?.data?.count || 0;
+    const filterUser = (e:any) => {
+        const dataOrigin = JSON.parse(JSON.stringify([...dataUser?.data.users.data]));
+        if(e.target.value !== ''){
+            const filtered = dataOrigin.filter((item: IUser) => {
+                return item.name.toLowerCase().includes(e.target.value.toLowerCase()) || item.email.toLowerCase().includes(e.target.value.toLowerCase()) || item.id.toString().includes(e.target.value.toLowerCase());
+            });
+            setUsers([...filtered]);
+        }else {
+            setUsers([...dataUser?.data.users.data]);
+        }
+    }
     // Define table columns
     const columns = [
         {
@@ -70,13 +71,20 @@ const ListUser = () => {
             key: 'status',
             render: (status: any) => {
                 let color = status === 'active' ? 'green' : 'gray';
-                return <Tag color={color}>{status}</Tag>;
+                return (
+                    <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color={color}>
+                        {status}
+                    </Tag>
+                );
             },
         },
         {
-            title: 'Group id',
-            dataIndex: 'group_id',
-            key: 'group_id',
+            title: 'Group ',
+            dataIndex: 'group',
+            key: 'group',
+            render: (group: any) => {
+                return <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center">{group?.group_name}</Tag>
+            }
         },
         {
             title: 'Email verified at',
@@ -96,9 +104,6 @@ const ListUser = () => {
                             <SquarePen />
                         </ButtonEdit>
                     </Link>
-                    <ButtonEdit onClick={() => handleDeleteUser(values.id)}>
-                        <Trash2 />
-                    </ButtonEdit>
                 </div>
             ),
         },
@@ -140,6 +145,7 @@ const ListUser = () => {
     return (
         <div style={{ padding: '20px' }}>
             <Heading>List Users</Heading>
+
             <Row gutter={[16, 16]}>
                 <Col span={6}>
                     <StatCard
@@ -153,7 +159,7 @@ const ListUser = () => {
                 <Col span={6}>
                     <StatCard
                         title="Inactive Users"
-                        value={users?.filter((u) => u.status !== 'active').length}
+                        value={users?.filter((u: IUser) => u.status !== 'active').length}
                         description="Banned or Inactive Accounts"
                         color="#ffd6d6"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#ff6666' }} />}
@@ -162,7 +168,7 @@ const ListUser = () => {
                 <Col span={6}>
                     <StatCard
                         title="Active Users"
-                        value={users?.filter((u) => u.status === 'active').length}
+                        value={users?.filter((u: IUser) => u.status === 'active').length}
                         description="Active Accounts"
                         color="#d6f5e6"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#66cc99' }} />}
@@ -185,6 +191,9 @@ const ListUser = () => {
                     <LoadingBlock />
                 ) : (
                     <section>
+                        <div className="my-6">
+                            <Input onChange={filterUser} placeholder="Search an id user or name or email." />
+                        </div>
                         <TableAdmin columns={columns} dataSource={users} pagination={{ pageSize: 8 }} />
                     </section>
                 )}

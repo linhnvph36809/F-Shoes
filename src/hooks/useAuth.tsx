@@ -103,18 +103,17 @@ const useAuth = () => {
             handleRemoveLocalStorage(INFO_AUTH.userName);
             handleRemoveLocalStorage(INFO_AUTH.userId);
             handleRemoveLocalStorage(INFO_AUTH.isAdmin);
-            navigate('/');
-            setUserGlobal({});
+            handleRemoveLocalStorage(INFO_AUTH.adminName);
+            handleRemoveLocalStorage(INFO_AUTH.adminId);
+            handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
+            handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
+            setUserGlobal(undefined);
             setUserName('');
             showMessageClient('Logout Successfuly', '', 'success');
             queryClient.clear();
+            navigate('/');
         } catch (error) {
-            if ((error as any)?.response?.data?.message) {
-                console.log(error as any);
-                showMessageClient((error as any).response.data.message, '', 'error');
-            } else {
-                showMessageClient('Something went wrong!', '', 'error');
-            }
+            showMessageClient((error as any).response.data.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }

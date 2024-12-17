@@ -14,10 +14,8 @@ type Props = {
     products: IProduct[] | [];
     category?: ICategory | null;
     loading: boolean;
-}
-export default function ClassicsSpotlight({products,loading}:Props) {
-    
-   
+};
+export default function ClassicsSpotlight({ products, loading }: Props) {
     return (
         <>
             <div className="relative">
@@ -60,7 +58,7 @@ export default function ClassicsSpotlight({products,loading}:Props) {
                         products.map((item: IProduct) => (
                             <SwiperSlide key={item.id}>
                                 <Link to={`detail/${item.slug}`}>
-                                    <img src={item.image_url} alt="" className="w-[500px]" />
+                                    <img src={item.image_url} alt="" className="w-[500px] h-[400px] object-cover" />
                                 </Link>
                             </SwiperSlide>
                         ))

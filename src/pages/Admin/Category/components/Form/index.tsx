@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import ButtonPrimary from '../../../../../components/Button';
 import '../../style.scss';
 import InputPrimary from '../../../components/Forms/InputPrimary';
+import ButtonAdd from '../../../components/Button/ButtonAdd';
 
 const FormCategory = ({
     onFinish,
@@ -20,8 +21,9 @@ const FormCategory = ({
         if (initialValues) {
             form.setFieldsValue({
                 name: initialValues.name,
-                parent: initialValues.parents ? initialValues.parents.map((paren: any) => paren.id) : [],
+                parent: initialValues.parents,
             });
+            console.log(initialValues.parents);
         }
     }, [initialValues, form]);
 
@@ -55,9 +57,8 @@ const FormCategory = ({
     return (
         <>
             {/* Nút mở modal */}
-            <ButtonPrimary width="w-[150px]" height="h-[50px]" onClick={showModal}>
-                Add Category
-            </ButtonPrimary>
+
+            <ButtonAdd onClick={showModal} title={'Add Category'} />
 
             {/* Modal chứa Form */}
             <Modal

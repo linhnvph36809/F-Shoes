@@ -11,6 +11,9 @@ import { IPost } from '../../../interfaces/IPost';
 import usePost, { API_POST } from '../../../hooks/usePosts';
 import ButtonPrimary from '../../../components/Button';
 import { PATH_ADMIN } from '../../../constants/path';
+import Heading from '../components/Heading';
+import ButtonAdd from '../components/Button/ButtonAdd';
+import ButtonDelete from '../components/Button/ButtonDelete';
 
 export const KEY = 'list-posts';
 
@@ -101,18 +104,18 @@ const ListPost = () => {
                         </ButtonEdit>
                     </Link>
                     {post.deleted_at ? (
-                        <ButtonEdit>
-                            <RefreshCcw onClick={() => handleRestorePost(post.id)} />
+                        <ButtonEdit onClick={() => handleRestorePost(post.id)} >
+                            <RefreshCcw />
                         </ButtonEdit>
                     ) : (
-                        <ButtonEdit>
-                            <CircleX onClick={() => handleSoftPost(post.id)} />
+                        <ButtonEdit onClick={() => handleSoftPost(post.id)}>
+                            <CircleX />
                         </ButtonEdit>
                     )}
                     {post.deleted_at ? (
                         ''
                     ) : (
-                        <ButtonEdit onClick={() => handleDeletePost(post.id)}>{<Trash2 />}</ButtonEdit>
+                        <ButtonDelete onClick={() => handleDeletePost(post.id)}>{<Trash2 />}</ButtonDelete>
                     )}
                 </div>
             ),
@@ -125,13 +128,10 @@ const ListPost = () => {
                 <LoadingBlock />
             ) : (
                 <div>
+                    <Heading>List Post</Heading>
                     <div className="flex justify-between">
                         <div>
-                            <Link to={PATH_ADMIN.ADD_POST}>
-                                <ButtonPrimary width="w-[150px]" height="h-[50px]">
-                                    Add Post
-                                </ButtonPrimary>
-                            </Link>
+                            <ButtonAdd to={PATH_ADMIN.ADD_POST} title=" Add Post"></ButtonAdd>
                         </div>
                         <div className="mb-4">
                             <Input
@@ -139,7 +139,7 @@ const ListPost = () => {
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 allowClear
-                                className="w-full h-[40px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] px-5"
+                                className={`w-[250px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                             />
                         </div>
                     </div>

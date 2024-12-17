@@ -4,12 +4,12 @@ import useQueryConfig from '../../../hooks/useQueryConfig';
 
 const Header = () => {
     const { data: posts2 } = useQueryConfig([QUERY_KEY, `list-posts`], API_POST);
+    console.log(posts2);
     return (
         <div className="bg-black text-white p-6 py-16 flex items-start gap-x-10">
             {' '}
             {/* Giảm padding dọc */}
             <div className="w-5/12">
-                {posts2?.data.theme}
                 <img
                     src="https://res.cloudinary.com/dmubfrefi/image/private/s--Y0WMlp47--/c_crop,h_2136,w_3200,x_0,y_394/c_scale,w_640/f_auto/q_auto/v1/dee-about-cms-prod-medias/674d10df-6b4b-42af-8785-6793985264fe/2025-ekiden-collection.jpeg?_a=BAAAV6Bs"
                     alt=""

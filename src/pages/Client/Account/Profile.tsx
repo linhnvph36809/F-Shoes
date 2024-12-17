@@ -18,9 +18,8 @@ import { Flex, message, Upload } from 'antd';
 import type { GetProp, UploadProps } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { QUERY_KEY as QUERY_KEY_PROFILE } from '../../../hooks/page/useProfile.tsx';
-import axios from 'axios';
 import { tokenManagerInstance } from '../../../api/index.tsx';
-import { showMessageActive, showMessageAdmin, showMessageClient } from '../../../utils/messages.ts';
+import { showMessageActive, showMessageClient } from '../../../utils/messages.ts';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
