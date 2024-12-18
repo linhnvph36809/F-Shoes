@@ -5,8 +5,10 @@ import { STATUS_ORDER } from '../../../../constants';
 import { Option } from 'antd/es/mentions';
 import useOrder, { API_ORDER } from '../../../../hooks/useOrder';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCancel: () => void }) => {
+    const intl = useIntl();
     const { refetch } = useQueryConfig('order-admin', API_ORDER);
     const { putOrder } = useOrder();
 
@@ -29,34 +31,37 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     <div className="grid grid-cols-2 mb-10">
                         <div>
                             <div className="font-medium text-[14px] color-gray mb-2">
-                                Name : {orderDetail.orderDetail?.user?.name}
+                                <FormattedMessage id="admin.name" /> : {orderDetail.orderDetail?.user?.name}
                             </div>
                             <div className="font-medium text-[14px] color-gray mb-2">
-                                Email : {orderDetail.orderDetail?.user?.email}
+                                <FormattedMessage id="receiver_emai" /> : {orderDetail.orderDetail?.user?.email}
                             </div>
                             <div className="font-medium text-[14px] color-gray mb-2">
-                                Phone : {orderDetail.orderDetail?.phone}
+                                <FormattedMessage id="phone" /> : {orderDetail.orderDetail?.phone}
                             </div>
                             <div className="font-medium text-[14px] color-gray mb-2">
-                                Address : {orderDetail.orderDetail?.address}
+                                <FormattedMessage id="address" /> : {orderDetail.orderDetail?.address}
                             </div>
                         </div>
                         <div>
                             <div className="font-medium text-[14px] color-gray mb-2">
-                                Create At : {formatTime(orderDetail.orderDetail?.created_at)}
+                                <FormattedMessage id="category.table.created_at" /> :{' '}
+                                {formatTime(orderDetail.orderDetail?.created_at)}
                             </div>
                             {orderDetail.orderDetail?.voucher ? (
                                 <div className="font-medium text-[14px] color-gray mb-2">
-                                    Voucher : {formatPrice(orderDetail.orderDetail?.voucher)}
+                                    <FormattedMessage id="voucher" /> : {formatPrice(orderDetail.orderDetail?.voucher)}
                                 </div>
                             ) : (
                                 ''
                             )}
                             <div className="font-medium text-[14px] color-gray mb-2">
-                                Shipping Cost : {formatPrice(orderDetail.orderDetail?.shipping_cost)} đ
+                                <FormattedMessage id="Shipping_Cost" />:{' '}
+                                {formatPrice(orderDetail.orderDetail?.shipping_cost)} đ
                             </div>
                             <div className="font-medium text-[15px] color-primary mb-2">
-                                Total : {formatPrice(orderDetail.orderDetail?.total_amount)} đ
+                                <FormattedMessage id="box.Cart.Total" /> :{' '}
+                                {formatPrice(orderDetail.orderDetail?.total_amount)} đ
                             </div>
                         </div>
                     </div>
@@ -66,7 +71,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                         <div className="mb-10">
                             <Select
                                 style={{ width: 200, marginRight: 8 }}
-                                placeholder="Please select status"
+                                placeholder={intl.formatMessage({ id: 'Please_select_status' })}
                                 onChange={handleChangeStatus}
                             >
                                 {STATUS_ORDER.map((status: string, index: number) => {
@@ -88,25 +93,33 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     )}
                     <div className="grid grid-cols-4 gap-x-5 border p-6">
                         <div>
-                            <p className="font-medium color-primary">Shipping method:</p>
+                            <p className="font-medium color-primary">
+                                <FormattedMessage id="shipping_method" />:
+                            </p>
                             <span className="color-primary font-normal color-gray">
                                 {orderDetail?.orderDetail?.shipping_method}
                             </span>
                         </div>
                         <div>
-                            <p className="font-medium color-primary">Payment method:</p>
+                            <p className="font-medium color-primary">
+                                <FormattedMessage id="paymentMethod" />:
+                            </p>
                             <span className="color-primary font-normal color-gray">
                                 {orderDetail?.orderDetail?.payment_method}
                             </span>
                         </div>
                         <div>
-                            <p className="font-medium color-primary">Payment status:</p>
+                            <p className="font-medium color-primary">
+                                <FormattedMessage id="Payment_status" />:
+                            </p>
                             <span className="color-primary font-normal color-gray">
                                 {orderDetail?.orderDetail?.payment_status}
                             </span>
                         </div>
                         <div>
-                            <p className="font-medium color-primary">Status :</p>
+                            <p className="font-medium color-primary">
+                                <FormattedMessage id="status" /> :
+                            </p>
                             <span className="color-primary font-normal color-gray">
                                 {STATUS_ORDER[orderDetail?.orderDetail?.status]}
                             </span>

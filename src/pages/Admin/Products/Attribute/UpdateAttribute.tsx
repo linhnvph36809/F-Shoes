@@ -10,6 +10,7 @@ import Heading from '../../components/Heading';
 import useAttribute from '../../../../hooks/useAttribute';
 import ButtonBack from '../../components/ButtonBack';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
+import { FormattedMessage } from 'react-intl';
 
 const UpdateAttribute = () => {
     const [form] = Form.useForm();
@@ -28,9 +29,9 @@ const UpdateAttribute = () => {
 
         const newAttributeValues = newAttribute
             ? newAttribute?.map((newAttribute: any) => ({
-                id: '',
-                value: newAttribute,
-            }))
+                  id: '',
+                  value: newAttribute,
+              }))
             : [];
 
         if (id) {
@@ -61,7 +62,9 @@ const UpdateAttribute = () => {
         <>
             <section>
                 <ButtonBack to="/admin/add-attribute" />
-                <Heading>Update Attribute</Heading>
+                <Heading>
+                    <FormattedMessage id="Update Attribute" />
+                </Heading>
                 <Form form={form} layout="vertical" onFinish={onFinish}>
                     <div className="my-4 w-6/12">
                         {attributeValues?.map((item: any, index: number) => (

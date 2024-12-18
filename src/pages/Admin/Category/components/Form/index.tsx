@@ -23,9 +23,8 @@ const FormCategory = ({
         if (initialValues) {
             form.setFieldsValue({
                 name: initialValues.name,
-                parent: initialValues.parents,
+                parent: initialValues.parents.map((parent: any) => parent.id),
             });
-            console.log(initialValues.parents);
         }
     }, [initialValues, form]);
 

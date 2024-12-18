@@ -16,8 +16,10 @@ import ButtonDelete from '../components/Button/ButtonDelete';
 import ButtonUpdate from '../components/Button/ButtonUpdate';
 import ButtonAdd from '../components/Button/ButtonAdd';
 import InputSearch from '../components/Forms/InputSearch';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const ListProduct = () => {
+    const intl = useIntl();
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
     const page = params.get('page') || 1;
@@ -54,7 +56,7 @@ const ListProduct = () => {
     const pageSize = products?.data?.paginator?.per_page || 8;
 
     const columnDelete = {
-        title: '',
+        title: <FormattedMessage id="category.table.action" />,
         dataIndex: 'slug',
         key: '8',
         render: (slug: string | number, values: IProduct) => {
@@ -62,8 +64,9 @@ const ListProduct = () => {
                 <div className="flex-row-center gap-x-3">
                     <Link
                         state={{ prevUrl: currentUrl }}
-                        to={`/admin/${values?.variations && values.variations.length ? 'update-variant' : 'add-variant'
-                            }/${slug}`}
+                        to={`/admin/${
+                            values?.variations && values.variations.length ? 'update-variant' : 'add-variant'
+                        }/${slug}`}
                     >
                         <ButtonEdit>
                             <CopyPlus />
@@ -80,10 +83,15 @@ const ListProduct = () => {
         <>
             {
                 <section>
-                    <Heading>List Product</Heading>
+                    <Heading>
+                        <FormattedMessage id="admin.listProduct" />
+                    </Heading>
                     <div className="flex justify-between">
-                        <ButtonAdd to="/admin/add-product" title={'Add Product'} />
-                        <InputSearch placeholder={'Search Product Name'} onSearch={handleSearch} />
+                        <ButtonAdd to="/admin/add-product" title={<FormattedMessage id="admin.addProduct" />} />
+                        <InputSearch
+                            placeholder={intl.formatMessage({ id: 'Search Product Name' })}
+                            onSearch={handleSearch}
+                        />
                     </div>
                     <div>
                         {isFetching ? (

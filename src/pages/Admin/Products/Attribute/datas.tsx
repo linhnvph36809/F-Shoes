@@ -1,20 +1,21 @@
-import { render } from "react-dom";
-import { formatTime } from "../../../../utils";
-import { Tag } from "antd";
+import { render } from 'react-dom';
+import { formatTime } from '../../../../utils';
+import { Tag } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 export const columnsAttribute = [
     {
-        title: 'ID',
+        title: <FormattedMessage id="admin.id" />,
         dataIndex: 'id',
         key: 'id',
     },
     {
-        title: 'Attribute Name',
+        title: <FormattedMessage id="Attribute_name" />,
         dataIndex: 'name',
         key: 'name',
     },
     {
-        title: 'Attribute Value',
+        title: <FormattedMessage id="Attribute Value" />,
         dataIndex: 'values',
         key: 'values',
         render: (_: any, attributeValues: any) => {
@@ -27,20 +28,22 @@ export const columnsAttribute = [
             return (
                 <div className="break-words max-w-[200px]">
                     {attributeValues.values.length
-                        ? attributeValues.values.map((value: any) => <Tag className="rounded-[30px] p-2"  key={value.id}>{value.value}</Tag>)
+                        ? attributeValues.values.map((value: any) => (
+                              <Tag className="rounded-[30px] p-2" key={value.id}>
+                                  {value.value}
+                              </Tag>
+                          ))
                         : 'This attribute has no value.'}
-                        
                 </div>
             );
         },
     },
     {
-        title: 'Created at',
+        title: <FormattedMessage id="category.table.created_at" />,
         dataIndex: 'created_at',
         key: 'created_at',
-        render: (time:any) => {
-            return <p>{formatTime(time)}</p>
-        }
+        render: (time: any) => {
+            return <p>{formatTime(time)}</p>;
+        },
     },
-
 ];
