@@ -22,7 +22,7 @@ const BoxProducts = ({
             <div className="text-left">
                 <p className="text-[18px] color-brown font-medium">{productName}</p>
                 <p className="text-[18px] color-gray font-medium mb-2">
-                    {categories.map((category: ICategory) => category.name).join(', ')}
+                    {categories.length > 2 ? categories.splice(0,3).map((category: ICategory) => category.name).join(', ') : categories.map((category: ICategory) => category.name).join(', ')}
                 </p>
                 <div className="mb-4">
                     {price_sale ? (

@@ -30,7 +30,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading, sortOption
                         <Link to={`/detail/${product.slug}`}>
                             <BoxProducts
                                 imageUrl={product.image_url || 'default-image-url.png'}
-                                categories={product.categories || 'Default Category'}
+                                categories={product.categories || []}
                                 productName={product.name}
                                 price={product.price}
                                 price_sale={product.sale_price}

@@ -27,11 +27,7 @@ const Footer = () => {
                                             {<FormattedMessage id="footer.Resources.Send Us Feedback" />}
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
-                                            {<FormattedMessage id="footer.Resources.Nike Journal" />}
-                                        </a>
-                                    </li>
+                                   
                                     <li>
                                         <a href="#" className="inline-block text-[1.4rem] font-medium mb-4 color-gray">
                                             {<FormattedMessage id="footer.Resources.Gift Cards" />}
@@ -137,42 +133,7 @@ const Footer = () => {
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <ul className="flex gap-x-10">
-                            <li>
-                                <a
-                                    href="#"
-                                    className="inline-block text-[1.4rem] font-medium color-gray hover:text-[#111111]"
-                                >
-                                    {<FormattedMessage id="footer.© 2024 Nike, Inc. All rights reserved" />}
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="inline-block text-[1.4rem] font-medium color-gray hover:text-[#111111]"
-                                >
-                                    {<FormattedMessage id="footer.Terms of Sale" />}
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="inline-block text-[1.4rem] font-medium color-gray hover:text-[#111111]"
-                                >
-                                    {<FormattedMessage id="footer.Terms of Use" />}
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="inline-block text-[1.4rem] font-medium color-gray hover:text-[#111111]"
-                                >
-                                    {<FormattedMessage id="footer.Nike Privacy Policy" />}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    
                 </div>
             </footer>
         </>
