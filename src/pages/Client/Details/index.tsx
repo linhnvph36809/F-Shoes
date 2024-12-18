@@ -35,11 +35,10 @@ const Detail = () => {
         id = slug.substring(index + 1);
     }
 
-    const { data, isFetching } = useQueryConfig([QUERY_KEY,`product-detail-${id}`], `/api/product/detail/${id}`);
+    const { data, isFetching } = useQueryConfig([QUERY_KEY, `product-detail-${id}`], `/api/product/detail/${id}`);
     const { refetch } = useQueryConfig('user-profile', 'api/auth/me?include=profile,favoriteProducts&times=user', {
         enabled: false,
     });
-
 
     const products = data?.data;
     const { user } = useContextGlobal();
@@ -51,6 +50,7 @@ const Detail = () => {
     const [imagesD, setImagesD] = useState<IImage[]>([]);
 
     const productD = products;
+
 
     //to test component replace if(variationD) below into => if(product && product?.variations)
 
@@ -66,8 +66,7 @@ const Detail = () => {
         postWishlist(id);
         refetch();
     };
-  
-    
+
     const handleAddCart = () => {
         let datas;
         if (productD.variations.length) {
@@ -158,57 +157,57 @@ const Detail = () => {
 
                             <h4 className="color-primary font-medium text-16px">
                                 {productD?.categories
-                                    ? productD?.categories.map(
-                                        (cat: any, index: any, array: any) => {
-                                            if (array.length < 2) {
-                                                return ' ' + cat?.name;
-                                            } else {
-                                                if (index > 1) return '';
-                                                if (index == 1) return ' ' + cat?.name;
-                                                return ' ' + cat?.name + ',';
-                                            }
-                                        },
-                                    )
+                                    ? productD?.categories.map((cat: any, index: any, array: any) => {
+                                        if (array.length < 2) {
+                                            return ' ' + cat?.name;
+                                        } else {
+                                            if (index > 1) return '';
+                                            if (index == 1) return ' ' + cat?.name;
+                                            return ' ' + cat?.name + ',';
+                                        }
+                                    })
                                     : ' '}
                             </h4>
                             <Price product={variant || productD} variation={variant} />
                             {productD?.attributes
                                 ? productD.attributes.map((item: any, index: number) => {
-                                      return (
-                                          <div key={item?.id} className="mb-6">
-                                              <div className="flex-row-center justify-between pb-5">
-                                                  <p className="text-16px font-medium color-primary">
-                                                      {<FormattedMessage id="body.Detail.Select" />} {item.name}
-                                                  </p>
-                                              </div>
+                                    return (
+                                        <div key={item?.id} className="mb-6">
+                                            <div className="flex-row-center justify-between pb-5">
+                                                <p className="text-16px font-medium color-primary">
+                                                    {<FormattedMessage id="body.Detail.Select" />} {item.name}
+                                                </p>
+                                            </div>
 
-                                              <Radio.Group onChange={(e) => onChange(e, index)}>
-                                                  <div className="grid md:grid-cols-5 gap-5">
-                                                      {item?.values.map((value: any, index: number) => (
-                                                          <Radio.Button
-                                                              key={index}
-                                                              className="font-medium h-[45px] text-[16px]"
-                                                              value={value.id}
-                                                          >
-                                                              {value.value}
-                                                          </Radio.Button>
-                                                      ))}
-                                                  </div>
-                                              </Radio.Group>
-                                          </div>
-                                      );
-                                  })
+                                            <Radio.Group onChange={(e) => onChange(e, index)}>
+                                                <div className="grid md:grid-cols-5 gap-5">
+                                                    {item?.values.map((value: any, index: number) => (
+                                                        <Radio.Button
+                                                            key={index}
+                                                            className="font-medium h-[45px] text-[16px]"
+                                                            value={value.id}
+                                                        >
+                                                            {value.value}
+                                                        </Radio.Button>
+                                                    ))}
+                                                </div>
+                                            </Radio.Group>
+                                        </div>
+                                    );
+                                })
                                 : ''}
                             {variant?.stock_qty || variant?.stock_qty === 0 ? (
                                 <p className="text-16px font-medium text-red-500">
                                     {<FormattedMessage id="body.Detail.Quantity" />} : {variant?.stock_qty}
                                 </p>
                             ) : (
-                                <p className="text-16px font-medium text-red-500">
+                                ''
+                            )}
+                            {productD?.variations.length ? ""
+                                : <p className="text-16px font-medium text-red-500">
                                     {<FormattedMessage id="body.Detail.Quantity" />} : {productD?.stock_qty}
                                 </p>
-                            )}
-
+                            }
                             {user ? (
                                 ''
                             ) : (
@@ -220,9 +219,10 @@ const Detail = () => {
                                 <button
                                     onClick={
                                         user
-                                            ? (productD?.variations?.length == 0 && productD?.stock_qty) || (variant && variant?.stock_qty)
+                                            ? (productD?.variations?.length == 0 && productD?.stock_qty) ||
+                                                (variant && variant?.stock_qty)
                                                 ? handleAddCart
-                                                : () => {}
+                                                : () => { }
                                             : () => {
                                                 showMessageClient(
                                                     'Login before adding products to cart',
@@ -233,11 +233,11 @@ const Detail = () => {
                                             }
                                     }
                                     className={`${user
-                                            ? productD?.variations?.length == 0 || (variant && variant?.stock_qty)
-                                                ? 'bg-primary'
-                                                : 'bg-[#f4f4f4] cursor-default'
+                                        ? (productD?.variations?.length == 0 && productD?.stock_qty) || (variant && variant?.stock_qty)
+                                            ? 'bg-primary'
                                             : 'bg-[#f4f4f4] cursor-default'
-                                    }           text-16px font-medium h-[58px] text-white
+                                        : 'bg-[#f4f4f4] cursor-default'
+                                        }           text-16px font-medium h-[58px] text-white
                                                 rounded-[30px] w-full hover-opacity transition-global`}
                                 >
                                     {loadingAddCart ? <LoadingSmall /> : <FormattedMessage id="body.Detail.addtobag" />}
@@ -279,19 +279,19 @@ const Detail = () => {
                             <SlidesScroll className="slidesProducts pb-20">
                                 {productD?.suggestedProduct
                                     ? productD?.suggestedProduct?.map((item: any) => (
-                                          <SwiperSlide key={item.id}>
-                                              <div>
-                                                  <a href={`${item.slug}`}>
-                                                      <div>
-                                                          <img src={item.image_url} alt={item.name} />
-                                                      </div>
-                                                      <div>
-                                                          <h3 className="text-15px color-primary font-medium pt-4">
-                                                              {item.name}
-                                                          </h3>
-                                                          <h5 className="text-[#707072] text-15px">
-                                                              {item?.categories
-                                                                  ? item?.categories.map(
+                                        <SwiperSlide key={item.id}>
+                                            <div>
+                                                <a href={`${item.slug}`}>
+                                                    <div>
+                                                        <img src={item.image_url} alt={item.name} />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="text-15px color-primary font-medium pt-4">
+                                                            {item.name}
+                                                        </h3>
+                                                        <h5 className="text-[#707072] text-15px">
+                                                            {item?.categories
+                                                                ? item?.categories.map(
                                                                     (cat: any, index: any, array: any) => {
                                                                         if (array.length < 2) {
                                                                             return ' ' + cat?.name;
@@ -302,16 +302,16 @@ const Detail = () => {
                                                                         }
                                                                     },
                                                                 )
-                                                                  : ' '}
-                                                          </h5>
-                                                          <h3 className="text-15px color-primary font-medium mt-3">
-                                                              {formatPrice(item.price)} ₫
-                                                          </h3>
-                                                      </div>
-                                                  </a>
-                                              </div>
-                                          </SwiperSlide>
-                                      ))
+                                                                : ' '}
+                                                        </h5>
+                                                        <h3 className="text-15px color-primary font-medium mt-3">
+                                                            {formatPrice(item.price)} ₫
+                                                        </h3>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </SwiperSlide>
+                                    ))
                                     : 'Nothing here.'}
                             </SlidesScroll>
                         </div>
