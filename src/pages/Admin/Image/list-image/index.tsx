@@ -16,7 +16,7 @@ const getBase64 = (file: any) =>
 
 const MediaLibrary = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const { data, isFetching, refetch } = useQueryConfig('image', `/api/image?page=${currentPage}`);
+    const { data, isFetching, refetch } = useQueryConfig('image-all', `/api/image?paginate=true&page=${currentPage}`);
     const { postImage, deleteImage } = useImage();
     const [fileList, setFileList] = useState<any>([]);
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -85,12 +85,6 @@ const MediaLibrary = () => {
             ) : (
                 <section>
                     <Heading>Media</Heading>
-                    <div className="flex justify-between items-center mb-4 mt-[15px]">
-                        <Button type="primary" className="custom-button bg-primary">
-                            Add new media file
-                        </Button>
-                    </div>
-
                     <Upload
                         action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                         listType="picture-card"
@@ -116,9 +110,9 @@ const MediaLibrary = () => {
                     )}
                     <Pagination
                         className="flex justify-end"
-                        current={data?.data?.paginator.current_page || 1}
-                        total={data?.data?.paginator.total_item || 0}
-                        pageSize={data?.data?.paginator.per_page || 15}
+                        current={data?.data?.paginator?.current_page || 1}
+                        total={data?.data?.paginator?.total_item || 0}
+                        pageSize={data?.data?.paginator?.per_page || 15}
                         onChange={handlePageChange}
                         style={{ marginTop: '20px', textAlign: 'center' }}
                     />

@@ -8,6 +8,7 @@ import language_vi from '../translations/vi.json';
 import useQueryConfig from '../hooks/useQueryConfig';
 import { handleGetLocalStorage, handleSetLocalStorage } from '../utils';
 import { INFO_AUTH, TOKENS } from '../constants';
+import { tokenManagerInstance } from '../api';
 
 const Context = createContext<any>({});
 
@@ -21,9 +22,8 @@ const language = {
 };
 
 const ContextGlobal = ({ children }: { children: ReactNode }) => {
-    const languageLocal = (handleGetLocalStorage('language') as LanguageType) || 'en';
+    const languageLocal = (handleGetLocalStorage('language') as LanguageType) || 'vi';
     const [locale, setLocale] = useState<LanguageType>(languageLocal);
-
     const [user, setUser] = useState<any>();
     const [quantityCart, setQuantityCart] = useState<number>(0);
 
@@ -56,6 +56,8 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
             refetchUser();
             refetchQuantityCart();
         }
+        tokenManagerInstance('get', `api/change/language?lang=${locale}`);
+
     }, []);
 
     useEffect(() => {
@@ -66,7 +68,8 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
         }
     }, [data]);
 
-    const changeLanguage = useCallback((selectedLocale: LanguageType) => {
+    const changeLanguage = useCallback(async (selectedLocale: LanguageType) => {
+        tokenManagerInstance('get', `api/change/language?lang=${selectedLocale}`);
         setLocale(selectedLocale);
         handleSetLocalStorage('language', selectedLocale);
     }, []);
