@@ -23,6 +23,7 @@ import ModalViewDetail from './ModalViewDetail.tsx';
 import { FormattedMessage } from 'react-intl';
 import NotFound from '../../../components/NotFound/index.tsx';
 import { showMessageClient } from '../../../utils/messages.ts';
+import { QUERY_KEY } from '../../../hooks/useProduct.tsx';
 
 const Detail = () => {
     const { slug } = useParams();
@@ -34,11 +35,7 @@ const Detail = () => {
         id = slug.substring(index + 1);
     }
 
-    const { data, isFetching } = useQueryConfig(`product-detail-${id}`, `/api/product/detail/${id}`);
-    const { refetch } = useQueryConfig('user-profile', 'api/auth/me?include=profile,favoriteProducts&times=user', {
-        enabled: false,
-    });
-
+    const { data, isFetching } = useQueryConfig([QUERY_KEY, `product-detail-${id}`], `/api/product/detail/${id}`);
 
     const products = data?.data;
     const { user } = useContextGlobal();
@@ -63,7 +60,6 @@ const Detail = () => {
 
     const handleAddFavourite = (id: number) => {
         postWishlist(id);
-        refetch();
     };
 
     const handleAddCart = () => {
@@ -156,11 +152,11 @@ const Detail = () => {
 
                             <h4 className="color-primary font-medium text-16px">
                                 {productD?.categories
-                                    ? productD?.categories.map((cat: any, index: number, array: any) => {
+                                    ? productD?.categories.map((cat: any, index: any, array: any) => {
                                         if (array.length < 2) {
                                             return ' ' + cat?.name;
                                         } else {
-                                            if (index == 2) return;
+                                            if (index > 1) return '';
                                             if (index == 1) return ' ' + cat?.name;
                                             return ' ' + cat?.name + ',';
                                         }
@@ -200,11 +196,15 @@ const Detail = () => {
                                     {<FormattedMessage id="body.Detail.Quantity" />} : {variant?.stock_qty}
                                 </p>
                             ) : (
+                                ''
+                            )}
+                            {productD?.variations.length ? (
+                                ''
+                            ) : (
                                 <p className="text-16px font-medium text-red-500">
                                     {<FormattedMessage id="body.Detail.Quantity" />} : {productD?.stock_qty}
                                 </p>
                             )}
-
                             {user ? (
                                 ''
                             ) : (
@@ -216,7 +216,8 @@ const Detail = () => {
                                 <button
                                     onClick={
                                         user
-                                            ? (productD?.variations?.length == 0 && productD?.stock_qty) || (variant && variant?.stock_qty)
+                                            ? (productD?.variations?.length == 0 && productD?.stock_qty) ||
+                                                (variant && variant?.stock_qty)
                                                 ? handleAddCart
                                                 : () => { }
                                             : () => {
@@ -229,7 +230,8 @@ const Detail = () => {
                                             }
                                     }
                                     className={`${user
-                                            ? productD?.variations?.length == 0 || (variant && variant?.stock_qty)
+                                            ? (productD?.variations?.length == 0 && productD?.stock_qty) ||
+                                                (variant && variant?.stock_qty)
                                                 ? 'bg-primary'
                                                 : 'bg-[#f4f4f4] cursor-default'
                                             : 'bg-[#f4f4f4] cursor-default'
@@ -277,13 +279,9 @@ const Detail = () => {
                                     ? productD?.suggestedProduct?.map((item: any) => (
                                         <SwiperSlide key={item.id}>
                                             <div>
-                                                <Link to={`/detail/${item.slug}`}>
+                                                <a href={`${item.slug}`}>
                                                     <div>
-                                                        <img
-                                                            src={item.image_url}
-                                                            alt={item.name}
-                                                            className="h-[678px] object-cover"
-                                                        />
+                                                        <img src={item.image_url} alt={item.name} />
                                                     </div>
                                                     <div>
                                                         <h3 className="text-15px color-primary font-medium pt-4">
@@ -296,7 +294,7 @@ const Detail = () => {
                                                                         if (array.length < 2) {
                                                                             return ' ' + cat?.name;
                                                                         } else {
-                                                                            if (index == 2) return;
+                                                                            if (index > 1) return '';
                                                                             if (index == 1) return ' ' + cat?.name;
                                                                             return ' ' + cat?.name + ',';
                                                                         }
@@ -308,7 +306,7 @@ const Detail = () => {
                                                             {formatPrice(item.price)} ₫
                                                         </h3>
                                                     </div>
-                                                </Link>
+                                                </a>
                                             </div>
                                         </SwiperSlide>
                                     ))

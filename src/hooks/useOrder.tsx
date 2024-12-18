@@ -4,7 +4,7 @@ import { tokenManagerInstance } from '../api';
 import { useNavigate } from 'react-router-dom';
 import { showMessageAdmin } from '../utils/messages';
 import { useQueryClient } from 'react-query';
-
+import { QUERY_KEY as QUERY_KEY_PRODUCT } from './useProduct';
 export const API_ORDER = '/api/orders';
 export const QUERY_KEY = 'orders';
 const useOrder = () => {
@@ -17,7 +17,7 @@ const useOrder = () => {
             setLoading(true);
             await tokenManagerInstance('post', API_ORDER, order);
             showMessageAdmin('Create Order Sussccess', '', 'success');
-            queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
+            queryClient.invalidateQueries({queryKey:[QUERY_KEY,QUERY_KEY_PRODUCT]});
             navigate('/admin/orderlist');
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
@@ -34,7 +34,7 @@ const useOrder = () => {
             await tokenManagerInstance('patch', API_ORDER + `/${id}`, order);
             navigate('/admin/orderlist');
             showMessageAdmin('Update Order Sussccess', '', 'success');
-            queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
+            queryClient.invalidateQueries({queryKey:[QUERY_KEY,QUERY_KEY_PRODUCT]});
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {

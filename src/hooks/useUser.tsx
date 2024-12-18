@@ -1,38 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { tokenManagerInstance } from '../api';
 import { IUser } from '../interfaces/IUser';
 import { useNavigate } from 'react-router-dom';
 import { PATH_LIST_USER } from '../constants';
+import { useQueryClient } from 'react-query';
+import { showMessageAdmin } from '../utils/messages';
 
 const API_USER = '/api/user';
 export const QUERY_KEY = 'users';
 const useUser = () => {
-    const [users, setUsers] = useState<IUser[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
 
     // Function to fetch all users
-    const getAllUser = async () => {
-        try {
-            setLoading(true);
-            const { data } = await tokenManagerInstance('get', API_USER);
-            setUsers(data.users.data);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const addUser = async (userData: IUser) => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('post', `${API_USER}?time=user`, userData);
+            await tokenManagerInstance('post', `${API_USER}`, userData, {
+                headers: { 'Content-Type': 'application/form-data' },
+            });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             navigate(PATH_LIST_USER);
-            setUsers((prevUsers) => [...prevUsers, data.user]);
         } catch (error) {
-            console.error(error);
+            showMessageAdmin((error as any)?.response?.data?.errors?.email || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }
@@ -43,7 +35,7 @@ const useUser = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_USER}/${id}`);
-            setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
             console.error(error);
         } finally {
@@ -51,12 +43,11 @@ const useUser = () => {
         }
     };
 
-   
     const editUser = async (id: any, userData: IUser) => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('put', `${API_USER}/${id}`, userData);
-            setUsers((prevUsers) => prevUsers.map((user) => (user.id === id ? { ...user, ...data.user } : user)));
+            await tokenManagerInstance('put', `${API_USER}/${id}`, userData);
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             navigate(PATH_LIST_USER);
         } catch (error) {
             console.error(error);
@@ -65,14 +56,8 @@ const useUser = () => {
         }
     };
 
-    useEffect(() => {
-        getAllUser();
-    }, []);
-
     return {
-        users,
         loading,
-        getAllUser,
         addUser,
         deleteUser,
         editUser, // Return the editUser function to make it accessible in components
