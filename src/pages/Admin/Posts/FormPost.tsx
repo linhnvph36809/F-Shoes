@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ConfigProvider, Form, Select, Upload, Button, message } from 'antd';
+import { ConfigProvider, Form, Select, Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
 import Heading from '../components/Heading';
@@ -117,6 +117,7 @@ const FormPost = ({
                 rules={[{ required: true, message: 'Please enter content' }]}
             >
                 <EditorComponent
+                    height={500}
                     initialValues={initialValues?.content}
                     setDescription={(content: string) => {
                         form.setFieldsValue({ content: content });
