@@ -1,35 +1,31 @@
-
 import ReactApexChart from 'react-apexcharts';
 import { IOrder } from '../../../../../interfaces/IOrder';
 import { oneMonthAgo } from '../../../../../utils';
 
-
-interface Props{
-    orders?:IOrder[] | [],
-    startDate?:number|string,
-    endDate?:number|string
+interface Props {
+    orders?: IOrder[] | [];
+    startDate?: number | string;
+    endDate?: number | string;
 }
 
-
-const generateOrdersData = (records:IOrder[]) => {
-    const grouped:{[key:string]:number} = {};
-    records.forEach((e:IOrder) => {
+const generateOrdersData = (records: IOrder[]) => {
+    const grouped: { [key: string]: number } = {};
+    records.forEach((e: IOrder) => {
         const date = e?.created_at.split('T')[0];
-        if(!grouped[date]){
+        if (!grouped[date]) {
             grouped[date] = 0;
         }
         grouped[date]++;
     });
-    return Object.entries(grouped).map(([date,count]) => [date,count]);
-}
+    return Object.entries(grouped).map(([date, count]) => [date, count]);
+};
 
-
-const BrushChart = ({orders,startDate ,endDate}:Props) => {
+const BrushChart = ({ orders, startDate, endDate }: Props) => {
     const chartData = generateOrdersData(orders || []);
-    const minDate = startDate?  new Date(`${startDate}`).getTime() : oneMonthAgo().getTime();
-    const maxDate  = endDate ? new Date(`${endDate}`).getTime() : new Date().getTime();
-    
-    const options1= {
+    const minDate = startDate ? new Date(`${startDate}`).getTime() : oneMonthAgo().getTime();
+    const maxDate = endDate ? new Date(`${endDate}`).getTime() : new Date().getTime();
+
+    const options1 = {
         chart: {
             id: 'chart2',
             type: 'area',
@@ -133,7 +129,7 @@ const BrushChart = ({orders,startDate ,endDate}:Props) => {
             tickAmount: 2,
         },
     };
-    
+
     return (
         <div>
             <div id="chart-area">

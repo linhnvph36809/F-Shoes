@@ -40,6 +40,7 @@ const Detail = () => {
         enabled: false,
     });
 
+
     const products = data?.data;
     const { user } = useContextGlobal();
     const [idVariants, setIdVariants] = useState<number[]>([]);
@@ -50,8 +51,6 @@ const Detail = () => {
     const [imagesD, setImagesD] = useState<IImage[]>([]);
 
     const productD = products;
-
-    console.log(user);
 
     //to test component replace if(variationD) below into => if(product && product?.variations)
 
@@ -200,7 +199,7 @@ const Detail = () => {
                                       );
                                   })
                                 : ''}
-                            {variant?.stock_qty ? (
+                            {variant?.stock_qty || variant?.stock_qty === 0 ? (
                                 <p className="text-16px font-medium text-red-500">
                                     {<FormattedMessage id="body.Detail.Quantity" />} : {variant?.stock_qty}
                                 </p>
@@ -221,20 +220,19 @@ const Detail = () => {
                                 <button
                                     onClick={
                                         user
-                                            ? productD?.variations?.length == 0 || (variant && variant?.stock_qty)
+                                            ? (productD?.variations?.length == 0 && productD?.stock_qty) || (variant && variant?.stock_qty)
                                                 ? handleAddCart
                                                 : () => {}
                                             : () => {
-                                                  showMessageClient(
-                                                      'Login before adding products to cart',
-                                                      '',
-                                                      'warning',
-                                                  );
-                                                  navigate('/authentication');
-                                              }
+                                                showMessageClient(
+                                                    'Login before adding products to cart',
+                                                    '',
+                                                    'warning',
+                                                );
+                                                navigate('/authentication');
+                                            }
                                     }
-                                    className={`${
-                                        user
+                                    className={`${user
                                             ? productD?.variations?.length == 0 || (variant && variant?.stock_qty)
                                                 ? 'bg-primary'
                                                 : 'bg-[#f4f4f4] cursor-default'

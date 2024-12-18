@@ -10,12 +10,21 @@ import { showMessageClient } from '../utils/messages';
 import { handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
 const API_CHECK_EMAIL = '/api/check/email';
 
+const removeAllLocal = () => {
+    handleRemoveLocalStorage(INFO_AUTH.userName);
+    handleRemoveLocalStorage(INFO_AUTH.userId);
+    handleRemoveLocalStorage(INFO_AUTH.isAdmin);
+    handleRemoveLocalStorage(INFO_AUTH.adminName);
+    handleRemoveLocalStorage(INFO_AUTH.adminId);
+    handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
+    handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
+};
 const useAuth = () => {
     const [page, setPage] = useState<string>('');
     const [user, setUser] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [timeSendEmail, setTimeSendEmail] = useState<number>(0);
-    const { setUser: setUserGlobal, refetchQuantityCart } = useContextGlobal();
+    const { setUser: setUserGlobal, refetchQuantityCart, locale } = useContextGlobal();
     const { setUserName } = useContextClient();
     const queryClient = useQueryClient();
 
@@ -33,8 +42,7 @@ const useAuth = () => {
             showMessageClient('Verify code has been sent to your email.', '', 'success');
             setPage('register');
         } catch (error) {
-            console.log(error);
-            showMessageClient('Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
             setUser(email);
@@ -100,18 +108,29 @@ const useAuth = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `/api/logout`, user);
-            handleRemoveLocalStorage(INFO_AUTH.userName);
-            handleRemoveLocalStorage(INFO_AUTH.userId);
-            handleRemoveLocalStorage(INFO_AUTH.isAdmin);
-            handleRemoveLocalStorage(INFO_AUTH.adminName);
-            handleRemoveLocalStorage(INFO_AUTH.adminId);
-            handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
-            handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
+            showMessageClient('Logout Successfuly', '', 'success');
+            navigate('/');
+            removeAllLocal();
             setUserGlobal(undefined);
             setUserName('');
-            showMessageClient('Logout Successfuly', '', 'success');
             queryClient.clear();
-            navigate('/');
+        } catch (error) {
+            showMessageClient((error as any).response.data.message || 'Something went wrong!', '', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const logoutAdmin = async (user?: { email: string; password: string }) => {
+        try {
+            setLoading(true);
+            await tokenManagerInstance('post', `/api/logout`, user);
+            showMessageClient('Logout Successfuly', '', 'success');
+            navigate('/login-admin');
+            removeAllLocal();
+            setUserGlobal(undefined);
+            setUserName('');
+            queryClient.clear();
         } catch (error) {
             showMessageClient((error as any).response.data.message || 'Something went wrong!', '', 'error');
         } finally {
@@ -183,6 +202,7 @@ const useAuth = () => {
         loginAdmin,
         register,
         logout,
+        logoutAdmin,
     };
 };
 

@@ -14,7 +14,7 @@ const useTopic = () => {
     const deleteTopic = async (id: string | number) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('delete', `${API_TOPIC}/forceDelete112/${id}`);
+            await tokenManagerInstance('delete', `${API_TOPIC}/forceDelete/${id}`);
             showMessageAdmin('Delete Topic successfully', '', 'success');
         } catch (error) {
             showMessageAdmin('Error', (error as any).message, 'error');

@@ -15,8 +15,10 @@ import { ACTIONS, PERMISSION } from '../../../constants';
 import PermissionElement from '../../../components/Permissions/PermissionElement';
 import TableAdmin from '../components/Table';
 import ButtonUpdate from '../components/Button/ButtonUpdate';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const ListCategory = () => {
+    const intl = useIntl();
     const { deleteCategory, categories, mainCategories, postCategory, getAllCategory, putCategory } = useCategory();
 
     const [cateUpdate, setCateUpdate] = useState<any>();
@@ -59,7 +61,7 @@ const ListCategory = () => {
 
     // Cột xóa danh mục
     const columnDelete = {
-        title: 'Action',
+        title: <FormattedMessage id="category.table.action" />,
         dataIndex: 'id',
         key: 'id',
         render: (_: any, values: ICategory) => {
@@ -89,7 +91,9 @@ const ListCategory = () => {
                 <SkeletonComponent />
             ) : ( */}
             <section>
-                <Heading>List Category</Heading>
+                <Heading>
+                    <FormattedMessage id="admin.listCategory" />
+                </Heading>
 
                 {/* Thanh công cụ chứa Form và ô tìm kiếm */}
                 <div className="flex justify-between items-center mb-6">
@@ -126,7 +130,7 @@ const ListCategory = () => {
                         <div className="relative">
                             <input
                                 type="text"
-                                placeholder=" Search by category name"
+                                placeholder={intl.formatMessage({ id: 'category.search' })}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className={`w-full h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}

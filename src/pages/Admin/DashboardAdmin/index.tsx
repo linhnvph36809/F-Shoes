@@ -97,10 +97,12 @@ const AdminDashboard = () => {
                 <Skeleton />
             ) : (
                 <div className="grid grid-cols-4 gap-x-10">
-                    <div className="h-[180px] flex flex-col justify-between bg-[#FFFFFF] p-9 rounded-[14px]">
+                    <div className="h-[180px] flex flex-col justify-between bg-[#f1f1f1] p-9 rounded-[14px]">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-[16px] text-[#606060] font-medium">Total User</p>
+                                <p className="text-[16px] text-[#606060] font-medium">
+                                    <FormattedMessage id="admin.Total_User" />
+                                </p>
                                 <h3 className="text-[30px] font-bold color-primary mt-5">
                                     {overall?.users ? overall.users.total : 0}
                                 </h3>
@@ -157,10 +159,12 @@ const AdminDashboard = () => {
                             </p>
                         </div>
                     </div>
-                    <div className="h-[180px] flex flex-col justify-between bg-[#FFFFFF] p-9 rounded-[14px]">
+                    <div className="h-[180px] flex flex-col justify-between bg-[#f1f1f1] p-9 rounded-[14px]">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-[16px] text-[#606060] font-medium">Total Order</p>
+                                <p className="text-[16px] text-[#606060] font-medium">
+                                    <FormattedMessage id="admin.Total_Order" />
+                                </p>
                                 <h3 className="text-[30px] font-bold color-primary mt-5">
                                     {overall?.orders ? overall.orders.total : 0}
                                 </h3>
@@ -217,10 +221,12 @@ const AdminDashboard = () => {
                             </p>
                         </div>
                     </div>
-                    <div className="h-[180px] flex flex-col justify-between bg-[#FFFFFF] p-9 rounded-[14px]">
+                    <div className="h-[180px] flex flex-col justify-between bg-[#f1f1f1] p-9 rounded-[14px]">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-[16px] text-[#606060] font-medium">Total Product</p>
+                                <p className="text-[16px] text-[#606060] font-medium">
+                                    <FormattedMessage id="admin.Total_Product" />
+                                </p>
                                 <h3 className="text-[30px] font-bold color-primary mt-5">
                                     {overall?.products ? overall.products.total : 0}
                                 </h3>
@@ -278,10 +284,12 @@ const AdminDashboard = () => {
                             </p>
                         </div>
                     </div>
-                    <div className="h-[180px] flex flex-col justify-between bg-[#FFFFFF] p-9 rounded-[14px]">
+                    <div className="h-[180px] flex flex-col justify-between bg-[#f1f1f1] p-9 rounded-[14px]">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-[16px] text-[#606060] font-medium">Total Amount Order</p>
+                                <p className="text-[16px] text-[#606060] font-medium">
+                                    <FormattedMessage id="admin.Total_Amount_Order" />
+                                </p>
                                 <h3 className="text-[30px] font-bold color-primary mt-5">
                                     {formatPrice(overall?.total_amount_orders ? overall.total_amount_orders : 0)}đ
                                 </h3>
@@ -317,14 +325,16 @@ const AdminDashboard = () => {
                 </div>
             )}
             <div>
-                <h3 className="text-[18px] font-bold m-4 border-b-[1px]">Order Statistics Chart</h3>
+                <h3 className="text-[18px] font-bold m-4 border-b-[1px]">
+                    <FormattedMessage id="admin.Order_Statistics_Chart" />
+                </h3>
                 <BrushChart orders={chartData} startDate={dates.date_start} endDate={dates.date_end} />
             </div>
             <div>
                 <BestSellingProduct data={productBestSellingData} />
             </div>
             <div>
-                <h3 className="text-[18px] font-bold m-4 border-b-[1px]">Annual Revenue Statistics Chart</h3>
+                <h3 className="text-[18px] font-bold m-4 border-b-[1px]"><FormattedMessage id="admin.Annual_Revenue_Statistics_Chart" /></h3>
                 <div className="flex justify-end my-4">
                     <DatePicker
                         placeholder="Select a year"

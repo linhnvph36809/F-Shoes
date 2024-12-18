@@ -12,7 +12,7 @@ const PrivateRouteAdmin = ({ children }: { children: ReactNode }) => {
     return (
         <>
             <div>
-                {isAdmin && adminName && +isAdmin ? (
+                {isAdmin && adminName ? (
                     children
                 ) : (
                     <div>
