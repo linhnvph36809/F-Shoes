@@ -29,6 +29,8 @@ const useVariant = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            console.log(error,'e');
+            
         } finally {
             setLoading(false);
         }

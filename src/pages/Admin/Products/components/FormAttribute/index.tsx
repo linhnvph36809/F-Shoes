@@ -3,8 +3,17 @@ import { Plus, X } from 'lucide-react';
 
 import ButtonPrimary from '../../../../../components/Button';
 import InputPrimary from '../../../components/Forms/InputPrimary';
+import LoadingSmall from '../../../../../components/Loading/LoadingSmall';
 
-const FormAttribute = ({ handlePostAttributes, setVariantId }: { handlePostAttributes: any; setVariantId: any }) => {
+const FormAttribute = ({
+    handlePostAttributes,
+    setVariantId,
+    loading,
+}: {
+    handlePostAttributes: any;
+    setVariantId: any;
+    loading?: boolean;
+}) => {
     const [form] = Form.useForm();
 
     const handleAddSubmit = (name: string, remove: any) => {
@@ -88,17 +97,28 @@ const FormAttribute = ({ handlePostAttributes, setVariantId }: { handlePostAttri
 
                                 <Form.Item>
                                     <div className="text-end">
-                                        <ButtonPrimary
-                                            type="default"
-                                            htmlType="button"
-                                            onClick={() => {
-                                                handleAddSubmit(name, remove);
-                                            }}
-                                            width="w-[100px]"
-                                            height="h-[50px]"
-                                        >
-                                            Save
-                                        </ButtonPrimary>
+                                        {loading ? (
+                                            <ButtonPrimary
+                                                type="default"
+                                                htmlType="button"
+                                                width="w-[100px]"
+                                                height="h-[50px]"
+                                            >
+                                                <LoadingSmall />
+                                            </ButtonPrimary>
+                                        ) : (
+                                            <ButtonPrimary
+                                                type="default"
+                                                htmlType="button"
+                                                onClick={() => {
+                                                    handleAddSubmit(name, remove);
+                                                }}
+                                                width="w-[100px]"
+                                                height="h-[50px]"
+                                            >
+                                                Save
+                                            </ButtonPrimary>
+                                        )}
                                     </div>
                                 </Form.Item>
                             </div>

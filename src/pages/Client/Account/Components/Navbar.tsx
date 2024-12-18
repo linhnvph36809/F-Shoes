@@ -36,8 +36,8 @@ const Navbar = () => {
         <nav className="w-full bg-white p-4 flex justify-center items-center">
             <ul className="flex space-x-6 items-center">
                 {Item.map((item: PropsItem, index) => (
-                    <li className={getMenuClass(item.name)} key={index}>
-                        <Link to={`${item.url}`} onClick={() => handleMenuClick(item.name)}>
+                    <li className={getMenuClass(item?.name)} key={index}>
+                        <Link to={`${item.url}`} onClick={() => handleMenuClick(item?.name)}>
                             {item.name}
                         </Link>
                     </li>

@@ -71,7 +71,7 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) =>
 
         setImages((preImage: any) => {
             const newValues = images.filter((image: any) => {
-                if (value.images.includes(image.id)) {
+                if (value?.images?.includes(image.id)) {
                     return image.url;
                 }
             });
