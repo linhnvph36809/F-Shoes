@@ -1,53 +1,35 @@
-import { message } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import LoadingBlock from '../../../../components/Loading/LoadingBlock';
-import useUser from '../../../../hooks/useUser';
+import useUser, { QUERY_KEY } from '../../../../hooks/useUser';
 import Heading from '../../components/Heading';
 import FormUser from '../FormUser';
-import { FormattedMessage } from 'react-intl';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
+import { Skeleton } from 'antd';
+import ButtonBack from '../../components/ButtonBack';
 
 const UpdateUser: React.FC = () => {
-    const { id } = useParams<{ id: string }>(); // Assuming the user ID is in the URL params
-    const { users, editUser, getAllUser, loading } = useUser();
-    const [initialValues, setInitialValues] = useState<any>(null);
+    const { nickname } = useParams<{ nickname: string }>();
+    const { data, isFetching } = useQueryConfig([QUERY_KEY, `user-detail-${nickname}`], `/api/user/${nickname}`);
 
-    // Fetch the user details and set as initial values
-    useEffect(() => {
-        // Gọi getAllUser nếu users chưa có dữ liệu
-        if (!users.length) {
-            getAllUser();
-        } else {
-            const user = users.find((u) => u.id === Number(id));
-            if (user) {
-                setInitialValues(user);
-            }
-        }
-    }, [id, users, getAllUser]);
+    const { editUser, loading } = useUser();
 
-    const handleUpdateUser = useCallback(
-        async (values: any) => {
-            try {
-                await editUser(id, values);
-                message.success(<FormattedMessage id="user.User_Update_succes_pass" />);
-            } catch (error) {
-                message.error(<FormattedMessage id="user.User_Update_succes_fail" />);
-                console.error(error);
-            }
-        },
-        [editUser, id],
-    );
+    const handleUpdateUser = async (values: any) => {
+        // editUser(id, values);
+    };
 
     return (
         <>
-            {loading ? (
-                <LoadingBlock />
-            ) : (
-                <section>
-                    <Heading><FormattedMessage id="user.User_Update" /></Heading>
-                    <FormUser onFinish={handleUpdateUser} initialValues={initialValues} />
-                </section>
-            )}
+
+            <section>
+                <ButtonBack to="/admin/list-user" />
+                <Heading>Update User</Heading>
+                {isFetching ? (
+                    <Skeleton />
+                ) : (
+                    <FormUser loading={loading} onFinish={handleUpdateUser} initialValues={data?.data?.user} />
+                )}
+            </section>
+
         </>
     );
 };

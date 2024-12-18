@@ -12,6 +12,7 @@ import useVariant from '../../../../hooks/useVariant';
 import ButtonBack from '../../components/ButtonBack';
 import { PATH_ADMIN } from '../../../../constants/path';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
+import { FormattedMessage } from 'react-intl';
 
 const UpdateVariant = () => {
     const { slug } = useParams();
@@ -66,7 +67,9 @@ const UpdateVariant = () => {
         <>
             <section>
                 <ButtonBack to={PATH_ADMIN.LIST_PRODUCT} />
-                <Heading>Update Variant</Heading>
+                <Heading>
+                    <FormattedMessage id="Update Variant" />
+                </Heading>
                 <div className="grid grid-cols-2 gap-x-10">
                     <div>
                         <ConfigProvider
@@ -140,15 +143,21 @@ const UpdateVariant = () => {
                                         expandedRowRender: (record: any) => (
                                             <div>
                                                 <div className="flex items-center gap-x-5 pb-5 border-b">
-                                                    <p className="text-[14px] color-primary">Variant Name : </p>
+                                                    <p className="text-[14px] color-primary">
+                                                        <FormattedMessage id="Variant Name" /> :{' '}
+                                                    </p>
                                                     <p>{record.classify}</p>
                                                 </div>
                                                 <div className="flex items-center gap-x-5 pb-5 border-b">
-                                                    <p className="text-[14px] color-primary">Stock Quantity : </p>
+                                                    <p className="text-[14px] color-primary">
+                                                        <FormattedMessage id="admin.stock_qty" /> :{' '}
+                                                    </p>
                                                     <p>{record.stock_qty}</p>
                                                 </div>
                                                 <div className="flex items-center gap-x-5 py-5 border-b">
-                                                    <p className="text-[14px] color-primary">Price : </p>
+                                                    <p className="text-[14px] color-primary">
+                                                        <FormattedMessage id="admin.price" /> :{' '}
+                                                    </p>
                                                     <p>{formatPrice(record.price)}đ</p>
                                                 </div>
                                                 <div className="flex items-center gap-x-5 py-5 border-b">
@@ -156,7 +165,9 @@ const UpdateVariant = () => {
                                                     <p>{record.sku}</p>
                                                 </div>
                                                 <div className="flex items-center gap-x-5 py-5 border-b">
-                                                    <p className="text-[14px] color-primary">Images : </p>
+                                                    <p className="text-[14px] color-primary">
+                                                        <FormattedMessage id="admin.image" /> :{' '}
+                                                    </p>
                                                     <div className="grid grid-cols-6 gap-5">
                                                         {record.images.map((image: any) => (
                                                             <img
@@ -174,17 +185,17 @@ const UpdateVariant = () => {
                                     rowKey={(record) => `table2-${record.id}`}
                                     columns={[
                                         {
-                                            title: 'ID',
+                                            title: <FormattedMessage id="admin.id" />,
                                             dataIndex: 'id',
                                             key: '1',
                                         },
                                         {
-                                            title: 'Variant Name',
+                                            title: <FormattedMessage id="Variant Name" />,
                                             dataIndex: 'classify',
                                             key: '2',
                                         },
                                         {
-                                            title: 'Action',
+                                            title: <FormattedMessage id="category.table.action" />,
                                             key: '3',
                                             render: (_, { id, stock_qty, price, sku, images, values }: any) => {
                                                 let buttonDelete = (

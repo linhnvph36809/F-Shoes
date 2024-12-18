@@ -230,6 +230,7 @@
     "admin.listCategory": "List Category",
     "admin.order": "Order",
     "admin.orderList": "Order List",
+    "admin.Update_Order": "Update Order",
     "admin.addOrder": "Add Order",
     "admin.sale": "Sale",
     "admin.listSale": "List Sale",

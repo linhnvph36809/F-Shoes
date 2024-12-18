@@ -4,7 +4,8 @@ import utc from 'dayjs/plugin/utc';
 import { useContextGlobal } from '../contexts';
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
-import "dayjs/locale/vi";
+import 'dayjs/locale/vi';
+import { LANGUAGE_EN, LANGUAGE_VI } from '../constants';
 
 export const formatPrice = (price: number): string => {
     const intPart = Math.floor(price);
@@ -12,7 +13,6 @@ export const formatPrice = (price: number): string => {
 };
 
 export const timeToNow = (time: string) => {
-    
     const { locale } = useContextGlobal();
     dayjs.locale(locale || 'vi');
     return dayjs(time).fromNow();
@@ -62,4 +62,18 @@ export const handleChangeTitleTab = (title: string) => {
 
 export const createTitleLoader = (title: string) => {
     document.title = title;
+};
+
+export const handleChangeMessage: (language: string, enMessage: string, viMessage: string) => any = (
+    language,
+    enMessage,
+    viMessage,
+) => {
+    console.log(language);
+
+    if (language === LANGUAGE_EN) {
+        return enMessage;
+    } else if (language === LANGUAGE_VI) {
+        return viMessage;
+    }
 };

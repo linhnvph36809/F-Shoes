@@ -7,7 +7,7 @@ import { INFO_AUTH, TOKENS } from '../constants';
 import { useContextGlobal } from '../contexts';
 import { useContextClient } from '../components/Layouts/LayoutClient';
 import { showMessageClient } from '../utils/messages';
-import { handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
+import { handleChangeMessage, handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
 const API_CHECK_EMAIL = '/api/check/email';
 
 const removeAllLocal = () => {
@@ -91,7 +91,7 @@ const useAuth = () => {
             setUserGlobal(data.user);
             refetchQuantityCart();
             navigate('/');
-            showMessageClient('Login Successfuly', '', 'success');
+            showMessageClient(handleChangeMessage(locale, 'Logout Successfuly', 'Đăng nhập thành công'), '', 'success');
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
                 console.log(error as any);
@@ -110,9 +110,9 @@ const useAuth = () => {
             await tokenManagerInstance('post', `/api/logout`, user);
             showMessageClient('Logout Successfuly', '', 'success');
             navigate('/');
+            setUserName('');
             removeAllLocal();
             setUserGlobal(undefined);
-            setUserName('');
             queryClient.clear();
         } catch (error) {
             showMessageClient((error as any).response.data.message || 'Something went wrong!', '', 'error');
@@ -125,14 +125,13 @@ const useAuth = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `/api/logout`, user);
-            showMessageClient('Logout Successfuly', '', 'success');
+            showMessageClient(handleChangeMessage(locale, 'Logout Successfuly', 'Đăng nhập thành công'), '', 'success');
             navigate('/login-admin');
             removeAllLocal();
             setUserGlobal(undefined);
-            setUserName('');
             queryClient.clear();
         } catch (error) {
-            showMessageClient((error as any).response.data.message || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }
@@ -146,7 +145,8 @@ const useAuth = () => {
                 handleSetLocalStorage(TOKENS.ACCESS_TOKEN, data.access_token);
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
                 handleSetLocalStorage(INFO_AUTH.isAdmin, data.user.is_admin);
-                handleSetLocalStorage(INFO_AUTH.adminName, data.user.name);
+                handleSetLocalStorage(INFO_AUTH.userName, data.user.name);
+                handleSetLocalStorage(INFO_AUTH.adminId, data.user.id);
             }
             setUserGlobal(data.user);
             navigate('/admin');
@@ -154,7 +154,7 @@ const useAuth = () => {
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
                 console.log(error as any);
-                showMessageClient((error as any).response.data.message, '', 'error');
+                showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
             } else {
                 showMessageClient('Something went wrong!', '', 'error');
             }
@@ -181,7 +181,7 @@ const useAuth = () => {
             return data;
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
-                showMessageClient((error as any).response.data.message, '', 'error');
+                showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
             } else {
                 showMessageClient('Something went wrong!', '', 'error');
             }

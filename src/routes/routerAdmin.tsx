@@ -131,7 +131,7 @@ const routerAdmin = [
                 element: <AddUser />,
             },
             {
-                path: 'Update-user/:id',
+                path: 'Update-user/:nickname',
                 element: <UpdateUser />,
             },
             {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ConfigProvider, Form, Select, Upload, Button, message } from 'antd';
+import { ConfigProvider, Form, Select, Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
 import Heading from '../components/Heading';
@@ -9,6 +9,7 @@ import { useContextGlobal } from '../../../contexts';
 import InputPrimary from '../components/Forms/InputPrimary';
 import ButtonSubmit from '../components/Button/ButtonSubmit';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { showMessageAdmin } from '../../../utils/messages';
 
 const FormPost = ({
     title,
@@ -44,7 +45,7 @@ const FormPost = ({
     const handleImageUpload = (file: any) => {
         const isImage = file.type.startsWith('image/');
         if (!isImage) {
-            message.error('You can only upload image files!');
+            showMessageAdmin('You can only upload image files!', '', 'warning');
         } else {
             setImageFile(file);
         }
@@ -61,7 +62,7 @@ const FormPost = ({
                 theme: initialValues.image,
             });
         }
-    }, [initialValues, form]);
+    }, [initialValues, form, user]);
 
     return (
         <Form form={form} initialValues={initialValues} onFinish={handleFinish} layout="vertical">
@@ -117,6 +118,7 @@ const FormPost = ({
                 rules={[{ required: true, message: <FormattedMessage id="post.message.content" /> }]}
             >
                 <EditorComponent
+                    height={500}
                     initialValues={initialValues?.content}
                     setDescription={(content: string) => {
                         form.setFieldsValue({ content: content });

@@ -1,68 +1,65 @@
-import { Button, Table } from "antd";
+import { Button, Table } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 const CreateOrder = () => {
     const columns = [
         {
-            title: 'Name',
+            title: <FormattedMessage id="admin.name" />,
             dataIndex: 'name',
-            key: 'name', 
+            key: 'name',
         },
         {
             title: 'Variant',
             dataIndex: 'classify',
             key: 'classify',
-            render: (classify:string) => {
-               return <div>{classify ? classify : 'Simple Product'}</div>
-            }
+            render: (classify: string) => {
+                return <div>{classify ? classify : 'Simple Product'}</div>;
+            },
         },
         {
-            title: 'Image',
+            title: <FormattedMessage id="admin.image" />,
             dataIndex: 'image_url',
-            key: 'image_url', 
+            key: 'image_url',
         },
         {
-            title: 'Price',
+            title: <FormattedMessage id="admin.price" />,
             dataIndex: 'price',
             key: 'price',
         },
         {
-            title: 'Quantity',
+            title: <FormattedMessage id="body.Detail.Quantity" />,
             dataIndex: 'quantity',
             key: 'quantity',
         },
         {
-            title: 'Action',
+            title: <FormattedMessage id="category.table.action" />,
             render: () => {
                 return (
                     <div>
-                      
-                        <Button type="dashed">Remove</Button>
+                        <Button type="dashed">
+                            <FormattedMessage id="Remove" />
+                        </Button>
                     </div>
-                )
-            }
+                );
+            },
         },
-        
-    ]
+    ];
     return (
         <div className="bg-white h-full w-full p-8">
-           <h3 className="font-bold text-[16px]">
-                Create Order
-           </h3>
-           <div>
+            <h3 className="font-bold text-[16px]">Create Order</h3>
+            <div>
                 <header className="flex justify-between my-4">
-                    <div>
-                        đơn hàng
-                    </div>
+                    <div>đơn hàng</div>
                     <div>
                         <Button>Add Product</Button>
                     </div>
                 </header>
                 <main className="">
                     <div>Cart</div>
-                    <Table columns={columns} dataSource={[]}/>
+                    <Table columns={columns} dataSource={[]} />
                 </main>
-           </div>
+            </div>
         </div>
-    )
-}
+    );
+};
 export default CreateOrder;

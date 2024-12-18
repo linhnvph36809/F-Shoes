@@ -228,6 +228,7 @@
     "admin.order": "Đơn hàng",
     "admin.orderList": "Danh sách đơn hàng",
     "admin.addOrder": "Thêm đơn hàng",
+    "admin.Update_Order": "Cập nhật đơn hàng",
     "admin.sale": "Khuyến mãi",
     "admin.listSale": "Danh sách khuyến mãi",
     "admin.addSale": "Thêm khuyến mãi",

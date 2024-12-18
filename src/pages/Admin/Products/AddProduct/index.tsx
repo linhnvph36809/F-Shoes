@@ -6,6 +6,7 @@ import FormProduct from '../components/FormProduct';
 import useProduct from '../../../../hooks/useProduct';
 import ButtonBack from '../../components/ButtonBack';
 import { PATH_ADMIN } from '../../../../constants/path';
+import { FormattedMessage } from 'react-intl';
 
 const AddProduct = () => {
     const { loading, postProduct } = useProduct();
@@ -29,7 +30,9 @@ const AddProduct = () => {
         <>
             <section>
                 <ButtonBack to={PATH_ADMIN.LIST_PRODUCT} />
-                <Heading>Add Product</Heading>
+                <Heading>
+                    <FormattedMessage id="admin.addProduct" />
+                </Heading>
                 <FormProduct setImages={setImages} loading={loading} images={images} onFinish={onFinish} />
             </section>
         </>

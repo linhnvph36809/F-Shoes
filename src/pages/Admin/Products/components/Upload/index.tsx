@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Flex, message, Upload } from 'antd';
 import type { GetProp, UploadProps } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -44,7 +45,9 @@ const UploadImage: React.FC = () => {
     const uploadButton = (
         <button style={{ border: 0, background: 'none' }} type="button">
             {loading ? <LoadingOutlined /> : <PlusOutlined />}
-            <div style={{ marginTop: 8 }}>Upload Image</div>
+            <div style={{ marginTop: 8 }}>
+                <FormattedMessage id="Upload Image" />
+            </div>
         </button>
     );
 
