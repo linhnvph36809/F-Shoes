@@ -8,6 +8,7 @@ import EditorComponent from '../Products/components/FormProduct/Editor';
 import { useContextGlobal } from '../../../contexts';
 import InputPrimary from '../components/Forms/InputPrimary';
 import ButtonSubmit from '../components/Button/ButtonSubmit';
+import { showMessageAdmin } from '../../../utils/messages';
 
 const FormPost = ({
     title,
@@ -43,7 +44,7 @@ const FormPost = ({
     const handleImageUpload = (file: any) => {
         const isImage = file.type.startsWith('image/');
         if (!isImage) {
-            message.error('You can only upload image files!');
+            showMessageAdmin('You can only upload image files!', '', 'warning');
         } else {
             setImageFile(file);
         }
@@ -60,7 +61,7 @@ const FormPost = ({
                 theme: initialValues.image,
             });
         }
-    }, [initialValues, form]);
+    }, [initialValues, form, user]);
 
     return (
         <Form form={form} initialValues={initialValues} onFinish={handleFinish} layout="vertical">
