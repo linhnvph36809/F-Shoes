@@ -1,34 +1,27 @@
-import { QUERY_KEY } from '../../../hooks/useCategory';
+import { useParams } from 'react-router-dom';
 import { API_POST } from '../../../hooks/usePosts';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 
-const Header = () => {
-    const { data: posts2 } = useQueryConfig([QUERY_KEY, `list-posts`], API_POST);
-    console.log(posts2);
+const Header = ({ data }: any) => {
+    console.log(data);
     return (
-        <div className="bg-black text-white p-6 py-16 flex items-start gap-x-10">
+        <div className="bg-black text-white p-10 py-16 flex items-start gap-x-10">
             {' '}
             {/* Giảm padding dọc */}
             <div className="w-5/12">
-                <img
-                    src="https://res.cloudinary.com/dmubfrefi/image/private/s--Y0WMlp47--/c_crop,h_2136,w_3200,x_0,y_394/c_scale,w_640/f_auto/q_auto/v1/dee-about-cms-prod-medias/674d10df-6b4b-42af-8785-6793985264fe/2025-ekiden-collection.jpeg?_a=BAAAV6Bs"
-                    alt=""
-                    className="w-full object-cover"
-                />
+                <img src={data?.data?.theme} alt="" className="w-full object-cover" />
             </div>
             <div className="w-8/12">
                 {/* Cột bên trái */}
                 <div className="lg:w-1/3 flex flex-col">
                     {' '}
                     {/* Thêm mt-auto nếu cần */}
-                    <h1 className="text-white text-15px">31 tháng 10, 2024</h1>
+                    <h1 className="text-white text-15px">{data?.data?.created_at}</h1>
                 </div>
                 {/* Cột bên phải */}
                 <div className="lg:w-2/3">
                     {/* Tiêu đề */}
-                    <h1 className="text-white text-48px font-black ">
-                        Nike Extends Support for Kenyan Athletes, Providing Emergency Medical and Rescue Services
-                    </h1>
+                    <h1 className="text-white text-48px font-black">{data?.data?.title}</h1>
                 </div>
             </div>
         </div>
@@ -36,9 +29,9 @@ const Header = () => {
 };
 
 const NewsList = () => {
-    const { data: posts } = useQueryConfig([QUERY_KEY, `list-posts`], API_POST);
+    const { data: posts } = useQueryConfig([`KEY_POST_DETAIL`, `list-posts`], API_POST);
     return (
-        <div className=" flex flex-wrap mx-4 px-4 ">
+        <div className=" flex flex-wrap">
             {posts?.data?.map((po: any) => (
                 <div key={po.id} className="w-full md:w-1/3 p-4">
                     <a
@@ -60,10 +53,17 @@ const NewsList = () => {
     );
 };
 function PostDetail() {
+    const { slug } = useParams();
+
+    const { data: post2 } = useQueryConfig([`key-post-detail`, `post-detail-${slug}`], `/api/posts/${slug}`);
+    console.log(post2);
     return (
         <div className="">
-            <Header />
-            <section className="text-center py-10">Content</section>
+            <Header data={post2} />
+            <p
+                className="text-font nav-color text-[15px] text-justify p-10"
+                dangerouslySetInnerHTML={{ __html: post2?.data.content }}
+            ></p>
             <NewsList />
         </div>
     );

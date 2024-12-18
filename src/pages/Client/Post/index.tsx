@@ -6,6 +6,7 @@ import { Input, Pagination } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import { API_POST, QUERY_KEY } from '../../../hooks/usePosts';
+import { Link } from 'react-router-dom';
 
 const Header = () => (
     <div className="bg-black text-white py-16">
@@ -59,8 +60,8 @@ const NewsList = () => {
             <div className=" flex flex-wrap mx-4 px-4 ">
                 {posts?.data?.map((po: any) => (
                     <div key={po.id} className="w-full md:w-1/3 p-4">
-                        <a
-                            href={`post-detail/${po.slug}`}
+                        <Link
+                            to={`/post-detail/${po.slug}`}
                             className="inline-block border rounded-full px-6 py-2 text-15px font-medium text-gray-700 hover:bg-gray-100"
                         >
                             <div className="bg-white border-none shadow-none overflow-hidden">
@@ -71,7 +72,7 @@ const NewsList = () => {
                                     <p className="text-gray-600 text-15px">{po.created_at}</p>
                                 </div>
                             </div>
-                        </a>
+                        </Link>
                     </div>
                 ))}
             </div>

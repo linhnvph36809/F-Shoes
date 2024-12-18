@@ -12,6 +12,7 @@ import { Bell, Globe, LogOut } from 'lucide-react';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import useAuth from '../../../hooks/useAuth';
 import { LANGUAGE_EN, LANGUAGE_VI } from '../../../constants';
+import { FormattedMessage } from 'react-intl';
 
 const { Header, Content, Sider } = Layout;
 
@@ -101,7 +102,9 @@ const LayoutAdmin: React.FC = () => {
                 </Sider>
                 <Layout className="ml-[250px] relative min-h-[100vh]">
                     <Header className="bg-white px-5 py-10 flex justify-between items-center h-[70px]">
-                        <h3 className="text-[32px] font-semibold pl-5">Overview</h3>
+                        <h3 className="text-[32px] font-semibold pl-5">
+                            <FormattedMessage id="admin.Overview" />
+                        </h3>
                         <div
                             className="flex items-center gap-x-12"
                             onMouseEnter={() => setMessageWaitingConfirm(true)}
@@ -132,7 +135,9 @@ const LayoutAdmin: React.FC = () => {
                                         {countOrderWaiting?.data?.data ? (
                                             <p>
                                                 {`You have ${countOrderWaiting?.data?.data} orders on waiting confirmation. `}
-                                                <Link to={`/admin/orderlist?status=waiting_confirm`}>Checkout!</Link>
+                                                <Link to={`/admin/orderlist?status=waiting_confirm`}>
+                                                    <FormattedMessage id="admin.Checkout!" />
+                                                </Link>
                                             </p>
                                         ) : (
                                             ''
@@ -146,7 +151,7 @@ const LayoutAdmin: React.FC = () => {
                                 className="flex items-center gap-x-2 text-[16px] font-medium hover:cursor-pointer hover:opacity-50 transition-global"
                                 onClick={() => logout()}
                             >
-                                Logout <LogOut />
+                                <FormattedMessage id="admin.logout" /> <LogOut />
                             </div>
                         </div>
                     </Header>

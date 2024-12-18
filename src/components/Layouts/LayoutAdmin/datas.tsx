@@ -18,24 +18,29 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PERMISSION } from '../../../constants';
+import { FormattedMessage } from 'react-intl';
 
 export const items: MenuProps['items'] = [
     {
         key: '1',
         icon: <House className="w-[18px]" />,
-        label: <Link to="">Dashboard</Link>,
+        label: (
+            <Link to="">
+                <FormattedMessage id="admin.dashboard" />
+            </Link>
+        ),
     },
     {
         key: '2',
         icon: <Folder className="w-[18px]" />,
-        label: 'Category',
+        label: <FormattedMessage id="admin.category" />,
         permissionName: PERMISSION.PERMISSION_CATEGORY,
         children: [
             {
                 key: '2-1',
                 label: (
                     <Link to="list-category" className="text-[14px]">
-                        List Category
+                        <FormattedMessage id="admin.listCategory" />
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -45,13 +50,13 @@ export const items: MenuProps['items'] = [
     {
         key: '4',
         icon: <ListOrdered className="w-[18px]" />,
-        label: 'Order',
+        label: <FormattedMessage id="admin.order" />,
         children: [
             {
                 key: '4-1',
                 label: (
                     <Link to="orderlist" className="text-[14px]">
-                        Order List
+                        <FormattedMessage id="admin.orderList" />
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -60,7 +65,7 @@ export const items: MenuProps['items'] = [
                 key: '4-2',
                 label: (
                     <Link to="orderadd" className="text-[14px]">
-                        Add Order
+                        <FormattedMessage id="admin.addOrder" />
                     </Link>
                 ),
                 icon: <Plus className="w-[16px]" />,
@@ -70,13 +75,13 @@ export const items: MenuProps['items'] = [
     {
         key: '5',
         icon: <TicketPercent className="w-[18px]" />,
-        label: 'Sale',
+        label: <FormattedMessage id="admin.sale" />,
         children: [
             {
                 key: '5-1',
                 label: (
                     <Link to="listsale" className="text-[14px]">
-                        List Sale
+                        <FormattedMessage id="admin.listSale" />
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -85,7 +90,7 @@ export const items: MenuProps['items'] = [
                 key: '5-2',
                 label: (
                     <Link to="addsale" className="text-[14px]">
-                        Add Sale
+                        <FormattedMessage id="admin.addSale" />
                     </Link>
                 ),
                 icon: <Plus className="w-[16px]" />,
@@ -95,14 +100,14 @@ export const items: MenuProps['items'] = [
     {
         key: '6',
         icon: <Box className="w-[18px]" />,
-        label: 'Product',
+        label: <FormattedMessage id="admin.product" />,
         permissionName: PERMISSION.PERMISSION_PRODUCT,
         children: [
             {
                 key: '6-1',
                 label: (
                     <Link to="list-product" className="text-[14px]">
-                        List Product
+                        <FormattedMessage id="admin.listProduct" />
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -111,7 +116,7 @@ export const items: MenuProps['items'] = [
                 key: '6-2',
                 label: (
                     <Link to="add-product" className="text-[14px]">
-                        Add Product
+                        <FormattedMessage id="admin.addProduct" />
                     </Link>
                 ),
                 icon: <Plus className="w-[16px]" />,
@@ -120,7 +125,7 @@ export const items: MenuProps['items'] = [
                 key: '6-3',
                 label: (
                     <Link to="add-attribute" className="text-[14px]">
-                        Attribute
+                        <FormattedMessage id="admin.attribute" />
                     </Link>
                 ),
                 icon: <Tag className="w-[16px]" />,
@@ -130,13 +135,13 @@ export const items: MenuProps['items'] = [
     {
         key: '7',
         icon: <Users className="w-[18px]" />,
-        label: 'Groups',
+        label: <FormattedMessage id="admin.groups" />,
         children: [
             {
                 key: '7-1',
                 label: (
                     <Link to="groups" className="text-[14px]">
-                        List Group
+                        <FormattedMessage id="admin.listGroup" />
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -146,13 +151,13 @@ export const items: MenuProps['items'] = [
     {
         key: '8',
         icon: <User className="w-[18px]" />,
-        label: 'User',
+        label: <FormattedMessage id="admin.user" />,
         children: [
             {
                 key: '8-1',
                 label: (
                     <Link to="list-user" className="text-[14px]">
-                        List User
+                        <FormattedMessage id="admin.listUser" />
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -161,7 +166,7 @@ export const items: MenuProps['items'] = [
                 key: '8-2',
                 label: (
                     <Link to="add-user" className="text-[14px]">
-                        Add User
+                        <FormattedMessage id="admin.addUser" />
                     </Link>
                 ),
                 icon: <Plus className="w-[16px]" />,
@@ -171,13 +176,13 @@ export const items: MenuProps['items'] = [
     {
         key: '9',
         icon: <File className="w-[18px]" />,
-        label: 'Topic',
+        label: <FormattedMessage id="admin.topic" />,
         children: [
             {
                 key: '9-1',
                 label: (
                     <Link to="topic" className="text-[14px]">
-                        List Topic
+                        <FormattedMessage id="admin.listTopic" />
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -187,13 +192,13 @@ export const items: MenuProps['items'] = [
     {
         key: '10',
         icon: <BookOpen className="w-[18px]" />,
-        label: 'Post',
+        label: <FormattedMessage id="admin.post" />,
         children: [
             {
                 key: '10-1',
                 label: (
                     <Link to="posts" className="text-[14px]">
-                        List Post
+                        <FormattedMessage id="admin.listPost" />
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -202,7 +207,7 @@ export const items: MenuProps['items'] = [
                 key: '10-2',
                 label: (
                     <Link to="add-posts" className="text-[14px]">
-                        Add Post
+                        <FormattedMessage id="admin.addPost" />
                     </Link>
                 ),
                 icon: <Plus className="w-[16px]" />,
@@ -212,13 +217,13 @@ export const items: MenuProps['items'] = [
     {
         key: '11',
         icon: <Image className="w-[18px]" />,
-        label: 'Media',
+        label: <FormattedMessage id="admin.media" />,
         children: [
             {
                 key: '11-1',
                 label: (
                     <Link to="media" className="text-[14px]">
-                        List Media
+                        <FormattedMessage id="admin.listMedia" />
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -228,13 +233,13 @@ export const items: MenuProps['items'] = [
     {
         key: '12',
         icon: <TicketCheck className="w-[18px]" />,
-        label: 'Voucher',
+        label: <FormattedMessage id="admin.voucher" />,
         children: [
             {
                 key: '12-1',
                 label: (
                     <Link to="voucher" className="text-[14px]">
-                        List Voucher
+                        <FormattedMessage id="Featureadmin.listVoucherd" />
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -244,15 +249,16 @@ export const items: MenuProps['items'] = [
     {
         key: '13',
         icon: <Star className="w-[18px]" />,
-        label: 'Review',
+        label: <FormattedMessage id="admin.review" />,
         children: [
             {
                 key: '13-1',
                 label: (
                     <Link to="list-review" className="text-[14px]">
-                        List Review
+                        <FormattedMessage id="admin.listReview" />
                     </Link>
                 ),
+                icon: <Grid2X2 className="w-[16px]" />,
             },
         ],
     },
