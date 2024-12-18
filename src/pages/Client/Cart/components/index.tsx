@@ -6,6 +6,7 @@ import useWishlist from '../../../../hooks/useWishlist';
 import { formatPrice } from '../../../../utils';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { FormattedMessage } from 'react-intl';
+import { useEffect, useState } from 'react';
 
 const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
     const { putCart } = useCart();
@@ -14,21 +15,31 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
         'user-profile',
         'api/auth/me?include=profile,favoriteProducts&times=user',
     );
-
-    const onChange = (id: string | number, value: any) => {
-        if (value) {
-            putCart(id, {
-                quantity: +value,
-            });
-            refetch();
+    const [cartQty, setCartQty] = useState<number>(0);
+    useEffect(() => {
+        if (product?.quantity) {
+            setCartQty(product?.quantity);
+        }
+    }, [product]);
+    const onChange = (value: any) => {
+        if (!value || +value === product.quantity) {
+            setCartQty(product?.quantity);
         } else {
-            putCart(id, {
-                quantity: product.quantity,
+            setCartQty(value);
+            
+        }
+    };
+    const onChangeQuantity = (qty: any) => {
+        if (!qty || +qty === product.quantity) {
+            setCartQty(product?.quantity);
+        } else {
+            setCartQty(qty);
+            putCart(product.id, {
+                quantity: qty,
             });
             refetch();
         }
     };
-
     const handleAddFavourite = (id: number) => {
         postWishlist(id);
         refetchWishlist();
@@ -89,9 +100,11 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
                                         className="w-[60px] text-center ml-5"
                                         min={1}
                                         max={10}
+                                        value={cartQty}
                                         defaultValue={product.quantity}
                                         type="number"
-                                        onChange={(value: any) => onChange(product.id, value)}
+                                        onBlur={(e) => onChangeQuantity(e.target.value)}
+                                        onChange={(e) => onChange(e)}
                                     />
                                 </div>
                             </div>

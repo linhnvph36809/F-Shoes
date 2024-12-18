@@ -38,7 +38,6 @@ const HomePage = () => {
     const productsDisplay2 = category2?.products || [];
     const productsDisplay3 = category3?.products || [];
     
-    
     return (
         <>
             <section className="container">
