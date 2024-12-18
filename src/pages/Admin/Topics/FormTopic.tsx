@@ -5,9 +5,12 @@ import Heading from '../components/Heading';
 import { ITopic } from '../../../interfaces/ITopic';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import InputPrimary from '../components/Forms/InputPrimary';
-import ButtonSubmit from '../components/Button/ButtonSubmit';
+
+import { FormattedMessage, useIntl } from 'react-intl';
+import ButtonPrimary from '../../../components/Button';
 
 const FormTopic = ({ title, initialValues, onFinish }: { title: string; initialValues: any; onFinish: any }) => {
+    const intl = useIntl();
     const [form] = Form.useForm();
     const { data, refetch } = useQueryConfig('topic-form', 'api/topics');
 
@@ -41,15 +44,15 @@ const FormTopic = ({ title, initialValues, onFinish }: { title: string; initialV
                     }}
                 >
                     <Form.Item
-                        label="Parent Topic"
+                        label={intl.formatMessage({ id: 'topic.form.parent_Name' })} 
                         name="parent_topic_id"
                         className='font-medium'
-                        rules={[{ required: true, message: 'Please enter parent topic' }]}
+                        rules={[{ required: true, message: <FormattedMessage id="topic.form.parent_name" /> }]}
                     >
                         <Select
                             allowClear
                             className="text-20px font-medium w-full sm:h-[45px] md:h-[56px] border-1 border-[#111111]"
-                            placeholder="Please select"
+                            placeholder=""
                             optionFilterProp="name"
                             fieldNames={{ label: 'topic_name', value: 'id' }}
                             options={data?.data}
@@ -58,22 +61,23 @@ const FormTopic = ({ title, initialValues, onFinish }: { title: string; initialV
                     </Form.Item>
                 </ConfigProvider>
                 <InputPrimary
-                    label="Topic Name"
+                    label={intl.formatMessage({ id: 'topic.form.name' })}
                     name="topic_name"
-                    rules={[{ required: true, message: 'Please enter group name' }]}
-                    placeholder="Group name"
+                    rules={[{ required: true, message: <FormattedMessage id="topic.form.message.name" /> }]}
+                    placeholder=""
                 ></InputPrimary>
+                
 
                 <InputPrimary
-                    label="Slug"
+                    label={intl.formatMessage({ id: 'topic.form.slug' })}
                     name="slug"
-                    placeholder="Group name"
-                    rules={[{ required: true, message: 'Please enter slug' }]}
+                    placeholder=""
+                    rules={[{ required: true, message: <FormattedMessage id="topic.form.message.slug" /> }]}
                 ></InputPrimary>
 
-                <Form.Item className="mt-20">
-                    <ButtonSubmit />
-                </Form.Item>
+<ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
+        <FormattedMessage id="group.Group_button" />
+    </ButtonPrimary>
             </div>
         </Form>
     );

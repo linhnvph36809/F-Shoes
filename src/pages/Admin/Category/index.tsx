@@ -58,7 +58,7 @@ const ListCategory = () => {
         },
         [cateUpdate],
     );
-
+    console.log(cateUpdate);
     // Cột xóa danh mục
     const columnDelete = {
         title: <FormattedMessage id="category.table.action" />,

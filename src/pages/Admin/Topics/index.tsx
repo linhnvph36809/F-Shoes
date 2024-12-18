@@ -12,10 +12,13 @@ import useTopic, { API_TOPIC } from '../../../hooks/useTopic';
 import FormTopic from './FormTopic';
 import { showMessageActive } from '../../../utils/messages';
 import ButtonDelete from '../components/Button/ButtonDelete';
+import { FormattedMessage, useIntl } from 'react-intl';
+
 
 export const KEY = 'list-topic';
 
 const ListTopic = ({ initialValues }: any) => {
+    const intl = useIntl();
     const { data, isFetching, refetch } = useQueryConfig(KEY, API_TOPIC);
     const { deleteTopic, postTopic, restoreTopic, softTopic } = useTopic();
     const [searchTerm, setSearchTerm] = useState('');
@@ -61,22 +64,22 @@ const ListTopic = ({ initialValues }: any) => {
             key: '1',
         },
         {
-            title: 'Topic Name',
+            title: <FormattedMessage id="topic.Topic_Name" />,
             dataIndex: 'topic_name',
             key: '2',
         },
         {
-            title: 'Slug',
+            title: <FormattedMessage id="topic.Topic_Slug" />,
             dataIndex: 'slug',
             key: '3',
         },
         {
-            title: 'Created At',
+            title: <FormattedMessage id="topic.Topic_Greated_at" />,
             dataIndex: 'created_at',
             key: '4',
         },
         {
-            title: 'Actions',
+            title: <FormattedMessage id="topic.Topic_Action" />,
             dataIndex: 'id',
             key: '5',
             render: (_: any, topic: ITopic) => (
@@ -112,10 +115,14 @@ const ListTopic = ({ initialValues }: any) => {
                 <LoadingBlock />
             ) : (
                 <div>
-                    <FormTopic title="List Topic" initialValues={initialValues} onFinish={onFinish} />
+                   <FormTopic 
+            title={intl.formatMessage({ id: 'topic.List_Topic' })} 
+            initialValues={initialValues} 
+            onFinish={onFinish} 
+        />
                     <div className="mb-4 text-end">
                         <Input
-                            placeholder="Search by Topic Name"
+                            placeholder={intl.formatMessage({ id: 'topic.message' })}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             allowClear

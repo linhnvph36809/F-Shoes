@@ -14,8 +14,10 @@ import ButtonUpdate from '../../components/Button/ButtonUpdate';
 import ButtonDelete from '../../components/Button/ButtonDelete';
 import { handleGetLocalStorage } from '../../../../utils';
 import { INFO_AUTH } from '../../../../constants';
+import { FormattedMessage } from 'react-intl';
 
 const ListGroups = ({ initialValues }: any) => {
+
     const [form] = Form.useForm();
     const { loading, groups, postGroup, deleteGroup, softGroup, restoreGroup } = useGroups();
     const groupId = handleGetLocalStorage(INFO_AUTH.groupId) || 0;
@@ -32,17 +34,17 @@ const ListGroups = ({ initialValues }: any) => {
 
     const columns = [
         {
-            title: 'Group Name',
+            title: <FormattedMessage id="group.Group_name" />,
             dataIndex: 'group_name',
             key: '1',
         },
         {
-            title: 'Created At',
+            title: <FormattedMessage id="group.Group_created_at" />,
             dataIndex: 'created_at',
             key: '3',
         },
         {
-            title: 'Actions',
+            title: <FormattedMessage id="group.Group_action" />,
             dataIndex: 'id',
             key: '4',
             render: (_: any, group: IGroup) => (
@@ -82,17 +84,18 @@ const ListGroups = ({ initialValues }: any) => {
                 <LoadingPage />
             ) : (
                 <Form form={form} initialValues={initialValues} onFinish={onFinish} layout="vertical">
-                    <Heading>List Groups</Heading>
+                    <Heading><FormattedMessage id="group.List_Groups" /></Heading>
                     <div className="my-4 w-6/12">
                         <InputPrimary
-                            label="Group Name"
+                            label={<FormattedMessage id="group.Group_name_form" />}
                             name="group_name"
-                            rules={[{ required: true, message: 'Please enter group name' }]}
-                            placeholder="Group name"
+
+                            rules={[{ required: true, message: <FormattedMessage id="group.Group_name_requie" /> }]}
                         ></InputPrimary>
 
                         <Form.Item>
-                            <ButtonSubmit loading={loading} />
+                            <ButtonSubmit loading={loading} >
+                                <FormattedMessage id="group.Group_button" /> </ButtonSubmit>
                         </Form.Item>
                     </div>
                     <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={groups} />

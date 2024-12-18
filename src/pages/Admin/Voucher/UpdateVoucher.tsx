@@ -6,8 +6,10 @@ import useVoucher, { API_VOUCHER } from '../../../hooks/useVoucher';
 import LoadingBlock from '../../../components/Loading/LoadingBlock';
 import { KEY } from './index';
 import { PATH_ADMIN } from '../../../constants/path';
+import { useIntl } from 'react-intl';
 
 const UpdateVoucher = () => {
+    const intl = useIntl();
     const { loading, patchVoucher } = useVoucher();
     const { id } = useParams();
     const { cookies } = useCookiesConfig('user');
@@ -31,7 +33,7 @@ const UpdateVoucher = () => {
                 <LoadingBlock />
             ) : (
                 <FormVoucher
-                    title="Update Voucher"
+                title={intl.formatMessage({ id: 'voucher.update' })}
                     initialValues={initialValues}
                     onFinish={onFinish}
                     loading={loading}

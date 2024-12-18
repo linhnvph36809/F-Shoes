@@ -11,8 +11,10 @@ import SelectPrimary from '../../components/Forms/SelectPrimary';
 import InputPrimary from '../../components/Forms/InputPrimary';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import ButtonBack from '../../components/ButtonBack';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const Addorder = () => {
+    const intl = useIntl();
     const { data } = useQueryConfig(
         `all-product-admin`,
         `/api/product?per_page=8&page=1&include=categories,sale_price,variations`,
@@ -92,8 +94,9 @@ const Addorder = () => {
             amount_collected: value.amount_collected || 0,
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-                } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
+                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+            } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: null,
@@ -162,14 +165,16 @@ const Addorder = () => {
         <div style={{ fontSize: '20px' }}>
             <Form onFinish={onFinish} layout="vertical" style={{ fontSize: '18px' }}>
                 <ButtonBack to="/admin/orderlist" />
-                <Heading>Add Order</Heading>
+                <Heading>
+                    <FormattedMessage id="admin.addOrder" />
+                </Heading>
 
                 {/* Select User */}
                 <SelectPrimary
-                    label="Select User"
+                    label={<FormattedMessage id="admin.selectUser" />}
                     name="user_id"
-                    rules={[{ required: true, message: 'Please select a user' }]}
-                    placeholder="Select User"
+                    rules={[{ required: true, message: <FormattedMessage id="admin.pleaseSelectUser" /> }]}
+                    placeholder={intl.formatMessage({ id: 'admin.selectUser' })}
                     optionFilterProp="email"
                     allowClear
                     options={users}
@@ -177,12 +182,12 @@ const Addorder = () => {
                 ></SelectPrimary>
 
                 <SelectPrimary
-                    label="Select Product"
+                    label={<FormattedMessage id="admin.selectProduct" />}
                     name="product"
-                    rules={[{ required: true, message: 'Please select products' }]}
+                    rules={[{ required: true, message: <FormattedMessage id="admin.pleaseSelectProducts" /> }]}
                     mode="multiple"
                     onChange={handleProductChange}
-                    placeholder="Select Products"
+                    placeholder={intl.formatMessage({ id: 'admin.selectProduct' })}
                     optionFilterProp="name"
                     allowClear
                     options={products}
@@ -194,12 +199,18 @@ const Addorder = () => {
                     <div key={index} className="ml-20 mb-10">
                         <Form.Item
                             className="mb-5 font-medium"
-                            label={`Select Variant :  ${product.name}`}
+                            label={
+                                <>
+                                    <FormattedMessage id="admin.Select_Variant" />: {product.name}
+                                </>
+                            }
                             name={`variant-${index}`}
-                            rules={[{ required: true, message: 'Please select a variant' }]}
+                            rules={[
+                                { required: true, message: <FormattedMessage id="admin.Please_select_a_variant" /> },
+                            ]}
                         >
                             <Select
-                                placeholder="Select Variant"
+                                placeholder={intl.formatMessage({ id: 'admin.Select_Variant' })}
                                 optionFilterProp="name"
                                 options={product.variations}
                                 fieldNames={{ label: 'slug', value: 'id' }}
@@ -208,11 +219,11 @@ const Addorder = () => {
                         </Form.Item>
 
                         <Form.Item
-                            label="Quantity"
+                            label={<FormattedMessage id="body.Detail.Quantity" />}
                             className="font-medium"
                             name={`quantity-${index}`}
                             rules={[
-                                { required: true, message: 'Please enter a quantity' },
+                                { required: true, message: <FormattedMessage id="admin.Please_enter_a_quantity" /> },
                                 {
                                     validator: (_, value) => {
                                         if (value && variants[index]?.stock_qty && +value > variants[index].stock_qty) {
@@ -226,7 +237,7 @@ const Addorder = () => {
                             ]}
                         >
                             <Input
-                                placeholder="Quantity"
+                                placeholder={intl.formatMessage({ id: 'body.Detail.Quantity' })}
                                 type="number"
                                 value={listQuantity[index]}
                                 onChange={(e) => handlerChangeQuantity(index, e.target.value)}
@@ -236,16 +247,16 @@ const Addorder = () => {
                 ))}
 
                 <InputPrimary
-                    label="Amount Collected"
+                    label={<FormattedMessage id="admin.amountCollected" />}
                     name="amount_collected"
-                    placeholder="Enter Amount Collected"
+                    placeholder={intl.formatMessage({ id: 'admin.pleaseEnterAmount' })}
                     type="number"
                     initialValue={0}
                     rules={[
                         {
                             validator: (_: any, value: number) => {
                                 if (+value < 0) {
-                                    return Promise.reject(new Error('Amount must be greater than or equal to 0'));
+                                    return Promise.reject(new Error(intl.formatMessage({ id: 'Error.Amount_must' })));
                                 }
                                 return Promise.resolve();
                             },
@@ -254,42 +265,42 @@ const Addorder = () => {
                 ></InputPrimary>
 
                 <InputPrimary
-                    label="Recipient name"
+                    label={<FormattedMessage id="receiver_name" />}
                     name="receiver_full_name"
-                    rules={[{ required: true, message: 'Please enter recipient name' }]}
-                    placeholder="Enter recipient name"
+                    rules={[{ required: true, message: <FormattedMessage id="receiver_name_message" /> }]}
+                    placeholder={intl.formatMessage({ id: 'receiver_name' })}
                 ></InputPrimary>
                 <InputPrimary
-                    label="Recipient Email"
+                    label={<FormattedMessage id="receiver_email" />}
                     name="receiver_email"
-                    rules={[{ required: true, message: 'Please enter email' }]}
-                    placeholder="Enter recipient email"
+                    rules={[{ required: true, message: <FormattedMessage id="receiver_email_message" /> }]}
+                    placeholder={intl.formatMessage({ id: 'receiver_email' })}
                     type="email"
                 ></InputPrimary>
 
                 <InputPrimary
-                    label="Phone"
+                    label={<FormattedMessage id="phone" />}
                     name="phone"
-                    rules={[{ required: true, message: 'Please enter phone number' }]}
-                    placeholder="Enter phone number"
+                    rules={[{ required: true, message: <FormattedMessage id="phone_message" /> }]}
+                    placeholder={intl.formatMessage({ id: 'phone' })}
                 ></InputPrimary>
 
                 <SelectPrimary
-                    label="Select Province"
+                    label={<FormattedMessage id="city" />}
                     name="province"
-                    rules={[{ required: true, message: 'Please select a province' }]}
+                    rules={[{ required: true, message: <FormattedMessage id="city_message" /> }]}
                     onChange={handleCityChange}
-                    placeholder="Select Province"
+                    placeholder={intl.formatMessage({ id: 'city' })}
                     optionFilterProp="ProvinceName"
                     options={provinces}
                     fieldNames={{ label: 'ProvinceName', value: 'ProvinceID' }}
                 ></SelectPrimary>
 
                 <SelectPrimary
-                    label="Select District"
+                    label={<FormattedMessage id="district" />}
                     name="district"
-                    rules={[{ required: true, message: 'Please select a district' }]}
-                    placeholder="Select District"
+                    rules={[{ required: true, message: <FormattedMessage id="district_message" /> }]}
+                    placeholder={intl.formatMessage({ id: 'district' })}
                     optionFilterProp="ProvinceName"
                     options={districts}
                     fieldNames={{ label: 'DistrictName', value: 'DistrictID' }}
@@ -297,10 +308,10 @@ const Addorder = () => {
                 ></SelectPrimary>
 
                 <SelectPrimary
-                    label="Select Ward"
+                    label={<FormattedMessage id="ward" />}
                     name="ward"
-                    rules={[{ required: true, message: 'Please select a ward' }]}
-                    placeholder="Select Ward"
+                    rules={[{ required: true, message: <FormattedMessage id="ward_message" /> }]}
+                    placeholder={intl.formatMessage({ id: 'ward' })}
                     optionFilterProp="ProvinceName"
                     options={wards}
                     onChange={handleWardChange}
@@ -308,52 +319,62 @@ const Addorder = () => {
                 ></SelectPrimary>
 
                 <Form.Item
-                    label="Address"
+                    label={<FormattedMessage id="address_placeholder" />}
                     className="font-medium"
                     name="address"
-                    rules={[{ required: true, message: 'Please enter address' }]}
+                    rules={[{ required: true, message: <FormattedMessage id="address_message" /> }]}
                 >
-                    <TextArea placeholder="Enter address" />
+                    <TextArea placeholder={intl.formatMessage({ id: 'address_placeholder' })} />
                 </Form.Item>
 
                 <Form.Item
-                    label="Payment method"
+                    label={<FormattedMessage id="payment_method" />}
                     name="payment_method"
                     className="font-medium"
-                    rules={[{ required: true, message: 'Please select a payment method' }]}
+                    rules={[{ required: true, message: <FormattedMessage id="mess.payment_method" /> }]}
                 >
                     <Radio.Group>
-                        <Radio value="COD">Cash on Delivery (COD)</Radio>
+                        <Radio value="COD">
+                            <FormattedMessage id="title.Payment.CASH ON DELIVERY" /> (COD)
+                        </Radio>
                         <Radio value="VNPAY">VNPAY</Radio>
                         <Radio value="MOMO">MOMO</Radio>
                     </Radio.Group>
                 </Form.Item>
 
                 <Form.Item
-                    label="Shipping method"
+                    label={<FormattedMessage id="shipping_method" />}
                     name="shipping_method"
                     className="font-medium"
-                    rules={[{ required: true, message: 'Please select a shipping method' }]}
+                    rules={[{ required: true, message: <FormattedMessage id="shipping_method_message" /> }]}
                 >
                     <Radio.Group onChange={(e) => handleShippingChange(e.target.value)} disabled={!wardCode}>
-                        <Radio value={1}>Express Shipping</Radio>
-                        <Radio value={2}>Standard shipping</Radio>
-                        <Radio value={3}>Saving shipping</Radio>
+                        <Radio value={1}>
+                            <FormattedMessage id="shipping_express" />
+                        </Radio>
+                        <Radio value={2}>
+                            <FormattedMessage id="shipping_standard" />
+                        </Radio>
+                        <Radio value={3}>
+                            <FormattedMessage id="shipping_saving" />
+                        </Radio>
                     </Radio.Group>
                 </Form.Item>
 
-                <Form.Item label="Note" name="note" className="font-medium">
-                    <TextArea placeholder="Enter note" rows={9} />
+                <Form.Item label={<FormattedMessage id="note" />} name="note" className="font-medium">
+                    <TextArea placeholder={intl.formatMessage({ id: 'note_placeholder' })} rows={9} />
                 </Form.Item>
 
                 {fee.service_fee && totalAmount ? (
                     <div className="text-end my-10">
-                        <p className="font-medium text-[16px] color-gray">Subtotal: {formatPrice(totalAmount)} đ </p>
                         <p className="font-medium text-[16px] color-gray">
-                            Shipping Fee: {formatPrice(fee.service_fee)} đ
+                            <FormattedMessage id="box.Cart.Subtotal" />: {formatPrice(totalAmount)} đ{' '}
+                        </p>
+                        <p className="font-medium text-[16px] color-gray">
+                            <FormattedMessage id="shipping" />: {formatPrice(fee.service_fee)} đ
                         </p>
                         <h1 className="font-medium text-[20px] text-red-500">
-                            Total: {formatPrice(totalAmount + +fee.service_fee)} đ
+                            <FormattedMessage id="box.Cart.Total" />: {formatPrice(totalAmount + +fee.service_fee)} đ
                         </h1>
                     </div>
                 ) : (

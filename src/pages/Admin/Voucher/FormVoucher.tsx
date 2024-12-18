@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form } from 'antd';
+import { Button, DatePicker, Form, message } from 'antd';
 import dayjs from 'dayjs';
 
 import { useEffect, useState } from 'react';
@@ -6,6 +6,7 @@ import InputPrimary from '../../../components/Input';
 import ButtonPrimary from '../../../components/Button';
 import Heading from '../components/Heading';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface FormVoucherProps {
     title: string;
@@ -26,6 +27,7 @@ const initTypeVoucher = {
     percentage: 'percentage',
 };
 const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherProps) => {
+    const intl = useIntl();
     const [form] = Form.useForm();
 
     const [typeVoucher, setTypeVoucher] = useState(initTypeVoucher.fixed);
@@ -76,15 +78,15 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
         <Form form={form} onFinish={handleFinish} layout="vertical">
             <Heading>{title}</Heading>
             <div className="my-4 grid grid-cols-2 gap-x-5">
-                <Form.Item label="Code" name="code" rules={[{ required: true, message: 'Please enter code' }]}>
+                <Form.Item label={intl.formatMessage({ id: 'voucher.table.code' })} name="code" rules={[{ required: true, message:<FormattedMessage id="voucher.required.code" /> }]}>
                     <InputPrimary placeholder="Code" width="100%" height="h-[56px]" margin="mb-0" />
                 </Form.Item>
 
                 <Form.Item
-                    label="Discount"
+                    label={intl.formatMessage({ id: 'voucher.table.discount' })}
                     name="discount"
                     rules={[
-                        { required: true, message: 'Please enter discount' },
+                        { required: true, message: <FormattedMessage id="voucher.required.discount" />},
                         {
                             validator: (_, value) =>
                                 value && value < 1
@@ -113,7 +115,7 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                         </div>
                         {typeVoucher === initTypeVoucher.fixed && (
                             <InputPrimary
-                                placeholder="Discount"
+                            placeholder={intl.formatMessage({ id: 'voucher.table.discount' })}
                                 width="100%"
                                 height="h-[56px]"
                                 margin="mb-0"
@@ -135,19 +137,19 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                 </Form.Item>
 
                 <Form.Item
-                    label="Select Date Start"
+                    label={intl.formatMessage({ id: 'voucher.table.date_start' })}
                     name="date_start"
-                    rules={[{ required: true, message: 'Please select a start date and time!' }]}
+                    rules={[{ required: true, message: <FormattedMessage id="voucher.required.date_start" /> }]}
                 >
                     <DatePicker format="DD/MM/YYYY HH:mm:ss" showTime className="w-full h-[56px] border-[#111111]" />
                 </Form.Item>
 
                 <Form.Item
-                    label="Select Date End"
+                    label={intl.formatMessage({ id: 'voucher.table.date_end' })}
                     name="date_end"
                     dependencies={['date_start']}
                     rules={[
-                        { required: true, message: 'Please select an end date and time!' },
+                        { required: true, message: <FormattedMessage id="voucher.required.date_end" />},
                         ({ getFieldValue }) => ({
                             validator(_, value) {
                                 const startDate = getFieldValue('date_start');
@@ -168,16 +170,19 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                 </Form.Item>
 
                 <Form.Item
-                    label="Quantity"
+                    label={intl.formatMessage({ id: 'voucher.table.quantity' })}
                     name="quantity"
-                    rules={[{ required: true, message: 'Please enter quantity' }]}
+                    rules={[{ required: true, message: <FormattedMessage id="voucher.required.quantity" /> }]}
                 >
-                    <InputPrimary placeholder="Quantity" width="100%" height="h-[56px]" margin="mb-0" />
+                    <InputPrimary placeholder={intl.formatMessage({ id: 'voucher.table.quantity' })} width="100%" height="h-[56px]" margin="mb-0" />
                 </Form.Item>
-                <Form.Item label="Min Total Amount" name="min_total_amount">
+                <Form.Item label={intl.formatMessage({ id: 'voucher.table.min_total_amount' })} name="min_total_amount"
+
+                rules={[{ required: true, message: <FormattedMessage id="voucher.required.min_total_amount" /> }]}
+                >
                     <InputPrimary
                         type="number"
-                        placeholder="Min Total Amount"
+                        placeholder={intl.formatMessage({ id: 'voucher.table.min_total_amount' })}
                         width="100%"
                         height="h-[56px]"
                         margin="mb-0"

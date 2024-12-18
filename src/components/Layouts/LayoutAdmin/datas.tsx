@@ -254,7 +254,7 @@ export const items: MenuProps['items'] = [
                 key: '12-1',
                 label: (
                     <Link to="voucher" className="text-[14px]">
-                        <FormattedMessage id="Featureadmin.listVoucherd" />
+                        <FormattedMessage id="admin.listVoucher" />
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -285,3 +285,4 @@ export const items: MenuProps['items'] = [
     children: item.children,
     permissionName: item.permissionName,
 }));
+/*333*/

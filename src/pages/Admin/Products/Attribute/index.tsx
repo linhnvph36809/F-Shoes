@@ -14,11 +14,13 @@ import ButtonDelete from '../../components/Button/ButtonDelete';
 import { showMessageActive } from '../../../../utils/messages';
 import InputPrimary from '../../components/Forms/InputPrimary';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 export const API_ATTRIBUTE_ADD = '/api/attribute?include=values&times=attribute';
 export const KEY = 'attribute';
 
 const AddAttribute = () => {
+    const intl = useIntl();
     const [form] = Form.useForm();
     const { data, refetch, isFetching } = useQueryConfig([QUERY_KEY, KEY], API_ATTRIBUTE_ADD);
     const { postAttributeName, deleteAttribute } = useAttribute();
@@ -59,15 +61,16 @@ const AddAttribute = () => {
 
     return (
         <>
-
             <section>
-                <Heading>Attribute</Heading>
+                <Heading>
+                    <FormattedMessage id="Attribute" />
+                </Heading>
                 <Form form={form} name="basic" onFinish={onFinish} autoComplete="off">
                     <InputPrimary
-                        label="Attribute Name"
+                        label={<FormattedMessage id="Attribute_name" />}
                         name="name"
-                        rules={[{ required: true, message: 'Please enter Attribute Name!' }]}
-                        placeholder="Enter attribute Name"
+                        rules={[{ required: true, message: <FormattedMessage id="Please enter Attribute Name!" /> }]}
+                        placeholder={intl.formatMessage({ id: 'Attribute_name' })}
                         width="w-1/2"
                     />
 
@@ -80,13 +83,11 @@ const AddAttribute = () => {
                 <div>
                     {isFetching ? (
                         <SkeletonComponent />
-                    ) :
+                    ) : (
                         <TableAdmin columns={[...columnsAttribute, Edit]} rowKey="id" datas={data?.data[0].data} />
-                    }
+                    )}
                 </div>
-
             </section>
-
         </>
     );
 };

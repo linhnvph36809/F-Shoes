@@ -12,7 +12,9 @@ import { showMessageActive, showMessageClient } from '../../../../utils/messages
 import LoadingSmall from '../../../../components/Loading/LoadingSmall.tsx';
 import { tokenManagerInstance } from '../../../../api/index.tsx';
 import { API_SALE } from '../../../../hooks/useSale.tsx';
+import { FormattedMessage, useIntl } from 'react-intl';
 const ListSale = () => {
+    const intl = useIntl();
     const navigate = useNavigate();
     const urlQuery = new URLSearchParams(useLocation().search);
 
@@ -22,7 +24,6 @@ const ListSale = () => {
     const keySearch = urlQuery.get('search');
     const keyStatus = urlQuery.get('status') || 'all';
     const [dataSearch, setDataSearch] = useState<ISale[]>([]);
-
 
     useEffect(() => {
         const eventSource = new EventSource(STREAM_SALE_LIST_URL);
@@ -37,28 +38,27 @@ const ListSale = () => {
             eventSource.close();
         };
 
-        const deleteSale = async (id:string|number) => {
-            try{
+        const deleteSale = async (id: string | number) => {
+            try {
                 eventSource.close();
                 setLoadingDeleteSale(true);
-                
-                const {data} = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
-                showMessageClient('Success','Sale deleted successfully!','success');
-            }catch(error){  
-                if((error as any)?.response?.data?.message){
-                    showMessageClient('Error',(error as any)?.response?.data?.message,'error');
+
+                const { data } = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
+                showMessageClient('Success', 'Sale deleted successfully!', 'success');
+            } catch (error) {
+                if ((error as any)?.response?.data?.message) {
+                    showMessageClient('Error', (error as any)?.response?.data?.message, 'error');
                     return;
                 }
                 showMessageClient('Error', 'Something went wrong!', 'error');
             } finally {
                 setLoadingDeleteSale(false);
             }
-        }
+        };
         if (deletedSaleID !== 0) {
             deleteSale(deletedSaleID);
         }
 
-        
         return () => {
             eventSource.close();
         };
@@ -68,10 +68,9 @@ const ListSale = () => {
         if (!loadingDeleteSale) {
             setDeletedSaleID(0);
         }
-
-    },[loadingDeleteSale]);
+    }, [loadingDeleteSale]);
     useEffect(() => {
-        const statusData = data.filter((item:ISale) => {
+        const statusData = data.filter((item: ISale) => {
             const start_date = new Date(item.start_date);
             const end_date = new Date(item.end_date);
             const now = new Date();
@@ -82,7 +81,6 @@ const ListSale = () => {
             } else if (keyStatus === 'active') {
                 return start_date < now && end_date > now;
             } else if (keyStatus === 'expired') {
-                
                 if (start_date < now && end_date < now) {
                     return true;
                 }
@@ -92,23 +90,26 @@ const ListSale = () => {
             }
         });
         if (keySearch && keySearch.length > 0) {
-
-            setDataSearch(statusData.filter((item: ISale) => {
-                if (item.name) {
-                    return item.name.toLowerCase().includes(keySearch.toLowerCase()) || item.id.toString().includes(keySearch.toLowerCase());
-                }
-                return item.id.toString().includes(keySearch.toLowerCase());
-            }))
+            setDataSearch(
+                statusData.filter((item: ISale) => {
+                    if (item.name) {
+                        return (
+                            item.name.toLowerCase().includes(keySearch.toLowerCase()) ||
+                            item.id.toString().includes(keySearch.toLowerCase())
+                        );
+                    }
+                    return item.id.toString().includes(keySearch.toLowerCase());
+                }),
+            );
         } else {
             setDataSearch([...statusData]);
         }
-    },[keySearch,keyStatus,data]);
-    const handleDelete = async (id:string|number) => {
-        await showMessageActive('Delete','Are you sure you want to delete?','warning',() => {
+    }, [keySearch, keyStatus, data]);
+    const handleDelete = async (id: string | number) => {
+        await showMessageActive('Delete', 'Are you sure you want to delete?', 'warning', () => {
             setDeletedSaleID(id);
         });
-
-    }
+    };
 
     // Search
     const searchSale = (e: any) => {
@@ -122,12 +123,12 @@ const ListSale = () => {
     const dataSource = [...dataSearch];
     const columns = [
         {
-            title: 'ID',
+            title: <FormattedMessage id="admin.id" />,
             dataIndex: 'id',
             key: 'id',
         },
         {
-            title: 'Name',
+            title: <FormattedMessage id="admin.name" />,
             dataIndex: 'name',
             key: 'name',
             render: (text: string) => (
@@ -137,56 +138,82 @@ const ListSale = () => {
             ),
         },
         {
-            title: 'Type',
+            title: <FormattedMessage id="admin.type" />,
             dataIndex: 'type',
             key: 'type',
-            render: (type: string) => <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center' color={type === 'percent' ? 'blue' : 'red'}>{type}</Tag>,
+            render: (type: string) => (
+                <Tag
+                    className="p-3 rounded-[30px] w-[90%] flex items-center justify-center"
+                    color={type === 'percent' ? 'blue' : 'red'}
+                >
+                    {type}
+                </Tag>
+            ),
         },
         {
-            title: 'Value',
+            title: <FormattedMessage id="admin.value" />,
             dataIndex: 'value',
             key: 'value',
         },
         {
-            title: 'Start date',
+            title: <FormattedMessage id="admin.startDate" />,
             dataIndex: 'start_date',
             key: 'start_date',
             render: (start_date: string) => <>{formatTime(start_date)}</>,
         },
         {
-            title: 'End date',
+            title: <FormattedMessage id="admin.endDate" />,
             dataIndex: 'end_date',
             key: 'end_date',
             render: (end_date: string) => <>{formatTime(end_date)}</>,
         },
         {
-            title: 'Status',
+            title: <FormattedMessage id="status" />,
             dataIndex: 'status',
             key: 'status',
             render: (_: any, record: ISale) => {
-                
                 const start_date = new Date(record.start_date);
                 const end_date = new Date(record.end_date);
                 const now = new Date();
                 if (start_date < now && end_date < now) {
-                    return <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center' color="red">Ended</Tag>;
+                    return (
+                        <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color="red">
+                            <FormattedMessage id="sale.status.ended" />
+                        </Tag>
+                    );
                 } else if (start_date < now && end_date > now) {
-                    return <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center' color="green">On going</Tag>;
+                    return (
+                        <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color="green">
+                            <FormattedMessage id="sale.status.ongoing" />
+                        </Tag>
+                    );
                 } else if (start_date > now) {
-                    return <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center' color="gold">Upcomming</Tag>;
+                    return (
+                        <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color="gold">
+                            <FormattedMessage id="sale.status.upcoming" />
+                        </Tag>
+                    );
                 }
             },
         },
         {
-            title: 'Active',
+            title: <FormattedMessage id="admin.active" />,
             key: 'is_active',
             dataIndex: 'is_active',
             render: (is_active: boolean) => {
-                return is_active ? <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center' color="geekblue">Active</Tag> : <Tag color="red">Inactive</Tag>;
+                return is_active ? (
+                    <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color="geekblue">
+                        <FormattedMessage id="sale.active" />
+                    </Tag>
+                ) : (
+                    <Tag color="red">
+                        <FormattedMessage id="sale.inactive" />
+                    </Tag>
+                );
             },
         },
         {
-            title: 'Action',
+            title: <FormattedMessage id="category.table.action" />,
             key: 'actions',
             render: (_: any, record: ISale) => {
                 let buttonDelete = (
@@ -214,7 +241,11 @@ const ListSale = () => {
                 return (
                     <div className="flex gap-2">
                         {buttonDelete}
-                        <Button onClick={() => navigate(`/admin/sale/update/${record.id}`)} style={{ color: 'black' }} icon={<EditOutlined />} />
+                        <Button
+                            onClick={() => navigate(`/admin/sale/update/${record.id}`)}
+                            style={{ color: 'black' }}
+                            icon={<EditOutlined />}
+                        />
                     </div>
                 );
             },
@@ -223,29 +254,41 @@ const ListSale = () => {
 
     return (
         <div>
-            <Heading>List Sale</Heading>
+            <Heading>
+                <FormattedMessage id="admin.listSale" />
+            </Heading>
             <div
                 style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
                 <Input
                     onChange={searchSale}
-                    placeholder="Search for discounts by name, code..."
+                    placeholder={intl.formatMessage({ id: 'Search_for' })}
                     style={{ width: 300 }}
                 />
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span style={{ marginRight: 10 }}>Status:</span>
+                    <span style={{ marginRight: 10 }}>
+                        <FormattedMessage id="status" />:
+                    </span>
                     <Radio.Group value={keyStatus} onChange={handleStatusChange} style={{ marginRight: '10px' }}>
-                        <Radio value="all">All</Radio>
-                        <Radio value="upcoming">Upcoming</Radio>
-                        <Radio value="active">Ongoing</Radio>
-                        <Radio value="expired">It has ended.</Radio>
+                        <Radio value="all">
+                            <FormattedMessage id="body.category.All" />
+                        </Radio>
+                        <Radio value="upcoming">
+                            <FormattedMessage id="status.upcoming" />
+                        </Radio>
+                        <Radio value="active">
+                            <FormattedMessage id="status.active" />
+                        </Radio>
+                        <Radio value="expired">
+                            <FormattedMessage id="status.expired" />
+                        </Radio>
                     </Radio.Group>
                     <Button type="primary" style={{ backgroundColor: 'black', borderColor: 'black', color: 'white' }}>
                         <Link
                             to="/admin/addsale"
                             style={{ backgroundColor: 'black', borderColor: 'black', color: 'white' }}
                         >
-                            Add a discount coupon.
+                            <FormattedMessage id="button.addDiscount" />
                         </Link>
                     </Button>
                 </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { message } from 'antd';
+import { useIntl } from 'react-intl';
 
 interface Group {
     key: string;
@@ -9,6 +10,7 @@ interface Group {
 }
 
 const useGroups = () => {
+    const intl = useIntl();
     const [dataSource, setDataSource] = useState<Group[]>([
         {
             key: '1',
@@ -24,12 +26,12 @@ const useGroups = () => {
         if (editingKey) {
             // Cập nhật nhóm
             setDataSource(dataSource.map(item => (item.key === editingKey ? { ...item, ...values } : item)));
-            message.success('Group updated successfully!');
+            message.success(intl.formatMessage({ id: 'group.succese.edit.pass' }));
         } else {
             // Thêm nhóm mới
             const newGroup = { key: String(dataSource.length + 1), ...values };
             setDataSource([...dataSource, newGroup]);
-            message.success('Group added successfully!');
+            message.success(intl.formatMessage({ id: 'group.succese.add.pass' }));
         }
         setEditingKey(null); // Reset trạng thái chỉnh sửa
     };
@@ -37,7 +39,7 @@ const useGroups = () => {
     // Xóa nhóm
     const deleteGroup = (key: string) => {
         setDataSource(dataSource.filter(item => item.key !== key));
-        message.success('Group deleted successfully!');
+        message.success(intl.formatMessage({ id: 'group.succese.delete' }));
     };
 
     // Chỉnh sửa nhóm

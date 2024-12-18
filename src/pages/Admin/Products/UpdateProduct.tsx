@@ -9,6 +9,7 @@ import SkeletonComponent from '../components/Skeleton';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import ButtonBack from '../components/ButtonBack';
 import { PATH_ADMIN } from '../../../constants/path';
+import { FormattedMessage } from 'react-intl';
 
 const KEY = 'product-detail-admin';
 
@@ -70,7 +71,9 @@ const UpdateProduct = () => {
             ) : (
                 <section>
                     <ButtonBack to={PATH_ADMIN.LIST_PRODUCT} />
-                    <Heading>Update Product</Heading>
+                    <Heading>
+                        <FormattedMessage id="Update Product" />
+                    </Heading>
                     <FormProduct
                         setImages={setImages}
                         images={images}

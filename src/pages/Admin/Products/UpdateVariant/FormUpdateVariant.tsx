@@ -7,8 +7,10 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { IImage } from '../../../../interfaces/IImage';
 import PaginationComponent from '../../../../components/Pagination';
 import useVariant from '../../../../hooks/useVariant';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const FormUpdateVariant = ({ initialValues }: any) => {
+    const intl = useIntl();
     const [currentPage, setCurrentPage] = useState(1);
     const { data, isFetching, refetch } = useQueryConfig('image', `/api/image?paginate=true&page=${currentPage}`);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,7 +64,11 @@ const FormUpdateVariant = ({ initialValues }: any) => {
                 <SquarePen />
             </ButtonEdit>
             <Modal
-                title={<h3 className="text-[25px] font-medidum">Update Value Variant</h3>}
+                title={
+                    <h3 className="text-[25px] font-medidum">
+                        <FormattedMessage id="Update Value Variant" />
+                    </h3>
+                }
                 open={isModalOpen}
                 onOk={handleOk}
                 closeIcon={<X onClick={handleClose} />}
@@ -74,7 +80,7 @@ const FormUpdateVariant = ({ initialValues }: any) => {
                         rounded-lg transition-global hover:text-white"
                             onClick={handleCancel}
                         >
-                            Cancel
+                            <FormattedMessage id="button.cancel" />
                         </button>
                         <button
                             key="ok"
@@ -82,7 +88,7 @@ const FormUpdateVariant = ({ initialValues }: any) => {
                         hover:opacity-80 transition-global"
                             onClick={handleOk}
                         >
-                            Submit
+                            <FormattedMessage id="button.submit" />
                         </button>
                     </div>,
                 ]}
@@ -92,18 +98,20 @@ const FormUpdateVariant = ({ initialValues }: any) => {
                 ) : (
                     <Form form={form} onFinish={onFinish} initialValues={initialValues}>
                         <InputPrimary
-                            label="Price"
-                            placeholder="Enter Price"
+                            label={<FormattedMessage id="admin.price" />}
+                            placeholder={intl.formatMessage({ id: 'product.enterPrice' })}
                             name="price"
                             type="number"
-                            rules={[{ required: true, message: 'Please enter price' }]}
+                            rules={[{ required: true, message: <FormattedMessage id="product.priceRequired" /> }]}
                         />
                         <InputPrimary
-                            label="Stock Quantity"
-                            placeholder="Enter Stock Quantity"
+                            label={<FormattedMessage id="product.stockQuantity" />}
+                            placeholder={intl.formatMessage({ id: 'product.enterStockQuantity' })}
                             name="stock_qty"
                             type="number"
-                            rules={[{ required: true, message: 'Please enter stock quantity' }]}
+                            rules={[
+                                { required: true, message: <FormattedMessage id="product.stockQuantityRequired" /> },
+                            ]}
                         />
                         <InputPrimary label="SKU" placeholder="Enter SKU" name="sku" />
 
@@ -121,7 +129,7 @@ const FormUpdateVariant = ({ initialValues }: any) => {
                             ) : (
                                 <Form.Item
                                     name="images"
-                                    label="Choose Images"
+                                    label={<FormattedMessage id="admin.image" />}
                                     className="font-medium"
                                     labelCol={{ span: 24 }}
                                 >
