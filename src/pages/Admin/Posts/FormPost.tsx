@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react';
 import { ConfigProvider, Form, Select, Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
-import ButtonPrimary from '../../../components/Button';
 import Heading from '../components/Heading';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import EditorComponent from '../Products/components/FormProduct/Editor';
-import LoadingSmall from '../../../components/Loading/LoadingSmall';
 import { useContextGlobal } from '../../../contexts';
 import InputPrimary from '../components/Forms/InputPrimary';
 import ButtonSubmit from '../components/Button/ButtonSubmit';
@@ -34,6 +32,7 @@ const FormPost = ({
         formData.append('slug', values.slug);
         formData.append('content', values.content);
         formData.append('author_id', user?.id);
+        initialValues?.title && formData.append('_method', 'PATCH');
         if (imageFile) {
             formData.append('theme', imageFile);
         }
@@ -95,14 +94,27 @@ const FormPost = ({
                     </Form.Item>
                 </ConfigProvider>
 
-                <InputPrimary label="Title" name="title" placeholder="Title" rules={[{ required: true, message: 'Please enter Title' }]}>
-                </InputPrimary>
+                <InputPrimary
+                    label="Title"
+                    name="title"
+                    placeholder="Title"
+                    rules={[{ required: true, message: 'Please enter Title' }]}
+                ></InputPrimary>
 
-                <InputPrimary label="Slug" placeholder="Slug" name="slug" rules={[{ required: true, message: 'Please enter slug' }]}>
-                </InputPrimary>
+                <InputPrimary
+                    label="Slug"
+                    placeholder="Slug"
+                    name="slug"
+                    rules={[{ required: true, message: 'Please enter slug' }]}
+                ></InputPrimary>
             </div>
 
-            <Form.Item label="Content" className='font-medium' name="content" rules={[{ required: true, message: 'Please enter content' }]}>
+            <Form.Item
+                label="Content"
+                className="font-medium"
+                name="content"
+                rules={[{ required: true, message: 'Please enter content' }]}
+            >
                 <EditorComponent
                     initialValues={initialValues?.content}
                     setDescription={(content: string) => {
@@ -119,7 +131,7 @@ const FormPost = ({
             )}
             <Form.Item
                 label="Image"
-                className='font-medium'
+                className="font-medium"
                 name="theme"
                 rules={initialValues?.theme ? [] : [{ required: true, message: 'Please upload an image' }]}
             >

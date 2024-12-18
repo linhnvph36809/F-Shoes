@@ -10,6 +10,15 @@ import { showMessageClient } from '../utils/messages';
 import { handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
 const API_CHECK_EMAIL = '/api/check/email';
 
+const removeAllLocal = () => {
+    handleRemoveLocalStorage(INFO_AUTH.userName);
+    handleRemoveLocalStorage(INFO_AUTH.userId);
+    handleRemoveLocalStorage(INFO_AUTH.isAdmin);
+    handleRemoveLocalStorage(INFO_AUTH.adminName);
+    handleRemoveLocalStorage(INFO_AUTH.adminId);
+    handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
+    handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
+}
 const useAuth = () => {
     const [page, setPage] = useState<string>('');
     const [user, setUser] = useState<string>('');
@@ -100,18 +109,29 @@ const useAuth = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `/api/logout`, user);
-            handleRemoveLocalStorage(INFO_AUTH.userName);
-            handleRemoveLocalStorage(INFO_AUTH.userId);
-            handleRemoveLocalStorage(INFO_AUTH.isAdmin);
-            handleRemoveLocalStorage(INFO_AUTH.adminName);
-            handleRemoveLocalStorage(INFO_AUTH.adminId);
-            handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
-            handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
+            showMessageClient('Logout Successfuly', '', 'success');
+            navigate('/');
+            removeAllLocal();
             setUserGlobal(undefined);
             setUserName('');
-            showMessageClient('Logout Successfuly', '', 'success');
             queryClient.clear();
-            navigate('/');
+        } catch (error) {
+            showMessageClient((error as any).response.data.message || 'Something went wrong!', '', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const logoutAdmin = async (user?: { email: string; password: string }) => {
+        try {
+            setLoading(true);
+            await tokenManagerInstance('post', `/api/logout`, user);
+            showMessageClient('Logout Successfuly', '', 'success');
+            navigate('/login-admin');
+            removeAllLocal();
+            setUserGlobal(undefined);
+            setUserName('');
+            queryClient.clear();
         } catch (error) {
             showMessageClient((error as any).response.data.message || 'Something went wrong!', '', 'error');
         } finally {
@@ -127,7 +147,7 @@ const useAuth = () => {
                 handleSetLocalStorage(TOKENS.ACCESS_TOKEN, data.access_token);
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
                 handleSetLocalStorage(INFO_AUTH.isAdmin, data.user.is_admin);
-                handleSetLocalStorage(INFO_AUTH.adminName, data.user.name);
+                handleSetLocalStorage(INFO_AUTH.userName, data.user.name);
             }
             setUserGlobal(data.user);
             navigate('/admin');
@@ -183,6 +203,7 @@ const useAuth = () => {
         loginAdmin,
         register,
         logout,
+        logoutAdmin,
     };
 };
 

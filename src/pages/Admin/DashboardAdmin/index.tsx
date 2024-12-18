@@ -8,7 +8,6 @@ import { formatPrice, formatTime } from '../../../utils';
 import BrushChart from './components/BrushChart';
 import ColumnChart from './components/ColumnChart';
 import BestSellingProduct from './components/BestSellingProduct';
-import { FormattedMessage } from 'react-intl';
 
 const { RangePicker } = DatePicker;
 
@@ -85,9 +84,7 @@ const AdminDashboard = () => {
     return (
         <Content>
             <div className="flex justify-between items-center">
-                <Heading>
-                    <FormattedMessage id="admin.dashboard" />
-                </Heading>
+                <Heading>Statistics</Heading>
                 <div className="flex gap-x-5 mb-10">
                     <RangePicker
                         onChange={handleChange}
@@ -99,7 +96,7 @@ const AdminDashboard = () => {
                 <Skeleton />
             ) : (
                 <div className="grid grid-cols-4 gap-x-10">
-                    <div className="h-[180px] flex flex-col justify-between bg-[#FFFFFF] p-9 rounded-[14px]">
+                    <div className="h-[180px] flex flex-col justify-between bg-[#f1f1f1] p-9 rounded-[14px]">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-[16px] text-[#606060] font-medium">
@@ -161,7 +158,7 @@ const AdminDashboard = () => {
                             </p>
                         </div>
                     </div>
-                    <div className="h-[180px] flex flex-col justify-between bg-[#FFFFFF] p-9 rounded-[14px]">
+                    <div className="h-[180px] flex flex-col justify-between bg-[#f1f1f1] p-9 rounded-[14px]">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-[16px] text-[#606060] font-medium">
@@ -223,7 +220,7 @@ const AdminDashboard = () => {
                             </p>
                         </div>
                     </div>
-                    <div className="h-[180px] flex flex-col justify-between bg-[#FFFFFF] p-9 rounded-[14px]">
+                    <div className="h-[180px] flex flex-col justify-between bg-[#f1f1f1] p-9 rounded-[14px]">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-[16px] text-[#606060] font-medium">
@@ -286,7 +283,7 @@ const AdminDashboard = () => {
                             </p>
                         </div>
                     </div>
-                    <div className="h-[180px] flex flex-col justify-between bg-[#FFFFFF] p-9 rounded-[14px]">
+                    <div className="h-[180px] flex flex-col justify-between bg-[#f1f1f1] p-9 rounded-[14px]">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-[16px] text-[#606060] font-medium">

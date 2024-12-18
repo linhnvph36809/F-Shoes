@@ -67,33 +67,7 @@ export const MENU_ITEM = [
             </Link>
         ),
     },
-    {
-        key: '7',
-        icon: <Blocks className="w-[18px]" />,
-        label: (
-            <Link to="/profile/orders?status=return_processing">
-                <FormattedMessage id="returnProcessing" />
-            </Link>
-        ),
-    },
-    {
-        key: '8',
-        icon: <Undo2 className="w-[18px]" />,
-        label: (
-            <Link to="/profile/orders?status=denied_return">
-                <FormattedMessage id="deniedReturn" />
-            </Link>
-        ),
-    },
-    {
-        key: '9',
-        icon: <RotateCcw className="w-[18px]" />,
-        label: (
-            <Link to="/profile/orders?status=returned">
-                <FormattedMessage id="returned" />
-            </Link>
-        ),
-    },
+    
 ];
 
 export default MENU_ITEM;

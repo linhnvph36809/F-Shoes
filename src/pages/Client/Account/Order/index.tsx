@@ -7,6 +7,7 @@ import ListOrder from './components/ListOrder';
 import { useNavigate } from 'react-router-dom';
 import { statusArr } from '../../../../interfaces/IOrder';
 import { FormattedMessage } from 'react-intl';
+import { QUERY_KEY as QUERY_KEY_ORDER } from '../../../../hooks/useOrder';
 
 const OrderProfile = () => {
     const navigate = useNavigate();
@@ -21,7 +22,6 @@ const OrderProfile = () => {
         return s === statusQueryUrl;
     });
 
-
     useEffect(() => {
         if (!statusQueryUrl) {
             indexInArr = null;
@@ -35,7 +35,7 @@ const OrderProfile = () => {
 
 
     const { data, isFetching } = useQueryConfig(
-        `order-all-${page}-status-${indexStatus || indexStatus === 0 ? indexStatus : 'empty'}`,
+        [QUERY_KEY_ORDER,`order-all-${page}-status-${indexStatus || indexStatus === 0 ? indexStatus : 'empty'}`],
         `/api/me/orders?per_page=5&page=${page}&status=${indexStatus || indexStatus === 0 ? indexStatus : ''}`,
     );
 
