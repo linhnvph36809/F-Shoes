@@ -34,7 +34,7 @@ export const usePermissionContext = () => useContext(ContextAdmin);
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
     const { locale, changeLanguage, user } = useContextGlobal();
-    const { logout } = useAuth();
+    const { logoutAdmin } = useAuth();
 
     useEffect(() => {
         const starCountRef = ref(db, `groups/${user?.group_id}`);
@@ -144,7 +144,7 @@ const LayoutAdmin: React.FC = () => {
                             </div>
                             <div
                                 className="flex items-center gap-x-2 text-[16px] font-medium hover:cursor-pointer hover:opacity-50 transition-global"
-                                onClick={() => logout()}
+                                onClick={() => logoutAdmin()}
                             >
                                 Logout <LogOut />
                             </div>
