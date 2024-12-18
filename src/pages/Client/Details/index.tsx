@@ -36,9 +36,6 @@ const Detail = () => {
     }
 
     const { data, isFetching } = useQueryConfig([QUERY_KEY, `product-detail-${id}`], `/api/product/detail/${id}`);
-    const { refetch } = useQueryConfig('user-profile', 'api/auth/me?include=profile,favoriteProducts&times=user', {
-        enabled: false,
-    });
 
     const products = data?.data;
     const { user } = useContextGlobal();
@@ -50,7 +47,6 @@ const Detail = () => {
     const [imagesD, setImagesD] = useState<IImage[]>([]);
 
     const productD = products;
-
 
     //to test component replace if(variationD) below into => if(product && product?.variations)
 
@@ -64,7 +60,6 @@ const Detail = () => {
 
     const handleAddFavourite = (id: number) => {
         postWishlist(id);
-        refetch();
     };
 
     const handleAddCart = () => {
@@ -203,11 +198,13 @@ const Detail = () => {
                             ) : (
                                 ''
                             )}
-                            {productD?.variations.length ? ""
-                                : <p className="text-16px font-medium text-red-500">
+                            {productD?.variations.length ? (
+                                ''
+                            ) : (
+                                <p className="text-16px font-medium text-red-500">
                                     {<FormattedMessage id="body.Detail.Quantity" />} : {productD?.stock_qty}
                                 </p>
-                            }
+                            )}
                             {user ? (
                                 ''
                             ) : (
@@ -233,10 +230,11 @@ const Detail = () => {
                                             }
                                     }
                                     className={`${user
-                                        ? (productD?.variations?.length == 0 && productD?.stock_qty) || (variant && variant?.stock_qty)
-                                            ? 'bg-primary'
+                                            ? (productD?.variations?.length == 0 && productD?.stock_qty) ||
+                                                (variant && variant?.stock_qty)
+                                                ? 'bg-primary'
+                                                : 'bg-[#f4f4f4] cursor-default'
                                             : 'bg-[#f4f4f4] cursor-default'
-                                        : 'bg-[#f4f4f4] cursor-default'
                                         }           text-16px font-medium h-[58px] text-white
                                                 rounded-[30px] w-full hover-opacity transition-global`}
                                 >

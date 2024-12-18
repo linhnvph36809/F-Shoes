@@ -20,7 +20,7 @@ const UpdatePost = () => {
 
     const onFinish = async (value: any) => {
         if (id) {
-            await patchPost(id, value);
+            patchPost(id, value);
             refetch();
         }
 
