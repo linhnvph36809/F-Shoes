@@ -5,6 +5,7 @@ import ButtonPrimary from '../../../../../components/Button';
 import '../../style.scss';
 import InputPrimary from '../../../components/Forms/InputPrimary';
 import ButtonAdd from '../../../components/Button/ButtonAdd';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const FormCategory = ({
     onFinish,
@@ -14,6 +15,7 @@ const FormCategory = ({
     setIsModalVisible,
     setCateUpdate,
 }: any) => {
+    const intl = useIntl();
     const [form] = Form.useForm();
     const [isLoading, setIsLoading] = useState(false); // State quản lý trạng thái loading
 
@@ -58,13 +60,17 @@ const FormCategory = ({
         <>
             {/* Nút mở modal */}
 
-            <ButtonAdd onClick={showModal} title={'Add Category'} />
+            <ButtonAdd onClick={showModal} title={<FormattedMessage id="category.add_button" />} />
 
             {/* Modal chứa Form */}
             <Modal
                 title={
                     <h3 className="text-[23px] font-bold">
-                        {initialValues ? 'Update New Category' : 'Add New Category'}
+                        {initialValues ? (
+                            <FormattedMessage id="category.modal_title_update" />
+                        ) : (
+                            <FormattedMessage id="category.modal_title_add" />
+                        )}
                     </h3>
                 }
                 visible={isModalVisible}
@@ -78,25 +84,28 @@ const FormCategory = ({
                         {/* Input Tên Category */}
                         <Form.Item
                             name="name"
-                            label="Category Name"
+                            label={<FormattedMessage id="category.name_label" />}
                             className="font-medium"
                             labelCol={{ span: 24 }} // Căn label theo chiều ngang
-                            rules={[{ required: true, message: 'Please enter category name' }]}
+                            rules={[{ required: true, message: <FormattedMessage id="category.name_required" /> }]}
                         >
-                            <InputPrimary placeholder={'Category Name'} width={'w-[395px]'} />
+                            <InputPrimary
+                                placeholder={intl.formatMessage({ id: 'category.name_placeholder' })}
+                                width={'w-[395px]'}
+                            />
                         </Form.Item>
 
                         {/* Select Parent Category */}
                         <Form.Item
                             name="parent"
                             className="font-medium"
-                            label="Parent Category"
+                            label={<FormattedMessage id="category.parent_label" />}
                             labelCol={{ span: 24 }}
-                            rules={[{ required: true, message: 'Please select a parent category' }]}
+                            rules={[{ required: true, message: <FormattedMessage id="category.parent_required" /> }]}
                         >
                             <Select
                                 mode="multiple"
-                                placeholder="Select Parent Category"
+                                placeholder={intl.formatMessage({ id: 'category.parent_placeholder' })}
                                 options={mainCategories}
                                 fieldNames={{ label: 'name', value: 'id' }}
                                 style={{ width: '395px', height: '52px' }}
@@ -112,7 +121,7 @@ const FormCategory = ({
                                 className="bg-blue-500 text-white rounded hover:bg-blue-600"
                                 loading={isLoading} // Thêm thuộc tính loading
                             >
-                                Submit
+                                <FormattedMessage id="category.submit" />
                             </ButtonPrimary>
                         </Form.Item>
                     </div>

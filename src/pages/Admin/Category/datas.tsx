@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { formatTime } from '../../../utils';
 import { ICategory } from '../../../interfaces/ICategory';
+import { FormattedMessage } from 'react-intl';
 
 export interface DataType {
     key: string;
@@ -12,12 +13,12 @@ export interface DataType {
 
 export const columns: any['columns'] = [
     {
-        title: 'ID',
+        title: <FormattedMessage id="admin.id" />,
         dataIndex: 'id',
         key: 'id',
     },
     {
-        title: 'Category Name',
+        title: <FormattedMessage id="category.table.category_name" />,
         dataIndex: 'name',
         key: 'name',
         render: (name: string) => {
@@ -29,7 +30,7 @@ export const columns: any['columns'] = [
         },
     },
     {
-        title: 'Category Parent',
+        title: <FormattedMessage id="category.table.category_parent" />,
         dataIndex: 'parents',
         key: 'parents',
         render: (parents: ICategory[]) => {
@@ -43,7 +44,7 @@ export const columns: any['columns'] = [
         },
     },
     {
-        title: 'Created At',
+        title: <FormattedMessage id="category.table.created_at" />,
         dataIndex: 'created_at',
         key: 'created_at',
         render: (created_at: string) => {
@@ -51,7 +52,7 @@ export const columns: any['columns'] = [
         },
     },
     {
-        title: 'Updated At',
+        title: <FormattedMessage id="category.table.updated_at" />,
         dataIndex: 'updated_at',
         key: 'updated_at',
         render: (updated_at: string) => {
