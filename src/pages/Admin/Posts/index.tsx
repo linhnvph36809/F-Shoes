@@ -9,15 +9,17 @@ import LoadingBlock from '../../../components/Loading/LoadingBlock';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import { IPost } from '../../../interfaces/IPost';
 import usePost, { API_POST } from '../../../hooks/usePosts';
-import ButtonPrimary from '../../../components/Button';
+
 import { PATH_ADMIN } from '../../../constants/path';
 import Heading from '../components/Heading';
 import ButtonAdd from '../components/Button/ButtonAdd';
 import ButtonDelete from '../components/Button/ButtonDelete';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 export const KEY = 'list-posts';
 
 const ListPost = () => {
+    const intl = useIntl();
     const [searchTerm, setSearchTerm] = useState<string>('');
     const { data, isFetching, refetch } = useQueryConfig(KEY, API_POST);
     const { deletePost, restorePost, softPost } = usePost();
@@ -54,12 +56,12 @@ const ListPost = () => {
             key: '1',
         },
         {
-            title: 'Title',
+            title: <FormattedMessage id="post.table.title"/>,
             dataIndex: 'title',
             key: '2',
         },
         {
-            title: 'Image',
+            title: <FormattedMessage id="post.table.image"/>,
             dataIndex: 'theme',
             key: '3',
             render: (_: any, { theme }: { theme: string }) => (
@@ -72,7 +74,7 @@ const ListPost = () => {
         //     key: '4',
         // },
         {
-            title: 'Author',
+            title: <FormattedMessage id="post.table.author"/>,
             dataIndex: 'topic_id',
             key: '5',
             render: (_: any, post: any) => (
@@ -88,12 +90,12 @@ const ListPost = () => {
             ),
         },
         {
-            title: 'Created At',
+            title:<FormattedMessage id="post.table.Created_At"/>,
             dataIndex: 'created_at',
             key: '6',
         },
         {
-            title: 'Actions',
+            title: <FormattedMessage id="post.table.Action"/>,
             dataIndex: 'id',
             key: '7',
             render: (_: any, post: IPost) => (
@@ -128,14 +130,14 @@ const ListPost = () => {
                 <LoadingBlock />
             ) : (
                 <div>
-                    <Heading>List Post</Heading>
+                    <Heading><FormattedMessage id="post.List_Post" /></Heading>
                     <div className="flex justify-between">
                         <div>
-                            <ButtonAdd to={PATH_ADMIN.ADD_POST} title=" Add Post"></ButtonAdd>
+                            <ButtonAdd to={PATH_ADMIN.ADD_POST} title={intl.formatMessage({ id: 'post.add' })} ></ButtonAdd>
                         </div>
                         <div className="mb-4">
                             <Input
-                                placeholder="Search by Title"
+                                placeholder={intl.formatMessage({ id: 'post.search' })}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 allowClear

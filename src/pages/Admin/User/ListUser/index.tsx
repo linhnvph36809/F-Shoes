@@ -76,7 +76,7 @@ const ListUser = () => {
             render: (status: any) => {
                 let color = status === 'active' ? 'green' : 'gray';
                 return (
-                    <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color={color}>
+<Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color={color}>
                         {status}
                     </Tag>
                 );
@@ -160,7 +160,7 @@ const ListUser = () => {
                     />
                 </Col>
                 <Col span={6}>
-                    <StatCard
+<StatCard
                         title="Inactive Users"
                         value={users?.filter((u: IUser) => u.status !== 'active').length}
                         description="Banned or Inactive Accounts"

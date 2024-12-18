@@ -74,7 +74,7 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                 ></InputPrimary>
                 <InputPrimary
                     name="email"
-                    type="email"
+type="email"
                     label="Email"
                     placeholder="Enter Email"
                     rules={[
