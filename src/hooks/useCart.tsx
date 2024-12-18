@@ -16,7 +16,7 @@ const useCart = () => {
             showMessageClient('Add to cart successfully', '', 'success');
             refetchQuantityCart();
         } catch (error) {
-            showMessageClient('Error', (error as any).message, 'error');
+            showMessageClient((error as any)?.response?.data?.error || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }
@@ -27,7 +27,7 @@ const useCart = () => {
             setLoading(true);
             await tokenManagerInstance('patch', API_CART + `/${id}`, quantity);
         } catch (error) {
-            console.log(error);
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }
@@ -39,7 +39,7 @@ const useCart = () => {
             await tokenManagerInstance('delete', API_CART + `/${id}`);
             showMessageClient('Delete cart successfully', '', 'success');
         } catch (error) {
-            showMessageClient('Error', (error as any).message, 'error');
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }

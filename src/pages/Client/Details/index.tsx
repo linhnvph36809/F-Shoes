@@ -39,6 +39,7 @@ const Detail = () => {
         enabled: false,
     });
 
+
     const products = data?.data;
     const { user } = useContextGlobal();
     const [idVariants, setIdVariants] = useState<number[]>([]);
@@ -49,8 +50,6 @@ const Detail = () => {
     const [imagesD, setImagesD] = useState<IImage[]>([]);
 
     const productD = products;
-
-    console.log(user);
 
     //to test component replace if(variationD) below into => if(product && product?.variations)
 
@@ -89,8 +88,8 @@ const Detail = () => {
 
     const handleNotLogin = () => {
         showMessageClient('Log in before adding products to your favorites list', '', 'warning');
-        navigate("/authentication")
-    }
+        navigate('/authentication');
+    };
 
     useEffect(() => {
         if (idVariants.length == products?.attributes.length) {
@@ -115,7 +114,7 @@ const Detail = () => {
         } else {
             setImagesD(products?.images);
         }
-    }, [variant,productD]);
+    }, [variant, productD]);
     if (!products && !isFetching) {
         return (
             <>
@@ -131,7 +130,6 @@ const Detail = () => {
                 </>
             );
     }
-
 
     return (
         <>
@@ -197,7 +195,7 @@ const Detail = () => {
                                     );
                                 })
                                 : ''}
-                            {variant?.stock_qty ? (
+                            {variant?.stock_qty || variant?.stock_qty === 0 ? (
                                 <p className="text-16px font-medium text-red-500">
                                     {<FormattedMessage id="body.Detail.Quantity" />} : {variant?.stock_qty}
                                 </p>
@@ -207,25 +205,31 @@ const Detail = () => {
                                 </p>
                             )}
 
-                            {
-                                user ? "" : <Link to="/authentication" className="text-16px font-medium mt-10 block underline">
+                            {user ? (
+                                ''
+                            ) : (
+                                <Link to="/authentication" className="text-16px font-medium mt-10 block underline">
                                     Login & Register
-                                </Link >
-                            }
+                                </Link>
+                            )}
                             <div className="my-20">
                                 <button
                                     onClick={
                                         user
-                                            ? productD?.variations?.length == 0 || (variant && variant?.stock_qty)
+                                            ? (productD?.variations?.length == 0 && productD?.stock_qty) || (variant && variant?.stock_qty)
                                                 ? handleAddCart
                                                 : () => { }
                                             : () => {
-                                                showMessageClient('Login before adding products to cart', '', 'warning');
-                                                navigate("/authentication")
+                                                showMessageClient(
+                                                    'Login before adding products to cart',
+                                                    '',
+                                                    'warning',
+                                                );
+                                                navigate('/authentication');
                                             }
                                     }
                                     className={`${user
-                                        ? productD?.variations?.length == 0 || (variant && variant?.stock_qty)
+                                        ? (productD?.variations?.length == 0 && productD?.stock_qty) || (variant && variant?.stock_qty)
                                             ? 'bg-primary'
                                             : 'bg-[#f4f4f4] cursor-default'
                                         : 'bg-[#f4f4f4] cursor-default'
@@ -237,8 +241,7 @@ const Detail = () => {
 
                                 <button
                                     onClick={() => {
-                                        user ? handleAddFavourite(productD.id) :
-                                            handleNotLogin()
+                                        user ? handleAddFavourite(productD.id) : handleNotLogin();
                                     }}
                                     className="h-[58px] color-primary border
                                     hover:border-[#111111] rounded-[30px] w-full
@@ -274,9 +277,13 @@ const Detail = () => {
                                     ? productD?.suggestedProduct?.map((item: any) => (
                                         <SwiperSlide key={item.id}>
                                             <div>
-                                                <a href={`${item.slug}`}>
+                                                <Link to={`/detail/${item.slug}`}>
                                                     <div>
-                                                        <img src={item.image_url} alt={item.name} />
+                                                        <img
+                                                            src={item.image_url}
+                                                            alt={item.name}
+                                                            className="h-[678px] object-cover"
+                                                        />
                                                     </div>
                                                     <div>
                                                         <h3 className="text-15px color-primary font-medium pt-4">
@@ -301,7 +308,7 @@ const Detail = () => {
                                                             {formatPrice(item.price)} ₫
                                                         </h3>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </SwiperSlide>
                                     ))
