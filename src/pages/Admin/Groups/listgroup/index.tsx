@@ -1,5 +1,5 @@
 import { Form } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { CircleX, Hand, RefreshCcw } from 'lucide-react';
 
 import Heading from '../../components/Heading';
@@ -12,10 +12,13 @@ import InputPrimary from '../../components/Forms/InputPrimary';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import ButtonUpdate from '../../components/Button/ButtonUpdate';
 import ButtonDelete from '../../components/Button/ButtonDelete';
+import { handleGetLocalStorage } from '../../../../utils';
+import { INFO_AUTH } from '../../../../constants';
 
 const ListGroups = ({ initialValues }: any) => {
     const [form] = Form.useForm();
     const { loading, groups, postGroup, deleteGroup, softGroup, restoreGroup } = useGroups();
+    const groupId = handleGetLocalStorage(INFO_AUTH.groupId) || 0;
 
     const onFinish = (value: any) => {
         postGroup(value);
@@ -68,6 +71,10 @@ const ListGroups = ({ initialValues }: any) => {
             ),
         },
     ];
+
+    if (+groupId !== 2) {
+        return <Navigate to="/admin" />;
+    }
 
     return (
         <>

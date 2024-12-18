@@ -19,6 +19,8 @@ export const PERMISSION = {
     PERMISSION_MEDIA: 'media',
     PERMISSION_DISCOUNT: 'discount',
     PERMISSION_REVIEW: 'review',
+    PERMISSION_SALE: 'sale',
+
 };
 
 export const ACTIONS = {
@@ -59,5 +61,6 @@ export const INFO_AUTH = {
     adminName: 'adminName',
     userId: 'userId',
     userName: 'userName',
-    isAdmin: 'isAdmin'
+    isAdmin: 'isAdmin',
+    groupId: 'groupId',
 };

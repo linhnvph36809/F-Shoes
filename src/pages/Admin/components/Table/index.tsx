@@ -2,7 +2,6 @@ import { ConfigProvider, Table } from 'antd';
 import "./table.scss";
 
 const TableAdmin = ({ columns, datas, ...props }: any) => {
-    console.log(datas);
 
     return (
         <ConfigProvider
