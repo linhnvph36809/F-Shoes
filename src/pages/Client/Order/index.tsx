@@ -48,8 +48,6 @@ const Order = () => {
     const { loading: loadingCheckOut, postVNPAY, postOrder, postMomo } = useOnlinePayment();
     const { user } = useContextGlobal();
     const { handleSetCookie } = useCookiesConfig('order');
-   
-   
 
     const [province, setProvince] = useState<any>('');
     const [districtId, setDistrictId] = useState<number | null>(null);
@@ -229,7 +227,6 @@ const Order = () => {
                 newValues,
             );
         }
-    
     };
 
     useEffect(() => {

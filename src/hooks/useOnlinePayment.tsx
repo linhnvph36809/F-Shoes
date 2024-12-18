@@ -23,7 +23,7 @@ const useOnlinePayment = () => {
             refetchQuantityCart();
             navigate('/order-cash-on-delivery');
         } catch (error) {
-            showMessageClient('Error', (error as any).message, 'error');
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }
@@ -42,7 +42,7 @@ const useOnlinePayment = () => {
             }
             refetchQuantityCart();
         } catch (error) {
-            showMessageClient('Error', (error as any).message, 'error');
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }
@@ -59,7 +59,7 @@ const useOnlinePayment = () => {
             }
             refetchQuantityCart();
         } catch (error) {
-            showMessageClient('Error', (error as any).message, 'error');
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }
@@ -69,7 +69,7 @@ const useOnlinePayment = () => {
         try {
             await tokenManagerInstance('put', `api/order/update/payment-status/${id}`, paymentStatus);
         } catch (error) {
-            showMessageClient('Error', (error as any).message, 'error');
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         }
     };
 
