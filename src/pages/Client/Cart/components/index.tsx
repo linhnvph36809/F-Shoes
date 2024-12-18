@@ -22,9 +22,9 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
         }
     }, [product]);
     const onChange = (value: any) => {
-        if (!value || +value === product.quantity) {
-            setCartQty(product?.quantity);
-        } else {
+        if (!value || +value === product.quantity ) {
+            
+        }else {
             setCartQty(value);
             
         }
@@ -32,7 +32,14 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
     const onChangeQuantity = (qty: any) => {
         if (!qty || +qty === product.quantity) {
             setCartQty(product?.quantity);
-        } else {
+        }else if(+qty > 10){
+            setCartQty(10);
+            putCart(product.id, {
+                quantity: 10,
+            });
+            refetch();
+        } 
+         else {
             setCartQty(qty);
             putCart(product.id, {
                 quantity: qty,
