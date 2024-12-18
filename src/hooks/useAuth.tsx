@@ -7,7 +7,7 @@ import { INFO_AUTH, TOKENS } from '../constants';
 import { useContextGlobal } from '../contexts';
 import { useContextClient } from '../components/Layouts/LayoutClient';
 import { showMessageClient } from '../utils/messages';
-import { handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
+import { handleChangeMessage, handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
 const API_CHECK_EMAIL = '/api/check/email';
 
 const removeAllLocal = () => {
@@ -91,7 +91,7 @@ const useAuth = () => {
             setUserGlobal(data.user);
             refetchQuantityCart();
             navigate('/');
-            showMessageClient('Login Successfuly', '', 'success');
+            showMessageClient(handleChangeMessage(locale, 'Logout Successfuly', 'Đăng nhập thành công'), '', 'success');
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
                 console.log(error as any);
@@ -125,7 +125,7 @@ const useAuth = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `/api/logout`, user);
-            showMessageClient('Logout Successfuly', '', 'success');
+            showMessageClient(handleChangeMessage(locale, 'Logout Successfuly', 'Đăng nhập thành công'), '', 'success');
             navigate('/login-admin');
             removeAllLocal();
             setUserGlobal(undefined);
@@ -155,7 +155,6 @@ const useAuth = () => {
             if ((error as any)?.response?.data?.message) {
                 console.log(error as any);
                 showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
-
             } else {
                 showMessageClient('Something went wrong!', '', 'error');
             }
@@ -183,7 +182,6 @@ const useAuth = () => {
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
                 showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
-
             } else {
                 showMessageClient('Something went wrong!', '', 'error');
             }
