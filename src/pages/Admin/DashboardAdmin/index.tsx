@@ -8,6 +8,7 @@ import { formatPrice, formatTime } from '../../../utils';
 import BrushChart from './components/BrushChart';
 import ColumnChart from './components/ColumnChart';
 import BestSellingProduct from './components/BestSellingProduct';
+import { FormattedMessage } from 'react-intl';
 
 const { RangePicker } = DatePicker;
 

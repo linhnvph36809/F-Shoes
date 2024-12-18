@@ -18,13 +18,13 @@ const removeAllLocal = () => {
     handleRemoveLocalStorage(INFO_AUTH.adminId);
     handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
     handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
-}
+};
 const useAuth = () => {
     const [page, setPage] = useState<string>('');
     const [user, setUser] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [timeSendEmail, setTimeSendEmail] = useState<number>(0);
-    const { setUser: setUserGlobal, refetchQuantityCart } = useContextGlobal();
+    const { setUser: setUserGlobal, refetchQuantityCart, locale } = useContextGlobal();
     const { setUserName } = useContextClient();
     const queryClient = useQueryClient();
 
@@ -42,8 +42,7 @@ const useAuth = () => {
             showMessageClient('Verify code has been sent to your email.', '', 'success');
             setPage('register');
         } catch (error) {
-            console.log(error);
-            showMessageClient('Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
             setUser(email);
@@ -147,7 +146,7 @@ const useAuth = () => {
                 handleSetLocalStorage(TOKENS.ACCESS_TOKEN, data.access_token);
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
                 handleSetLocalStorage(INFO_AUTH.isAdmin, data.user.is_admin);
-                handleSetLocalStorage(INFO_AUTH.userName, data.user.name);
+                handleSetLocalStorage(INFO_AUTH.adminName, data.user.name);
             }
             setUserGlobal(data.user);
             navigate('/admin');
