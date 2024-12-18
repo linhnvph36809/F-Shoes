@@ -1,5 +1,5 @@
 import { Form } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { CircleX, Hand, RefreshCcw } from 'lucide-react';
 
 import Heading from '../../components/Heading';
@@ -12,12 +12,15 @@ import InputPrimary from '../../components/Forms/InputPrimary';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import ButtonUpdate from '../../components/Button/ButtonUpdate';
 import ButtonDelete from '../../components/Button/ButtonDelete';
+import { handleGetLocalStorage } from '../../../../utils';
+import { INFO_AUTH } from '../../../../constants';
 import { FormattedMessage } from 'react-intl';
 
 const ListGroups = ({ initialValues }: any) => {
-    
+
     const [form] = Form.useForm();
     const { loading, groups, postGroup, deleteGroup, softGroup, restoreGroup } = useGroups();
+    const groupId = handleGetLocalStorage(INFO_AUTH.groupId) || 0;
 
     const onFinish = (value: any) => {
         postGroup(value);
@@ -71,6 +74,10 @@ const ListGroups = ({ initialValues }: any) => {
         },
     ];
 
+    if (+groupId !== 2) {
+        return <Navigate to="/admin" />;
+    }
+
     return (
         <>
             {loading ? (
@@ -82,13 +89,13 @@ const ListGroups = ({ initialValues }: any) => {
                         <InputPrimary
                             label={<FormattedMessage id="group.Group_name_form" />}
                             name="group_name"
-                            
+
                             rules={[{ required: true, message: <FormattedMessage id="group.Group_name_requie" /> }]}
                         ></InputPrimary>
 
                         <Form.Item>
                             <ButtonSubmit loading={loading} >
-                            <FormattedMessage id="group.Group_button" /> </ButtonSubmit>
+                                <FormattedMessage id="group.Group_button" /> </ButtonSubmit>
                         </Form.Item>
                     </div>
                     <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={groups} />

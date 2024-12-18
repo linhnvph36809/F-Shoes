@@ -1,4 +1,4 @@
-import { Card, Switch, Typography, Row, Col, Checkbox } from 'antd';
+import { Switch, Typography, Row, Col, Checkbox } from 'antd';
 import Heading from '../../components/Heading';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -15,6 +15,7 @@ const { Title } = Typography;
 const permissionList = [
     { name: 'Dashboard', key: PERMISSION.PERMISSION_DASHBOARD, actions: ACTIONS.ACTIONS_VIEW },
     { name: 'Categories', key: PERMISSION.PERMISSION_CATEGORY, actions: ACTIONS_LIST },
+    { name: 'Order', key: PERMISSION.PERMISSION_ORDER, actions: ACTIONS_LIST },
     { name: 'Products', key: PERMISSION.PERMISSION_PRODUCT, actions: ACTIONS_LIST },
     { name: 'Users', key: PERMISSION.PERMISSION_USER, actions: ACTIONS_LIST },
     { name: 'Topic', key: PERMISSION.PERMISSION_TOPIC, actions: ACTIONS_LIST },
@@ -29,6 +30,7 @@ const Authorization = () => {
     const { loadingDelete, getOneGroup, patchGroup } = useGroups();
     const [permissions, setPermissions] = useState<any>();
     const [groupName, setGroupName] = useState<string>('');
+    console.log(permissions);
 
     const handleSwitchChange = useCallback(
         (checked: boolean, key: string, action: string) => {

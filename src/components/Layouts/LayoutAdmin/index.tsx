@@ -13,6 +13,7 @@ import useQueryConfig from '../../../hooks/useQueryConfig';
 import useAuth from '../../../hooks/useAuth';
 import { LANGUAGE_EN, LANGUAGE_VI } from '../../../constants';
 import { FormattedMessage } from 'react-intl';
+import { showMessageAdmin } from '../../../utils/messages';
 
 const { Header, Content, Sider } = Layout;
 
@@ -45,7 +46,7 @@ const LayoutAdmin: React.FC = () => {
                 const newValue = JSON.parse(data);
                 setPermissions(JSON.parse(newValue));
             } catch (error) {
-                console.log(error);
+                showMessageAdmin((error as any).response.data.message || 'Something went wrong!', '', 'error');
             }
         });
 
@@ -70,6 +71,8 @@ const LayoutAdmin: React.FC = () => {
         'api/v1/statistics/count/order/waitings',
     );
     const [messageWaitingConfirm, setMessageWaitingConfirm] = useState(false);
+
+    console.log(itemsPermission);
 
     return (
         <ContextAdmin.Provider value={{ permissions }}>
