@@ -8,6 +8,7 @@ import EditorComponent from '../Products/components/FormProduct/Editor';
 import { useContextGlobal } from '../../../contexts';
 import InputPrimary from '../components/Forms/InputPrimary';
 import ButtonSubmit from '../components/Button/ButtonSubmit';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const FormPost = ({
     title,
@@ -24,7 +25,7 @@ const FormPost = ({
     const { data } = useQueryConfig('topic-form', 'api/topics');
     const [imageFile, setImageFile] = useState(null);
     const { user } = useContextGlobal();
-
+    const intl = useIntl();
     const handleFinish = (values: any) => {
         const formData = new FormData();
         formData.append('topic_id', values.topic_id);
@@ -77,15 +78,15 @@ const FormPost = ({
                     }}
                 >
                     <Form.Item
-                        label="Topic"
+                        label={intl.formatMessage({ id: 'post.form.topic' })}
                         name="topic_id"
                         className="font-medium"
-                        rules={[{ required: true, message: 'Please enter parent topic' }]}
+                        rules={[{ required: true, message: <FormattedMessage id="post.message.topic" /> }]}
                     >
                         <Select
                             allowClear
                             className="font-medium w-full sm:h-[45px] md:h-[50px] border-1 border-[#111111]"
-                            placeholder="Please select"
+                            placeholder=""
                             optionFilterProp="name"
                             fieldNames={{ label: 'topic_name', value: 'id' }}
                             options={data?.data}
@@ -95,25 +96,25 @@ const FormPost = ({
                 </ConfigProvider>
 
                 <InputPrimary
-                    label="Title"
+                    label={intl.formatMessage({ id: 'post.form.title' })}
                     name="title"
-                    placeholder="Title"
-                    rules={[{ required: true, message: 'Please enter Title' }]}
+                    placeholder=""
+                    rules={[{ required: true, message: <FormattedMessage id="post.message.title" /> }]}
                 ></InputPrimary>
 
                 <InputPrimary
                     label="Slug"
-                    placeholder="Slug"
+                    placeholder=""
                     name="slug"
-                    rules={[{ required: true, message: 'Please enter slug' }]}
+                    rules={[{ required: true, message: <FormattedMessage id="post.message.slug" /> }]}
                 ></InputPrimary>
             </div>
 
             <Form.Item
-                label="Content"
+                label={intl.formatMessage({ id: 'post.form.content' })}
                 className="font-medium"
                 name="content"
-                rules={[{ required: true, message: 'Please enter content' }]}
+                rules={[{ required: true, message: <FormattedMessage id="post.message.content" /> }]}
             >
                 <EditorComponent
                     initialValues={initialValues?.content}
@@ -130,13 +131,13 @@ const FormPost = ({
                 ''
             )}
             <Form.Item
-                label="Image"
+                label={intl.formatMessage({ id: 'post.form.image' })}
                 className="font-medium"
                 name="theme"
                 rules={initialValues?.theme ? [] : [{ required: true, message: 'Please upload an image' }]}
             >
                 <Upload name="image" listType="picture" accept="image/*" beforeUpload={handleImageUpload}>
-                    <Button icon={<UploadOutlined />}>Upload Image</Button>
+                    <Button icon={<UploadOutlined />} ><FormattedMessage id="post.upload_image" /></Button>
                 </Upload>
             </Form.Item>
 

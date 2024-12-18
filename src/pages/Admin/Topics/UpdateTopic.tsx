@@ -7,8 +7,10 @@ import FormTopic from './FormTopic';
 import LoadingBlock from '../../../components/Loading/LoadingBlock';
 import { PATH_ADMIN } from '../../../constants/path';
 import { KEY } from './index';
+import { useIntl } from 'react-intl';
 
 const UpdateTopic = () => {
+    const intl = useIntl();
     const { id } = useParams();
     const { data, isFetching, refetch } = useQueryConfig(KEY, API_TOPIC);
     const { patchTopic } = useTopic();
@@ -31,7 +33,7 @@ const UpdateTopic = () => {
             {isFetching ? (
                 <LoadingBlock />
             ) : (
-                <FormTopic title="Update Topic" initialValues={initialValues} onFinish={onFinish} />
+                <FormTopic title={intl.formatMessage({ id: 'topic.update' })} initialValues={initialValues} onFinish={onFinish} />
             )}
         </div>
     );

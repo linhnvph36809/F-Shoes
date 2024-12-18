@@ -4,6 +4,7 @@ import LoadingPage from '../../../../components/Loading/LoadingPage';
 import useUser from '../../../../hooks/useUser';
 import Heading from '../../components/Heading';
 import FormUser from '../FormUser';
+import { FormattedMessage } from 'react-intl';
 
 const AddUser = () => {
     const { loading, addUser } = useUser();
@@ -12,9 +13,11 @@ const AddUser = () => {
         async (values: any) => {
             try {
                 await addUser(values);
-                message.success('User added successfully');
+                
+                message.success(<FormattedMessage id="user.add_User_added_successfully" />);
             } catch (error) {
-                message.error('Failed to add user');
+                message.success(<FormattedMessage id="user.add_Failed_to_add_user" />);
+
                 console.error(error);
             }
         },
@@ -27,7 +30,7 @@ const AddUser = () => {
                 <LoadingPage />
             ) : (
                 <section>
-                    <Heading>Add User</Heading>
+                    <Heading><FormattedMessage id="user.add_user" /></Heading>
                     <FormUser onFinish={handleAddUser} />
                     {/* Include delete functionality where needed */}
                 </section>

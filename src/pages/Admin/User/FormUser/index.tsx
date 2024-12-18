@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Form } from 'antd';
 import ButtonPrimary from '../../../../components/Button';
 import InputPrimary from '../../../../components/Input';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface FormUserProps {
     onFinish: (values: any) => void;
@@ -9,6 +10,7 @@ interface FormUserProps {
 }
 
 const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues }) => {
+    const intl = useIntl();
     const [form] = Form.useForm();
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -46,14 +48,22 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues }) => {
     return (
         <Form form={form} initialValues={initialValues} onFinish={handleSubmit}>
             <div className="grid grid-cols-2 gap-5">
-                <Form.Item name="name" rules={[{ required: true, message: 'Please enter name' }]}>
-                    <InputPrimary placeholder="Name" />
-                </Form.Item>
-                <Form.Item name="email" rules={[{ required: true, message: 'Please enter Email' }]}>
+            <Form.Item 
+    name="name" 
+    rules={[
+        { 
+            required: true, 
+            message: <FormattedMessage id="user.User_Form_name_required" /> 
+        }
+    ]}
+>
+    <InputPrimary placeholder={intl.formatMessage({ id: 'user.User_Form_name' })} />
+</Form.Item>
+                <Form.Item name="email" rules={[{ required: true, message: <FormattedMessage id="user.User_Form_email_required" /> }]}>
                     <InputPrimary placeholder="Email" />
                 </Form.Item>
-                <Form.Item name="password" rules={[{ required: true, message: 'Please enter Password' }]}>
-                    <InputPrimary placeholder="Password" />
+                <Form.Item name="password" rules={[{ required: true, message: <FormattedMessage id="user.User_Form_password_required" /> }]}>
+                    <InputPrimary placeholder={intl.formatMessage({ id: 'user.User_Form_password' })}/>
                 </Form.Item>
                 <Form.Item>
                     <input type="file" accept="image/*" onChange={handleFileChange} />
@@ -63,10 +73,10 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues }) => {
                 </Form.Item>
             </div>
             <div className="text-end mt-10">
-                <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
-                    Submit
-                </ButtonPrimary>
-            </div>
+    <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
+        <FormattedMessage id="group.Group_button" />
+    </ButtonPrimary>
+</div>
         </Form>
     );
 };

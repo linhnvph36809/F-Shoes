@@ -10,10 +10,12 @@ import TableAdmin from '../../components/Table';
 import { Link } from 'react-router-dom';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const { Text } = Typography;
 
 const ListReview = () => {
+    const intl = useIntl();
     const { loading, deleteReview } = useReview(); // Use the useReview hook
     const { data: cachingReviewsData } = useQueryConfig(
         [QUERY_KEY, 'admin/list/all/reviews'],
@@ -50,7 +52,7 @@ const ListReview = () => {
     };
     const columns = [
         {
-            title: 'Product',
+            title: <FormattedMessage id="review.table.product" />,
             dataIndex: 'name',
             key: 'name',
             render: (_: any, record: any) => (
@@ -68,7 +70,7 @@ const ListReview = () => {
             ),
         },
         {
-            title: 'Title',
+            title: <FormattedMessage id="review.table.title" />,
             dataIndex: 'title',
             key: 'title',
             render: (_: any, record: IReview) => (
@@ -76,7 +78,7 @@ const ListReview = () => {
             ),
         },
         {
-            title: 'Text',
+            title: <FormattedMessage id="review.table.text" />,
             dataIndex: 'text',
             key: 'text',
             render: (_: any, record: IReview) => (
@@ -84,7 +86,7 @@ const ListReview = () => {
             ),
         },
         {
-            title: 'Rating',
+            title: <FormattedMessage id="review.table.rating" />,
             dataIndex: 'rating',
             key: 'rating',
             width: 150,
@@ -97,7 +99,7 @@ const ListReview = () => {
             ),
         },
         {
-            title: 'Actions',
+            title: <FormattedMessage id="review.table.action" />,
             key: 'actions',
             render: (_: any, record: any) => (
                 <div className="flex-row-center gap-x-5">
@@ -116,8 +118,8 @@ const ListReview = () => {
 
     return (
         <div style={{ padding: '20px' }}>
-            <Heading>List Review</Heading>
-            <div><Input  placeholder='Search a title or a text' onChange={handleSearch}/></div>
+            <Heading><FormattedMessage id="review.List_Review" /></Heading>
+            <div><Input  title={intl.formatMessage({ id: "review.search" })}  onChange={handleSearch}/></div>
             {loading ? (
                 <LoadingBlock />
             ) : (

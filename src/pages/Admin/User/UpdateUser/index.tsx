@@ -5,6 +5,7 @@ import LoadingBlock from '../../../../components/Loading/LoadingBlock';
 import useUser from '../../../../hooks/useUser';
 import Heading from '../../components/Heading';
 import FormUser from '../FormUser';
+import { FormattedMessage } from 'react-intl';
 
 const UpdateUser: React.FC = () => {
     const { id } = useParams<{ id: string }>(); // Assuming the user ID is in the URL params
@@ -28,9 +29,9 @@ const UpdateUser: React.FC = () => {
         async (values: any) => {
             try {
                 await editUser(id, values);
-                message.success('User updated successfully');
+                message.success(<FormattedMessage id="user.User_Update_succes_pass" />);
             } catch (error) {
-                message.error('Failed to update user');
+                message.error(<FormattedMessage id="user.User_Update_succes_fail" />);
                 console.error(error);
             }
         },
@@ -43,7 +44,7 @@ const UpdateUser: React.FC = () => {
                 <LoadingBlock />
             ) : (
                 <section>
-                    <Heading>Update User</Heading>
+                    <Heading><FormattedMessage id="user.User_Update" /></Heading>
                     <FormUser onFinish={handleUpdateUser} initialValues={initialValues} />
                 </section>
             )}

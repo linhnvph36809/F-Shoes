@@ -11,10 +11,12 @@ import TableAdmin from '../../components/Table';
 import { useEffect, useState } from 'react';
 import { formatTime } from '../../../../utils';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const { Text } = Typography;
 
 const ListUser = () => {
+    const intl = useIntl();
     
     const { data:dataCountHasOrder } = useQueryConfig([QUERY_KEY, 'count/has/order'], `api/count/user/has/orders`);
     const [users,setUsers] = useState<IUser[]>([]);
@@ -51,7 +53,7 @@ const ListUser = () => {
         },
 
         {
-            title: 'User',
+            title: <FormattedMessage id="user.table.user" />,
             dataIndex: 'name',
             key: 'user',
             render: (_: any, record: IUser) => (
@@ -66,7 +68,7 @@ const ListUser = () => {
             ),
         },
         {
-            title: 'Status',
+            title: <FormattedMessage id="user.table.status" />,
             dataIndex: 'status',
             key: 'status',
             render: (status: any) => {
@@ -79,7 +81,7 @@ const ListUser = () => {
             },
         },
         {
-            title: 'Group ',
+            title: <FormattedMessage id="user.table.group" />,
             dataIndex: 'group',
             key: 'group',
             render: (group: any) => {
@@ -87,7 +89,7 @@ const ListUser = () => {
             }
         },
         {
-            title: 'Email verified at',
+            title: <FormattedMessage id="user.table.Email_verified_at" />,
             dataIndex: 'email_verified_at',
             key: 'email_verified_at',
             render: (email_verified_at: string) => {
@@ -95,7 +97,7 @@ const ListUser = () => {
             },
         },
         {
-            title: 'Actions',
+            title: <FormattedMessage id="user.table.actions" />,
             key: 'actions',
             render: (_: any, values: IUser) => (
                 <div className="flex-row-center gap-x-5">
@@ -144,41 +146,41 @@ const ListUser = () => {
 
     return (
         <div style={{ padding: '20px' }}>
-            <Heading>List Users</Heading>
+            <Heading><FormattedMessage id="user.List_User" /></Heading>
 
             <Row gutter={[16, 16]}>
                 <Col span={6}>
                     <StatCard
-                        title="Total Users"
+                        title= {<FormattedMessage id="user.User_Total_Users" />}
                         value={users?.length}
-                        description="Total Users"
+                        description={<FormattedMessage id="user.User_Total_Users" />}
                         color="#d4d4ff"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#6c63ff' }} />}
                     />
                 </Col>
                 <Col span={6}>
                     <StatCard
-                        title="Inactive Users"
+                        title= {<FormattedMessage id="user.User_Inactive_Users" />}
                         value={users?.filter((u: IUser) => u.status !== 'active').length}
-                        description="Banned or Inactive Accounts"
+                        description={<FormattedMessage id="user.User_Inactive_Users" />}
                         color="#ffd6d6"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#ff6666' }} />}
                     />
                 </Col>
                 <Col span={6}>
                     <StatCard
-                        title="Active Users"
+                        title= {<FormattedMessage id="user.User_Active_Users" />}
                         value={users?.filter((u: IUser) => u.status === 'active').length}
-                        description="Active Accounts"
+                        description={<FormattedMessage id="user.User_Active_Users" />}
                         color="#d6f5e6"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#66cc99' }} />}
                     />
                 </Col>
                 <Col span={6}>
                     <StatCard
-                        title="Users Ordering Number"
+                        title= {<FormattedMessage id="user.User_Users_Ordering_Number" />}
                         value={userHasOrderCount}
-                        description="People have made purchases"
+                        description={<FormattedMessage id="user.User_Users_Ordering_Number" />}
                         color="#ffecd6"
                         icon={<UserOutlined style={{ fontSize: '20px', color: '#ffa500' }} />}
                     />
@@ -191,9 +193,10 @@ const ListUser = () => {
                     <LoadingBlock />
                 ) : (
                     <section>
-                        <div className="my-6">
-                            <Input onChange={filterUser} placeholder="Search an id user or name or email." />
-                        </div>
+                        <Input
+        onChange={filterUser}
+        placeholder={intl.formatMessage({ id: 'user.User_Users_Input_section' })}
+    />
                         <TableAdmin columns={columns} dataSource={users} pagination={{ pageSize: 8 }} />
                     </section>
                 )}
