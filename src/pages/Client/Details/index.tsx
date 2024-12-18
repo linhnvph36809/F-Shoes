@@ -229,10 +229,10 @@ const Detail = () => {
                                             }
                                     }
                                     className={`${user
-                                        ? (productD?.variations?.length == 0 && productD?.stock_qty) || (variant && variant?.stock_qty)
-                                            ? 'bg-primary'
+                                            ? productD?.variations?.length == 0 || (variant && variant?.stock_qty)
+                                                ? 'bg-primary'
+                                                : 'bg-[#f4f4f4] cursor-default'
                                             : 'bg-[#f4f4f4] cursor-default'
-                                        : 'bg-[#f4f4f4] cursor-default'
                                         }           text-16px font-medium h-[58px] text-white
                                                 rounded-[30px] w-full hover-opacity transition-global`}
                                 >

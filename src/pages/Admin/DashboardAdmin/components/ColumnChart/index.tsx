@@ -2,24 +2,24 @@ import ReactApexChart from 'react-apexcharts';
 import { formatPrice } from '../../../../../utils';
 
 interface Props {
-    year1?: number|string;
-    year2?: number|string;
+    year1?: number | string;
+    year2?: number | string;
     data1?: Array<any>;
     data2?: Array<any>;
 }
-const ColumnChart = ({ data1,data2,year1,year2 }: Props) => {
+const ColumnChart = ({ data1, data2, year1, year2 }: Props) => {
     const series = [
         {
-            name: year1 ,
-            data: data1 ,
+            name: year1,
+            data: data1,
         },
         {
             name: year2,
             data: data2,
-        },  
+        },
     ];
-    if(year1 === year2) {
-         series.splice(1);
+    if (year1 === year2) {
+        series.splice(1);
     }
     const chartState = {
         series: series,

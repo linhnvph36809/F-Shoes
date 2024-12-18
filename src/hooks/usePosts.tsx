@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { tokenManagerInstance } from '../api';
 import { IPost } from '../interfaces/IPost';
+import { useQueryClient } from 'react-query';
+export const QUERY_KEY = 'posts';
 import { showMessageAdmin } from '../utils/messages';
 
 export const API_POST = '/api/posts';
-
 const usePost = () => {
+    const queryClient = useQueryClient();
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
@@ -15,6 +17,7 @@ const usePost = () => {
         try {
             setLoading(true);
             tokenManagerInstance('delete', `${API_POST}/forceDelete/${id}`);
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
@@ -26,6 +29,7 @@ const usePost = () => {
         try {
             setLoading(true);
             tokenManagerInstance('delete', `${API_POST}/${id}`);
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
@@ -37,6 +41,7 @@ const usePost = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_POST + `/restore/${id}`);
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
@@ -51,6 +56,7 @@ const usePost = () => {
                 headers: { 'Content-Type': 'application/form-data' },
             });
             navigate('/admin/posts');
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error: any) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
@@ -65,6 +71,7 @@ const usePost = () => {
                 headers: { 'Content-Type': 'application/form-data' },
             });
             navigate('/admin/posts');
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error: any) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
@@ -76,6 +83,7 @@ const usePost = () => {
         loading,
         deletePost,
         softPost,
+
         addPost,
         patchPost,
         restorePost,
