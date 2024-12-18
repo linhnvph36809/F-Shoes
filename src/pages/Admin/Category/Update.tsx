@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ButtonPrimary from '../../../components/Button';
 import useCategory from '../../../hooks/useCategory';
-import useProduct from '../../../hooks/useProduct';
 import { ICategory } from '../../../interfaces/ICategory';
 import { IProduct } from '../../../interfaces/IProduct';
 import { showMessageActive, showMessageAdmin } from '../../../utils/messages';
@@ -14,8 +13,10 @@ import SkeletonComponent from '../components/Skeleton';
 import TableAdmin from '../components/Table';
 import { columnsAttribute } from '../Products/datas';
 import useQueryConfig from '../../../hooks/useQueryConfig';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const UpdateCategory = () => {
+    const intl = useIntl();
     const { id } = useParams<{ id: string }>();
     const { categories, loading, addProductsToCategory, deleteProductFromCategory } = useCategory();
     const [initialValues, setInitialValues] = useState<ICategory | null>(null);
@@ -72,7 +73,7 @@ const UpdateCategory = () => {
     }, [id, categories]);
 
     const columnDelete = {
-        title: 'Action',
+        title: <FormattedMessage id="category.table.action" />,
         dataIndex: 'slug',
         key: '8',
         render: (_: string | number, values: IProduct) => {
@@ -99,14 +100,16 @@ const UpdateCategory = () => {
     return (
         <>
             <section>
-                <Heading>Add Category For Product</Heading>
+                <Heading>
+                    <FormattedMessage id="Add Category For Product" />
+                </Heading>
                 <section>
                     <div className="my-4">
                         <Select
                             mode="multiple"
                             value={selectedProducts}
                             onChange={(value) => setSelectedProducts(value)}
-                            placeholder="Select products"
+                            placeholder={intl.formatMessage({ id: 'admin.selectProduct' })}
                             className="font-medium"
                             style={{ width: '360px', height: '50px', marginRight: '10px' }}
                         >
@@ -122,7 +125,7 @@ const UpdateCategory = () => {
                             height="h-[50px]"
                             htmlType="submit"
                         >
-                            Add Products
+                            <FormattedMessage id="admin.addProduct" />
                         </ButtonPrimary>
                     </div>
                     {loading ? (

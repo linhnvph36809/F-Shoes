@@ -4,7 +4,9 @@ import ButtonComponent from '../../../Client/Authtication/components/Button';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import useOrder from '../../../../hooks/useOrder';
 import { useParams } from 'react-router-dom';
+import { FormattedMessage, useIntl } from 'react-intl';
 const UpdateOrder = () => {
+    const intl = useIntl();
     const [form] = Form.useForm();
     const { putOrder } = useOrder();
     const { id } = useParams();
@@ -20,7 +22,9 @@ const UpdateOrder = () => {
     return (
         <>
             <div>
-                <Heading>Order Update</Heading>
+                <Heading>
+                    <FormattedMessage id="admin.Update_Order" />
+                </Heading>
                 <Form
                     form={form}
                     name="status_form"
@@ -29,38 +33,50 @@ const UpdateOrder = () => {
                     initialValues={{ status: '' }}
                 >
                     <Form.Item
-                        label="Amount Collected"
+                        label={<FormattedMessage id="admin.amountCollected" />}
                         name="amount_collected"
                         initialValue={0}
                         rules={[
-                            { required: true, message: 'Please enter an Amount Collected' },
+                            { required: true, message: <FormattedMessage id="admin.pleaseEnterAmount" /> },
                             {
                                 validator: (_, value) =>
                                     value >= 0
                                         ? Promise.resolve()
-                                        : Promise.reject(new Error('Amount Collected cannot be negative')),
+                                        : Promise.reject(new Error(intl.formatMessage({ id: 'Error.Amount_must' }))),
                             },
                         ]}
                     >
-                        <Input placeholder="Enter your Amount Collected" type="number" />
+                        <Input placeholder={intl.formatMessage({ id: 'admin.amountCollected' })} type="number" />
                     </Form.Item>
 
                     <Form.Item
-                        label="Status"
+                        label={<FormattedMessage id="admin.status" />}
                         name="status"
-                        rules={[{ required: true, message: 'Please select a status' }]}
+                        rules={[{ required: true, message: <FormattedMessage id="Please_select_status" /> }]}
                     >
                         <Radio.Group>
-                            <Radio value={1}>Cancelled</Radio>
-                            <Radio value={2}>Waiting Confirm</Radio>
-                            <Radio value={3}>Pending</Radio>
-                            <Radio value={4}>Transporting</Radio>
-                            <Radio value={5}>Done</Radio>
+                            <Radio value={1}>
+                                <FormattedMessage id="status.cancelled" />
+                            </Radio>
+                            <Radio value={2}>
+                                <FormattedMessage id="status.waiting_confirm" />
+                            </Radio>
+                            <Radio value={3}>
+                                <FormattedMessage id="status.pending" />
+                            </Radio>
+                            <Radio value={4}>
+                                <FormattedMessage id="status.transporting" />
+                            </Radio>
+                            <Radio value={5}>
+                                <FormattedMessage id="status.done" />
+                            </Radio>
                         </Radio.Group>
                     </Form.Item>
 
                     <Form.Item className="text-end">
-                        <ButtonComponent htmlType="submit">{false ? <LoadingSmall /> : 'Submit'}</ButtonComponent>
+                        <ButtonComponent htmlType="submit">
+                            {false ? <LoadingSmall /> : <FormattedMessage id="submit" />}
+                        </ButtonComponent>
                     </Form.Item>
                 </Form>
             </div>

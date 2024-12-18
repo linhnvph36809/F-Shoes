@@ -4,16 +4,17 @@ import { Link } from 'react-router-dom';
 import { STATUS_ORDER } from '../../../../constants';
 import { formatPrice, formatTime } from '../../../../utils';
 import { paymentMethodString } from '../../../../interfaces/IOrder';
+import { FormattedMessage } from 'react-intl';
 const { Text } = Typography;
 
 export const columns = [
     {
-        title: 'Order ID',
+        title: <FormattedMessage id="admin.id" />,
         dataIndex: 'id',
         key: '1',
     },
     {
-        title: 'Customer',
+        title: <FormattedMessage id="admin.customer" />,
         key: 'customer',
         dataIndex: 'user',
         render: (_: any, { user }: any) => (
@@ -29,7 +30,7 @@ export const columns = [
     },
 
     {
-        title: 'Payment',
+        title: <FormattedMessage id="admin.payment" />,
         dataIndex: 'payment_method',
         key: 'payment',
         render: (
@@ -43,11 +44,15 @@ export const columns = [
                 | undefined,
         ) => {
             const color = payment === 'Pending' ? 'orange' : payment === 'Failed' ? 'red' : 'gray';
-            return <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center ' color={color}>{paymentMethodString(payment as string)}</Tag>;
+            return (
+                <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center " color={color}>
+                    {paymentMethodString(payment as string)}
+                </Tag>
+            );
         },
     },
     {
-        title: 'Status',
+        title: <FormattedMessage id="admin.status" />,
         dataIndex: 'status',
         key: 'status',
         render: (_: any, { status }: any) => {
@@ -64,11 +69,15 @@ export const columns = [
 
             const color = statusColors[status] || 'default';
 
-            return  <Tag className='p-3 rounded-[30px] w-[90%] flex items-center justify-center' color={color}>{STATUS_ORDER[status]}</Tag>;
+            return (
+                <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color={color}>
+                    {STATUS_ORDER[status]}
+                </Tag>
+            );
         },
     },
     {
-        title: 'Total',
+        title: <FormattedMessage id="admin.total" />,
         key: 'paymentMethod',
         dataIndex: 'total_amount',
         render: (_: any, { total_amount }: any) => (
@@ -79,13 +88,13 @@ export const columns = [
         ),
     },
     {
-        title: 'Date',
+        title: <FormattedMessage id="admin.date" />,
         dataIndex: 'created_at',
         key: '2',
         render: (_: any, { created_at }: any) => <p>{formatTime(created_at)}</p>,
     },
     {
-        title: 'Actions',
+        title: <FormattedMessage id="admin.actions" />,
         key: 'actions',
         dataIndex: 'id',
         render: (_: any, { id }: any) => (

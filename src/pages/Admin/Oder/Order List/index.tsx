@@ -11,10 +11,12 @@ import { statusArr } from '../../../../interfaces/IOrder';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import ButtonAdd from '../../components/Button/ButtonAdd';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const { Option } = Select;
 
 const OrderList = () => {
+    const intl = useIntl();
     const navigate = useNavigate();
     const urlQuery = new URLSearchParams(useLocation().search);
     const [searchText, setSearchText] = useState('');
@@ -88,13 +90,15 @@ const OrderList = () => {
 
     return (
         <div>
-            <Heading>Order List</Heading>
-            <div className='flex justify-between'>
-                <ButtonAdd title="Add Order" to="/admin/orderadd" />
+            <Heading>
+                <FormattedMessage id="admin.orderList" />
+            </Heading>
+            <div className="flex justify-between">
+                <ButtonAdd title={<FormattedMessage id="admin.addOrder" />} to="/admin/orderadd" />
                 <div className="flex justify-end items-center gap-x-5">
                     <div className="relative">
                         <Input
-                            placeholder="Search Order"
+                            placeholder={intl.formatMessage({ id: 'order.Search_Order' })}
                             className={`w-[250px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                             value={searchText}
                             onChange={handleSearch}
@@ -115,11 +119,15 @@ const OrderList = () => {
                             <Select
                                 className="font-medium"
                                 style={{ width: 250, height: '52px' }}
-                                placeholder="Please select"
+                                placeholder={intl.formatMessage({ id: 'order.Please_select' })}
                                 onChange={handleSort}
                             >
-                                <Option value={1}>Sort ascending by date</Option>
-                                <Option value={2}>Sort descending by date</Option>
+                                <Option value={1}>
+                                    <FormattedMessage id="order.Sort_ascending_by_date" />
+                                </Option>
+                                <Option value={2}>
+                                    <FormattedMessage id="order.Sort descending by date" />
+                                </Option>
                             </Select>
                         </ConfigProvider>
                     </div>
@@ -141,12 +149,24 @@ const OrderList = () => {
                                 placeholder="Select a status"
                                 onChange={onChangeStatus}
                             >
-                                <Option value="all">All</Option>
-                                <Option value={statusArr[0]}>Cancelled</Option>
-                                <Option value={statusArr[1]}>Waiting Confirm</Option>
-                                <Option value={statusArr[2]}>Confirmed</Option>
-                                <Option value={statusArr[3]}>Delivering</Option>
-                                <Option value={statusArr[4]}>Delivered</Option>
+                                <Option value="all">
+                                    <FormattedMessage id="body.category.All" />
+                                </Option>
+                                <Option value={statusArr[0]}>
+                                    <FormattedMessage id="status.cancelled" />
+                                </Option>
+                                <Option value={statusArr[1]}>
+                                    <FormattedMessage id="status.waiting_confirm" />
+                                </Option>
+                                <Option value={statusArr[2]}>
+                                    <FormattedMessage id="status.confirmed" />
+                                </Option>
+                                <Option value={statusArr[3]}>
+                                    <FormattedMessage id="status.delivering" />
+                                </Option>
+                                <Option value={statusArr[4]}>
+                                    <FormattedMessage id="status.delivered" />
+                                </Option>
                             </Select>
                         </ConfigProvider>
                     </div>

@@ -10,8 +10,10 @@ import { showMessageActive, showMessageAdmin } from '../../../../utils/messages.
 import useSale from '../../../../hooks/useSale.tsx';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall.tsx';
 import { BadgeCentIcon, CircleX, Filter } from 'lucide-react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const AddSale = () => {
+    const intl = useIntl();
     const { data: productList } = useQueryConfig(
         `sale-list_products-add_sale_page`,
         `/api/products/all/summary?include=variations`,
@@ -165,9 +167,8 @@ const AddSale = () => {
                 setDataSourceProduct([...filtered]);
             },
         );
-    }
-   
-    
+    };
+
     const onFilterVariation = (record?: IVariation) => {
         showMessageActive(
             'Delete',
@@ -188,7 +189,7 @@ const AddSale = () => {
     };
     const columnsVariations = [
         {
-            title: 'ID',
+            title: <FormattedMessage id="admin.id" />,
             dataIndex: 'id',
             key: 'id',
             filteredValue: [searchKeyDataSouceVariation],
@@ -203,13 +204,13 @@ const AddSale = () => {
             },
         },
         {
-            title: 'Image',
+            title: <FormattedMessage id="admin.image" />,
             dataIndex: 'image_url',
             key: 'image_url',
             render: (image_url: string) => <img src={image_url} alt="product" style={{ width: 50, height: 50 }} />,
         },
         {
-            title: 'Name',
+            title: <FormattedMessage id="admin.name" />,
             dataIndex: 'name',
             key: 'name',
             render: (name: string) => {
@@ -217,17 +218,17 @@ const AddSale = () => {
             },
         },
         {
-            title: 'Price',
+            title: <FormattedMessage id="admin.price" />,
             dataIndex: 'price',
             key: 'price',
         },
         {
-            title: 'Quantity',
+            title: <FormattedMessage id="body.Detail.Quantity" />,
             dataIndex: 'stock_qty',
             key: 'stock_qty',
         },
         {
-            title: 'Action',
+            title: <FormattedMessage id="category.table.action" />,
             dataIndex: 'action',
             key: 'action',
             render: (_: any, record: any) => {
@@ -247,7 +248,7 @@ const AddSale = () => {
 
     const columnsProduct = [
         {
-            title: 'ID',
+            title: <FormattedMessage id="admin.id" />,
             dataIndex: 'id',
             key: 'id',
             filteredValue: [searchKeyDataSouceProduct],
@@ -262,13 +263,13 @@ const AddSale = () => {
             },
         },
         {
-            title: 'Image',
+            title: <FormattedMessage id="admin.image" />,
             dataIndex: 'image_url',
             key: 'image_url',
             render: (image_url: string) => <img src={image_url} alt="product" style={{ width: 50, height: 50 }} />,
         },
         {
-            title: 'Name',
+            title: <FormattedMessage id="admin.name" />,
             dataIndex: 'name',
             key: 'name',
             render: (name: string) => {
@@ -276,17 +277,17 @@ const AddSale = () => {
             },
         },
         {
-            title: 'Price',
+            title: <FormattedMessage id="admin.price" />,
             dataIndex: 'price',
             key: 'price',
         },
         {
-            title: 'Quantity',
+            title: <FormattedMessage id="body.Detail.Quantity" />,
             dataIndex: 'stock_qty',
             key: 'stock_qty',
         },
         {
-            title: 'Action',
+            title: <FormattedMessage id="category.table.action" />,
             dataIndex: 'action',
             key: 'action',
             render: (_: any, record: any) => {
@@ -310,7 +311,7 @@ const AddSale = () => {
     };
     const columns = [
         {
-            title: 'ID',
+            title: <FormattedMessage id="admin.id" />,
             dataIndex: 'id',
             key: 'id',
             filteredValue: [searchKeyListProduct],
@@ -325,13 +326,13 @@ const AddSale = () => {
             },
         },
         {
-            title: 'Image',
+            title: <FormattedMessage id="admin.image" />,
             dataIndex: 'image_url',
             key: 'image_url',
             render: (image_url: string) => <img src={image_url} alt="product" style={{ width: 50, height: 50 }} />,
         },
         {
-            title: 'Name',
+            title: <FormattedMessage id="admin.name" />,
             dataIndex: 'name',
             key: 'name',
             render: (name: string) => {
@@ -339,12 +340,12 @@ const AddSale = () => {
             },
         },
         {
-            title: 'Quantity',
+            title: <FormattedMessage id="body.Detail.Quantity" />,
             dataIndex: 'stock_qty',
             key: 'stock_qty',
         },
         {
-            title: 'Price',
+            title: <FormattedMessage id="admin.price" />,
             dataIndex: 'price',
             key: 'price',
             render: (price: number) => <span style={{ color: 'black' }}>{formatPrice(price)} đ</span>,
@@ -473,16 +474,25 @@ const AddSale = () => {
         <div className="bg-slate-50 rounded-lg p-8">
             <div className="">
                 <div>
-                    <Heading>Add Sale </Heading>
+                    <Heading>
+                        <FormattedMessage id="admin.addSale" />
+                    </Heading>
                     <BadgeCentIcon />
 
                     <div className="form-row my-4">
-                        <span className="text-xl my-4">Name</span>
-                        <Input onChange={onChangeName} placeholder="Enter the sale name" />
+                        <span className="text-xl my-4">
+                            <FormattedMessage id="admin.name" />
+                        </span>
+                        <Input
+                            onChange={onChangeName}
+                            placeholder={intl.formatMessage({ id: 'Enter_the_sale_name' })}
+                        />
                         {/* {error.name ? <span className='text-red-600'>{error.name}</span> : ''} */}
                     </div>
                     <div className="form-row my-4">
-                        <span className="text-xl mb-4">Type</span>
+                        <span className="text-xl mb-4">
+                            <FormattedMessage id="admin.type" />
+                        </span>
                         <Flex
                             onChange={(e: any) => setDataSale({ ...dataSale, type: e?.target?.value, value: 1 })}
                             vertical
@@ -499,13 +509,15 @@ const AddSale = () => {
                         </Flex>
                     </div>
                     <div className="form-row my-4">
-                        <span className="text-xl my-4">Value</span>
+                        <span className="text-xl my-4">
+                            <FormattedMessage id="admin.value" />
+                        </span>
                         {dataSale.type === 'fixed' ? (
                             <Input
                                 type="number"
                                 min={1}
                                 onChange={onChangeValueFixed}
-                                placeholder="Enter the discount fixed..."
+                                placeholder={intl.formatMessage({ id: 'Enter the discount fixed...' })}
                             />
                         ) : (
                             <Input
@@ -515,14 +527,16 @@ const AddSale = () => {
                                 min={1}
                                 onChange={onChangeValuePercent}
                                 suffix="%"
-                                placeholder="Enter the discount percentage..."
+                                placeholder={intl.formatMessage({ id: 'Enter the discount percentage...' })}
                             />
                         )}
 
                         {error.value ? <span className="text-red-600">{error.value}</span> : ''}
                     </div>
                     <div className="form-row my-4">
-                        <span className="text-xl my-4">Start date</span>
+                        <span className="text-xl my-4">
+                            <FormattedMessage id="admin.startDate" />
+                        </span>
                         <div>
                             <DatePicker
                                 onChange={onChangeStartDate}
@@ -534,7 +548,9 @@ const AddSale = () => {
                         {error.start_date ? <span className="text-red-600">{error.start_date}</span> : ''}
                     </div>
                     <div className="form-row my-4">
-                        <span className="text-xl my-4">End date</span>
+                        <span className="text-xl my-4">
+                            <FormattedMessage id="admin.endDate" />
+                        </span>
                         <div>
                             <DatePicker
                                 onChange={onChangeEndDate}
@@ -546,14 +562,18 @@ const AddSale = () => {
                         {error.end_date ? <span className="text-red-600">{error.end_date}</span> : ''}
                     </div>
                     <div>
-                        <span className="text-xl my-4 block">Active</span>
+                        <span className="text-xl my-4 block">
+                            <FormattedMessage id="admin.active" />
+                        </span>
                         <Switch
                             checked={dataSale.is_active}
                             onChange={() => setDataSale({ ...dataSale, is_active: !dataSale.is_active })}
                         />
                     </div>
                     <div className="form-row my-4">
-                        <span className="text-xl my-4 block">Apply to all products</span>
+                        <span className="text-xl my-4 block">
+                            <FormattedMessage id="Apply to all products" />
+                        </span>
                         <Switch
                             checked={dataSale.applyAll}
                             onChange={() => setDataSale({ ...dataSale, applyAll: !dataSale.applyAll })}
@@ -562,8 +582,12 @@ const AddSale = () => {
 
                     {!dataSale.applyAll ? (
                         <div className="form-row my-4">
-                            <span className="text-xl my-4 block">or</span>
-                            <Button onClick={() => setOpenAddProductTable(!openAddProductTable)}>Add product</Button>
+                            <span className="text-xl my-4 block">
+                                <FormattedMessage id="Or" />
+                            </span>
+                            <Button onClick={() => setOpenAddProductTable(!openAddProductTable)}>
+                                <FormattedMessage id="admin.addProduct" />
+                            </Button>
                         </div>
                     ) : (
                         ''
@@ -601,9 +625,14 @@ const AddSale = () => {
                 <div className="product-list">
                     <div className="">
                         <div>
-                            <Heading>Simple Product</Heading>
+                            <Heading>
+                                <FormattedMessage id="Simple Product" />
+                            </Heading>
                             <div>
-                                <Input onChange={onSearchProduct} placeholder="Search a product name or id" />
+                                <Input
+                                    onChange={onSearchProduct}
+                                    placeholder={intl.formatMessage({ id: 'Search a product name or id' })}
+                                />
                             </div>
                             <Table
                                 rowKey={(record) => `table2-${record.id}`}
@@ -620,8 +649,13 @@ const AddSale = () => {
                             />
                         </div>
                         <div>
-                            <Heading>Variation Product</Heading>
-                            <Input onChange={onSearchVariation} placeholder="Search a product name or id" />
+                            <Heading>
+                                <FormattedMessage id="Variation Product" />
+                            </Heading>
+                            <Input
+                                onChange={onSearchVariation}
+                                placeholder={intl.formatMessage({ id: 'Search a product name or id' })}
+                            />
                             <Table
                                 rowKey={(record) => `table3-${record.id}`}
                                 rowSelection={{
@@ -647,8 +681,8 @@ const AddSale = () => {
                         <LoadingSmall />
                     </Button>
                 ) : (
-                    <Button className="h-16 w-32 rounded-3xl " onClick={onSubmit}>
-                        Save Sale
+                    <Button className="h-16 rounded-3xl " onClick={onSubmit}>
+                        <FormattedMessage id="Save Sale" />
                     </Button>
                 )}
             </div>
