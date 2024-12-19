@@ -74,7 +74,7 @@ const ListGroups = ({ initialValues }: any) => {
         },
     ];
 
-    if (+groupId !== 2) {
+    if (+groupId !== 1) {
         return <Navigate to="/admin" />;
     }
 

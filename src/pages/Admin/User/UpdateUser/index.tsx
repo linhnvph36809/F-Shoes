@@ -10,7 +10,10 @@ import { FormattedMessage } from 'react-intl';
 
 const UpdateUser: React.FC = () => {
     const { nickname } = useParams<{ nickname: string }>();
-    const { data, isFetching } = useQueryConfig([QUERY_KEY, `user-detail-${nickname}`], `/api/user/${nickname}`);
+    const { data, isFetching } = useQueryConfig(
+        [QUERY_KEY, `user-detail-${nickname}`],
+        `/api/user/${nickname}?include=profile&times=user`,
+    );
 
     const { editUser, loading } = useUser();
 
@@ -20,7 +23,6 @@ const UpdateUser: React.FC = () => {
 
     return (
         <>
-
             <section>
                 <ButtonBack to="/admin/list-user" />
                 <Heading><FormattedMessage id="user.User_Update" /></Heading>
@@ -30,7 +32,6 @@ const UpdateUser: React.FC = () => {
                     <FormUser loading={loading} onFinish={handleUpdateUser} initialValues={data?.data?.user} />
                 )}
             </section>
-
         </>
     );
 };

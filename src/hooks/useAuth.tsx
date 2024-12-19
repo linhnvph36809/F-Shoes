@@ -148,7 +148,7 @@ const useAuth = () => {
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
                 handleSetLocalStorage(INFO_AUTH.isAdmin, data.user.is_admin);
                 handleSetLocalStorage(INFO_AUTH.userName, data.user.name);
-                handleSetLocalStorage(INFO_AUTH.adminId, data.user.id);
+                handleSetLocalStorage(INFO_AUTH.userId, data.user.id);
                 handleSetLocalStorage(INFO_AUTH.groupId, data.user.group_id);
 
 

@@ -1,7 +1,7 @@
 import { Tag } from 'antd';
 import { Link } from 'react-router-dom';
 
-import { IOrder, statusString } from '../../../../../../interfaces/IOrder';
+import { IOrder, paymentMethodString, statusString } from '../../../../../../interfaces/IOrder';
 import { formatPrice, timeToNow } from '../../../../../../utils';
 import { FormattedMessage } from 'react-intl';
 
@@ -55,7 +55,7 @@ const OrderItem = ({ order }: { order: IOrder }) => {
             </div>
             <div>
                 <p className="color-primary text-[18px] font-medium mb-3">{<FormattedMessage id="paymentMethod" />}</p>
-                <span className="color-gray text-[15px]">{order.payment_method}</span>
+                <span className="color-gray text-[15px]">{paymentMethodString(order.payment_method)}</span>
             </div>
             <div>
                 <p className="color-primary text-[18px] font-medium mb-3">{<FormattedMessage id="status" />}</p>

@@ -30,7 +30,9 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
         formData.append('password', values.password);
         formData.append('group_id', values.group_id);
         formData.append('is_admin', values.is_admin);
-        formData.append('birth_date', values.birth_date);
+        formData.append('profile[given_name]', values.given_name);
+        formData.append('profile[family_name]', values.family_name);
+        formData.append('profile[birth_date]', values.birth_date);
 
         if (imageFile) {
             formData.append('avatar', imageFile);
@@ -77,7 +79,7 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                 ></InputPrimary>
                 <InputPrimary
                     name="email"
-type="email"
+                    type="email"
                     label={intl.formatMessage({ id: 'user.User_gmail' })}
                     placeholder={intl.formatMessage({ id: 'user.User_gmail' })}
                     rules={[

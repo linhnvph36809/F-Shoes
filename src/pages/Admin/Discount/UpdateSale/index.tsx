@@ -12,12 +12,13 @@ import { BadgeCentIcon, CircleX, Filter } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { ISale } from '../../../../interfaces/ISale.ts';
+import LoadingPage from '../../../../components/Loading/LoadingPage.tsx';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 const UpdateSale = () => {
     const intl = useIntl();
     const { id } = useParams();
-    const { data: dataCachingSale } = useQueryConfig(
+    const { data: dataCachingSale,isFetching:loadingSale } = useQueryConfig(
         [QUERY_KEY, `sale/data/update/${id}`],
         `api/sale/${id}?include=products,variations`,
     );
@@ -393,7 +394,9 @@ const UpdateSale = () => {
         { label: 'Percent', value: 'percent' },
         { label: 'Fixed', value: 'fixed' },
     ];
-
+    if(loadingSale){
+        return <LoadingPage/>
+    }
     return (
         <div className="bg-slate-50 rounded-lg p-8">
             <div className="">

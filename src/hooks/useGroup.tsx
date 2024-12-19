@@ -92,6 +92,8 @@ const useGroups = () => {
 
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            console.log(error);
+            
         } finally {
             setLoadingDelete(false);
         }
