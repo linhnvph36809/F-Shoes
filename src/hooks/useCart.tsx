@@ -21,12 +21,12 @@ const useCart = () => {
             if((error as any).response.data.message){
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
             }else if((error as any)?.response?.data?.errors){
-                showMessageClient('Something is missing.Please check again!', '', 'error');
+                showMessageClient(handleChangeMessage(locale,'Something is missing.Please check again!','Một số trường đã bị sót.Hãy kiểm tra lại'), '', 'error');
             }
             else if((error as any)?.response?.data?.error){
                 showMessageClient((error as any)?.response?.data?.error, '', 'error');
             }else{
-                showMessageClient('Something went wrong!', '', 'error');
+                showMessageClient(handleChangeMessage(locale,'Something went wrong!','Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!'), '', 'error');
             }
             
             
@@ -40,7 +40,31 @@ const useCart = () => {
             setLoading(true);
             await tokenManagerInstance('patch', API_CART + `/${id}`, quantity);
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
             setLoading(false);
         }
     };
@@ -51,7 +75,31 @@ const useCart = () => {
             await tokenManagerInstance('delete', API_CART + `/${id}`);
             showMessageClient(handleChangeMessage(locale,'Delete cart successfully','Xóa giỏ hàng thành công'), '', 'success');
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }

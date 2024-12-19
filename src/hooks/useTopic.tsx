@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { tokenManagerInstance } from '../api';
 import { ITopic } from '../interfaces/ITopic';
-import { showMessageAdmin } from '../utils/messages';
+import { showMessageAdmin, showMessageClient } from '../utils/messages';
 import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
 
@@ -20,7 +20,31 @@ const useTopic = () => {
             await tokenManagerInstance('delete', `${API_TOPIC}/forceDelete/${id}`);
             showMessageAdmin(handleChangeMessage(locale,'Delete Topic successfully','Xóa chủ đề thành công'), '', 'success');
         } catch (error) {
-            showMessageAdmin('Error', (error as any).message, 'error');
+           if ((error as any).response.data.message) {
+                           showMessageClient((error as any)?.response?.data?.message, '', 'error');
+                       } else if ((error as any)?.response?.data?.errors) {
+                           showMessageClient(
+                               handleChangeMessage(
+                                   locale,
+                                   'Something is missing.Please check again!',
+                                   'Một số trường đã bị sót.Hãy kiểm tra lại',
+                               ),
+                               '',
+                               'error',
+                           );
+                       } else if ((error as any)?.response?.data?.error) {
+                           showMessageClient((error as any)?.response?.data?.error, '', 'error');
+                       } else {
+                           showMessageClient(
+                               handleChangeMessage(
+                                   locale,
+                                   'Something went wrong!',
+                                   'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                               ),
+                               '',
+                               'error',
+                           );
+                       }
         } finally {
             setLoading(false);
         }
@@ -31,7 +55,31 @@ const useTopic = () => {
             setLoading(true);
             tokenManagerInstance('delete', `${API_TOPIC}/${id}`);
         } catch (error) {
-            showMessageAdmin('Error', (error as any).message, 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -42,7 +90,31 @@ const useTopic = () => {
             setLoading(true);
             await tokenManagerInstance('post', API_TOPIC + `/restore/${id}`);
         } catch (error) {
-            showMessageAdmin('Error', (error as any).message, 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -54,7 +126,31 @@ const useTopic = () => {
             await tokenManagerInstance('post', API_TOPIC, topic);
             showMessageAdmin(handleChangeMessage(locale,'Add Topic successfully','Thêm chủ đề thành công'), '', 'success');
         } catch (error) {
-            showMessageAdmin('Error', (error as any).message, 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -67,7 +163,31 @@ const useTopic = () => {
             showMessageAdmin(handleChangeMessage(locale,'Update Topic successfully','Cập nhật chủ đề thành công'), '', 'success');
             navigate('/admin/topic');
         } catch (error) {
-            showMessageAdmin('Error', (error as any).message, 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
