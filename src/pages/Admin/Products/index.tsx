@@ -17,6 +17,8 @@ import ButtonUpdate from '../components/Button/ButtonUpdate';
 import ButtonAdd from '../components/Button/ButtonAdd';
 import InputSearch from '../components/Forms/InputSearch';
 import { FormattedMessage, useIntl } from 'react-intl';
+import PermissionElement from '../../../components/Permissions/PermissionElement';
+import { ACTIONS, PERMISSION } from '../../../constants';
 import { useContextGlobal } from '../../../contexts';
 import { handleChangeMessage } from '../../../utils';
 
@@ -75,8 +77,13 @@ const ListProduct = () => {
                             <CopyPlus />
                         </ButtonEdit>
                     </Link>
-                    <ButtonUpdate state={{ prevUrl: currentUrl }} to={`/admin/update-product/${slug}`} />
-                    <ButtonDelete onClick={() => handleDeleteProduct(values.id)} />
+
+                    <PermissionElement keyName={PERMISSION.PERMISSION_PRODUCT} action={ACTIONS.ACTIONS_EDIT}>
+                        <ButtonUpdate state={{ prevUrl: currentUrl }} to={`/admin/update-product/${slug}`} />
+                    </PermissionElement>
+                    <PermissionElement keyName={PERMISSION.PERMISSION_PRODUCT} action={ACTIONS.ACTIONS_DELETE}>
+                        <ButtonDelete onClick={() => handleDeleteProduct(values.id)} />
+                    </PermissionElement>
                 </div>
             );
         },

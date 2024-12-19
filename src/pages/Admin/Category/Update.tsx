@@ -14,6 +14,8 @@ import TableAdmin from '../components/Table';
 import { columnsAttribute } from '../Products/datas';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import { FormattedMessage, useIntl } from 'react-intl';
+import PermissionElement from '../../../components/Permissions/PermissionElement';
+import { ACTIONS, PERMISSION } from '../../../constants';
 
 const UpdateCategory = () => {
     const intl = useIntl();
@@ -84,14 +86,19 @@ const UpdateCategory = () => {
                             <CopyPlus />
                         </ButtonEdit>
                     </Link>
-                    <Link to={`/admin/update-product/${values.slug}`}>
-                        <ButtonEdit>
-                            <SquarePen />
+
+                    <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
+                        <Link to={`/admin/update-product/${values.slug}`}>
+                            <ButtonEdit>
+                                <SquarePen />
+                            </ButtonEdit>
+                        </Link>
+                    </PermissionElement>
+                    <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}>
+                        <ButtonEdit onClick={() => handleDeleteProduct(values.id)}>
+                            <Trash2 />
                         </ButtonEdit>
-                    </Link>
-                    <ButtonEdit onClick={() => handleDeleteProduct(values.id)}>
-                        <Trash2 />
-                    </ButtonEdit>
+                    </PermissionElement>
                 </div>
             );
         },
