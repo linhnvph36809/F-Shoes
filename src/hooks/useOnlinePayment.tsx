@@ -6,24 +6,29 @@ import { showMessageClient } from '../utils/messages';
 import useCookiesConfig from './useCookiesConfig';
 import { useContextGlobal } from '../contexts';
 import { handleChangeMessage } from '../utils';
+import { useQueryClient } from 'react-query';
+import { QUERY_KEY as QUERY_KEY_ORDER } from './useOrder';
+import { QUERY_KEY as QUERY_KEY_PRODUCT } from './useProduct';
 
 const API = '/api/';
 const API_ORDER = '/api/orders';
 
 const useOnlinePayment = () => {
-    const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
     const { handleSetCookie } = useCookiesConfig('orderId');
     const { refetchQuantityCart } = useContextGlobal();
+    const queryClient = useQueryClient();
 
     const postOrder = async (order: any) => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_ORDER, order);
-            showMessageClient(handleChangeMessage(locale,'Order successfully','Đặt hàng thành công'), '', 'success');
+            showMessageClient(handleChangeMessage(locale, 'Order successfully', 'Đặt hàng thành công'), '', 'success');
             refetchQuantityCart();
             navigate('/order-cash-on-delivery');
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_ORDER] });
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -67,6 +72,7 @@ const useOnlinePayment = () => {
                 window.location.href = data;
             }
             refetchQuantityCart();
+
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');

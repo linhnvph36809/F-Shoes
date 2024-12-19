@@ -22,12 +22,12 @@ import { useContextGlobal } from '../../../contexts';
 import ButtonPrimary from '../../../components/Button';
 import useVoucher from '../../../hooks/useVoucher';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
-import { formatPrice } from '../../../utils';
+import { formatPrice, handleChangeMessage } from '../../../utils';
 import useOnlinePayment from '../../../hooks/useOnlinePayment';
 import LoadingPage from '../../../components/Loading/LoadingPage';
 import useCookiesConfig from '../../../hooks/useCookiesConfig';
 import useQueryConfig from '../../../hooks/useQueryConfig';
-import { showMessageClient } from '../../../utils/messages';
+import { showMessageActive, showMessageClient } from '../../../utils/messages';
 import { FREE_SHIP } from '../../../constants';
 import { useForm } from 'antd/es/form/Form';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -39,14 +39,13 @@ const Order = () => {
     const [form] = useForm();
     const { provinces, districts, fee, wards, getAllWard, getAllDistrict, getFee } = useDelivery();
     const orderId = JSON.parse(localStorage.getItem('orderId') || '[]');
-
     const { data, isFetching: loadingCart } = useQueryConfig('cart', '/api/cart');
 
     const carts = data?.data ? data.data.filter((cart: any) => orderId.includes(cart.id)) : null;
 
-    const { loading: loadingVoucher, voucher, postVoucher } = useVoucher();
+    const { loading: loadingVoucher, voucher, postVoucher, setVoucher } = useVoucher();
     const { loading: loadingCheckOut, postVNPAY, postOrder, postMomo } = useOnlinePayment();
-    const { user } = useContextGlobal();
+    const { user, locale } = useContextGlobal();
     const { handleSetCookie } = useCookiesConfig('order');
 
     const [province, setProvince] = useState<any>('');
@@ -103,11 +102,28 @@ const Order = () => {
         } else {
             sum = handleTotalPrice + (fee.total || 0);
         }
-
-        if (voucher?.type && voucher?.type === 'fixed') {
-            return sum - (+voucher?.discount || 0);
+        if (voucher?.min_total_amount > sum) {
+            showMessageClient(
+                handleChangeMessage(
+                    locale,
+                    `The order must be larger than ${formatPrice(voucher.min_total_amount)}đ`,
+                    `Đơn hàng phải lớn hơn ${formatPrice(voucher.min_total_amount)}đ`,
+                ),
+                '',
+                'warning',
+            );
+            setVoucher([]);
+            return sum;
+        } else if (voucher.discount && voucher?.type && voucher?.type === 'fixed') {
+            if (sum - +voucher.discount > 0) {
+                return sum - +voucher.discount;
+            }
+            return 0;
         } else if (voucher?.type && voucher?.type === 'percentage') {
-            return sum - (sum * +voucher.discount) / 100;
+            if (sum - (sum * +voucher.discount) / 100 > 0) {
+                return sum - (sum * +voucher.discount) / 100;
+            }
+            return 0;
         } else {
             return sum;
         }
@@ -181,9 +197,8 @@ const Order = () => {
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
 
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
-                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-            } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+                } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: voucher?.id ? voucher.id : null,
@@ -201,8 +216,8 @@ const Order = () => {
                     voucher.type == 'fixed'
                         ? voucher.discount
                         : ((handleTotalPrice >= FREE_SHIP ? handleTotalPrice : handleTotalPrice + (fee?.total || 0)) *
-                              +voucher.discount) /
-                          100,
+                            +voucher.discount) /
+                        100,
                 ...newValues,
             },
             new Date(Date.now() + 20 * 60 * 1000),
@@ -211,20 +226,42 @@ const Order = () => {
         if (value.payment_method == 'cash on delivery') {
             postOrder(newValues);
         } else if (value.payment_method == 'vnpay') {
-            postVNPAY(
-                {
-                    total: Math.round(totalAmount),
-                    url: `${window.location.origin}/order-vnpay-complete`,
+            showMessageActive(
+                handleChangeMessage(
+                    locale,
+                    'When using the VNPAY payment method, you cannot cancel the order',
+                    'Khi sử dụng phương thức thanh toán VNPAY bạn không thể hủy đơn hàng ',
+                ),
+                '',
+                'warning',
+                () => {
+                    postVNPAY(
+                        {
+                            total: Math.round(totalAmount),
+                            url: `${window.location.origin}/order-vnpay-complete`,
+                        },
+                        newValues,
+                    );
                 },
-                newValues,
             );
         } else if (value.payment_method == 'momo') {
-            postMomo(
-                {
-                    total: Math.round(totalAmount),
-                    url: `${window.location.origin}/order-momo-complete`,
+            showMessageActive(
+                handleChangeMessage(
+                    locale,
+                    'When using the MOMO payment method, you cannot cancel the order',
+                    'Khi sử dụng phương thức thanh toán MOMO bạn không thể hủy đơn hàng ',
+                ),
+                '',
+                'warning',
+                () => {
+                    postMomo(
+                        {
+                            total: Math.round(totalAmount),
+                            url: `${window.location.origin}/order-momo-complete`,
+                        },
+                        newValues,
+                    );
                 },
-                newValues,
             );
         }
     };
@@ -553,10 +590,10 @@ const Order = () => {
                                                     voucher.type === 'fixed'
                                                         ? voucher.discount
                                                         : ((handleTotalPrice >= FREE_SHIP
-                                                              ? handleTotalPrice
-                                                              : handleTotalPrice + (fee?.total || 0)) *
-                                                              +voucher.discount) /
-                                                              100,
+                                                            ? handleTotalPrice
+                                                            : handleTotalPrice + (fee?.total || 0)) *
+                                                            +voucher.discount) /
+                                                        100,
                                                 )}
                                                 đ
                                             </Text>
@@ -634,7 +671,7 @@ const Order = () => {
                                                             cart?.product
                                                                 ? cart?.product.price
                                                                 : cart?.product_variation?.sale_price ||
-                                                                      cart?.product_variation?.price,
+                                                                cart?.product_variation?.price,
                                                         )}{' '}
                                                         ₫
                                                     </Text>
