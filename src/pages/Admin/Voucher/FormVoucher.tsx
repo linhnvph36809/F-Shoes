@@ -56,7 +56,7 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
             date_start: `${values?.date_start?.$y}-${values?.date_start?.$M + 1}-${values?.date_start?.$D}`,
             date_end: `${values?.date_end?.$y}-${values?.date_end?.$M + 1}-${values?.date_end?.$D}`,
             status: 1,
-            type: typeVoucher
+            type: typeVoucher,
         });
     };
 
@@ -77,7 +77,11 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
         <Form form={form} onFinish={handleFinish} layout="vertical">
             <Heading>{title}</Heading>
             <div className="my-4 grid grid-cols-2 gap-x-5">
-                <Form.Item label={intl.formatMessage({ id: 'voucher.table.code' })} name="code" rules={[{ required: true, message: <FormattedMessage id="voucher.required.code" /> }]}>
+                <Form.Item
+                    label={intl.formatMessage({ id: 'voucher.table.code' })}
+                    name="code"
+                    rules={[{ required: true, message: <FormattedMessage id="voucher.required.code" /> }]}
+                >
                     <InputPrimary placeholder="Code" width="100%" height="h-[56px]" margin="mb-0" />
                 </Form.Item>
 
@@ -173,11 +177,27 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                     name="quantity"
                     rules={[{ required: true, message: <FormattedMessage id="voucher.required.quantity" /> }]}
                 >
-                    <InputPrimary placeholder={intl.formatMessage({ id: 'voucher.table.quantity' })} width="100%" height="h-[56px]" margin="mb-0" />
+                    <InputPrimary
+                        placeholder={intl.formatMessage({ id: 'voucher.table.quantity' })}
+                        width="100%"
+                        height="h-[56px]"
+                        margin="mb-0"
+                    />
                 </Form.Item>
-                <Form.Item label={intl.formatMessage({ id: 'voucher.table.min_total_amount' })} name="min_total_amount"
-
-                    rules={[{ required: true, message: <FormattedMessage id="voucher.required.min_total_amount" /> }]}
+                <Form.Item
+                    label={intl.formatMessage({ id: 'voucher.table.min_total_amount' })}
+                    name="min_total_amount"
+                    rules={[
+                        { required: true, message: <FormattedMessage id="voucher.required.min_total_amount" /> },
+                        {
+                            validator: (_: any, value: number) => {
+                                if (value > 0) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject('Vui lòng nhập lớn hơn 0!');
+                            },
+                        },
+                    ]}
                 >
                     <InputPrimary
                         type="number"
