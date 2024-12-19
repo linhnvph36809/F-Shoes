@@ -39,8 +39,7 @@ const useAuth = () => {
                 return;
             }
             localStorage.setItem('code', data.code);
-
-            showMessageClient(handleChangeMessage(locale, 'Verify code has been sent to your email.', 'Xác minh mã đã được gửi đến email của bạn.'), '', 'success');
+            showMessageClient(handleChangeMessage(locale, 'Verify code has been sent to your email', 'Mã xác minh đã được gửi đến email của bạn'), '', 'success');
             setPage('register');
         } catch (error) {
             showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
@@ -94,7 +93,7 @@ const useAuth = () => {
             setUserGlobal(data.user);
             refetchQuantityCart();
             navigate('/');
-            showMessageClient(handleChangeMessage(locale, 'Logout Successfuly', 'Đăng nhập thành công'), '', 'success');
+            showMessageClient(handleChangeMessage(locale, 'Login Successfuly', 'Đăng nhập thành công'), '', 'success');
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
                 console.log(error as any);
@@ -111,7 +110,7 @@ const useAuth = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `/api/logout`, user);
-            showMessageClient('Logout Successfuly', '', 'success');
+            showMessageClient(handleChangeMessage(locale, 'Logout Successfuly', 'Đăng xuất thành công'), '', 'success');
             navigate('/');
             setUserName('');
             removeAllLocal();
@@ -128,7 +127,7 @@ const useAuth = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `/api/logout`, user);
-            showMessageClient(handleChangeMessage(locale, 'Logout Successfuly', 'Đăng nhập thành công'), '', 'success');
+            showMessageClient(handleChangeMessage(locale, 'Logout Successfuly', 'Đăng xuất thành công'), '', 'success');
             navigate('/login-admin');
             removeAllLocal();
             setUserGlobal(undefined);
@@ -160,7 +159,7 @@ const useAuth = () => {
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
                 console.log(error as any);
-                showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+                showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
             } else {
                 showMessageClient('Something went wrong!', '', 'error');
             }

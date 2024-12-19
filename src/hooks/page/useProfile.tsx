@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { tokenManagerInstance } from '../../api';
 import { showMessageClient } from '../../utils/messages';
 import { useQueryClient } from 'react-query';
+import { handleChangeMessage } from '../../utils';
+import { useContextGlobal } from '../../contexts';
 export const QUERY_KEY = 'users';
 const useProfile = () => {
+    const {  locale } = useContextGlobal();
     const [loading, setLoading] = useState<boolean>(false);
     const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false);
      const queryClient = useQueryClient();
@@ -24,7 +27,7 @@ const useProfile = () => {
             if((error as any)?.response?.data?.message){
                 showMessageClient((error as any).response.data.message, '', 'error');
             }else{
-                showMessageClient('Error', "Something went wrong!", 'error');
+                showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
             }
             
         } finally {

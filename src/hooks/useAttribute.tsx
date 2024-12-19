@@ -68,7 +68,9 @@ const useAttribute = () => {
             await tokenManagerInstance('post', `/api/attribute`, attributeName);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin(
+                (error as any)?.response?.data?.message || handleChangeMessage(
+                    locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -82,7 +84,7 @@ const useAttribute = () => {
 
             navigate(PATH_ADMIN.ADD_ATTRIBUTE);
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -94,8 +96,7 @@ const useAttribute = () => {
             await tokenManagerInstance('delete', API_ATTRIBUTE + id);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
-        } finally {
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
             setLoading(false);
         }
     };
@@ -106,7 +107,7 @@ const useAttribute = () => {
             await tokenManagerInstance('delete', `${API_ATTRIBUTE}${idAttribute}/value/${idValue}`);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -124,3 +125,4 @@ const useAttribute = () => {
 };
 
 export default useAttribute;
+/** */

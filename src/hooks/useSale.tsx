@@ -1,14 +1,17 @@
 import {useState} from "react";
 import {tokenManagerInstance} from "../api";
 import {ISale} from "../interfaces/ISale.ts";
-import { showMessageClient } from "../utils/messages.ts";
+import { showMessageAdmin, showMessageClient } from "../utils/messages.ts";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "react-query";
+import { handleChangeMessage } from "../utils/index.ts";
+import { useContextGlobal } from "../contexts/index.tsx";
 
 export const QUERY_KEY = 'sales';
 export const API_SALE = 'api/sale';
 
 const useSale = () => {
+    const {  locale } = useContextGlobal();
     const [sales,setSales] = useState<ISale[]>([]);
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -21,7 +24,7 @@ const useSale = () => {
             setSales(data.data.data);
         }catch (error)
         {
-            console.log(error);
+            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         }
 
     }
@@ -45,7 +48,7 @@ const useSale = () => {
             const {data} = await tokenManagerInstance('post', API_SALE,dataSale);
             queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
             navigate('/admin/listsale');
-            showMessageClient('Success','Sale created successfully','success');
+            showMessageClient(handleChangeMessage(locale,'Sale created successfully','Bán hàng đã được tạo thành công'),'','success');
         }catch (error){
             const e = error as any;
             if(e?.response?.data?.errors?.start_date){
@@ -69,7 +72,7 @@ const useSale = () => {
             const {data} = await tokenManagerInstance('put', `${API_SALE}/${id}`,dataSale);
             queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
             navigate('/admin/listsale');
-            showMessageClient('Success','Sale created successfully','success');
+            showMessageClient(handleChangeMessage(locale,'Sale created successfully','Bán hàng đã được tạo thành công'),'','success');
         }catch (error){
             const e = error as any;
             if(e?.response?.data?.errors?.start_date){

@@ -5,10 +5,13 @@ import { PATH_LIST_CATEGORY } from '../constants';
 import { ICategory } from '../interfaces/ICategory';
 import { showMessageAdmin } from '../utils/messages';
 import { useQueryClient } from 'react-query';
+import { handleChangeMessage } from '../utils';
+import { useContextGlobal } from '../contexts';
 export const QUERY_KEY = 'categories';
 export const API_CATEGORY = '/api/category';
 
 const useCategory = () => {
+    const {  locale } = useContextGlobal();
     const [categories, setCategories] = useState<ICategory[]>([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -26,7 +29,7 @@ const useCategory = () => {
 
             setCategories(data.categories.data);
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -38,7 +41,7 @@ const useCategory = () => {
             const { data } = await tokenManagerInstance('get', 'api/main/categories?include=children');
             setMainCategoires(data.categories.data);
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -50,7 +53,7 @@ const useCategory = () => {
             await tokenManagerInstance('delete', `${API_CATEGORY}/${id}`);
             getAllCategory();
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-            showMessageAdmin('Delete Topic successfully', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Delete Topic successfully','Xóa chủ đề thành công'), '', 'success');
         } catch (error) {
             showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
@@ -64,7 +67,7 @@ const useCategory = () => {
             await tokenManagerInstance('post', API_CATEGORY, category);
             getAllCategory();
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-            showMessageAdmin('Create Topic successfully', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Create Topic successfully','Tạo chủ đề thành công'), '', 'success');
         } catch (error) {
             showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
@@ -79,7 +82,7 @@ const useCategory = () => {
             getAllCategory();
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             navigate(PATH_LIST_CATEGORY);
-            showMessageAdmin('Update Topic successfully', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Update Topic successfully','Cập nhật chủ đề thành công'), '', 'success');
         } catch (error) {
             showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
@@ -133,7 +136,7 @@ const useCategory = () => {
                     : 'Unexpected response status';
             showMessageAdmin(message, '', response.status === 200 || response.status === 204 ? 'success' : 'warning');
         } catch (error: any) {
-            showMessageAdmin('Error', error.response?.data?.message || 'Something went wrong.', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         }
     };
 
@@ -143,7 +146,7 @@ const useCategory = () => {
             const { data } = await tokenManagerInstance('get', `${API_CATEGORY}/${id}`);
             return data.category; // Assuming the response has a `category` field
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
             throw error;
         } finally {
             setLoading(false);

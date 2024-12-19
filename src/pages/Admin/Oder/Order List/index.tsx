@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { ConfigProvider, Input, Select } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
 import Heading from '../../components/Heading';
 import { columns } from './datas';
 import { API_ORDER } from '../../../../hooks/useOrder';
@@ -31,7 +30,6 @@ const OrderList = () => {
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchText(value);
-
         if (value.trim() === '') {
             setFilteredData(orders?.data);
         } else {

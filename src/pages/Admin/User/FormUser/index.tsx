@@ -9,7 +9,7 @@ import SelectPrimary from '../../components/Forms/SelectPrimary';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { API_GROUP, KEY_GROUP } from '../../../../hooks/useGroup';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
-
+import { FormattedMessage, useIntl } from 'react-intl';
 interface FormUserProps {
     onFinish: (values: any) => void;
     initialValues?: any;
@@ -17,12 +17,14 @@ interface FormUserProps {
 }
 
 const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading }) => {
+    const intl = useIntl();
     const [form] = Form.useForm();
     const { data, isFetching } = useQueryConfig([KEY_GROUP, 'all-groups'], API_GROUP);
     const groups = data?.data || [];
     const [imageFile, setImageFile] = useState(null);
 
     const handleSubmit = async (values: any) => {
+
         const formData = new FormData();
         formData.append('name', `${values.given_name} ${values.family_name}`);
         formData.append('email', values.email);
@@ -75,23 +77,23 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
             <div className="grid grid-cols-2 gap-5">
                 <InputPrimary
                     name="given_name"
-                    label="Given Name"
-                    placeholder="Enter Given Name"
-                    rules={[{ required: true, message: 'Please enter given name' }]}
+                    label={intl.formatMessage({ id: 'user.User_Form_name' })}
+                    placeholder={intl.formatMessage({ id: 'user.User_Form_name' })}
+                    rules={[{ required: true, message: <FormattedMessage id="user.User_Form_name_required" /> }]}
                 ></InputPrimary>
                 <InputPrimary
                     name="family_name"
-                    label="Family Name"
-                    placeholder="Enter Family Name"
-                    rules={[{ required: true, message: 'Please enter family name' }]}
+                    label={intl.formatMessage({ id: 'user.User_family' })}
+                    placeholder={intl.formatMessage({ id: 'user.User_family' })}
+                    rules={[{ required: true, message: <FormattedMessage id="user.User_Form_name_required" /> }]}
                 ></InputPrimary>
                 <InputPrimary
                     name="email"
                     type="email"
-                    label="Email"
-                    placeholder="Enter Email"
+                    label={intl.formatMessage({ id: 'user.User_gmail' })}
+                    placeholder={intl.formatMessage({ id: 'user.User_gmail' })}
                     rules={[
-                        { required: true, message: 'Please enter Email' },
+                        { required: true, message: <FormattedMessage id="user.User_Form_email_required" /> },
                         {
                             type: 'email',
                             message: 'Please enter a valid email address!',
@@ -100,7 +102,7 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                 ></InputPrimary>
 
                 <InputPrimary
-                    label="Password"
+                    label={intl.formatMessage({ id: 'user.User_Form_password' })}
                     type="password"
                     name="password"
                     placeholder="Enter Password"
@@ -112,8 +114,8 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                     name="group_id"
                     rules={[{ required: true, message: 'Please enter group' }]}
                     allowClear
-                    label="Group"
-                    placeholder="Choose groups"
+                    label={intl.formatMessage({ id: 'user.User_Active_Users' })}
+                    placeholder={intl.formatMessage({ id: 'user.User_Active_Users' })}
                     optionFilterProp="group_name"
                     fieldNames={{ label: 'group_name', value: 'id' }}
                     key={'value'}
@@ -140,7 +142,7 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
 
             <Form.Item className="font-medium" name="theme">
                 <Upload name="image" listType="picture" accept="image/*" beforeUpload={handleImageUpload}>
-                    <Button icon={<UploadOutlined />}>Upload Image</Button>
+                    <Button icon={<UploadOutlined />}><FormattedMessage id="user.User_Upload_image" /></Button>
                 </Upload>
             </Form.Item>
             <div className="text-end mt-10">

@@ -4,10 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { tokenManagerInstance } from '../api';
 import { showMessageAdmin, showMessageClient } from '../utils/messages';
 import { PATH_ADMIN } from '../constants/path';
+import { useContextGlobal } from '../contexts';
+import { handleChangeMessage } from '../utils';
 
 export const API_VOUCHER = 'api/vouchers';
 
 const useVoucher = () => {
+    const {  locale } = useContextGlobal();
     const [voucher, setVoucher] = useState<any>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -16,7 +19,7 @@ const useVoucher = () => {
         try {
             setLoading(true);
             const { data } = await tokenManagerInstance('get', 'api/vouchers/code/' + `${voucher}`);
-            showMessageClient('Voucher Valid', '', 'success');
+            showMessageClient(handleChangeMessage(locale,'Voucher Valid','Phiếu quà tặng hợp lệ'), '', 'success');
             setVoucher(data);
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
@@ -35,7 +38,7 @@ const useVoucher = () => {
         try {
             setLoading(true);
             tokenManagerInstance('delete', `api/vouchers/forceDelete/${id}`);
-            showMessageAdmin('Delete Voucher successfully', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Delete Voucher successfully','Xóa voucher thành công'), '', 'success');
         } catch (error) {
             showMessageClient('Error', (error as any).message, 'error');
         } finally {
@@ -47,7 +50,7 @@ const useVoucher = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_VOUCHER, voucher);
-            showMessageAdmin('Add Voucher successfully', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Add Voucher successfully','Thêm mã giảm giá thành công'), '', 'success');
             navigate(PATH_ADMIN.VOUCHER);
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
@@ -65,7 +68,7 @@ const useVoucher = () => {
             setLoading(true);
             await tokenManagerInstance('patch', `${API_VOUCHER}/${id}`, voucher);
             navigate('/admin/voucher');
-            showMessageAdmin('Update Voucher successfully', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Update Voucher successfully','Cập nhật voucher thành công'), '', 'success');
         } catch (error) {
             showMessageClient('Error', (error as any).message, 'error');
         } finally {
