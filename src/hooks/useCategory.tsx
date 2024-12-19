@@ -11,7 +11,7 @@ export const QUERY_KEY = 'categories';
 export const API_CATEGORY = '/api/category';
 
 const useCategory = () => {
-    const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const [categories, setCategories] = useState<ICategory[]>([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -101,7 +101,11 @@ const useCategory = () => {
             await tokenManagerInstance('delete', `${API_CATEGORY}/${id}`);
             getAllCategory();
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-            showMessageAdmin(handleChangeMessage(locale,'Delete Topic successfully','Xóa chủ đề thành công'), '', 'success');
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Delete Topic successfully', 'Xóa chủ đề thành công'),
+                '',
+                'success',
+            );
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -139,33 +143,37 @@ const useCategory = () => {
             await tokenManagerInstance('post', API_CATEGORY, category);
             getAllCategory();
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-            showMessageAdmin(handleChangeMessage(locale,'Create Topic successfully','Tạo chủ đề thành công'), '', 'success');
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Create Topic successfully', 'Tạo chủ đề thành công'),
+                '',
+                'success',
+            );
         } catch (error) {
             if ((error as any).response.data.message) {
-                            showMessageClient((error as any)?.response?.data?.message, '', 'error');
-                        } else if ((error as any)?.response?.data?.errors) {
-                            showMessageClient(
-                                handleChangeMessage(
-                                    locale,
-                                    'Something is missing.Please check again!',
-                                    'Một số trường đã bị sót.Hãy kiểm tra lại',
-                                ),
-                                '',
-                                'error',
-                            );
-                        } else if ((error as any)?.response?.data?.error) {
-                            showMessageClient((error as any)?.response?.data?.error, '', 'error');
-                        } else {
-                            showMessageClient(
-                                handleChangeMessage(
-                                    locale,
-                                    'Something went wrong!',
-                                    'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                                ),
-                                '',
-                                'error',
-                            );
-                        }
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -178,7 +186,11 @@ const useCategory = () => {
             getAllCategory();
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             navigate(PATH_LIST_CATEGORY);
-            showMessageAdmin(handleChangeMessage(locale,'Update Topic successfully','Cập nhật chủ đề thành công'), '', 'success');
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Update Topic successfully', 'Cập nhật chủ đề thành công'),
+                '',
+                'success',
+            );
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -262,21 +274,28 @@ const useCategory = () => {
         }
     };
 
-    const deleteProductFromCategory = async (categoryId: any, productId: string | number | (string | number)[]) => {
+    const deleteProductFromCategory = async (categoryId: any, productId: string | number) => {
         try {
-            const productIds = Array.isArray(productId) ? productId : [productId];
-            if (!productIds.length) throw new Error('Product IDs must not be empty.');
-            const response = await tokenManagerInstance('delete', `${API_CATEGORY}/${categoryId}/products`, {
-                data: { products: productIds },
-            });
+            const data = {
+                products: [productId],
+                _method: 'DELETE',
+            };
+            const response = await tokenManagerInstance('post', `${API_CATEGORY}/${categoryId}/products`, data);
+
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             const message =
                 response.status === 200 || response.status === 204
                     ? 'Products deleted successfully!'
                     : 'Unexpected response status';
+
             showMessageAdmin(message, '', response.status === 200 || response.status === 204 ? 'success' : 'warning');
         } catch (error: any) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            showMessageAdmin(
+                error?.response?.data?.message ||
+                    handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                '',
+                'error',
+            );
         }
     };
 
