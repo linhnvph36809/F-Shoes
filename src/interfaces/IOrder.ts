@@ -53,14 +53,16 @@ export const statusString = (id: number) => {
 };
 
 export const paymentMethodString = (method: string) => {
+    const language = handleGetLocalStorage('language') as string;
+
     if (typeof method !== 'string') {
         return '...';
     }
     switch (method.toLocaleLowerCase()) {
         case 'cash_on_delivery':
-            return 'Cash on Delivery';
+            return handleChangeMessage(language, 'Cash on Delivery', 'Thanh toán khi nhận hàng ');
         case 'momo':
-            return 'Momo Wallet';
+            return 'Momo';
         case 'vnpay':
             return 'VNPAY';
         case 'banking':
@@ -73,14 +75,15 @@ export const paymentMethodString = (method: string) => {
 };
 
 export const paymentStatusString = (status: any) => {
+    const language = handleGetLocalStorage('language') as string;
     if (typeof status !== 'string') {
         return '...';
     }
     switch (status.toLocaleLowerCase()) {
         case 'paid':
-            return 'Paid';
+            return handleChangeMessage(language, 'Paid', 'Đã thanh toán');
         case 'not_yet_paid':
-            return 'Not yet paid';
+            return handleChangeMessage(language, 'Not yet paid', 'Chưa thanh toán');
         default:
             return '...';
     }
