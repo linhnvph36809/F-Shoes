@@ -12,6 +12,7 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { paymentMethodString, statusString } from '../../../../interfaces/IOrder';
 import { formatPrice, formatTime } from '../../../../utils';
 import { showMessageActive } from '../../../../utils/messages';
+import { FormattedMessage } from 'react-intl';
 
 const OrderDetail = () => {
     const { reOrder } = UseOrder();
@@ -50,11 +51,10 @@ const OrderDetail = () => {
 
     const status:
         | {
-            className: string;
-            text: string;
-        }
+              className: string;
+              text: string;
+          }
         | undefined = statusString(order?.status);
-   
 
     return (
         <>
@@ -62,7 +62,9 @@ const OrderDetail = () => {
                 <Skeleton />
             ) : (
                 <section>
-                    <Heading>Order Detail</Heading>
+                    <Heading>
+                        <FormattedMessage id="Order Detail" />
+                    </Heading>
                     <Link
                         to={prevUrl}
                         className="w-[100px] h-[40px] flex items-center
@@ -70,13 +72,15 @@ const OrderDetail = () => {
                         mb-10 hover:bg-gray-200 transition-global"
                     >
                         <ArrowLeftToLine className="w-[16px]" />
-                        Back
+                        <FormattedMessage id="Back" />
                     </Link>
                     <div>
                         <div className="bg-whitesmoke p-8 rounded-lg min-h-[650px]">
                             <div>
                                 <div className="flex justify-between items-center mb-6">
-                                    <h3 className="font-medium text-[25px]">Ordering information</h3>
+                                    <h3 className="font-medium text-[25px]">
+                                        <FormattedMessage id="Ordering information" />
+                                    </h3>
                                     <div className="flex items-center gap-x-2">
                                         <Tag
                                             className={`flex justify-center items-center text-[16px]
@@ -84,40 +88,52 @@ const OrderDetail = () => {
                                         >
                                             {status?.text}
                                         </Tag>
-                                        <p className="text-[15px] color-gray">ID : {order?.id}</p>
+                                        <p className="text-[15px] color-gray">
+                                            <FormattedMessage id="admin.id" /> : {order?.id}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="flex gap-x-10">
                                     <div className="w-6/12">
                                         <h3 className="text-[15px] font-medium color-primary">
-                                            Name : {order?.user.name}
+                                            <FormattedMessage id="admin.name" /> : {order?.user.name}
                                         </h3>
-                                        <p className="text-[14px] color-gray my-3">Phone : {order?.phone} </p>
-                                        <p className="text-[14px] color-gray mb-3">Address : {order?.address}</p>
                                         <p className="text-[14px] color-gray my-3">
-                                            Date : {formatTime(order?.created_at)}
+                                            <FormattedMessage id="phone" /> : {order?.phone}{' '}
+                                        </p>
+                                        <p className="text-[14px] color-gray mb-3">
+                                            <FormattedMessage id="address" /> : {order?.address}
+                                        </p>
+                                        <p className="text-[14px] color-gray my-3">
+                                            <FormattedMessage id="admin.date" /> : {formatTime(order?.created_at)}
                                         </p>
                                     </div>
                                     <div className="w-6/12 pl-10 border-l">
                                         <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
                                             <p>
                                                 {' '}
-                                                <p>Shipping Method :</p>
+                                                <p>
+                                                    <FormattedMessage id="shipping_method" /> :
+                                                </p>
                                             </p>
                                             <p className="font-medium">{order?.shipping_method}</p>
                                         </div>
                                         <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
                                             <p>
                                                 {' '}
-                                                <p>Subtotal :</p>
+                                                <p>
+                                                    <FormattedMessage id="box.Cart.Subtotal" /> :
+                                                </p>
                                             </p>
                                             <p className="font-medium">
                                                 {+order?.voucher_id?.discount
-                                                    ? order.total_amount <= 0 ? 0: formatPrice(
-                                                        +order.total_amount /
-                                                        (1 - +order?.voucher_id?.discount / 100) -
-                                                        +order.shipping_cost,
-                                                    )
+                                                    ? order.total_amount <= 0
+                                                        ? 0
+                                                        : formatPrice(
+                                                              +order.total_amount /
+                                                                  (1 - +order?.voucher_id?.discount / 100) -
+                                                                  +order.shipping_cost,
+                                                          )
                                                     : formatPrice(+order.total_amount - +order.shipping_cost)}
                                                 đ
                                             </p>
@@ -126,7 +142,9 @@ const OrderDetail = () => {
                                         <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
                                             <p>
                                                 {' '}
-                                                <p>Shipping Cost :</p>
+                                                <p>
+                                                    <FormattedMessage id="Shipping_Cost" /> :
+                                                </p>
                                             </p>
                                             <p className="font-medium">{formatPrice(order?.shipping_cost)}đ</p>
                                         </div>
@@ -135,19 +153,18 @@ const OrderDetail = () => {
                                             <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
                                                 <p>
                                                     {' '}
-                                                    <p>Voucher :</p>
+                                                    <p>
+                                                        <FormattedMessage id="voucher" /> :
+                                                    </p>
                                                 </p>
-                                               
-                                                    {
-                                                        order?.voucher_id && order?.voucher_id?.type == 'fixed' ? 
-                                                        <p className="font-medium">
-                                                        -{formatPrice(order.voucher_id?.discount)}
-                                                        đ</p>
-                                                        :<p className="font-medium">
-                                                            {order.voucher_id?.discount}%
-                                                        </p>
-                                                    }
-                                                   
+
+                                                {order?.voucher_id && order?.voucher_id?.type == 'fixed' ? (
+                                                    <p className="font-medium">
+                                                        -{formatPrice(order.voucher_id?.discount)}đ
+                                                    </p>
+                                                ) : (
+                                                    <p className="font-medium">{order.voucher_id?.discount}%</p>
+                                                )}
                                             </div>
                                         ) : (
                                             ''
@@ -155,14 +172,18 @@ const OrderDetail = () => {
                                         <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
                                             <p>
                                                 {' '}
-                                                <p>Payment Method :</p>
+                                                <p>
+                                                    <FormattedMessage id="paymentMethod" /> :
+                                                </p>
                                             </p>
                                             <p className="font-medium">{paymentMethodString(order?.payment_method)}</p>
                                         </div>
                                         <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
                                             <p>
                                                 {' '}
-                                                <p className="font-medium text-[20px]">Total :</p>
+                                                <p className="font-medium text-[20px]">
+                                                    <FormattedMessage id="admin.total" /> :
+                                                </p>
                                             </p>
                                             <p className="font-medium text-[20px]">
                                                 {formatPrice(order?.total_amount)}đ
@@ -176,7 +197,7 @@ const OrderDetail = () => {
                                                         className="w-[140px] h-[50px] bg-red-500
                                                         rounded-[30px] text-[16px] font-medium transition-global hover:opacity-70 text-white"
                                                     >
-                                                        Cancel
+                                                        <FormattedMessage id="button.cancel" />
                                                     </button>
                                                     <ModalCancel
                                                         isModalOpen={isModalOpen}
@@ -187,7 +208,8 @@ const OrderDetail = () => {
                                                 </>
                                             ) : order.status > 3 ? (
                                                 <p className="text-[16px] color-gray">
-                                                    The Order is <span className="color-primary">{status.text}</span>
+                                                    <FormattedMessage id="The Order is" />{' '}
+                                                    <span className="color-primary">{status.text}</span>
                                                 </p>
                                             ) : (
                                                 ''
@@ -198,7 +220,7 @@ const OrderDetail = () => {
                                                     width="w-[140px]"
                                                     height="h-[50px]"
                                                 >
-                                                    Buy Again
+                                                    <FormattedMessage id="Buy Again" />
                                                 </ButtonPrimary>
                                             ) : (
                                                 ''
@@ -232,7 +254,8 @@ const OrderDetail = () => {
                                                     </h3>
                                                     {orderDetail?.variation?.classify ? (
                                                         <p className="font-medium color-gray text-[14px] my-2">
-                                                            Variant : {orderDetail?.variation?.classify}
+                                                            <FormattedMessage id="Variant" /> :{' '}
+                                                            {orderDetail?.variation?.classify}
                                                         </p>
                                                     ) : (
                                                         ''
@@ -249,7 +272,7 @@ const OrderDetail = () => {
                                                 {order.status > 3 ? (
                                                     <Link to={`/detail/${orderDetail?.product?.slug}`}>
                                                         <button className="w-[80px] h-[36px] bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">
-                                                            Review
+                                                            <FormattedMessage id="admin.review" />
                                                         </button>
                                                     </Link>
                                                 ) : (

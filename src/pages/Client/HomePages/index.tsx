@@ -38,7 +38,7 @@ const HomePage = () => {
     const productsDisplay2 = data2?.data?.category?.products || [];
     const productsDisplay3 = data3?.data?.category?.products || [];
     console.log(productsDisplay1);
-    
+
     return (
         <>
             <section className="container">
@@ -69,9 +69,13 @@ const HomePage = () => {
                                 productsDisplay1.map((item: IProduct) => (
                                     <SwiperSlide key={item.id}>
                                         <div>
-                                            <Link to={`detail/${item.slug}`} className='flex flex-col justify-between'>
+                                            <Link to={`detail/${item.slug}`} className="flex flex-col justify-between">
                                                 <div>
-                                                    <img src={item.image_url} alt="" className='h-[678px] object-cover' />
+                                                    <img
+                                                        src={item.image_url}
+                                                        alt=""
+                                                        className="h-[678px] object-cover"
+                                                    />
                                                 </div>
                                                 <div>
                                                     <h3 className="text-15px color-primary font-medium pt-4">
@@ -80,19 +84,21 @@ const HomePage = () => {
                                                     <h5 className="text-[#707072] text-15px">
                                                         {item?.categories
                                                             ? item?.categories.map((cat, index, array) => {
-                                                                if (array.length < 2) {
-                                                                    return ' ' + cat?.name;
-                                                                } else {
-                                                                    if (index == 2) return;
-                                                                    if (index == 1) return ' ' + cat?.name;
-                                                                    return ' ' + cat?.name + ',';
-                                                                }
-                                                            })
+                                                                  if (array.length < 2) {
+                                                                      return ' ' + cat?.name;
+                                                                  } else {
+                                                                      if (index == 2) return;
+                                                                      if (index == 1) return ' ' + cat?.name;
+                                                                      return ' ' + cat?.name + ',';
+                                                                  }
+                                                              })
                                                             : ' '}
                                                     </h5>
                                                     <h3 className="text-15px color-primary font-medium mt-3">
-                                                        
-                                                        {item.sale_price ?formatPrice(item.sale_price) : formatPrice(item.price)} ₫
+                                                        {item.sale_price
+                                                            ? formatPrice(item.sale_price)
+                                                            : formatPrice(item.price)}{' '}
+                                                        ₫
                                                     </h3>
                                                 </div>
                                             </Link>
@@ -124,7 +130,7 @@ const HomePage = () => {
                             productsDisplay2.map((item: IProduct, index: number) => (
                                 <SwiperSlide key={index}>
                                     <div className="relative">
-                                        <img src={item.image_url} alt="" className='h-[678px] object-cover' />
+                                        <img src={item.image_url} alt="" className="h-[678px] object-cover" />
                                         <Link
                                             to={`detail/${item.slug}`}
                                             className="absolute left-[5%] bottom-[5%] px-8 py-4
@@ -140,7 +146,7 @@ const HomePage = () => {
                     </SlidesScroll>
                 </div>
                 <div>
-                    <Heading title="Don't Miss" />
+                    <Heading title={<FormattedMessage id="title.Don't Miss" />} />
                     <iframe
                         width={'100%'}
                         height={'950px'}

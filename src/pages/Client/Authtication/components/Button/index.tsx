@@ -1,6 +1,8 @@
 import { Button } from 'antd';
+import { ReactNode } from 'react';
+import { FormattedMessage } from 'react-intl';
 
-const ButtonComponent = ({ children, type = 'default', ...props }: any) => {
+const ButtonComponent = ({ children, type = <FormattedMessage id="default" />, ...props }: any | ReactNode) => {
     return (
         <Button
             type={type}

@@ -139,11 +139,15 @@ const Header = () => {
                                         overlay={
                                             <Menu className="color-primary absolute left-0 right-0 font-medium">
                                                 <Menu.Item key="1">
-                                                    <Link to="/profile">Profile</Link>
+                                                    <Link to="/profile">
+                                                        <FormattedMessage id="Profile" />
+                                                    </Link>
                                                 </Menu.Item>
                                                 {+isAdmin ? (
                                                     <Menu.Item key="2">
-                                                        <Link to="/admin">Admin</Link>
+                                                        <Link to="/admin">
+                                                            <FormattedMessage id="ADMIN" />
+                                                        </Link>
                                                     </Menu.Item>
                                                 ) : (
                                                     ''
@@ -156,7 +160,7 @@ const Header = () => {
                                                         logout();
                                                     }}
                                                 >
-                                                    Logout
+                                                    <FormattedMessage id="admin.logout" />
                                                 </Menu.Item>
                                             </Menu>
                                         }

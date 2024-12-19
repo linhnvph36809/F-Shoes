@@ -2,6 +2,7 @@ import { Form, Modal } from 'antd';
 import UseOrder from '../../../../../../hooks/profile/useOrder';
 import TextArea from 'antd/es/input/TextArea';
 import { useForm } from 'antd/es/form/Form';
+import { FormattedMessage } from 'react-intl';
 
 const ModalCancel = ({
     isModalOpen,
@@ -39,7 +40,11 @@ const ModalCancel = ({
             <Modal
                 okButtonProps={{ type: 'primary', style: { backgroundColor: '#ff4d4f', borderColor: '#ff4d4f' } }}
                 cancelButtonProps={{ type: 'default' }}
-                title={<h3 className="text-[28px]">Reason</h3>}
+                title={
+                    <h3 className="text-[28px]">
+                        <FormattedMessage id="Reason" />
+                    </h3>
+                }
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
@@ -50,7 +55,7 @@ const ModalCancel = ({
                         rounded-lg transition-global hover:text-white"
                         onClick={handleCancel}
                     >
-                        Cancel
+                        <FormattedMessage id="button.cancel" />
                     </button>,
                     <button
                         key="ok"
@@ -58,16 +63,18 @@ const ModalCancel = ({
                         hover:opacity-80 transition-global"
                         onClick={handleOk}
                     >
-                        Submit
+                        <FormattedMessage id="button.submit" />
                     </button>,
                 ]}
             >
                 <Form layout="vertical" form={form} onFinish={onFinish}>
                     <Form.Item
-                        label="Enter reason"
+                        label={<FormattedMessage id="Enter_Reason" />}
                         className="font-medium"
                         name="reason_cancelled"
-                        rules={[{ required: true, message: 'Please enter reason for cancellation' }]}
+                        rules={[
+                            { required: true, message: <FormattedMessage id="Please enter reason for cancellation" /> },
+                        ]}
                     >
                         <TextArea rows={6} />
                     </Form.Item>

@@ -109,7 +109,6 @@ const Addorder = () => {
         postOrder(newValues);
         refetch();
     };
-
     const handleCityChange = (cityId: number) => {
         getAllDistrict(cityId);
         setProvince(provinces.find((province: any) => province.ProvinceID == cityId).ProvinceName);
