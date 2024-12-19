@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PATH_ADMIN } from '../constants/path';
 import { showMessageAdmin } from '../utils/messages';
 import { useQueryClient } from 'react-query';
+import { useContextGlobal } from '../contexts';
+import { handleChangeMessage } from '../utils';
 
 const API_ATTRIBUTE_ADD = '/api/add/attribute/values/product/';
 const API_ATTRIBUTE = '/api/attribute/';
@@ -16,6 +18,7 @@ const useAttribute = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const { locale } = useContextGlobal();
 
     let id: string | number | undefined;
 
@@ -30,7 +33,12 @@ const useAttribute = () => {
             const { data } = await tokenManagerInstance('get', `/api/attribute/${id}/value`);
             return data;
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin(
+                (error as any)?.response?.data?.message ||
+                    handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi !'),
+                '',
+                'error',
+            );
         } finally {
             setLoading(false);
         }
@@ -43,7 +51,12 @@ const useAttribute = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             return data;
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin(
+                (error as any)?.response?.data?.message ||
+                    handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi !'),
+                '',
+                'error',
+            );
         } finally {
             setLoading(false);
         }
@@ -54,9 +67,10 @@ const useAttribute = () => {
             setLoading(true);
             await tokenManagerInstance('post', `/api/attribute`, attributeName);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin(
+                (error as any)?.response?.data?.message || handleChangeMessage(
+                    locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -70,7 +84,7 @@ const useAttribute = () => {
 
             navigate(PATH_ADMIN.ADD_ATTRIBUTE);
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -81,10 +95,8 @@ const useAttribute = () => {
             setLoading(true);
             await tokenManagerInstance('delete', API_ATTRIBUTE + id);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
-        } finally {
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
             setLoading(false);
         }
     };
@@ -94,9 +106,8 @@ const useAttribute = () => {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_ATTRIBUTE}${idAttribute}/value/${idValue}`);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -114,3 +125,4 @@ const useAttribute = () => {
 };
 
 export default useAttribute;
+/** */

@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
 
 import axios from 'axios';
+import { showMessageClient } from '../utils/messages';
+import { handleChangeMessage } from '../utils';
+import { useContextGlobal } from '../contexts';
 
 const TOKEN = '2081020d-8fac-11ef-866e-82ec7f121ab7';
 
 const useDelivery = () => {
+    const {  locale } = useContextGlobal();
     const [provinces, setProvinces] = useState<any>([]);
     const [districts, setDistricts] = useState<any>([]);
     const [wards, setWards] = useState<any>([]);
@@ -87,7 +91,7 @@ const useDelivery = () => {
             );
             setFee(data.data);
         } catch (error) {
-            console.log(error);
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }

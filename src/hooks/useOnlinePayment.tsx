@@ -5,11 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { showMessageClient } from '../utils/messages';
 import useCookiesConfig from './useCookiesConfig';
 import { useContextGlobal } from '../contexts';
+import { handleChangeMessage } from '../utils';
 
 const API = '/api/';
 const API_ORDER = '/api/orders';
 
 const useOnlinePayment = () => {
+    const {  locale } = useContextGlobal();
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
     const { handleSetCookie } = useCookiesConfig('orderId');
@@ -19,11 +21,11 @@ const useOnlinePayment = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_ORDER, order);
-            showMessageClient('Order successfully', '', 'success');
+            showMessageClient(handleChangeMessage(locale,'Order successfully','Đặt hàng thành công'), '', 'success');
             refetchQuantityCart();
             navigate('/order-cash-on-delivery');
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -42,7 +44,7 @@ const useOnlinePayment = () => {
             }
             refetchQuantityCart();
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -59,7 +61,7 @@ const useOnlinePayment = () => {
             }
             refetchQuantityCart();
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -69,7 +71,7 @@ const useOnlinePayment = () => {
         try {
             await tokenManagerInstance('put', `api/order/update/payment-status/${id}`, paymentStatus);
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         }
     };
 
