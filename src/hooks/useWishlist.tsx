@@ -18,7 +18,16 @@ const useWishlist = () => {
             showMessageClient('Add Wishlist successfully', '', 'success');
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PROFILE] });
         } catch (error) {
-            showMessageClient('Error', (error as any).message, 'error');
+            if((error as any).response.data.message){
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            }else if((error as any)?.response?.data?.errors){
+                showMessageClient('Something is missing.Please check again!', '', 'error');
+            }
+            else if((error as any)?.response?.data?.error){
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            }else{
+                showMessageClient('Something went wrong!', '', 'error');
+            }
         } finally {
             setLoading(false);
         }

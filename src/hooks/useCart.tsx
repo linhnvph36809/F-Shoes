@@ -16,7 +16,13 @@ const useCart = () => {
             showMessageClient('Add to cart successfully', '', 'success');
             refetchQuantityCart();
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.error || 'Something went wrong!', '', 'error');
+            if((error as any).response.data.message){
+                showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            }else if((error as any)?.response?.data?.error){
+                showMessageClient((error as any)?.response?.data?.error || 'Something went wrong!', '', 'error');
+            }
+            
+            
         } finally {
             setLoading(false);
         }
