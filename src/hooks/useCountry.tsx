@@ -27,7 +27,7 @@ const useCountry = () => {
             setCountries(data.geonames);
 
         } catch (error) {
-            console.log(error);
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -38,7 +38,7 @@ const useCountry = () => {
             const { data } = await axios.get(`http://api.geonames.org/childrenJSON?geonameId=${geonamesCountryId}&username=louis1124`);
             setProvinces(data.geonames);
         } catch (error) {
-            console.log(error)
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoadingProvinces(false);
         }
@@ -49,7 +49,7 @@ const useCountry = () => {
             const { data } = await axios.get(`http://api.geonames.org/childrenJSON?geonameId=${geonamesProvinceId}&username=louis1124`);
             setDistricts(data.geonames);
         } catch (error) {
-            console.log(error)
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoadingDistricts(false);
         }
@@ -60,7 +60,7 @@ const useCountry = () => {
             const { data } = await axios.get(`http://api.geonames.org/childrenJSON?geonameId=${geonamesDistrictId}&username=louis1124`);
             setCommunes(data.geonames);
         } catch (error) {
-            console.log(error)
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoadingCommune(false);
         }
@@ -70,7 +70,7 @@ const useCountry = () => {
             const { data } = await axios.get(`http://ipinfo.io/?token=460c929b3a6791`);
             setDeviceAddress(data.country);
         } catch (error) {
-            console.log(error);
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         }
     }
     const getDeviceCountryGeonames = async (country: string) => {

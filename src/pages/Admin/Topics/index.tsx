@@ -13,11 +13,14 @@ import FormTopic from './FormTopic';
 import { showMessageActive } from '../../../utils/messages';
 import ButtonDelete from '../components/Button/ButtonDelete';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { handleChangeMessage } from '../../../utils';
+import { useContextGlobal } from '../../../contexts';
 
 
 export const KEY = 'list-topic';
 
 const ListTopic = ({ initialValues }: any) => {
+    const {  locale } = useContextGlobal();
     const intl = useIntl();
     const { data, isFetching, refetch } = useQueryConfig(KEY, API_TOPIC);
     const { deleteTopic, postTopic, restoreTopic, softTopic } = useTopic();
@@ -30,7 +33,7 @@ const ListTopic = ({ initialValues }: any) => {
 
     const handleDeleteTopic = (id?: string | number) => {
         if (id) {
-            showMessageActive('Are you sure you want to delete the topic?', '', 'warning', () => {
+            showMessageActive(handleChangeMessage(locale,'Are you sure you want to delete the topic?','Bạn có chắc chắn muốn xóa chủ đề này không?'), '', 'warning', () => {
                 deleteTopic(id);
                 refetch();
             });

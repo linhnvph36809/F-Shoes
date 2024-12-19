@@ -7,7 +7,7 @@ import Heading from '../../components/Heading';
 import useAttribute from '../../../../hooks/useAttribute';
 import ButtonBack from '../../components/ButtonBack';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { showMessageActive } from '../../../../utils/messages';
 import { handleChangeMessage } from '../../../../utils';
@@ -15,6 +15,7 @@ import { useContextGlobal } from '../../../../contexts';
 import LoadingPage from '../../../../components/Loading/LoadingPage';
 
 const UpdateAttribute = () => {
+    const intl = useIntl();
     const [form] = Form.useForm();
      const {  locale } = useContextGlobal();
     const { id } = useParams();
@@ -85,14 +86,14 @@ const UpdateAttribute = () => {
                     <div className="my-4 w-6/12">
                         {attributeValues?.map((item: any, index: number) => (
                             <Form.Item
-                                label="Attribute Value"
+                                label={intl.formatMessage({ id: 'attribute_value' })}
                                 name={`attribute_value-${index}`}
                                 initialValue={item.value}
                                 className="relative font-medium"
-                                rules={[{ required: true, message: 'Please enter Attribute Value' }]}
+                                rules={[{ required: true, message: <FormattedMessage id="attribute.succcess.value" />  }]}
                             >
                                 <Input
-                                    placeholder="Attribute Value"
+                                    placeholder={intl.formatMessage({ id: 'attribute_value' })}
                                     width="100%"
                                     className={`h-[56px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                                     defaultValue={item.value}
@@ -116,10 +117,10 @@ const UpdateAttribute = () => {
                                                 {...restField}
                                                 name={name}
                                                 fieldKey={fieldKey}
-                                                rules={[{ required: true, message: 'Please enter a value' }]}
+                                                rules={[{ required: true, message: <FormattedMessage id="attribute.succcess" /> }]}
                                             >
                                                 <Input
-                                                    placeholder="Attribute Value"
+                                                    placeholder={intl.formatMessage({ id: 'attribute_value' })}
                                                     width="100%"
                                                     className={`h-[56px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                                                 />
@@ -131,7 +132,7 @@ const UpdateAttribute = () => {
                                     ))}
                                     <Form.Item>
                                         <Button type="dashed" onClick={() => add()} block>
-                                            Add Attribute Value
+                                        <FormattedMessage id="attribute_add_value" />
                                         </Button>
                                     </Form.Item>
                                 </>

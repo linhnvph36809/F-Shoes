@@ -306,6 +306,11 @@
     "group.succese.update.fail": "Fail to updated group!",
     "group.Authorization_Customer": "Update Authorization",
     "group.permission": "Permission",
+    "group.form_password":"Please enter password",
+    "group.form_password.success":"Please enter password",
+    "user.password_8":"Password must be at least 8 characters!",
+    "user.email.vaild":"Please enter a valid email address!",
+
 
     "user.List_User": "List Users",
     "user.User_Total_Users": "Total Users",
@@ -394,10 +399,13 @@
     "voucher.update": "Update Voucher",
     "voucher.required.discount": "Please enter discount",
     "voucher.required.code": "Please enter code",
-    "voucher.required.date_start": "Please enter code",
-    "voucher.required.date_end": "Please enter code",
-    "voucher.required.quantity": "Please enter code",
-    "voucher.required.min_total_amount": "Please enter code",
+    "voucher.required.date_start": "Please enter date start",
+    "voucher.required.date_end": "Please enter date end",
+    "voucher.required.quantity": "Please enter quantity",
+    "voucher.required.min_total_amount": "Please enter min total amount",
+    "voucher.table.fixed":"Fixed",
+    "voucher.percentage":"Percentage",
+
     "category.search": "Search by category name",
     "order.Search_Order": "Search Order",
     "order.Please_select": "Please select",
@@ -564,6 +572,7 @@
     "Please enter reason for cancellation": "Please enter reason for cancellation",
     "Statistics": "Statistics",
 
+
     "attribute.add_button": "Add Attribute",
     "attribute.attribute_name": "Attribute Name",
     "attribute.name_placeholder": "Enter Attribute Name",
@@ -571,5 +580,11 @@
     "product.priceInvalid": "Please enter a price greater than 0",
     "product.quantityInvalid": "Please enter quantity greater than 0",
     "page.notFoundTile": "Sorry, we couldn't find the page you're looking for.",
-    "page.noAccessTile": "You do not have permission to access the page"
+    "page.noAccessTile": "You do not have permission to access the page",
+    "attribute_value":"Attribute Value",
+    "attribute_add_value":"Add Attribute Value",
+    "attribute.succcess":"Please enter a value",
+    "attribute.succcess.value":"Please enter Attribute Value"
+
+    
 }

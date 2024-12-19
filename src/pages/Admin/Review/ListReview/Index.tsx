@@ -125,8 +125,11 @@ const ListReview = () => {
                 <FormattedMessage id="review.List_Review" />
             </Heading>
             <div>
-                <Input title={intl.formatMessage({ id: 'review.search' })} onChange={handleSearch} />
-            </div>
+    <Input 
+        placeholder={intl.formatMessage({ id: 'review.search' })} 
+        onChange={handleSearch} 
+    />
+</div>
             {loading ? (
                 <LoadingBlock />
             ) : (
