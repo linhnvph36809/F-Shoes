@@ -1,6 +1,6 @@
 import { EyeOutlined, StarFilled } from '@ant-design/icons';
-import { Input, message, Typography } from 'antd';
-import { Trash2 } from 'lucide-react';
+import { message, Typography } from 'antd';
+import { Search, Trash2 } from 'lucide-react';
 import LoadingBlock from '../../../../components/Loading/LoadingBlock';
 import useReview, { QUERY_KEY } from '../../../../hooks/useReview';
 import { IReview } from '../../../../interfaces/IReview';
@@ -11,10 +11,14 @@ import { Link } from 'react-router-dom';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { handleChangeMessage } from '../../../../utils';
+import { showMessageActive } from '../../../../utils/messages';
+import { useContextGlobal } from '../../../../contexts';
 
 const { Text } = Typography;
 
 const ListReview = () => {
+    const { locale } = useContextGlobal();
     const intl = useIntl();
     const { loading, deleteReview } = useReview(); // Use the useReview hook
     const { data: cachingReviewsData } = useQueryConfig(
@@ -29,14 +33,32 @@ const ListReview = () => {
     }, [cachingReviewsData]);
 
     const handleDeleteUser = async (id: string | number) => {
-        if (window.confirm('Bạn có chắc chắn muốn xoá Review này không?')) {
-            try {
-                await deleteReview(id); // Giả sử deleteUser trả về kết quả thành công hoặc lỗi
-
-                message.success('Xóa Review thành công!');
-            } catch (error) {
-                message.error('Đã xảy ra lỗi khi xóa Review. Vui lòng thử lại.');
-            }
+        if (id) {
+            showMessageActive(
+                handleChangeMessage(
+                    locale,
+                    'Are you sure you want to delete this Review?',
+                    'Bạn có chắc chắn muốn xóa Review này không?',
+                ),
+                '',
+                'warning',
+                async () => {
+                    try {
+                        await deleteReview(id); // Hàm xóa review từ API
+                        message.success(
+                            handleChangeMessage(locale, 'Review deleted successfully!', 'Xóa Review thành công!'),
+                        );
+                    } catch (error) {
+                        message.error(
+                            handleChangeMessage(
+                                locale,
+                                'An error occurred while deleting the Review. Please try again.',
+                                'Đã xảy ra lỗi khi xóa Review. Vui lòng thử lại.',
+                            ),
+                        );
+                    }
+                },
+            );
         }
     };
     const handleSearch = (e: any) => {
@@ -124,8 +146,13 @@ const ListReview = () => {
             <Heading>
                 <FormattedMessage id="review.List_Review" />
             </Heading>
-            <div>
-                <Input title={intl.formatMessage({ id: 'review.search' })} onChange={handleSearch} />
+            <div className='relative text-end'>
+                <input
+                    className={`w-[400px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                    placeholder={intl.formatMessage({ id: 'review.search' })} onChange={handleSearch} />
+                <Search
+                    className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global"
+                />
             </div>
             {loading ? (
                 <LoadingBlock />

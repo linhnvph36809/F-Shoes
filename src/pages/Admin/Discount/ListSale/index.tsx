@@ -5,7 +5,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Heading from '../../components/Heading';
 
 import { ISale } from '../../../../interfaces/ISale.ts';
-import { formatTime } from '../../../../utils';
+import { formatTime, handleChangeMessage } from '../../../../utils';
 import { STREAM_SALE_LIST_URL } from '../../../../constants/index.ts';
 
 import { showMessageActive, showMessageClient } from '../../../../utils/messages.ts';
@@ -13,7 +13,9 @@ import LoadingSmall from '../../../../components/Loading/LoadingSmall.tsx';
 import { tokenManagerInstance } from '../../../../api/index.tsx';
 import { API_SALE } from '../../../../hooks/useSale.tsx';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useContextGlobal } from '../../../../contexts/index.tsx';
 const ListSale = () => {
+    const {  locale } = useContextGlobal();
     const intl = useIntl();
     const navigate = useNavigate();
     const urlQuery = new URLSearchParams(useLocation().search);
@@ -44,13 +46,21 @@ const ListSale = () => {
                 setLoadingDeleteSale(true);
 
                 const { data } = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
-                showMessageClient('Success', 'Sale deleted successfully!', 'success');
+                showMessageClient(handleChangeMessage(locale, 'Sale deleted successfully!','Xóa giảm giá thành công'),'', 'success');
             } catch (error) {
                 if ((error as any)?.response?.data?.message) {
                     showMessageClient('Error', (error as any)?.response?.data?.message, 'error');
                     return;
                 }
-                showMessageClient('Error', 'Something went wrong!', 'error');
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
             } finally {
                 setLoadingDeleteSale(false);
             }
@@ -106,7 +116,7 @@ const ListSale = () => {
         }
     }, [keySearch, keyStatus, data]);
     const handleDelete = async (id: string | number) => {
-        await showMessageActive('Delete', 'Are you sure you want to delete?', 'warning', () => {
+        await showMessageActive(handleChangeMessage(locale, 'Are you sure you want to delete?','Bạn có chắc chắn muốn xóa không?'),'', 'warning', () => {
             setDeletedSaleID(id);
         });
     };

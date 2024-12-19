@@ -331,6 +331,11 @@
     "user.User_gmail": "Email",
     "user.Is_admin": "Quản trị viên",
     "user.date": "Ngày sinh",
+    "group.form_password":"Mật khẩu",
+    "group.form_password.success":"Vui lòng nhập mật khẩu",
+    "user.password_8":"Mật khẩu phải có ít nhất 8 ký tự!",
+    "user.email.vaild":"Vui lòng nhập một địa chỉ email hợp lệ!",
+
 
     "topic.List_Topic": "Danh sách topic",
     "topic.message": "Tìm kiếm theo Tên Chủ Đề",
@@ -343,7 +348,7 @@
     "topic.form.name": "Tên chủ đề",
     "topic.form.slug": "Slug",
     "topic.form.message.name": "Vui lòng nhập tên chủ đề",
-    "topic.form.message.slug": "Vui lòng nhập Sên",
+    "topic.form.message.slug": "Vui lòng nhập Slug",
     "topic.update": "Cập nhật chủ đề",
 
     "post.List_Post": "Danh sách bài viết",
@@ -377,6 +382,7 @@
     "review.table.rating": "Đánh giá",
     "review.table.action": "Hành động",
     "review.search": "Tìm kiếm một tiêu đề hoặc một văn bản",
+   
 
     "voucher.table.code": "Mã",
     "voucher.table.discount": "Giảm giá",
@@ -395,6 +401,9 @@
     "voucher.required.date_end": "Vui lòng nhập ngày kết thúc",
     "voucher.required.quantity": "Vui lòng nhập số lượng",
     "voucher.required.min_total_amount": "Vui lòng nhập số tiền tối thiểu",
+    "voucher.table.fixed":"Cố định",
+    "voucher.percentage":"Phần trăm",
+
     "order.Search_Order": "Tìm kiếm đơn hàng",
     "order.Please_select": "Vui lòng chọn",
     "order.Sort_ascending_by_date": "Sắp xếp tăng dần theo ngày",
@@ -429,6 +438,7 @@
     "admin.Please_enter_a_quantity": "Vui lòng nhập số lượng",
     "Error.Amount_must": "Số tiền phải lớn hơn hoặc bằng 0",
     "payment_method": "Phương thức thanh toán",
+    "admin.Select_Quantity": "Chọn số lượng cho sản phẩm",
     "mess.payment_method": "Vui lòng chọn phương thức thanh toán",
     "Search_for": "Tìm kiếm giảm giá theo tên, mã...",
     "status.upcoming": "Sắp diễn ra",
@@ -567,5 +577,18 @@
     "product.priceInvalid": "Vui lòng nhập giá lớn hơn 0",
     "product.quantityInvalid": "Vui lòng nhập số lượng lớn hơn 0",
     "page.notFoundTile": "Xin lỗi, chúng tôi không thể tìm thấy trang bạn đang tìm kiếm.",
-    "page.noAccessTile": "Bạn không có quyền truy cập vào trang "
+    "page.noAccessTile": "Bạn không có quyền truy cập vào trang ",
+    "attribute_value":"Giá trị thuộc tính",
+    "attribute_add_value":"Thêm giá trị thuộc tính",
+    "attribute.succcess":"Vui lòng nhập một giá trị",
+    "attribute.succcess.value":" Vui lòng nhập Giá trị Thuộc tính",
+
+    "discount.delete":"Xóa",
+    "discount.delete.success":"Bạn có chắc chắn muốn xóa không?",
+    "discount.success":"Bạn có chắc chắn chỉ muốn giữ những sản phẩm này và xóa những sản phẩm khác không?",
+    "Value is required":"Giá trị là bắt buộc.",
+    "Value must be less than or equal to 100":"Giá trị phải nhỏ hơn hoặc bằng 100.",
+    "Start date is required":"Ngày bắt đầu là bắt buộc.",
+    "End date is required":"Ngày kết thúc là bắt buộc"
+
 }

@@ -9,7 +9,9 @@ import { PATH_ADMIN } from '../../../constants/path';
 import { KEY } from './index';
 import { useIntl } from 'react-intl';
 
+
 const UpdateTopic = () => {
+    
     const intl = useIntl();
     const { id } = useParams();
     const { data, isFetching, refetch } = useQueryConfig(KEY, API_TOPIC);

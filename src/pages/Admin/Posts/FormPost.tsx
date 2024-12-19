@@ -10,6 +10,7 @@ import InputPrimary from '../components/Forms/InputPrimary';
 import ButtonSubmit from '../components/Button/ButtonSubmit';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { showMessageAdmin } from '../../../utils/messages';
+import { handleChangeMessage } from '../../../utils';
 
 const FormPost = ({
     title,
@@ -22,6 +23,7 @@ const FormPost = ({
     onFinish: any;
     loading: boolean;
 }) => {
+    const {  locale } = useContextGlobal();
     const [form] = Form.useForm();
     const { data } = useQueryConfig('topic-form', 'api/topics');
     const [imageFile, setImageFile] = useState(null);
@@ -43,9 +45,10 @@ const FormPost = ({
     };
 
     const handleImageUpload = (file: any) => {
+        
         const isImage = file.type.startsWith('image/');
         if (!isImage) {
-            showMessageAdmin('You can only upload image files!', '', 'warning');
+            showMessageAdmin(handleChangeMessage(locale,'You can only upload image files!',''), '', 'warning');
         } else {
             setImageFile(file);
         }
@@ -136,7 +139,7 @@ const FormPost = ({
                 label={intl.formatMessage({ id: 'post.form.image' })}
                 className="font-medium"
                 name="theme"
-                rules={initialValues?.theme ? [] : [{ required: true, message: 'Please upload an image' }]}
+                rules={initialValues?.theme ? [] : [{ required: true, message: <FormattedMessage id="post.message.image" /> }]}
             >
                 <Upload name="image" listType="picture" accept="image/*" beforeUpload={handleImageUpload}>
                     <Button icon={<UploadOutlined />} ><FormattedMessage id="post.upload_image" /></Button>

@@ -1,28 +1,41 @@
 import { Modal, Select } from 'antd';
 import { Link } from 'react-router-dom';
-import { formatPrice, formatTime } from '../../../../utils';
+import { formatPrice, formatTime, handleChangeMessage } from '../../../../utils';
 import { STATUS_ORDER } from '../../../../constants';
 import { Option } from 'antd/es/mentions';
 import useOrder, { API_ORDER } from '../../../../hooks/useOrder';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { paymentMethodString, paymentStatusString } from '../../../../interfaces/IOrder';
+import ButtonDelete from '../../components/Button/ButtonDelete';
+import { showMessageActive } from '../../../../utils/messages';
+import { useContextGlobal } from '../../../../contexts';
 
 const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCancel: () => void }) => {
     const intl = useIntl();
     const { refetch } = useQueryConfig('order-admin', API_ORDER);
-    const { putOrder } = useOrder();
+    const { putOrder, deleteOrder } = useOrder();
+    const { locale } = useContextGlobal();
 
-    const handleChangeStatus = (status: string) => {
+    const handleChangeStatus = async (status: string) => {
         if (orderDetail?.orderDetail.id) {
-            putOrder(orderDetail.orderDetail.id, {
+            await putOrder(orderDetail.orderDetail.id, {
                 status,
             });
             handleCancel();
             refetch();
         }
     };
-    
+
+    const handleDeleteOrder = async () => {
+        showMessageActive(handleChangeMessage(locale, 'Are you sure delete order?', 'Bạn có chắc chắn muốn xóa đơn hàng không?'), '', 'warning', async () => {
+            await deleteOrder(orderDetail?.orderDetail.id);
+            handleCancel();
+        })
+
+    }
+
+
 
     return (
         <>
@@ -68,9 +81,9 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     {orderDetail?.orderDetail?.status == 0 ? (
                         ''
                     ) : (
-                        <div className="mb-10">
+                        <div className="mb-10 flex items-center">
                             <Select
-                                style={{ width: 200, marginRight: 8 }}
+                                style={{ width: 200, marginRight: 8, height: "40px" }}
                                 placeholder={intl.formatMessage({ id: 'Please_select_status' })}
                                 onChange={handleChangeStatus}
                             >
@@ -89,6 +102,8 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     }
                                 })}
                             </Select>
+                            <ButtonDelete onClick={() => handleDeleteOrder()} />
+
                         </div>
                     )}
                     <div className="grid grid-cols-4 gap-x-5 border p-6">
@@ -129,7 +144,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                         {orderDetail?.orderDetail?.order_details?.map((orderDetail: any) => (
                             <Link to={`/detail/${orderDetail?.product?.slug}`} key={orderDetail?.orderDetail?.id}>
                                 <div className="flex gap-x-5 h-[80px] my-5 border-b pb-3">
-                                    <img src={orderDetail?.variation?.image_url} alt="Product Image" />
+                                    <img src={orderDetail?.variation?.image_url || orderDetail?.product?.image_url} alt="Product Image" className='w-[80px] h-[80px] object-cover' />
                                     <div>
                                         <div className="flex justify-between items-center gap-x-2 mt-2">
                                             <h3 className="text-[16px] color-primary font-medium">

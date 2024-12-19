@@ -1,6 +1,6 @@
 import FormVoucher from './FormVoucher';
 import { Navigate, useParams } from 'react-router-dom';
-import useCookiesConfig from '../../../hooks/useCookiesConfig';
+
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import useVoucher, { API_VOUCHER } from '../../../hooks/useVoucher';
 import LoadingBlock from '../../../components/Loading/LoadingBlock';
