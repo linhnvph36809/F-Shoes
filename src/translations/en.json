@@ -470,7 +470,7 @@
     "product.quantity": "Quantity",
     "product.enterQuantity": "Enter Quantity",
     "product.quantityRequired": "Please enter quantity",
-    "product.quantityLimit": "Quantity cannot be greater than 100000",
+    "product.quantityLimit": "Quantity cannot be greater than 10000",
     "product.status": "Status",
     "product.chooseMainImage": "Choose main image",
     "product.shortDescription": "Short Description",
@@ -566,5 +566,5 @@
     "attribute.name_placeholder": "Enter Attribute Name",
     "attribute.name_required": "Please enter attribute name",
     "product.priceInvalid": "Please enter a price greater than 0",
-    "product.quantityInvalid" : "Please enter a price greater than 0"
+    "product.quantityInvalid": "Please enter quantity greater than 0"
 }
