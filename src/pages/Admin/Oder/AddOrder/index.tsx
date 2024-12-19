@@ -152,8 +152,9 @@ const Addorder = () => {
             amount_collected: value.amount_collected || 0,
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-                } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
+                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+            } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: voucher?.id ? voucher.id : null,
@@ -446,10 +447,10 @@ const Addorder = () => {
                                         voucher.type === 'fixed'
                                             ? voucher.discount
                                             : ((handleTotalPrice >= FREE_SHIP
-                                                ? handleTotalPrice
-                                                : handleTotalPrice + (fee?.total || 0)) *
-                                                +voucher.discount) /
-                                            100,
+                                                  ? handleTotalPrice
+                                                  : handleTotalPrice + (fee?.total || 0)) *
+                                                  +voucher.discount) /
+                                                  100,
                                     )}
                                     đ
                                 </p>

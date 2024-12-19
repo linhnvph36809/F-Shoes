@@ -23,7 +23,7 @@ import { useContextGlobal } from '../../../contexts';
 import { handleChangeMessage } from '../../../utils';
 
 const ListProduct = () => {
-    const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const intl = useIntl();
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
@@ -41,7 +41,7 @@ const ListProduct = () => {
     );
 
     const handleDeleteProduct = (id: string | number) => {
-        showMessageActive(handleChangeMessage(locale,'Are you sure you want to delete this product','Bạn có chắc chắn muốn xóa sản phẩm này không?'), '', 'warning', () => {
+        showMessageActive(handleChangeMessage(locale, 'Are you sure you want to delete this product', 'Bạn có chắc chắn muốn xóa sản phẩm này không?'), '', 'warning', () => {
             deleteProduct(id);
         });
     };
@@ -67,11 +67,11 @@ const ListProduct = () => {
         render: (slug: string | number, values: IProduct) => {
             return (
                 <div className="flex-row-center gap-x-3">
+
                     <Link
                         state={{ prevUrl: currentUrl }}
-                        to={`/admin/${
-                            values?.variations && values.variations.length ? 'update-variant' : 'add-variant'
-                        }/${slug}`}
+                        to={`/admin/${values?.variations && values.variations.length ? 'update-variant' : 'add-variant'
+                            }/${slug}`}
                     >
                         <ButtonEdit>
                             <CopyPlus />
@@ -97,11 +97,13 @@ const ListProduct = () => {
                         <FormattedMessage id="admin.listProduct" />
                     </Heading>
                     <div className="flex justify-between">
-                        <ButtonAdd to="/admin/add-product" title={<FormattedMessage id="admin.addProduct" />} />
-                        <InputSearch
-                            placeholder={intl.formatMessage({ id: 'Search Product Name' })}
-                            onSearch={handleSearch}
-                        />
+                        <PermissionElement keyName={PERMISSION.PERMISSION_PRODUCT} action={ACTIONS.ACTIONS_ADD}>
+                            <ButtonAdd to="/admin/add-product" title={<FormattedMessage id="admin.addProduct" />} />
+                            <InputSearch
+                                placeholder={intl.formatMessage({ id: 'Search Product Name' })}
+                                onSearch={handleSearch}
+                            />
+                        </PermissionElement>
                     </div>
                     <div>
                         {isFetching ? (

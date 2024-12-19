@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CircleX, RefreshCcw, SquarePen, Trash2 } from 'lucide-react';
+import { CircleX, RefreshCcw, SquarePen } from 'lucide-react';
 import { Input } from 'antd';
 import { useState } from 'react';
 
@@ -15,12 +15,14 @@ import ButtonDelete from '../components/Button/ButtonDelete';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { handleChangeMessage } from '../../../utils';
 import { useContextGlobal } from '../../../contexts';
+import PermissionElement from '../../../components/Permissions/PermissionElement';
+import { ACTIONS, PERMISSION } from '../../../constants';
 
 
 export const KEY = 'list-topic';
 
 const ListTopic = ({ initialValues }: any) => {
-    const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const intl = useIntl();
     const { data, isFetching, refetch } = useQueryConfig(KEY, API_TOPIC);
     const { deleteTopic, postTopic, restoreTopic, softTopic } = useTopic();
@@ -33,7 +35,7 @@ const ListTopic = ({ initialValues }: any) => {
 
     const handleDeleteTopic = (id?: string | number) => {
         if (id) {
-            showMessageActive(handleChangeMessage(locale,'Are you sure you want to delete the topic?','Bạn có chắc chắn muốn xóa chủ đề này không?'), '', 'warning', () => {
+            showMessageActive(handleChangeMessage(locale, 'Are you sure you want to delete the topic?', 'Bạn có chắc chắn muốn xóa chủ đề này không?'), '', 'warning', () => {
                 deleteTopic(id);
                 refetch();
             });
@@ -124,11 +126,13 @@ const ListTopic = ({ initialValues }: any) => {
                 <LoadingBlock />
             ) : (
                 <div>
-                    <FormTopic
-                        title={intl.formatMessage({ id: 'topic.List_Topic' })}
-                        initialValues={initialValues}
-                        onFinish={onFinish}
-                    />
+                    <PermissionElement keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_ADD}>
+                        <FormTopic
+                            title={intl.formatMessage({ id: 'topic.List_Topic' })}
+                            initialValues={initialValues}
+                            onFinish={onFinish}
+                        />
+                    </PermissionElement>
                     <div className="mb-4 text-end">
                         <Input
                             placeholder={intl.formatMessage({ id: 'topic.message' })}

@@ -1,7 +1,7 @@
 import { Modal, Select } from 'antd';
 import { Link } from 'react-router-dom';
 import { formatPrice, formatTime, handleChangeMessage } from '../../../../utils';
-import { STATUS_ORDER } from '../../../../constants';
+import { ACTIONS, PERMISSION, STATUS_ORDER } from '../../../../constants';
 import { Option } from 'antd/es/mentions';
 import useOrder, { API_ORDER } from '../../../../hooks/useOrder';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
@@ -10,6 +10,7 @@ import { paymentMethodString, paymentStatusString } from '../../../../interfaces
 import ButtonDelete from '../../components/Button/ButtonDelete';
 import { showMessageActive } from '../../../../utils/messages';
 import { useContextGlobal } from '../../../../contexts';
+import PermissionElement from '../../../../components/Permissions/PermissionElement';
 
 const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCancel: () => void }) => {
     const intl = useIntl();
@@ -81,28 +82,33 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     {orderDetail?.orderDetail?.status == 0 ? (
                         ''
                     ) : (
+
                         <div className="mb-10 flex items-center">
-                            <Select
-                                style={{ width: 200, marginRight: 8, height: "40px" }}
-                                placeholder={intl.formatMessage({ id: 'Please_select_status' })}
-                                onChange={handleChangeStatus}
-                            >
-                                {STATUS_ORDER.map((status: string, index: number) => {
-                                    if (
-                                        orderDetail?.orderDetail?.status == 0 ||
-                                        orderDetail?.orderDetail?.status < index
-                                    ) {
-                                        return (
-                                            <Option key={String(index)} value={String(index)}>
-                                                {status}
-                                            </Option>
-                                        );
-                                    } else {
-                                        return '';
-                                    }
-                                })}
-                            </Select>
-                            <ButtonDelete onClick={() => handleDeleteOrder()} />
+                            <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
+                                <Select
+                                    style={{ width: 200, marginRight: 8, height: "40px" }}
+                                    placeholder={intl.formatMessage({ id: 'Please_select_status' })}
+                                    onChange={handleChangeStatus}
+                                >
+                                    {STATUS_ORDER.map((status: string, index: number) => {
+                                        if (
+                                            orderDetail?.orderDetail?.status == 0 ||
+                                            orderDetail?.orderDetail?.status < index
+                                        ) {
+                                            return (
+                                                <Option key={String(index)} value={String(index)}>
+                                                    {status}
+                                                </Option>
+                                            );
+                                        } else {
+                                            return '';
+                                        }
+                                    })}
+                                </Select>
+                            </PermissionElement>
+                            <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_ADD}>
+                                <ButtonDelete onClick={() => handleDeleteOrder()} />
+                            </PermissionElement>
 
                         </div>
                     )}
@@ -166,7 +172,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                         ))}
                     </div>
                 </div>
-            </Modal>
+            </Modal >
         </>
     );
 };

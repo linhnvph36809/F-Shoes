@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { Search, SquarePen, Trash2 } from 'lucide-react';
-import { Input } from 'antd';
 import { useState } from 'react';
 
 import ButtonEdit from '../components/Button/ButtonEdit';
@@ -121,11 +120,13 @@ const ListVoucher = () => {
                     </Heading>
                     <div className="mb-4 text-end flex justify-between">
                         <div>
-                            <Link to={PATH_ADMIN.ADD_VOUCHER}>
-                                <ButtonPrimary width="w-[150px]" height="h-[50px]">
-                                    <FormattedMessage id="voucher.add" />
-                                </ButtonPrimary>
-                            </Link>
+                            <PermissionElement keyName={PERMISSION.PERMISSION_VOUCHER} action={ACTIONS.ACTIONS_ADD}>
+                                <Link to={PATH_ADMIN.ADD_VOUCHER}>
+                                    <ButtonPrimary width="w-[150px]" height="h-[50px]">
+                                        <FormattedMessage id="voucher.add" />
+                                    </ButtonPrimary>
+                                </Link>
+                            </PermissionElement>
                         </div>
                         <div className="relative text-end">
                             <input
