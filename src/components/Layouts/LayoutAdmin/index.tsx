@@ -43,7 +43,6 @@ const LayoutAdmin: React.FC = () => {
     const { locale, changeLanguage, user } = useContextGlobal();
     const groupId = handleGetLocalStorage(INFO_AUTH.groupId);
     const { logoutAdmin } = useAuth();
-    console.log(user);
 
     useEffect(() => {
         const starCountRef = ref(db, `groups/${groupId}`);
@@ -166,7 +165,7 @@ const LayoutAdmin: React.FC = () => {
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Avatar src={user?.avatar_url} size={40} icon={<UserOutlined />} />
                                 <div style={{ marginLeft: '10px' }}>
-                                    <p className='text-[15px] font-medium'>{userName}</p>
+                                    <p className='text-[15px] font-medium'>{userName || user?.name}</p>
                                     <p className='text-[12px] color-gray'>{user?.group?.group_name}</p>
 
                                 </div>
