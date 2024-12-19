@@ -1,88 +1,90 @@
+import { handleChangeMessage, handleGetLocalStorage } from '../utils/index.ts';
 import { IOrderDetail } from './IOrderDetail.ts';
 import { IUser } from './IUser.ts';
 
 export const statusString = (id: number) => {
+    const language = handleGetLocalStorage('language') as string;
     if (id === 0)
         return {
             className: 'text-red-500',
-            text: 'Cancelled',
+            text: handleChangeMessage(language, 'Cancelled', 'Đã hủy'),
         };
     else if (id === 1)
         return {
             className: 'text-gray-500',
-            text: 'Waiting Confirm',
+            text: handleChangeMessage(language, 'Waiting Confirm', 'Chờ xác nhận'),
         };
     else if (id === 2)
         return {
             className: 'text-yellow-500',
-            text: 'Confirmed',
+            text: handleChangeMessage(language, 'Confirmed', 'Đã xác nhận'),
         };
     else if (id === 3)
         return {
             className: 'text-orange-500',
-            text: 'Delivering',
+            text: handleChangeMessage(language, 'Delivering', 'Đang giao'),
         };
     else if (id === 4)
         return {
             className: 'text-blue-500',
-            text: 'Delivered',
+            text: handleChangeMessage(language, 'Delivered', 'Đã giao'),
         };
     else if (id === 5)
         return {
             className: 'text-gray-500',
-            text: 'Return Processing',
+            text: handleChangeMessage(language, 'Return Processing', 'Đang hoàn trả'),
         };
     else if (id === 6)
         return {
             className: 'text-gray-500',
-            text: 'Denied Return',
+            text: handleChangeMessage(language, 'Denied Return', 'Từ chối hoàn trả'),
         };
     else if (id === 7)
         return {
             className: 'text-gray-500',
-            text: 'Returned',
+            text: handleChangeMessage(language, 'Returned', 'Đã hoàn trả'),
         };
     else {
         return {
             className: 'text-red-500',
-            text: 'Error',
+            text: handleChangeMessage(language, 'Error', 'Lỗi!'),
         };
     }
 };
 
-export const paymentMethodString = (method:string) => {
-    if(typeof method !== 'string') {
+export const paymentMethodString = (method: string) => {
+    if (typeof method !== 'string') {
         return '...';
     }
     switch (method.toLocaleLowerCase()) {
         case 'cash_on_delivery':
             return 'Cash on Delivery';
-        case 'momo': 
+        case 'momo':
             return 'Momo Wallet';
         case 'vnpay':
             return 'VNPAY';
-        case 'banking': 
+        case 'banking':
             return 'Banking Transfer';
-            case 'visa': 
+        case 'visa':
             return 'VISA';
-        default: return '...';
-
+        default:
+            return '...';
     }
-}
+};
 
-export const paymentStatusString = (status:any) => {
-    if(typeof status !== 'string') {
+export const paymentStatusString = (status: any) => {
+    if (typeof status !== 'string') {
         return '...';
     }
     switch (status.toLocaleLowerCase()) {
         case 'paid':
             return 'Paid';
-        case 'not_yet_paid': 
+        case 'not_yet_paid':
             return 'Not yet paid';
-        default: return '...';
-
+        default:
+            return '...';
     }
-}
+};
 
 export const statusArr = [
     'cancelled',
