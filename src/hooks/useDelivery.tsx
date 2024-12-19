@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import axios from 'axios';
+import { showMessageClient } from '../utils/messages';
 
 const TOKEN = '2081020d-8fac-11ef-866e-82ec7f121ab7';
 
@@ -87,7 +88,7 @@ const useDelivery = () => {
             );
             setFee(data.data);
         } catch (error) {
-            console.log(error);
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
             setLoading(false);
         }

@@ -5,11 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { showMessageClient } from '../utils/messages';
 import useCookiesConfig from './useCookiesConfig';
 import { useContextGlobal } from '../contexts';
+import { handleChangeMessage } from '../utils';
 
 const API = '/api/';
 const API_ORDER = '/api/orders';
 
 const useOnlinePayment = () => {
+    const {  locale } = useContextGlobal();
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
     const { handleSetCookie } = useCookiesConfig('orderId');
@@ -19,7 +21,7 @@ const useOnlinePayment = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_ORDER, order);
-            showMessageClient('Order successfully', '', 'success');
+            showMessageClient(handleChangeMessage(locale,'Order successfully','Đặt hàng thành công'), '', 'success');
             refetchQuantityCart();
             navigate('/order-cash-on-delivery');
         } catch (error) {

@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 
 import axios from "axios";
 import {geonameCommune, geonameCountry, geonameDistrict, geonameProvince} from "../interfaces/GeoNames/IGeoNames.ts";
+import { showMessageClient } from '../utils/messages.ts';
 
 
 const useCountry = () => {
@@ -77,7 +78,7 @@ const useCountry = () => {
             setThisDeviceAddressGeoname(data.geonames[0]);
 
         }catch (error){
-            console.log(error);
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         }
     }
     useEffect(() => {

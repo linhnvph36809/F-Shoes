@@ -6,10 +6,13 @@ import { tokenManagerInstance } from '../api';
 import { PATH_LIST_PRODUCT } from '../constants';
 import { showMessageAdmin } from '../utils/messages';
 import { useQueryClient } from 'react-query';
+import { handleChangeMessage } from '../utils';
+import { useContextGlobal } from '../contexts';
 export const QUERY_KEY = 'products';
 export const API_PRODUCT = '/api/product';
 
 const useProduct = () => {
+    const {  locale } = useContextGlobal();
     const queryClient = useQueryClient();
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -28,7 +31,7 @@ const useProduct = () => {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_PRODUCT}/${id}`);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-            showMessageAdmin('Delete Product Sussccess', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Delete Product Sussccess','Xóa sản phẩm thành công'), '', 'success');
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
@@ -42,7 +45,7 @@ const useProduct = () => {
             await tokenManagerInstance('post', API_PRODUCT, product);
             navigate(PATH_LIST_PRODUCT);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-            showMessageAdmin('Add Product Sussccess', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Add Product Sussccess','Thêm sản phẩm thành công'), '', 'success');
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {
@@ -56,7 +59,7 @@ const useProduct = () => {
             await tokenManagerInstance('put', `${API_PRODUCT}/${id}`, product);
             navigate(PATH_LIST_PRODUCT);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-            showMessageAdmin('Update Product Sussccess', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Update Product Sussccess','Cập nhật sản phẩm thành công'), '', 'success');
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         } finally {

@@ -6,6 +6,7 @@ import FormUser from '../FormUser';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { Skeleton } from 'antd';
 import ButtonBack from '../../components/ButtonBack';
+import { FormattedMessage } from 'react-intl';
 
 const UpdateUser: React.FC = () => {
     const { nickname } = useParams<{ nickname: string }>();
@@ -22,7 +23,7 @@ const UpdateUser: React.FC = () => {
 
             <section>
                 <ButtonBack to="/admin/list-user" />
-                <Heading>Update User</Heading>
+                <Heading><FormattedMessage id="user.User_Update" /></Heading>
                 {isFetching ? (
                     <Skeleton />
                 ) : (
