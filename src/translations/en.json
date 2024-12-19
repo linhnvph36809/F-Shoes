@@ -584,7 +584,15 @@
     "attribute_value":"Attribute Value",
     "attribute_add_value":"Add Attribute Value",
     "attribute.succcess":"Please enter a value",
-    "attribute.succcess.value":"Please enter Attribute Value"
+    "attribute.succcess.value":"Please enter Attribute Value",
+
+    "discount.delete":"Delete",
+    "discount.delete.success":"Are you sure you want to delete",
+    "discount.success.delete":"Are you sure you only want to keep these products and delete the others?",
+    "Value is required":"Value is required",
+    "Value must be less than or equal to 100":"Value must be less than or equal to 100",
+    "Start date is required":"Start date is required",
+    "End date is required":"End date is required"
 
     
 }

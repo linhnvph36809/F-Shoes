@@ -14,8 +14,11 @@ import dayjs from 'dayjs';
 import { ISale } from '../../../../interfaces/ISale.ts';
 import LoadingPage from '../../../../components/Loading/LoadingPage.tsx';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { handleChangeMessage } from '../../../../utils/index.ts';
+import { useContextGlobal } from '../../../../contexts/index.tsx';
 
 const UpdateSale = () => {
+    const {  locale } = useContextGlobal();
     const intl = useIntl();
     const { id } = useParams();
     const { data: dataCachingSale,isFetching:loadingSale } = useQueryConfig(
@@ -70,10 +73,10 @@ const UpdateSale = () => {
     };
     const onDeleteSimpleProduct = (record?: IProduct) => {
         if (saleEndDate < timeNow) {
-            showMessageClient('This sale has expired, you can not modifier anymore.', '', 'warning');
+            showMessageClient(handleChangeMessage(locale,'This sale has expired, you can not modifier anymore.','Đợt giảm giá này đã hết hạn, bạn không thể sửa đổi nữa.'), '', 'warning');
             return;
         }
-        showMessageActive('Delete', 'Are you sure you want to delete', 'warning', () => {
+        showMessageActive(handleChangeMessage(locale, 'Are you sure you want to delete','Bạn có chắc chắn muốn xóa không?'),'', 'warning', () => {
             const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
 
             const filtered = dataSourceProduct.filter((product) => {
@@ -84,12 +87,11 @@ const UpdateSale = () => {
     };
     const onFilterSimpleProduct = (record?: IProduct) => {
         if (saleStartDate < timeNow) {
-            showMessageClient('This sale has expired, you can not modifier anymore.', '', 'warning');
+            showMessageClient(handleChangeMessage(locale, 'This sale has expired, you can not modifier anymore.','Đợt giảm giá này đã hết hạn, bạn không thể sửa đổi nữa.'), '', 'warning');
             return;
         }
-        showMessageActive(
-            'Delete',
-            'Are you sure you only want to keep these products and delete the others?',
+        showMessageActive(handleChangeMessage(locale,
+            'Are you sure you only want to keep these products and delete the others?','Bạn có chắc chắn chỉ muốn giữ lại những sản phẩm này và xóa bỏ những sản phẩm khác không?'),'',
             'warning',
             () => {
                 const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
@@ -102,10 +104,10 @@ const UpdateSale = () => {
     };
     const onDeleteVariation = (record?: IVariation) => {
         if (saleStartDate < timeNow) {
-            showMessageClient('This sale has expired, you can not modifier anymore.', '', 'warning');
+            showMessageClient(handleChangeMessage(locale,'This sale has expired, you can not modifier anymore.','Đợt giảm giá này đã hết hạn, bạn không thể sửa đổi nữa.'), '', 'warning');
             return;
         }
-        showMessageActive('Delete', 'Are you sure you want to delete', 'warning', () => {
+        showMessageActive(handleChangeMessage(locale, 'Are you sure you want to delete','Bạn có chắc chắn muốn xóa không?'),'', 'warning', () => {
             const arrSelect = [
                 ...arrSelectVariationsOfOneSelectedProduct,
                 ...arrSelectedVariationsOfMultipleSelectedProduct,
@@ -119,12 +121,11 @@ const UpdateSale = () => {
     };
     const onFilterVariation = (record?: IVariation) => {
         if (saleEndDate < timeNow) {
-            showMessageClient('This sale has expired, you can not modifier anymore.', '', 'warning');
+            showMessageClient(handleChangeMessage(locale,'This sale has expired, you can not modifier anymore.','Đợt bán này đã hết hạn, bạn không thể sửa đổi nữa.'), '', 'warning');
             return;
         }
-        showMessageActive(
-            'Delete',
-            'Are you sure you only want to keep these products and delete the others?',
+        showMessageActive(handleChangeMessage(locale,
+            'Are you sure you only want to keep these products and delete the others?','Bạn có chắc chắn chỉ muốn giữ lại những sản phẩm này và xóa bỏ những sản phẩm khác không?'),'',
             'warning',
             () => {
                 const arrSelect = [
@@ -322,9 +323,9 @@ const UpdateSale = () => {
     };
     const onChangeValuePercent = (e: any) => {
         if (e.target.value === '') {
-            setError({ ...error, value: 'Value is required' });
+            setError({ ...error, value: intl.formatMessage({ id: 'Value is required' }) });
         } else if (parseInt(e.target.value) > 100) {
-            setError({ ...error, value: 'Value must be less than or equal to 100' });
+            setError({ ...error, value: intl.formatMessage({ id: 'Value must be less than or equal to 100' }) });
         } else {
             setError({ ...error, value: '' });
         }
@@ -332,7 +333,7 @@ const UpdateSale = () => {
     };
     const onChangeValueFixed = (e: any) => {
         if (e.target.value === '') {
-            setError({ ...error, value: 'Value is required' });
+            setError({ ...error, value: intl.formatMessage({ id: 'Value is required' }) });
         } else {
             setError({ ...error, value: '' });
         }
@@ -363,15 +364,15 @@ const UpdateSale = () => {
         let hasError = false;
         if (!dataSale.value) {
             hasError = true;
-            setError({ ...error, value: 'Value is required' });
+            setError({ ...error, value:intl.formatMessage({ id: 'Value is required' }) });
         } else if (error.value) {
             setError({ ...error });
         } else if (dataSale.start_date === '') {
             hasError = true;
-            setError({ ...error, start_date: 'Start date is required' });
+            setError({ ...error, start_date: intl.formatMessage({ id: 'Start date is required' }) });
         } else if (dataSale.end_date === '') {
             hasError = true;
-            setError({ ...error, end_date: 'End date is required' });
+            setError({ ...error, end_date: intl.formatMessage({ id: 'End date is required' }) });
         } else {
             hasError = false;
             setError({
@@ -385,14 +386,22 @@ const UpdateSale = () => {
             if (id) {
                 await updateSale(id, dataSale);
             } else {
-                showMessageAdmin('Something went wrong!', '', 'error');
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
             }
         }
     };
 
     const optionsType = [
-        { label: 'Percent', value: 'percent' },
-        { label: 'Fixed', value: 'fixed' },
+        { label: 'Percent', value: <FormattedMessage id="voucher.percentage" /> },
+        { label: 'Fixed', value: <FormattedMessage id="voucher.table.fixed" /> },
     ];
     if(loadingSale){
         return <LoadingPage/>
