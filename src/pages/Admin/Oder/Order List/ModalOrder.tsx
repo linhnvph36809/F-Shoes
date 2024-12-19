@@ -6,6 +6,7 @@ import { Option } from 'antd/es/mentions';
 import useOrder, { API_ORDER } from '../../../../hooks/useOrder';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { paymentMethodString, paymentStatusString } from '../../../../interfaces/IOrder';
 
 const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCancel: () => void }) => {
     const intl = useIntl();
@@ -21,8 +22,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
             refetch();
         }
     };
-
-    console.log(orderDetail);
+    
 
     return (
         <>
@@ -34,7 +34,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                 <FormattedMessage id="admin.name" /> : {orderDetail.orderDetail?.user?.name}
                             </div>
                             <div className="font-medium text-[14px] color-gray mb-2">
-                                <FormattedMessage id="receiver_emai" /> : {orderDetail.orderDetail?.user?.email}
+                                <FormattedMessage id="receiver_email" /> : {orderDetail.orderDetail?.user?.email}
                             </div>
                             <div className="font-medium text-[14px] color-gray mb-2">
                                 <FormattedMessage id="phone" /> : {orderDetail.orderDetail?.phone}
@@ -105,7 +105,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                 <FormattedMessage id="paymentMethod" />:
                             </p>
                             <span className="color-primary font-normal color-gray">
-                                {orderDetail?.orderDetail?.payment_method}
+                                {paymentMethodString(orderDetail?.orderDetail?.payment_method)}
                             </span>
                         </div>
                         <div>
@@ -113,7 +113,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                 <FormattedMessage id="Payment_status" />:
                             </p>
                             <span className="color-primary font-normal color-gray">
-                                {orderDetail?.orderDetail?.payment_status}
+                                {paymentStatusString(orderDetail?.orderDetail?.payment_status)}
                             </span>
                         </div>
                         <div>
