@@ -101,7 +101,7 @@ const ListGroups = ({ initialValues }: any) => {
                 </Heading>
                 <ModalAddGroup />
                 {isFetching ? (
-                    <Skeleton />
+                    <Skeleton className="mt-10" />
                 ) : (
                     <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={groups} />
                 )}

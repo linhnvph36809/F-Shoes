@@ -11,9 +11,10 @@ import Logo from '../../Logo';
 import { Bell, Globe, LogOut } from 'lucide-react';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import useAuth from '../../../hooks/useAuth';
-import { LANGUAGE_EN, LANGUAGE_VI } from '../../../constants';
+import { INFO_AUTH, LANGUAGE_EN, LANGUAGE_VI } from '../../../constants';
 import { FormattedMessage } from 'react-intl';
 import { showMessageAdmin } from '../../../utils/messages';
+import { handleGetLocalStorage } from '../../../utils';
 
 const { Header, Content, Sider } = Layout;
 
@@ -35,11 +36,12 @@ export const usePermissionContext = () => useContext(ContextAdmin);
 
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
-    const { locale, changeLanguage, user } = useContextGlobal();
+    const { locale, changeLanguage } = useContextGlobal();
+    const groupId = handleGetLocalStorage(INFO_AUTH.groupId);
     const { logoutAdmin } = useAuth();
 
     useEffect(() => {
-        const starCountRef = ref(db, `groups/${user?.group_id}`);
+        const starCountRef = ref(db, `groups/${groupId}`);
         const unsubscribe = onValue(starCountRef, (snapshot) => {
             try {
                 const data = snapshot.val();
@@ -51,8 +53,8 @@ const LayoutAdmin: React.FC = () => {
         });
 
         return () => unsubscribe();
-    }, [user]);
-    
+    }, [groupId]);
+
     const itemsPermission = useMemo(() => {
         return items?.filter((item: any) => {
             if (item.permissionName !== undefined) {
@@ -65,7 +67,7 @@ const LayoutAdmin: React.FC = () => {
                 return true;
             }
         });
-    }, [permissions, user]);
+    }, [permissions, groupId]);
     const { data: countOrderWaiting } = useQueryConfig(
         ['orders', 'products', 'count-order-waiting'],
         'api/v1/statistics/count/order/waitings',

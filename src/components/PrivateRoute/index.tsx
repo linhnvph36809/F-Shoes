@@ -3,6 +3,7 @@ import { handleGetLocalStorage } from '../../utils';
 import { INFO_AUTH } from '../../constants';
 import ButtonPrimary from '../Button';
 import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
     const userId = handleGetLocalStorage(INFO_AUTH.userId);
@@ -15,12 +16,8 @@ const PrivateRoute = ({ children }: { children: ReactNode }) => {
             ) : (
                 <div>
                     {/* <h1 className="text-center text-[50px] my-10">404 Not Found</h1> */}
-                    <div className="flex justify-center">
-                        <img
-                            className="w-[600px]"
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQapgOuAoFQ8eZJXjFpp9jLmkPbt9N8CzR8hg&s"
-                            alt=""
-                        />
+                    <div className="flex justify-center text-[40px] mb-10">
+                        <FormattedMessage id="page.noAccessTile" />
                     </div>
                     <Link to="/authentication" className="flex justify-center">
                         <ButtonPrimary>Login</ButtonPrimary>

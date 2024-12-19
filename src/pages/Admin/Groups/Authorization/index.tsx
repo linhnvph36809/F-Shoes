@@ -15,15 +15,16 @@ import NoAccess from '../../../../components/NotFound/NoAccess';
 const { Title } = Typography;
 
 const permissionList = [
-    { name: 'Dashboard', key: PERMISSION.PERMISSION_DASHBOARD, actions: ACTIONS.ACTIONS_VIEW },
     {
         name: 'Categories',
         key: PERMISSION.PERMISSION_CATEGORY,
         actions: [...ACTIONS_LIST, ACTIONS_CATEGORY.ACTIONS_ADD_PRODUCT],
     },
     { name: 'Order', key: PERMISSION.PERMISSION_ORDER, actions: ACTIONS_LIST },
+    { name: 'Sale', key: PERMISSION.PERMISSION_SALE, actions: ACTIONS_LIST },
     { name: 'Products', key: PERMISSION.PERMISSION_PRODUCT, actions: ACTIONS_LIST },
     { name: 'Users', key: PERMISSION.PERMISSION_USER, actions: ACTIONS_LIST },
+    { name: 'Groups', key: PERMISSION.PERMISSION_GROUP, actions: ACTIONS_LIST },
     { name: 'Topic', key: PERMISSION.PERMISSION_TOPIC, actions: ACTIONS_LIST },
     { name: 'Post', key: PERMISSION.PERMISSION_POST, actions: ACTIONS_LIST },
     { name: 'Media', key: PERMISSION.PERMISSION_MEDIA, actions: ACTIONS_LIST },
@@ -37,7 +38,6 @@ const Authorization = () => {
     const [permissions, setPermissions] = useState<any>();
     const [groupName, setGroupName] = useState<string>('');
     const groupId = handleGetLocalStorage(INFO_AUTH.groupId) || 0;
-
     const handleSwitchChange = useCallback(
         (checked: boolean, key: string, action: string) => {
             if (checked) {
