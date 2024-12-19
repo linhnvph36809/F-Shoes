@@ -10,8 +10,8 @@ import { items } from './datas';
 import { db } from '../../../../firebaseConfig';
 import { useContextGlobal } from '../../../contexts';
 import Logo from '../../Logo';
-import { Bell, Globe, LogOut } from 'lucide-react';
-import useQueryConfig from '../../../hooks/useQueryConfig';
+import { Globe, LogOut } from 'lucide-react';
+
 import useAuth from '../../../hooks/useAuth';
 import { INFO_AUTH, LANGUAGE_EN, LANGUAGE_VI } from '../../../constants';
 import { FormattedMessage } from 'react-intl';
@@ -72,10 +72,7 @@ const LayoutAdmin: React.FC = () => {
             }
         });
     }, [permissions, groupId]);
-    const { data: countOrderWaiting } = useQueryConfig(
-        ['orders', 'products', 'count-order-waiting'],
-        'api/v1/statistics/count/order/waitings',
-    );
+
     const [messageWaitingConfirm, setMessageWaitingConfirm] = useState(false);
 
     return (
@@ -114,12 +111,7 @@ const LayoutAdmin: React.FC = () => {
                         </h3>
                         <div
                             className="flex items-center gap-x-12"
-                            onMouseEnter={() => {
-                                if (countOrderWaiting?.data?.data > 0) {
-                                    setMessageWaitingConfirm(true);
-                                }
-                            }}
-                            onMouseLeave={() => setMessageWaitingConfirm(false)}
+
                         >
                             <Dropdown
                                 className="hover:cursor-pointer"
@@ -136,32 +128,7 @@ const LayoutAdmin: React.FC = () => {
                                     {locale === LANGUAGE_VI ? 'Viet Nam' : 'English'}
                                 </p>
                             </Dropdown>
-                            <div className="relative">
-                                {countOrderWaiting?.data?.data ? (
-                                    <span className="absolute -right-3 -top-2 flex items-center justify-center w-[18px] h-[18px] text-white font-medium text-[12px] rounded-full bg-[#d33918]">
-                                        {countOrderWaiting?.data?.data}
-                                    </span>
-                                ) : (
-                                    ''
-                                )}
-                                <Bell className="size-10" />
-                                {messageWaitingConfirm ? (
-                                    <div className="w-[480px] h-[40px] absolute bg-slate-200 right-0 rounded-lg flex items-center justify-center text-gray-500 transition-all">
-                                        {countOrderWaiting?.data?.data ? (
-                                            <p>
-                                                {`You have ${countOrderWaiting?.data?.data} orders on waiting confirmation. `}
-                                                <Link to={`/admin/orderlist?status=waiting_confirm`}>
-                                                    <FormattedMessage id="admin.Checkout!" />
-                                                </Link>
-                                            </p>
-                                        ) : (
-                                            ''
-                                        )}
-                                    </div>
-                                ) : (
-                                    ''
-                                )}
-                            </div>
+
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Avatar src={user?.avatar_url} size={40} icon={<UserOutlined />} />
                                 <div style={{ marginLeft: '10px' }}>

@@ -35,7 +35,7 @@ export const columns: any['columns'] = [
         key: 'parents',
         render: (parents: ICategory[]) => {
             if (!parents || parents.length === 0) {
-                return 'Main';
+                return '';
             }
 
             const parentNames = parents.map((parent) => parent.name).join(', ');
