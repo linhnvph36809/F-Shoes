@@ -1,34 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { tokenManagerInstance } from '../api';
-import { IGroup } from '../interfaces/IGroup';
-import { useNavigate } from 'react-router-dom';
 import { showMessageAdmin } from '../utils/messages';
 import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
+import { useQueryClient } from 'react-query';
 
 export const API_GROUP = '/api/groups';
 export const KEY_GROUP = 'key-group';
 
 const useGroups = () => {
-    const {  locale } = useContextGlobal();
-    const [groups, setGroups] = useState<IGroup[]>([]);
+    const queryClient = useQueryClient();
+    const { locale } = useContextGlobal();
     const [loading, setLoading] = useState<boolean>(false);
     const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
     const navigate = useNavigate();
 
     // Lấy tất cả các nhóm
-    const getAllGroups = async () => {
-        try {
-            setLoading(true);
-            const { data } = await tokenManagerInstance('get', API_GROUP);
-            setGroups(data);
-        } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const getOneGroup = async (id: string | number) => {
         try {
@@ -44,11 +33,20 @@ const useGroups = () => {
     const deleteGroup = async (id: string | number) => {
         try {
             setLoadingDelete(true);
-            tokenManagerInstance('delete', `${API_GROUP}/forceDelete/${id}`); // Thêm '/' vào trước id
-            showMessageAdmin(handleChangeMessage(locale,'Delete Group Sussccess','Xóa nhóm thành công'), '', 'success');
-            getAllGroups();
+            await tokenManagerInstance('delete', `${API_GROUP}/forceDelete/${id}`); // Thêm '/' vào trước id
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Delete Group Sussccess', 'Xóa nhóm thành công'),
+                '',
+                'success',
+            );
+            queryClient.invalidateQueries({ queryKey: [KEY_GROUP] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            showMessageAdmin(
+                (error as any)?.response?.data?.message ||
+                handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                '',
+                'error',
+            );
         } finally {
             setLoadingDelete(false);
         }
@@ -59,11 +57,15 @@ const useGroups = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_GROUP, groupName);
-            getAllGroups();
-            showMessageAdmin(handleChangeMessage(locale,'Add Group Sussccess','Thêm Nhóm Thành Công'), '', 'success');
-
+            showMessageAdmin(handleChangeMessage(locale, 'Add Group Sussccess', 'Thêm Nhóm Thành Công'), '', 'success');
+            queryClient.invalidateQueries({ queryKey: [KEY_GROUP] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            showMessageAdmin(
+                (error as any)?.response?.data?.message ||
+                handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                '',
+                'error',
+            );
         } finally {
             setLoading(false);
         }
@@ -73,11 +75,19 @@ const useGroups = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_GROUP + `/restore/${id}`);
-            getAllGroups();
-            showMessageAdmin(handleChangeMessage(locale,'Restore Group Sussccess','Khôi phục Nhóm Thành công'), '', 'success');
-
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Restore Group Sussccess', 'Khôi phục Nhóm Thành công'),
+                '',
+                'success',
+            );
+            queryClient.invalidateQueries({ queryKey: [KEY_GROUP] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            showMessageAdmin(
+                (error as any)?.response?.data?.message ||
+                handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                '',
+                'error',
+            );
         } finally {
             setLoading(false);
         }
@@ -88,12 +98,20 @@ const useGroups = () => {
             setLoadingDelete(true);
             await tokenManagerInstance('patch', API_GROUP + `/${id}`, group);
             navigate('/admin/groups/');
-            showMessageAdmin(handleChangeMessage(locale,'Update Group Sussccess','Cập nhật Nhóm Thành công'), '', 'success');
-
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Update Group Sussccess', 'Cập nhật Nhóm Thành công'),
+                '',
+                'success',
+            );
+            queryClient.invalidateQueries({ queryKey: [KEY_GROUP] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            showMessageAdmin(
+                (error as any)?.response?.data?.message ||
+                handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                '',
+                'error',
+            );
             console.log(error);
-            
         } finally {
             setLoadingDelete(false);
         }
@@ -103,22 +121,25 @@ const useGroups = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_GROUP}/${id}`);
-            getAllGroups();
-            showMessageAdmin(handleChangeMessage(locale,'Delete Group Sussccess','Xóa nhóm thành công'), '', 'success');
-
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Delete Group Sussccess', 'Xóa nhóm thành công'),
+                '',
+                'success',
+            );
+            queryClient.invalidateQueries({ queryKey: [KEY_GROUP] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            showMessageAdmin(
+                (error as any)?.response?.data?.message ||
+                handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                '',
+                'error',
+            );
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
-        getAllGroups();
-    }, []);
-
     return {
-        groups,
         loading,
         loadingDelete,
         deleteGroup,

@@ -31,7 +31,7 @@ const ListUser = () => {
 
     const handleDeleteUser = (id: number | string) => {
         showMessageActive(
-            handleChangeMessage(locale, 'Are you sure you want to delete?', 'Bạn có chắc chắn muốn xóa không '),
+            handleChangeMessage(locale, 'Are you sure you want to delete?', 'Bạn có chắc chắn muốn xóa không?'),
             '',
             'warning',
             () => {
