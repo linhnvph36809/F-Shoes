@@ -2,19 +2,25 @@ import { Switch, Typography, Row, Col, Checkbox } from 'antd';
 import Heading from '../../components/Heading';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 import useGroups from '../../../../hooks/useGroup';
-import { ACTIONS, ACTIONS_LIST, PERMISSION } from '../../../../constants';
+import { ACTIONS, ACTIONS_CATEGORY, ACTIONS_LIST, INFO_AUTH, PERMISSION } from '../../../../constants';
 import LoadingPage from '../../../../components/Loading/LoadingPage';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import ButtonBack from '../../components/ButtonBack';
-import { FormattedMessage } from 'react-intl';
+import { handleGetLocalStorage } from '../../../../utils';
+import NoAccess from '../../../../components/NotFound/NoAccess';
 
 const { Title } = Typography;
 
 const permissionList = [
     { name: 'Dashboard', key: PERMISSION.PERMISSION_DASHBOARD, actions: ACTIONS.ACTIONS_VIEW },
-    { name: 'Categories', key: PERMISSION.PERMISSION_CATEGORY, actions: ACTIONS_LIST },
+    {
+        name: 'Categories',
+        key: PERMISSION.PERMISSION_CATEGORY,
+        actions: [...ACTIONS_LIST, ACTIONS_CATEGORY.ACTIONS_ADD_PRODUCT],
+    },
     { name: 'Order', key: PERMISSION.PERMISSION_ORDER, actions: ACTIONS_LIST },
     { name: 'Products', key: PERMISSION.PERMISSION_PRODUCT, actions: ACTIONS_LIST },
     { name: 'Users', key: PERMISSION.PERMISSION_USER, actions: ACTIONS_LIST },
@@ -26,11 +32,11 @@ const permissionList = [
 ];
 
 const Authorization = () => {
-    const { id } = useParams();
+    const { id } = useParams() as any;
     const { loadingDelete, getOneGroup, patchGroup } = useGroups();
     const [permissions, setPermissions] = useState<any>();
     const [groupName, setGroupName] = useState<string>('');
-    console.log(permissions);
+    const groupId = handleGetLocalStorage(INFO_AUTH.groupId) || 0;
 
     const handleSwitchChange = useCallback(
         (checked: boolean, key: string, action: string) => {
@@ -88,13 +94,21 @@ const Authorization = () => {
         })();
     }, []);
 
+    if (+groupId !== 1) {
+        return <NoAccess />;
+    } else if (+groupId === +id) {
+        return <NoAccess />;
+    }
+
     return (
         <div>
             <ButtonBack to="/admin/groups" />
-            <Heading><FormattedMessage id="group.Authorization_Customer" /></Heading>
+            <Heading>
+                <FormattedMessage id="group.Authorization_Customer" />
+            </Heading>
             <hr className="my-4" />
             <Title level={2} style={{ fontSize: '24px', color: '#595959', marginBottom: '20px' }}>
-            <FormattedMessage id="group.permission" />
+                <FormattedMessage id="group.permission" />
             </Title>
             <div className="min-h-[200px] relative">
                 {permissions ? (

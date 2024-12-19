@@ -30,6 +30,11 @@ export const ACTIONS = {
     ACTIONS_DELETE: 'delete',
 };
 
+export const ACTIONS_CATEGORY = {
+    ACTIONS_ADD_PRODUCT: 'add-product',
+
+}
+
 export const ACTIONS_LIST = Object.values(ACTIONS);
 
 export const STATUS_ORDER = [
