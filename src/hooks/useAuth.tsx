@@ -39,7 +39,8 @@ const useAuth = () => {
                 return;
             }
             localStorage.setItem('code', data.code);
-            showMessageClient('Verify code has been sent to your email.', '', 'success');
+
+            showMessageClient(handleChangeMessage(locale, 'Verify code has been sent to your email.', 'Xác minh mã đã được gửi đến email của bạn.'), '', 'success');
             setPage('register');
         } catch (error) {
             showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
@@ -148,7 +149,7 @@ const useAuth = () => {
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
                 handleSetLocalStorage(INFO_AUTH.isAdmin, data.user.is_admin);
                 handleSetLocalStorage(INFO_AUTH.userName, data.user.name);
-                handleSetLocalStorage(INFO_AUTH.adminId, data.user.id);
+                handleSetLocalStorage(INFO_AUTH.userId, data.user.id);
                 handleSetLocalStorage(INFO_AUTH.groupId, data.user.group_id);
 
 

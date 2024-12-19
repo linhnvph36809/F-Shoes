@@ -60,6 +60,8 @@ export const paymentMethodString = (method:string) => {
             return 'VNPAY';
         case 'banking': 
             return 'Banking Transfer';
+            case 'visa': 
+            return 'VISA';
         default: return '...';
 
     }

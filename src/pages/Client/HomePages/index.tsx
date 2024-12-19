@@ -31,12 +31,13 @@ const HomePage = () => {
             retry: false,
         },
     );
-    const category1: ICategory = data1?.data?.category;
-    const category2: ICategory = data2?.data?.category;
-    const category3: ICategory = data3?.data?.category;
-    const productsDisplay1 = category1?.products || [];
-    const productsDisplay2 = category2?.products || [];
-    const productsDisplay3 = category3?.products || [];
+    const category1: ICategory = data1?.data?.category.category;
+    const category2: ICategory = data2?.data?.category.category;
+    const category3: ICategory = data3?.data?.category.category;
+    const productsDisplay1 = data1?.data?.category?.products || [];
+    const productsDisplay2 = data2?.data?.category?.products || [];
+    const productsDisplay3 = data3?.data?.category?.products || [];
+    console.log(productsDisplay1);
 
     return (
         <>
@@ -94,7 +95,10 @@ const HomePage = () => {
                                                             : ' '}
                                                     </h5>
                                                     <h3 className="text-15px color-primary font-medium mt-3">
-                                                        {formatPrice(item.price)} ₫
+                                                        {item.sale_price
+                                                            ? formatPrice(item.sale_price)
+                                                            : formatPrice(item.price)}{' '}
+                                                        ₫
                                                     </h3>
                                                 </div>
                                             </Link>

@@ -23,10 +23,10 @@ const ListReview = () => {
     );
     const [reviews, setReviews] = useState<IReview[]>([]);
     useEffect(() => {
-        if(cachingReviewsData?.data?.reviews?.data ){
+        if (cachingReviewsData?.data?.reviews?.data) {
             setReviews([...cachingReviewsData?.data?.reviews?.data]);
         }
-    },[cachingReviewsData]);
+    }, [cachingReviewsData]);
 
     const handleDeleteUser = async (id: string | number) => {
         if (window.confirm('Bạn có chắc chắn muốn xoá Review này không?')) {
@@ -39,14 +39,17 @@ const ListReview = () => {
             }
         }
     };
-    const handleSearch = (e:any) => {
+    const handleSearch = (e: any) => {
         const originData = JSON.parse(JSON.stringify([...cachingReviewsData?.data?.reviews?.data]));
-        if(e.target.value && e.target.value.length > 0) {
-            const filtered = originData.filter((item:IReview) => {
-                return item.title.toLowerCase().includes(e.target.value.toLowerCase()) || item.text.includes(e.target.value.toLowerCase());
+        if (e.target.value && e.target.value.length > 0) {
+            const filtered = originData.filter((item: IReview) => {
+                return (
+                    item.title.toLowerCase().includes(e.target.value.toLowerCase()) ||
+                    item.text.includes(e.target.value.toLowerCase())
+                );
             });
             setReviews([...filtered]);
-        }else{
+        } else {
             setReviews([...originData]);
         }
     };
@@ -118,8 +121,12 @@ const ListReview = () => {
 
     return (
         <div style={{ padding: '20px' }}>
-            <Heading><FormattedMessage id="review.List_Review" /></Heading>
-            <div><Input  title={intl.formatMessage({ id: "review.search" })}  onChange={handleSearch}/></div>
+            <Heading>
+                <FormattedMessage id="review.List_Review" />
+            </Heading>
+            <div>
+                <Input title={intl.formatMessage({ id: 'review.search' })} onChange={handleSearch} />
+            </div>
             {loading ? (
                 <LoadingBlock />
             ) : (

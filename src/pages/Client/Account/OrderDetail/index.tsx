@@ -9,7 +9,7 @@ import ButtonPrimary from '../../../../components/Button';
 import NotFound from '../../../../components/NotFound';
 import ModalCancel from './components/ModalCancel';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
-import { statusString } from '../../../../interfaces/IOrder';
+import { paymentMethodString, statusString } from '../../../../interfaces/IOrder';
 import { formatPrice, formatTime } from '../../../../utils';
 import { showMessageActive } from '../../../../utils/messages';
 import { FormattedMessage } from 'react-intl';
@@ -55,22 +55,6 @@ const OrderDetail = () => {
               text: string;
           }
         | undefined = statusString(order?.status);
-
-    const voucherPrice = useMemo(() => {
-        if (order?.voucher_id) {
-            if (order?.voucher_id?.type == 'fixed') {
-                return order?.voucher_id?.discount;
-            } else if (order?.voucher_id?.type == 'percentage') {
-                return (
-                    +order.total_amount / (1 - +order?.voucher_id?.discount / 100) -
-                    (+order.total_amount / (1 - +order?.voucher_id?.discount / 100) -
-                        (+order.total_amount / (1 - +order?.voucher_id?.discount / 100)) *
-                            (+order?.voucher_id?.discount / 100))
-                );
-            }
-        }
-        return 0;
-    }, [order]);
 
     return (
         <>
@@ -143,11 +127,13 @@ const OrderDetail = () => {
                                             </p>
                                             <p className="font-medium">
                                                 {+order?.voucher_id?.discount
-                                                    ? formatPrice(
-                                                          +order.total_amount /
-                                                              (1 - +order?.voucher_id?.discount / 100) -
-                                                              +order.shipping_cost,
-                                                      )
+                                                    ? order.total_amount <= 0
+                                                        ? 0
+                                                        : formatPrice(
+                                                              +order.total_amount /
+                                                                  (1 - +order?.voucher_id?.discount / 100) -
+                                                                  +order.shipping_cost,
+                                                          )
                                                     : formatPrice(+order.total_amount - +order.shipping_cost)}
                                                 đ
                                             </p>
@@ -171,7 +157,14 @@ const OrderDetail = () => {
                                                         <FormattedMessage id="voucher" /> :
                                                     </p>
                                                 </p>
-                                                <p className="font-medium">-{formatPrice(voucherPrice)}đ</p>
+
+                                                {order?.voucher_id && order?.voucher_id?.type == 'fixed' ? (
+                                                    <p className="font-medium">
+                                                        -{formatPrice(order.voucher_id?.discount)}đ
+                                                    </p>
+                                                ) : (
+                                                    <p className="font-medium">{order.voucher_id?.discount}%</p>
+                                                )}
                                             </div>
                                         ) : (
                                             ''
@@ -183,7 +176,7 @@ const OrderDetail = () => {
                                                     <FormattedMessage id="paymentMethod" /> :
                                                 </p>
                                             </p>
-                                            <p className="font-medium">{order?.payment_method}</p>
+                                            <p className="font-medium">{paymentMethodString(order?.payment_method)}</p>
                                         </div>
                                         <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
                                             <p>
