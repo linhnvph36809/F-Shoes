@@ -14,6 +14,8 @@ import ButtonPrimary from '../../../components/Button';
 import { PATH_ADMIN } from '../../../constants/path';
 import { formatPrice } from '../../../utils';
 import { FormattedMessage, useIntl } from 'react-intl';
+import PermissionElement from '../../../components/Permissions/PermissionElement';
+import { ACTIONS, PERMISSION } from '../../../constants';
 
 export const KEY = 'list-voucher';
 
@@ -88,13 +90,16 @@ const ListVoucher = () => {
             key: '8',
             render: (_: any, voucher: any) => (
                 <div className="flex gap-2">
-                    <Link to={`/admin/voucher/${voucher.id}`}>
-                        <ButtonEdit>
-                            <SquarePen />
-                        </ButtonEdit>
-                    </Link>
-
-                    <ButtonEdit onClick={() => handleDeleteVoucher(voucher.id)}>{<Trash2 />}</ButtonEdit>
+                    <PermissionElement keyName={PERMISSION.PERMISSION_VOUCHER} action={ACTIONS.ACTIONS_EDIT}>
+                        <Link to={`/admin/voucher/${voucher.id}`}>
+                            <ButtonEdit>
+                                <SquarePen />
+                            </ButtonEdit>
+                        </Link>
+                    </PermissionElement>
+                    <PermissionElement keyName={PERMISSION.PERMISSION_VOUCHER} action={ACTIONS.ACTIONS_DELETE}>
+                        <ButtonEdit onClick={() => handleDeleteVoucher(voucher.id)}>{<Trash2 />}</ButtonEdit>
+                    </PermissionElement>
                 </div>
             ),
         },
