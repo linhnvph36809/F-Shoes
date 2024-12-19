@@ -13,16 +13,15 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
     const { refetch } = useQueryConfig('order-admin', API_ORDER);
     const { putOrder } = useOrder();
 
-    const handleChangeStatus = (status: string) => {
+    const handleChangeStatus = async (status: string) => {
         if (orderDetail?.orderDetail.id) {
-            putOrder(orderDetail.orderDetail.id, {
+            await putOrder(orderDetail.orderDetail.id, {
                 status,
             });
             handleCancel();
             refetch();
         }
     };
-    
 
     return (
         <>
@@ -129,7 +128,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                         {orderDetail?.orderDetail?.order_details?.map((orderDetail: any) => (
                             <Link to={`/detail/${orderDetail?.product?.slug}`} key={orderDetail?.orderDetail?.id}>
                                 <div className="flex gap-x-5 h-[80px] my-5 border-b pb-3">
-                                    <img src={orderDetail?.variation?.image_url} alt="Product Image" />
+                                    <img src={orderDetail?.variation?.image_url || orderDetail?.product?.image_url} alt="Product Image" />
                                     <div>
                                         <div className="flex justify-between items-center gap-x-2 mt-2">
                                             <h3 className="text-[16px] color-primary font-medium">

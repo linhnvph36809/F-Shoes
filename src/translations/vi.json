@@ -429,6 +429,7 @@
     "admin.Please_enter_a_quantity": "Vui lòng nhập số lượng",
     "Error.Amount_must": "Số tiền phải lớn hơn hoặc bằng 0",
     "payment_method": "Phương thức thanh toán",
+    "admin.Select_Quantity": "Chọn số lượng cho sản phẩm",
     "mess.payment_method": "Vui lòng chọn phương thức thanh toán",
     "Search_for": "Tìm kiếm giảm giá theo tên, mã...",
     "status.upcoming": "Sắp diễn ra",

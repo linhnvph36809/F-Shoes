@@ -42,6 +42,7 @@ const Order = () => {
     const { data, isFetching: loadingCart } = useQueryConfig('cart', '/api/cart');
 
     const carts = data?.data ? data.data.filter((cart: any) => orderId.includes(cart.id)) : null;
+    console.log(carts);
 
     const { loading: loadingVoucher, voucher, postVoucher, setVoucher } = useVoucher();
     const { loading: loadingCheckOut, postVNPAY, postOrder, postMomo } = useOnlinePayment();
