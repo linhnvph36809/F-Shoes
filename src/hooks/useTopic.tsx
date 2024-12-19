@@ -4,10 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { tokenManagerInstance } from '../api';
 import { ITopic } from '../interfaces/ITopic';
 import { showMessageAdmin } from '../utils/messages';
+import { handleChangeMessage } from '../utils';
+import { useContextGlobal } from '../contexts';
 
 export const API_TOPIC = '/api/topics';
 
 const useTopic = () => {
+    const {  locale } = useContextGlobal();
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
@@ -15,7 +18,7 @@ const useTopic = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_TOPIC}/forceDelete/${id}`);
-            showMessageAdmin('Delete Topic successfully', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Delete Topic successfully','Xóa chủ đề thành công'), '', 'success');
         } catch (error) {
             showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
@@ -49,7 +52,7 @@ const useTopic = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_TOPIC, topic);
-            showMessageAdmin('Add Topic successfully', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Add Topic successfully','Thêm chủ đề thành công'), '', 'success');
         } catch (error) {
             showMessageAdmin('Error', (error as any).message, 'error');
         } finally {
@@ -61,7 +64,7 @@ const useTopic = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('patch', API_TOPIC + `/${id}`, group);
-            showMessageAdmin('Update Topic successfully', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Update Topic successfully','Cập nhật chủ đề thành công'), '', 'success');
             navigate('/admin/topic');
         } catch (error) {
             showMessageAdmin('Error', (error as any).message, 'error');

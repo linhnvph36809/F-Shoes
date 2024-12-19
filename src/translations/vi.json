@@ -322,6 +322,11 @@
     "user.User_Update": "Cập nhật người dùng",
     "user.User_Update_succes_pass": "Cập nhật người dùng thành công",
     "user.User_Update_succes_fail": "Cập nhật người dùng thất bại",
+    "user.User_Upload_image":"Tải ảnh lên",
+    "user.User_family": " Nhóm người dùng",
+    "user.User_gmail":"Email",
+    "user.Is_admin":"Quản trị viên",
+    "user.date":"Ngày sinh",
 
     "topic.List_Topic": "Danh sách topic",
     "topic.message": "Tìm kiếm theo Tên Chủ Đề",

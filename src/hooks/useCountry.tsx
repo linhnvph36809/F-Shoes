@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import axios from "axios";
-import { geonameCommune, geonameCountry, geonameDistrict, geonameProvince } from "../interfaces/GeoNames/IGeoNames.ts";
+import {geonameCommune, geonameCountry, geonameDistrict, geonameProvince} from "../interfaces/GeoNames/IGeoNames.ts";
+import { showMessageClient } from '../utils/messages.ts';
 
 
 const useCountry = () => {
@@ -75,8 +76,8 @@ const useCountry = () => {
             const { data } = await axios.get(`http://api.geonames.org/countryInfoJSON?country=${country}&username=louis1124`)
             setThisDeviceAddressGeoname(data.geonames[0]);
 
-        } catch (error) {
-            console.log(error);
+        }catch (error){
+            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
         }
     }
     useEffect(() => {

@@ -3,10 +3,13 @@ import { IOrder } from '../../interfaces/IOrder.ts';
 import { tokenManagerInstance } from '../../api';
 import { showMessageAdmin, showMessageClient } from '../../utils/messages.ts';
 import { useQueryClient } from 'react-query';
+import { useContextGlobal } from '../../contexts/index.tsx';
+import { handleChangeMessage } from '../../utils/index.ts';
 
 const API_ORDER = 'api/orders';
 export const QUERY_KEY = 'orders';
 const UseOrder = () => {
+    const {  locale } = useContextGlobal();
     const queryClient = useQueryClient();
     const [orders, setOrders] = useState<IOrder[]>([]);
     const [cancelLoading, setCancelLoading] = useState(false);
@@ -56,7 +59,7 @@ const UseOrder = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `api/reorder/order/${id}`);
-            showMessageClient('Reorder', 'The items was added to your cart!', 'success');
+            showMessageClient(handleChangeMessage(locale,' The items was added to your cart!',' Các mặt hàng đã được thêm vào giỏ của bạn!'),'', 'success');
             queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
         } catch (error) {
             console.log(error);

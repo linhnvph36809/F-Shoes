@@ -4,11 +4,14 @@ import { tokenManagerInstance } from '../api';
 import { IGroup } from '../interfaces/IGroup';
 import { useNavigate } from 'react-router-dom';
 import { showMessageAdmin } from '../utils/messages';
+import { handleChangeMessage } from '../utils';
+import { useContextGlobal } from '../contexts';
 
 export const API_GROUP = '/api/groups';
 export const KEY_GROUP = 'key-group';
 
 const useGroups = () => {
+    const {  locale } = useContextGlobal();
     const [groups, setGroups] = useState<IGroup[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
@@ -42,7 +45,7 @@ const useGroups = () => {
         try {
             setLoadingDelete(true);
             tokenManagerInstance('delete', `${API_GROUP}/forceDelete/${id}`); // Thêm '/' vào trước id
-            showMessageAdmin('Delete Group Sussccess', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Delete Group Sussccess','Xóa nhóm thành công'), '', 'success');
             getAllGroups();
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
@@ -57,7 +60,7 @@ const useGroups = () => {
             setLoading(true);
             await tokenManagerInstance('post', API_GROUP, groupName);
             getAllGroups();
-            showMessageAdmin('Add Group Sussccess', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Add Group Sussccess','Thêm Nhóm Thành Công'), '', 'success');
 
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
@@ -71,7 +74,7 @@ const useGroups = () => {
             setLoading(true);
             await tokenManagerInstance('post', API_GROUP + `/restore/${id}`);
             getAllGroups();
-            showMessageAdmin('Restore Group Sussccess', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Restore Group Sussccess','Khôi phục Nhóm Thành công'), '', 'success');
 
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
@@ -85,7 +88,7 @@ const useGroups = () => {
             setLoadingDelete(true);
             await tokenManagerInstance('patch', API_GROUP + `/${id}`, group);
             navigate('/admin/groups/');
-            showMessageAdmin('Update Group Sussccess', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Update Group Sussccess','Cập nhật Nhóm Thành công'), '', 'success');
 
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
@@ -101,7 +104,7 @@ const useGroups = () => {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_GROUP}/${id}`);
             getAllGroups();
-            showMessageAdmin('Delete Group Sussccess', '', 'success');
+            showMessageAdmin(handleChangeMessage(locale,'Delete Group Sussccess','Xóa nhóm thành công'), '', 'success');
 
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
