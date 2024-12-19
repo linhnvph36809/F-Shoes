@@ -52,7 +52,7 @@ const LayoutAdmin: React.FC = () => {
 
         return () => unsubscribe();
     }, [user]);
-
+    
     const itemsPermission = useMemo(() => {
         return items?.filter((item: any) => {
             if (item.permissionName !== undefined) {
@@ -121,7 +121,7 @@ const LayoutAdmin: React.FC = () => {
                                 className="hover:cursor-pointer"
                                 overlay={
                                     <Menu className="color-primary font-medium">
-                                        <Menu.Item onClick={() => changeLanguage(LANGUAGE_VI)}>Viet Nam</Menu.Item>
+                                        <Menu.Item onClick={() => changeLanguage(LANGUAGE_VI)}>Việt Nam</Menu.Item>
                                         <Menu.Item onClick={() => changeLanguage(LANGUAGE_EN)}>English</Menu.Item>
                                     </Menu>
                                 }
