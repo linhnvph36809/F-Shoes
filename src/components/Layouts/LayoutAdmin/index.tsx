@@ -5,7 +5,6 @@ import { ref, onValue } from 'firebase/database';
 import './style.scss';
 import { UserOutlined } from '@ant-design/icons';
 
-
 import { items } from './datas';
 import { db } from '../../../../firebaseConfig';
 import { useContextGlobal } from '../../../contexts';
@@ -109,10 +108,7 @@ const LayoutAdmin: React.FC = () => {
                         <h3 className="text-[32px] font-semibold pl-5">
                             <FormattedMessage id="admin.Overview" />
                         </h3>
-                        <div
-                            className="flex items-center gap-x-12"
-
-                        >
+                        <div className="flex items-center gap-x-12">
                             <Dropdown
                                 className="hover:cursor-pointer"
                                 overlay={
@@ -128,13 +124,11 @@ const LayoutAdmin: React.FC = () => {
                                     {locale === LANGUAGE_VI ? 'Viet Nam' : 'English'}
                                 </p>
                             </Dropdown>
-
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Avatar src={user?.avatar_url} size={40} icon={<UserOutlined />} />
                                 <div style={{ marginLeft: '10px' }}>
-                                    <p className='text-[15px] font-medium'>{userName || user?.name}</p>
-                                    <p className='text-[12px] color-gray'>{user?.group?.group_name}</p>
-
+                                    <p className="text-[15px] font-medium">{userName || user?.name}</p>
+                                    <p className="text-[12px] color-gray">{user?.group?.group_name}</p>
                                 </div>
                             </div>
                             <div
@@ -143,7 +137,6 @@ const LayoutAdmin: React.FC = () => {
                             >
                                 <FormattedMessage id="admin.logout" /> <LogOut />
                             </div>
-
                         </div>
                     </header>
                     <Content className=" my-4 p-10 bg-[#F5F6FA]">

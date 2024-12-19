@@ -58,7 +58,6 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
             status: 1,
             type: typeVoucher
         });
-        form.resetFields();
     };
 
     useEffect(() => {
@@ -78,7 +77,7 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
         <Form form={form} onFinish={handleFinish} layout="vertical">
             <Heading>{title}</Heading>
             <div className="my-4 grid grid-cols-2 gap-x-5">
-                <Form.Item label={intl.formatMessage({ id: 'voucher.table.code' })} name="code" rules={[{ required: true, message:<FormattedMessage id="voucher.required.code" /> }]}>
+                <Form.Item label={intl.formatMessage({ id: 'voucher.table.code' })} name="code" rules={[{ required: true, message: <FormattedMessage id="voucher.required.code" /> }]}>
                     <InputPrimary placeholder="Code" width="100%" height="h-[56px]" margin="mb-0" />
                 </Form.Item>
 
@@ -86,7 +85,7 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                     label={intl.formatMessage({ id: 'voucher.table.discount' })}
                     name="discount"
                     rules={[
-                        { required: true, message: <FormattedMessage id="voucher.required.discount" />},
+                        { required: true, message: <FormattedMessage id="voucher.required.discount" /> },
                         {
                             validator: (_, value) =>
                                 value && value < 1
@@ -115,7 +114,7 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                         </div>
                         {typeVoucher === initTypeVoucher.fixed && (
                             <InputPrimary
-                            placeholder={intl.formatMessage({ id: 'voucher.table.discount' })}
+                                placeholder={intl.formatMessage({ id: 'voucher.table.discount' })}
                                 width="100%"
                                 height="h-[56px]"
                                 margin="mb-0"
@@ -149,7 +148,7 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                     name="date_end"
                     dependencies={['date_start']}
                     rules={[
-                        { required: true, message: <FormattedMessage id="voucher.required.date_end" />},
+                        { required: true, message: <FormattedMessage id="voucher.required.date_end" /> },
                         ({ getFieldValue }) => ({
                             validator(_, value) {
                                 const startDate = getFieldValue('date_start');
@@ -178,7 +177,7 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                 </Form.Item>
                 <Form.Item label={intl.formatMessage({ id: 'voucher.table.min_total_amount' })} name="min_total_amount"
 
-                rules={[{ required: true, message: <FormattedMessage id="voucher.required.min_total_amount" /> }]}
+                    rules={[{ required: true, message: <FormattedMessage id="voucher.required.min_total_amount" /> }]}
                 >
                     <InputPrimary
                         type="number"
