@@ -12,18 +12,15 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { PATH_ADMIN } from '../../../../constants/path';
 import ButtonDelete from '../../components/Button/ButtonDelete';
 import { showMessageActive } from '../../../../utils/messages';
-import InputPrimary from '../../components/Forms/InputPrimary';
-import ButtonSubmit from '../../components/Button/ButtonSubmit';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import ModalAddAttribute from './ModalAddAttribute';
 
 export const API_ATTRIBUTE_ADD = '/api/attribute?include=values&times=attribute';
 export const KEY = 'attribute';
 
 const AddAttribute = () => {
-    const intl = useIntl();
-    const [form] = Form.useForm();
     const { data, refetch, isFetching } = useQueryConfig([QUERY_KEY, KEY], API_ATTRIBUTE_ADD);
-    const { postAttributeName, deleteAttribute } = useAttribute();
+    const { deleteAttribute } = useAttribute();
     const handleDeleteAttribute = (id: string | number) => {
         if (id) {
             showMessageActive('Are you sure you want to delete Attribute?', '', 'warning', () => {
@@ -51,36 +48,14 @@ const AddAttribute = () => {
         },
     };
 
-    const onFinish = (value: { name: string }) => {
-        postAttributeName(value);
-        form.setFieldsValue({
-            name: '',
-        });
-        refetch();
-    };
-
     return (
         <>
             <section>
                 <Heading>
                     <FormattedMessage id="Attribute" />
                 </Heading>
-                <Form form={form} name="basic" onFinish={onFinish} autoComplete="off">
-                    <InputPrimary
-                        label={<FormattedMessage id="Attribute_name" />}
-                        name="name"
-                        rules={[{ required: true, message: <FormattedMessage id="Please enter Attribute Name!" /> }]}
-                        placeholder={intl.formatMessage({ id: 'Attribute_name' })}
-                        width="w-1/2"
-                    />
-
-                    <Form.Item>
-                        <div className="text-start">
-                            <ButtonSubmit />
-                        </div>
-                    </Form.Item>
-                </Form>
-                <div>
+                <ModalAddAttribute />
+                <div className="mt-10">
                     {isFetching ? (
                         <SkeletonComponent />
                     ) : (

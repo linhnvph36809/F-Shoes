@@ -147,7 +147,7 @@ const Order = () => {
             if (cart?.product_variation) {
                 return {
                     product_variation_id: cart.product_variation.id,
-                    product_image: cart?.product_variation?.product.image_url,
+                    product_image: cart?.product_variation?.product?.image_url,
                     product_name: cart?.product_variation?.name,
                     classify: cart?.product_variation?.classify,
                     product_id: null,
@@ -158,7 +158,7 @@ const Order = () => {
             } else if (cart?.product) {
                 return {
                     product_variation_id: null,
-                    product_image: cart.product.image_url,
+                    product_image: cart.product?.image_url,
                     product_name: cart.product.name,
                     classify: cart?.product?.classify,
                     product_id: cart.product.id,
@@ -605,7 +605,7 @@ const Order = () => {
                                                 <img
                                                     src={
                                                         cart?.product
-                                                            ? cart?.product.image_url
+                                                            ? cart?.product?.image_url
                                                             : cart?.product_variation?.product?.image_url
                                                     }
                                                     alt="Tatum 3 PF 'Zero Days Off' Basketball Shoes"
