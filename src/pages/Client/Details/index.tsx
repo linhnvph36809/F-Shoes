@@ -36,7 +36,8 @@ const Detail = () => {
     }
 
     const { data, isFetching } = useQueryConfig([QUERY_KEY, `product-detail-${id}`], `/api/product/detail/${id}`);
-
+    
+    
     const products = data?.data;
     const { user } = useContextGlobal();
     const [idVariants, setIdVariants] = useState<number[]>([]);
@@ -279,7 +280,7 @@ const Detail = () => {
                                     ? productD?.suggestedProduct?.map((item: any) => (
                                         <SwiperSlide key={item.id}>
                                             <div>
-                                                <Link to={`${item.slug}`} className="flex flex-col justify-between">
+                                                <Link to={`/detail/${item.slug}`} className="flex flex-col justify-between">
                                                     <div>
                                                         <img src={item.image_url} alt={item.name} className="h-[678px] object-cover" />
                                                     </div>

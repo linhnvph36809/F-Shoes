@@ -11,10 +11,14 @@ import { Link } from 'react-router-dom';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { handleChangeMessage } from '../../../../utils';
+import { showMessageActive } from '../../../../utils/messages';
+import { useContextGlobal } from '../../../../contexts';
 
 const { Text } = Typography;
 
 const ListReview = () => {
+    const {  locale } = useContextGlobal();
     const intl = useIntl();
     const { loading, deleteReview } = useReview(); // Use the useReview hook
     const { data: cachingReviewsData } = useQueryConfig(
@@ -29,14 +33,36 @@ const ListReview = () => {
     }, [cachingReviewsData]);
 
     const handleDeleteUser = async (id: string | number) => {
-        if (window.confirm('Bạn có chắc chắn muốn xoá Review này không?')) {
-            try {
-                await deleteReview(id); // Giả sử deleteUser trả về kết quả thành công hoặc lỗi
-
-                message.success('Xóa Review thành công!');
-            } catch (error) {
-                message.error('Đã xảy ra lỗi khi xóa Review. Vui lòng thử lại.');
-            }
+        if (id) {
+            showMessageActive(
+                handleChangeMessage(
+                    locale, 
+                    'Are you sure you want to delete this Review?', 
+                    'Bạn có chắc chắn muốn xóa Review này không?'
+                ),
+                '',
+                'warning',
+                async () => {
+                    try {
+                        await deleteReview(id); // Hàm xóa review từ API
+                        message.success(
+                            handleChangeMessage(
+                                locale,
+                                'Review deleted successfully!',
+                                'Xóa Review thành công!'
+                            )
+                        );
+                    } catch (error) {
+                        message.error(
+                            handleChangeMessage(
+                                locale,
+                                'An error occurred while deleting the Review. Please try again.',
+                                'Đã xảy ra lỗi khi xóa Review. Vui lòng thử lại.'
+                            )
+                        );
+                    }
+                }
+            );
         }
     };
     const handleSearch = (e: any) => {
@@ -125,8 +151,11 @@ const ListReview = () => {
                 <FormattedMessage id="review.List_Review" />
             </Heading>
             <div>
-                <Input title={intl.formatMessage({ id: 'review.search' })} onChange={handleSearch} />
-            </div>
+    <Input 
+        placeholder={intl.formatMessage({ id: 'review.search' })} 
+        onChange={handleSearch} 
+    />
+</div>
             {loading ? (
                 <LoadingBlock />
             ) : (

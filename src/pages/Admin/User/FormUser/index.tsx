@@ -68,8 +68,8 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
     const validatePassword = initialValues
         ? null
         : [
-            { required: true, message: 'Please enter Password' },
-            { min: 8, message: 'Password must be at least 8 characters!' },
+            { required: true, message: <FormattedMessage id="group.form_password.success" /> },
+            { min: 8, message: <FormattedMessage id="user.password_8" />  },
         ];
 
     return (
@@ -96,7 +96,7 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                         { required: true, message: <FormattedMessage id="user.User_Form_email_required" /> },
                         {
                             type: 'email',
-                            message: 'Please enter a valid email address!',
+                            message: <FormattedMessage id="user.email.vaild" />,
                         },
                     ]}
                 ></InputPrimary>
@@ -105,14 +105,14 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                     label={intl.formatMessage({ id: 'user.User_Form_password' })}
                     type="password"
                     name="password"
-                    placeholder="Enter Password"
+                    placeholder={intl.formatMessage({ id: 'group.form_password' })}
                     rules={validatePassword}
                 ></InputPrimary>
 
                 <InputPrimary name="birth_date" label="Date Of Birth" type="date"></InputPrimary>
                 <SelectPrimary
                     name="group_id"
-                    rules={[{ required: true, message: 'Please enter group' }]}
+                    rules={[{ required: true, message: <FormattedMessage id="user.User_Form_email_required" /> }]}
                     allowClear
                     label={intl.formatMessage({ id: 'user.User_Active_Users' })}
                     placeholder={intl.formatMessage({ id: 'user.User_Active_Users' })}

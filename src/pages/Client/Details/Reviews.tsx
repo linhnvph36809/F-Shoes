@@ -1,13 +1,13 @@
 import { Dropdown, Menu, Skeleton, Collapse } from 'antd';
 import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ChevronDown, Ellipsis, Heart, Star } from 'lucide-react';
 
 import './style.scss';
 
 const { Panel } = Collapse;
 
-import useReview from '../../../hooks/useReview';
+import useReview, { QUERY_KEY } from '../../../hooks/useReview';
 import ReviewForm from '../../../components/FormReview';
 import { useContextGlobal } from '../../../contexts';
 import useQueryConfig from '../../../hooks/useQueryConfig';
@@ -16,7 +16,7 @@ import { FormattedMessage } from 'react-intl';
 
 const Reviews = ({ productId }: { productId?: string | number }) => {
     const { slug } = useParams();
-
+    const navigate = useNavigate();
     let id: string | number | undefined;
 
     if (slug) {
@@ -24,7 +24,7 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
         id = slug.substring(index + 1);
     }
     const { loading, deleteReview, postReview, postLikeReview } = useReview();
-    const { data, refetch } = useQueryConfig('get-review', `/api/product/${id}/reviews?times=review`);
+    const { data, refetch } = useQueryConfig([QUERY_KEY,`get-review/${id}`], `/api/product/${id}/reviews?times=review`);
     const { user } = useContextGlobal();
 
     const starElements = (rating: number) => {
@@ -47,10 +47,16 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
     };
 
     const handleLikeReview = (id: number) => {
-        postLikeReview(id);
-        refetch();
+        if(user){
+            postLikeReview(id);
+            refetch();
+        }else{
+            navigate('/authentication')
+            
+        }
+        
     };
-
+    
     return (
         <ul>
             <Collapse
@@ -153,7 +159,7 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
                                                         className="flex items-center gap-x-2 text-[14px] font-medium pr-2"
                                                         onClick={() => handleLikeReview(review?.id)}
                                                     >
-                                                        <Heart className="w-[15px] hover:text-red-500 hover:cursor-pointer" />{' '}
+                                                        <Heart className={`"w-[15px] ${review?.liked ? 'text-rose-500' : ''}  hover:cursor-pointer" `}/>{' '}
                                                         {review.likes_count}
                                                     </p>
 

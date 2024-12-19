@@ -17,8 +17,11 @@ import ButtonUpdate from '../components/Button/ButtonUpdate';
 import ButtonAdd from '../components/Button/ButtonAdd';
 import InputSearch from '../components/Forms/InputSearch';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useContextGlobal } from '../../../contexts';
+import { handleChangeMessage } from '../../../utils';
 
 const ListProduct = () => {
+    const {  locale } = useContextGlobal();
     const intl = useIntl();
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
@@ -36,7 +39,7 @@ const ListProduct = () => {
     );
 
     const handleDeleteProduct = (id: string | number) => {
-        showMessageActive('Are you sure you want to delete this product', '', 'warning', () => {
+        showMessageActive(handleChangeMessage(locale,'Are you sure you want to delete this product','Bạn có chắc chắn muốn xóa sản phẩm này không?'), '', 'warning', () => {
             deleteProduct(id);
         });
     };

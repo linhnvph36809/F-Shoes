@@ -102,14 +102,14 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                                     }`}
                                 onClick={() => handleChangeType(initTypeVoucher.fixed)}
                             >
-                                Fixed
+                                <FormattedMessage id="voucher.table.fixed" />
                             </Button>
                             <Button
                                 className={`${typeVoucher == initTypeVoucher.percentage ? 'bg-[#111111] text-white' : 'bg-white'
                                     }`}
                                 onClick={() => handleChangeType(initTypeVoucher.percentage)}
                             >
-                                Percentage
+                                <FormattedMessage id="voucher.percentage" />
                             </Button>
                         </div>
                         {typeVoucher === initTypeVoucher.fixed && (
