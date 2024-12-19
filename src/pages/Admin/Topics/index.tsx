@@ -13,7 +13,8 @@ import FormTopic from './FormTopic';
 import { showMessageActive } from '../../../utils/messages';
 import ButtonDelete from '../components/Button/ButtonDelete';
 import { FormattedMessage, useIntl } from 'react-intl';
-
+import PermissionElement from '../../../components/Permissions/PermissionElement';
+import { ACTIONS, PERMISSION } from '../../../constants';
 
 export const KEY = 'list-topic';
 
@@ -36,8 +37,6 @@ const ListTopic = ({ initialValues }: any) => {
             });
         }
     };
-
-
 
     const handleRestoreTopic = (id?: string | number) => {
         if (id) {
@@ -84,25 +83,33 @@ const ListTopic = ({ initialValues }: any) => {
             key: '5',
             render: (_: any, topic: ITopic) => (
                 <div className="flex gap-2">
-                    <Link to={`/admin/topic/${topic.id}`}>
-                        <ButtonEdit>
-                            <SquarePen />
-                        </ButtonEdit>
-                    </Link>
+                    <PermissionElement keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_EDIT}>
+                        <Link to={`/admin/topic/${topic.id}`}>
+                            <ButtonEdit>
+                                <SquarePen />
+                            </ButtonEdit>
+                        </Link>
+                    </PermissionElement>
                     {topic.deleted_at ? (
-                        <ButtonEdit onClick={() => handleRestoreTopic(topic.id)}>
-                            <RefreshCcw />
-                        </ButtonEdit>
+                        <PermissionElement keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_EDIT}>
+                            <ButtonEdit onClick={() => handleRestoreTopic(topic.id)}>
+                                <RefreshCcw />
+                            </ButtonEdit>
+                        </PermissionElement>
                     ) : (
-                        <ButtonEdit onClick={() => handleSoftTopic(topic.id)}>
-                            <CircleX />
-                        </ButtonEdit>
+                        <PermissionElement keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_EDIT}>
+                            <ButtonEdit onClick={() => handleSoftTopic(topic.id)}>
+                                <CircleX />
+                            </ButtonEdit>
+                        </PermissionElement>
                     )}
 
                     {topic.deleted_at ? (
                         ''
                     ) : (
-                        <ButtonDelete onClick={() => handleDeleteTopic(topic.id)}></ButtonDelete>
+                        <PermissionElement keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_DELETE}>
+                            <ButtonDelete onClick={() => handleDeleteTopic(topic.id)}></ButtonDelete>
+                        </PermissionElement>
                     )}
                 </div>
             ),
@@ -115,11 +122,11 @@ const ListTopic = ({ initialValues }: any) => {
                 <LoadingBlock />
             ) : (
                 <div>
-                   <FormTopic 
-            title={intl.formatMessage({ id: 'topic.List_Topic' })} 
-            initialValues={initialValues} 
-            onFinish={onFinish} 
-        />
+                    <FormTopic
+                        title={intl.formatMessage({ id: 'topic.List_Topic' })}
+                        initialValues={initialValues}
+                        onFinish={onFinish}
+                    />
                     <div className="mb-4 text-end">
                         <Input
                             placeholder={intl.formatMessage({ id: 'topic.message' })}
