@@ -51,6 +51,9 @@ export const statusString = (id: number) => {
 };
 
 export const paymentMethodString = (method:string) => {
+    if(typeof method !== 'string') {
+        return '...';
+    }
     switch (method.toLocaleLowerCase()) {
         case 'cash_on_delivery':
             return 'Cash on Delivery';
@@ -62,6 +65,20 @@ export const paymentMethodString = (method:string) => {
             return 'Banking Transfer';
             case 'visa': 
             return 'VISA';
+        default: return '...';
+
+    }
+}
+
+export const paymentStatusString = (status:any) => {
+    if(typeof status !== 'string') {
+        return '...';
+    }
+    switch (status.toLocaleLowerCase()) {
+        case 'paid':
+            return 'Paid';
+        case 'not_yet_paid': 
+            return 'Not yet paid';
         default: return '...';
 
     }

@@ -72,8 +72,6 @@ const LayoutAdmin: React.FC = () => {
     );
     const [messageWaitingConfirm, setMessageWaitingConfirm] = useState(false);
 
-    console.log(itemsPermission);
-
     return (
         <ContextAdmin.Provider value={{ permissions }}>
             <Layout hasSider>

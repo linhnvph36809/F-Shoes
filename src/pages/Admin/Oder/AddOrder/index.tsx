@@ -2,7 +2,6 @@ import { Form, Input, Select, Radio } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { useMemo, useState } from 'react';
 import Heading from '../../components/Heading';
-import useUser from '../../../../hooks/useUser';
 import useDelivery from '../../../../hooks/useDelivery';
 import useOrder from '../../../../hooks/useOrder';
 import { formatPrice } from '../../../../utils';
@@ -23,7 +22,12 @@ const Addorder = () => {
     const { refetch } = useQueryConfig('order-admin', '/api/orders');
 
     const products = data?.data.data;
-    const { users } = useUser();
+   
+    const { data:dataListUser} = useQueryConfig(
+        ['users','add/order/list/users'],
+        '/api/user'
+    );
+    const users = dataListUser?.data?.users?.data || [];    
     const { postOrder, loading } = useOrder();
     const [productSelected, setProductSelected] = useState<any>([]);
     const { provinces, districts, fee, wards, getAllWard, getAllDistrict, getFee } = useDelivery();
@@ -212,7 +216,7 @@ const Addorder = () => {
                                 placeholder={intl.formatMessage({ id: 'admin.Select_Variant' })}
                                 optionFilterProp="name"
                                 options={product.variations}
-                                fieldNames={{ label: 'slug', value: 'id' }}
+                                fieldNames={{ label: 'classify', value: 'id' }}
                                 onChange={(value) => handlerChangeVariant(index, value)}
                             />
                         </Form.Item>
