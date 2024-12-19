@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { SquarePen, Trash2 } from 'lucide-react';
+import { Search, SquarePen, Trash2 } from 'lucide-react';
 import { Input } from 'antd';
 import { useState } from 'react';
 
@@ -111,24 +111,26 @@ const ListVoucher = () => {
                 <LoadingBlock />
             ) : (
                 <div>
-                    <Heading><FormattedMessage id="voucher.List_voucheroucher" /></Heading>
+                    <Heading>
+                        <FormattedMessage id="voucher.List_voucheroucher" />
+                    </Heading>
                     <div className="mb-4 text-end flex justify-between">
                         <div>
                             <Link to={PATH_ADMIN.ADD_VOUCHER}>
                                 <ButtonPrimary width="w-[150px]" height="h-[50px]">
-                                <FormattedMessage id="voucher.add" />
+                                    <FormattedMessage id="voucher.add" />
                                 </ButtonPrimary>
                             </Link>
                         </div>
-                        <Input
-                            placeholder={intl.formatMessage({ id: 'voucher.search' })}
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            allowClear
-                            className="w-3/12 h-[40px]
-                                border-1 border-[#111111] focus:shadow
-                                font-medium focus:border-[#111111] hover:border-[#111111] px-5"
-                        />
+                        <div className="relative text-end">
+                            <input
+                                placeholder={intl.formatMessage({ id: 'voucher.search' })}
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className={`w-[300px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                            />
+                            <Search className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
+                        </div>
                     </div>
                     <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={filteredData} />
                 </div>

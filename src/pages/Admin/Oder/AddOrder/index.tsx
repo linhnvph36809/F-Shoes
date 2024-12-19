@@ -13,7 +13,7 @@ import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import ButtonBack from '../../components/ButtonBack';
 import { FormattedMessage, useIntl } from 'react-intl';
 import useVoucher from '../../../../hooks/useVoucher';
-import { showMessageClient } from '../../../../utils/messages';
+import { showMessageAdmin, showMessageClient } from '../../../../utils/messages';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import ModalAddOrder from './ModalAddOrder';
 import { useContextGlobal } from '../../../../contexts';
@@ -103,8 +103,15 @@ const Addorder = () => {
         }
     }, [handleTotalPrice, fee, voucher]);
 
-
     const onFinish = (value: any) => {
+        if (!orderDetail?.length) {
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Please select a product!', 'Vui lòng chọn sản phẩm!'),
+                '',
+                'warning',
+            );
+            return;
+        }
         const order_details = orderDetail.map((product: any, index: number) => {
             if (product?.variant?.id) {
                 return {
@@ -132,7 +139,6 @@ const Addorder = () => {
         } else if (value.shipping_method == 3) {
             shipping_method = 'Saving shipping';
         }
-
 
         const newValues = {
             user_id: value.user_id,
@@ -276,10 +282,10 @@ const Addorder = () => {
                     rules={[
                         {
                             validator: (_: any, value: number) => {
-                                if (+value < 0) {
-                                    return Promise.reject(new Error(intl.formatMessage({ id: 'Error.Amount_must' })));
+                                if (value > 0) {
+                                    return Promise.resolve();
                                 }
-                                return Promise.resolve();
+                                return Promise.reject('Vui lòng nhập lớn hơn 0!');
                             },
                         },
                     ]}
@@ -294,7 +300,13 @@ const Addorder = () => {
                 <InputPrimary
                     label={<FormattedMessage id="receiver_email" />}
                     name="receiver_email"
-                    rules={[{ required: true, message: <FormattedMessage id="receiver_email_message" /> }]}
+                    rules={[
+                        { required: true, message: <FormattedMessage id="receiver_email_message" /> },
+                        {
+                            type: 'email',
+                            message: <FormattedMessage id="receiver_email_invalid" />,
+                        },
+                    ]}
                     placeholder={intl.formatMessage({ id: 'receiver_email' })}
                     type="email"
                 ></InputPrimary>
@@ -302,7 +314,14 @@ const Addorder = () => {
                 <InputPrimary
                     label={<FormattedMessage id="phone" />}
                     name="phone"
-                    rules={[{ required: true, message: <FormattedMessage id="phone_message" /> }]}
+                    type="number"
+                    rules={[
+                        { required: true, message: <FormattedMessage id="phone_message" /> },
+                        {
+                            min: 10,
+                            message: 'Số điện thoại không hợp lệ',
+                        },
+                    ]}
                     placeholder={intl.formatMessage({ id: 'phone' })}
                 ></InputPrimary>
 
@@ -314,6 +333,7 @@ const Addorder = () => {
                     placeholder={intl.formatMessage({ id: 'city' })}
                     optionFilterProp="ProvinceName"
                     options={provinces}
+                    showSearch
                     fieldNames={{ label: 'ProvinceName', value: 'ProvinceID' }}
                 ></SelectPrimary>
 
@@ -322,8 +342,9 @@ const Addorder = () => {
                     name="district"
                     rules={[{ required: true, message: <FormattedMessage id="district_message" /> }]}
                     placeholder={intl.formatMessage({ id: 'district' })}
-                    optionFilterProp="ProvinceName"
+                    optionFilterProp="DistrictName"
                     options={districts}
+                    showSearch
                     fieldNames={{ label: 'DistrictName', value: 'DistrictID' }}
                     onChange={handleDistrictChange}
                 ></SelectPrimary>
@@ -333,8 +354,9 @@ const Addorder = () => {
                     name="ward"
                     rules={[{ required: true, message: <FormattedMessage id="ward_message" /> }]}
                     placeholder={intl.formatMessage({ id: 'ward' })}
-                    optionFilterProp="ProvinceName"
+                    optionFilterProp="WardName"
                     options={wards}
+                    showSearch
                     onChange={handleWardChange}
                     fieldNames={{ label: 'WardName', value: 'WardCode' }}
                 ></SelectPrimary>
@@ -370,14 +392,8 @@ const Addorder = () => {
                     rules={[{ required: true, message: <FormattedMessage id="shipping_method_message" /> }]}
                 >
                     <Radio.Group onChange={(e) => handleShippingChange(e.target.value)} disabled={!wardCode}>
-                        <Radio value={1}>
-                            <FormattedMessage id="shipping_express" />
-                        </Radio>
                         <Radio value={2}>
                             <FormattedMessage id="shipping_standard" />
-                        </Radio>
-                        <Radio value={3}>
-                            <FormattedMessage id="shipping_saving" />
                         </Radio>
                     </Radio.Group>
                 </Form.Item>
@@ -386,7 +402,7 @@ const Addorder = () => {
                     <TextArea placeholder={intl.formatMessage({ id: 'note_placeholder' })} rows={9} />
                 </Form.Item>
 
-                <div className="flex items-center justify-end gap-x-4 mb-10">
+                <div className="flex items-center justify-start gap-x-4 mb-10">
                     <div>
                         <ConfigProvider
                             theme={{
@@ -413,7 +429,6 @@ const Addorder = () => {
                         </Button>
                     </div>
                 </div>
-
                 {fee.service_fee ? (
                     <div className="text-end my-10">
                         <p className="font-medium text-[16px] color-gray">

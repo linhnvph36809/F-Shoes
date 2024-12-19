@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ConfigProvider, Input, Select } from 'antd';
+import { ConfigProvider, Input, Select, Skeleton } from 'antd';
 import Heading from '../../components/Heading';
 import { columns } from './datas';
 import { API_ORDER, QUERY_KEY } from '../../../../hooks/useOrder';
@@ -11,7 +11,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import ButtonAdd from '../../components/Button/ButtonAdd';
 import { FormattedMessage, useIntl } from 'react-intl';
-import LoadingPage from '../../../../components/Loading/LoadingPage';
 
 const { Option } = Select;
 
@@ -86,9 +85,7 @@ const OrderList = () => {
     const handleCancel = () => {
         setOrderDetail((preData: any) => ({ ...preData, isModalOpen: false }));
     };
-    if (isFetching) {
-        return <LoadingPage />;
-    }
+
     return (
         <div>
             <Heading>
@@ -175,14 +172,18 @@ const OrderList = () => {
             </div>
 
             {/* Bảng hiển thị đơn hàng */}
-            <TableAdmin
-                columns={columns}
-                rowKey="id"
-                dataSource={filteredData}
-                onRow={(record: any) => ({
-                    onClick: () => handleRowClick(record),
-                })}
-            />
+            {isFetching ? (
+                <Skeleton className="mt-10" />
+            ) : (
+                <TableAdmin
+                    columns={columns}
+                    rowKey="id"
+                    dataSource={filteredData}
+                    onRow={(record: any) => ({
+                        onClick: () => handleRowClick(record),
+                    })}
+                />
+            )}
             <ModalOrder orderDetail={orderDetail} handleCancel={handleCancel} />
         </div>
     );
