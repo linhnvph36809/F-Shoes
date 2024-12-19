@@ -9,19 +9,22 @@ import ButtonBack from '../../components/ButtonBack';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import { FormattedMessage } from 'react-intl';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
+import { showMessageActive } from '../../../../utils/messages';
+import { handleChangeMessage } from '../../../../utils';
+import { useContextGlobal } from '../../../../contexts';
+import LoadingPage from '../../../../components/Loading/LoadingPage';
 
 const UpdateAttribute = () => {
     const [form] = Form.useForm();
+     const {  locale } = useContextGlobal();
     const { id } = useParams();
     const { loading, postAttributeValue, deleteAttributeValue } = useAttribute();
     const [attributeValues, setAttributeValues] = useState<any>([]);
-    const { data } = useQueryConfig(`attribute-detail-${id}`, `/api/attribute/${id}?include=values`,
-        {
-            cacheTime: 0,
-            staleTime: 0,
-            retry: false,
-        }
-    );
+    const { data,isFetching,refetch } = useQueryConfig(`attribute-detail-${id}`, `/api/attribute/${id}?include=values`, {
+        cacheTime: 0,
+        staleTime: 0,
+        retry: false,
+    });
 
     const initialValues = data?.data.attribute.values || [];
 
@@ -30,9 +33,9 @@ const UpdateAttribute = () => {
 
         const newAttributeValues = newAttribute
             ? newAttribute?.map((newAttribute: any) => ({
-                id: '',
-                value: newAttribute,
-            }))
+                  id: '',
+                  value: newAttribute,
+              }))
             : [];
 
         if (id) {
@@ -43,8 +46,19 @@ const UpdateAttribute = () => {
     };
 
     const handleDeleteAttribute = (idValue: any) => {
-        setAttributeValues((preAttributeValues: any) => preAttributeValues.filter((item: any) => item.id != idValue));
-        if (id) deleteAttributeValue(idValue, id);
+        showMessageActive( handleChangeMessage(
+                                locale,
+                                'Are you sure want to delete?',
+                                'Bạn có chắc muốn xóa giá trị này?',
+                            ), '', 'warning', () => {
+            setAttributeValues((preAttributeValues: any) =>
+                preAttributeValues.filter((item: any) => item.id != idValue),
+            );
+            if (id) {
+                deleteAttributeValue(idValue, id);
+                refetch();
+            }
+        });
     };
 
     const handleChangeAttribute = (index: any, value: string) => {
@@ -57,7 +71,9 @@ const UpdateAttribute = () => {
     useEffect(() => {
         setAttributeValues(initialValues);
     }, [id, data, initialValues]);
-
+    if(isFetching){
+        return <LoadingPage/>
+    }
     return (
         <>
             <section>

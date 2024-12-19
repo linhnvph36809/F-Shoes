@@ -49,7 +49,6 @@ const useProfile = () => {
                     'error',
                 );
             }
-            
         } finally {
             setLoadingUpdate(false);
         }

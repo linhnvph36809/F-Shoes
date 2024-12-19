@@ -14,6 +14,7 @@ import useAuth from '../../../hooks/useAuth';
 import { LANGUAGE_EN, LANGUAGE_VI } from '../../../constants';
 import { FormattedMessage } from 'react-intl';
 import { showMessageAdmin } from '../../../utils/messages';
+import { handleChangeMessage } from '../../../utils';
 
 const { Header, Content, Sider } = Layout;
 
@@ -136,7 +137,11 @@ const LayoutAdmin: React.FC = () => {
                                         {countOrderWaiting?.data?.data}
                                     </span>
                                 ) : (
-                                    ''
+                                     handleChangeMessage(
+                                                            locale,
+                                                            'There\'s nothing here!',
+                                                            'Hiện chưa có gì mới!',
+                                                        )
                                 )}
                                 <Bell className="size-10" />
                                 {messageWaitingConfirm ? (
