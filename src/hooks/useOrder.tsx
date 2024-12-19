@@ -23,7 +23,7 @@ const useOrder = () => {
             queryClient.invalidateQueries({queryKey:[QUERY_KEY,QUERY_KEY_PRODUCT]});
             navigate('/admin/orderlist');
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
             console.log(error);
             
         } finally {
@@ -39,7 +39,7 @@ const useOrder = () => {
             showMessageAdmin(handleChangeMessage(locale,'Update Order Sussccess','Cập nhật đơn hàng thành công'), '', 'success');
             queryClient.invalidateQueries({queryKey:[QUERY_KEY,QUERY_KEY_PRODUCT]});
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }

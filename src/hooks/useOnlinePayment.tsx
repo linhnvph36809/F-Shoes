@@ -25,7 +25,7 @@ const useOnlinePayment = () => {
             refetchQuantityCart();
             navigate('/order-cash-on-delivery');
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -44,7 +44,7 @@ const useOnlinePayment = () => {
             }
             refetchQuantityCart();
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -61,7 +61,7 @@ const useOnlinePayment = () => {
             }
             refetchQuantityCart();
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -71,7 +71,7 @@ const useOnlinePayment = () => {
         try {
             await tokenManagerInstance('put', `api/order/update/payment-status/${id}`, paymentStatus);
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         }
     };
 

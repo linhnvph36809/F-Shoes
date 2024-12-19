@@ -6,9 +6,12 @@ import { IPost } from '../interfaces/IPost';
 import { useQueryClient } from 'react-query';
 export const QUERY_KEY = 'posts';
 import { showMessageAdmin } from '../utils/messages';
+import { handleChangeMessage } from '../utils';
+import { useContextGlobal } from '../contexts';
 
 export const API_POST = '/api/posts';
 const usePost = () => {
+    const {  locale } = useContextGlobal();
     const queryClient = useQueryClient();
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -19,7 +22,7 @@ const usePost = () => {
             tokenManagerInstance('delete', `${API_POST}/forceDelete/${id}`);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -31,7 +34,7 @@ const usePost = () => {
             tokenManagerInstance('delete', `${API_POST}/${id}`);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -43,7 +46,7 @@ const usePost = () => {
             await tokenManagerInstance('post', API_POST + `/restore/${id}`);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -58,7 +61,7 @@ const usePost = () => {
             navigate('/admin/posts');
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error: any) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -73,7 +76,7 @@ const usePost = () => {
             navigate('/admin/posts');
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error: any) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
