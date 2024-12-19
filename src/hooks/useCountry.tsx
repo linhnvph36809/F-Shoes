@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import {geonameCommune, geonameCountry, geonameDistrict, geonameProvince} from "../interfaces/GeoNames/IGeoNames.ts";
 import { showMessageClient } from '../utils/messages.ts';
+import { handleChangeMessage } from '../utils/index.ts';
+import { useContextGlobal } from '../contexts/index.tsx';
 
 
 const useCountry = () => {
-
+    const {  locale } = useContextGlobal();
     const [loading, setLoading] = useState<boolean>(false);
     const [countries, setCountries] = useState<geonameCountry[]>([]);
     const [loadingProvinces, setLoadingProvinces] = useState<boolean>(false);
@@ -77,7 +79,7 @@ const useCountry = () => {
             setThisDeviceAddressGeoname(data.geonames[0]);
 
         }catch (error){
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         }
     }
     useEffect(() => {

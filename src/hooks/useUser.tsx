@@ -5,10 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { PATH_LIST_USER } from '../constants';
 import { useQueryClient } from 'react-query';
 import { showMessageAdmin } from '../utils/messages';
+import { handleChangeMessage } from '../utils';
+import { useContextGlobal } from '../contexts';
 
 const API_USER = '/api/user';
 export const QUERY_KEY = 'users';
 const useUser = () => {
+    const {  locale } = useContextGlobal();
     const [loading, setLoading] = useState<boolean>(false);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -24,7 +27,7 @@ const useUser = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             navigate(PATH_LIST_USER);
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.errors?.email || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }

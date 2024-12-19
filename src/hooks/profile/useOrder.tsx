@@ -38,7 +38,7 @@ const UseOrder = () => {
             queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
         } catch (error) {
             console.log(error);
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setCancelLoading(false);
         }
@@ -63,7 +63,7 @@ const UseOrder = () => {
             queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
         } catch (error) {
             console.log(error);
-            showMessageAdmin('Error', 'Something went wrong!', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }

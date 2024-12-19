@@ -29,7 +29,7 @@ const useCategory = () => {
 
             setCategories(data.categories.data);
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -41,7 +41,7 @@ const useCategory = () => {
             const { data } = await tokenManagerInstance('get', 'api/main/categories?include=children');
             setMainCategoires(data.categories.data);
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -136,7 +136,7 @@ const useCategory = () => {
                     : 'Unexpected response status';
             showMessageAdmin(message, '', response.status === 200 || response.status === 204 ? 'success' : 'warning');
         } catch (error: any) {
-            showMessageAdmin('Error', error.response?.data?.message || 'Something went wrong.', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         }
     };
 
@@ -146,7 +146,7 @@ const useCategory = () => {
             const { data } = await tokenManagerInstance('get', `${API_CATEGORY}/${id}`);
             return data.category; // Assuming the response has a `category` field
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
             throw error;
         } finally {
             setLoading(false);

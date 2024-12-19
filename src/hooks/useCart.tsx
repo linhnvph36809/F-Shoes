@@ -18,7 +18,7 @@ const useCart = () => {
             showMessageClient(handleChangeMessage(locale, 'Add to cart successfully','Thêm vào giỏ hàng thành công'), '', 'success');
             refetchQuantityCart();
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.error || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -29,8 +29,7 @@ const useCart = () => {
             setLoading(true);
             await tokenManagerInstance('patch', API_CART + `/${id}`, quantity);
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
-        } finally {
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
             setLoading(false);
         }
     };
@@ -41,7 +40,7 @@ const useCart = () => {
             await tokenManagerInstance('delete', API_CART + `/${id}`);
             showMessageClient(handleChangeMessage(locale,'Delete cart successfully','Xóa giỏ hàng thành công'), '', 'success');
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }

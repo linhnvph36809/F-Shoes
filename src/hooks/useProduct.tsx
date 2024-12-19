@@ -33,7 +33,7 @@ const useProduct = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(handleChangeMessage(locale,'Delete Product Sussccess','Xóa sản phẩm thành công'), '', 'success');
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -47,7 +47,7 @@ const useProduct = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(handleChangeMessage(locale,'Add Product Sussccess','Thêm sản phẩm thành công'), '', 'success');
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -61,7 +61,7 @@ const useProduct = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(handleChangeMessage(locale,'Update Product Sussccess','Cập nhật sản phẩm thành công'), '', 'success');
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }

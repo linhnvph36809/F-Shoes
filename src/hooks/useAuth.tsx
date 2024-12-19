@@ -159,7 +159,7 @@ const useAuth = () => {
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
                 console.log(error as any);
-                showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+                showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
             } else {
                 showMessageClient('Something went wrong!', '', 'error');
             }

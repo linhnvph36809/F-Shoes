@@ -31,8 +31,7 @@ const useVariant = () => {
             navigate(PATH_LIST_PRODUCT);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
-            console.log(error,'e');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
             
         } finally {
             setLoading(false);
@@ -46,7 +45,7 @@ const useVariant = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(handleChangeMessage(locale,'Update Variant Sussccess','Cập nhật biến thể thành công'), '', 'success');
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -59,7 +58,7 @@ const useVariant = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(handleChangeMessage(locale,'Delete Variant Sussccess','Xóa biến thể thành công'), '', 'success');
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }

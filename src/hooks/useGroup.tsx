@@ -48,7 +48,7 @@ const useGroups = () => {
             showMessageAdmin(handleChangeMessage(locale,'Delete Group Sussccess','Xóa nhóm thành công'), '', 'success');
             getAllGroups();
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoadingDelete(false);
         }
@@ -63,7 +63,7 @@ const useGroups = () => {
             showMessageAdmin(handleChangeMessage(locale,'Add Group Sussccess','Thêm Nhóm Thành Công'), '', 'success');
 
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -77,7 +77,7 @@ const useGroups = () => {
             showMessageAdmin(handleChangeMessage(locale,'Restore Group Sussccess','Khôi phục Nhóm Thành công'), '', 'success');
 
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
@@ -91,7 +91,7 @@ const useGroups = () => {
             showMessageAdmin(handleChangeMessage(locale,'Update Group Sussccess','Cập nhật Nhóm Thành công'), '', 'success');
 
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
             console.log(error);
             
         } finally {
@@ -107,7 +107,7 @@ const useGroups = () => {
             showMessageAdmin(handleChangeMessage(locale,'Delete Group Sussccess','Xóa nhóm thành công'), '', 'success');
 
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);
         }
