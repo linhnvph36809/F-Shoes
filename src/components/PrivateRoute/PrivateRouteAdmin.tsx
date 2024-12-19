@@ -7,7 +7,7 @@ import { PATH_ADMIN } from '../../constants/path';
 
 const PrivateRouteAdmin = ({ children }: { children: ReactNode }) => {
     const isAdmin = handleGetLocalStorage(INFO_AUTH.isAdmin);
-    const adminName = handleGetLocalStorage(INFO_AUTH.adminName);
+    const adminName = handleGetLocalStorage(INFO_AUTH.userName);
 
     return (
         <>

@@ -11,9 +11,11 @@ import EditorComponent from './Editor';
 import { showMessageClient } from '../../../../../utils/messages';
 import InputPrimary from '../../../components/Forms/InputPrimary';
 import ButtonSubmit from '../../../components/Button/ButtonSubmit';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: any) => {
     const [form] = Form.useForm();
+    const intl = useIntl();
     const [description, setDescription] = useState<string>('');
     const [shortDescription, setShortDescription] = useState<string>('');
 
@@ -26,8 +28,6 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
 
     const handleFinish = useCallback(
         (values: IProduct) => {
-
-
             const imageArray = images.images.map((image: IImage) => image.id);
             if (!imageArray.length) {
                 showMessageClient('Please choose image', '', 'error');
@@ -58,30 +58,30 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
         <Form onFinish={handleFinish} form={form} initialValues={initialValues}>
             <div className="grid grid-cols-2 gap-5">
                 <InputPrimary
-                    label="Product Name"
-                    placeholder="Enter Product Name"
+                    label={<FormattedMessage id="product.name" />}
+                    placeholder={intl.formatMessage({ id: 'product.enterName' })}
                     name="name"
-                    rules={[{ required: true, message: 'Please enter product name' }]}
+                    rules={[{ required: true, message: <FormattedMessage id="product.nameRequired" /> }]}
                 />
                 <InputPrimary
-                    label="Price"
-                    placeholder="Enter Price"
+                    label={<FormattedMessage id="product.price" />}
+                    placeholder={intl.formatMessage({ id: 'product.enterPrice' })}
                     name="price"
                     type="number"
-                    rules={[{ required: true, message: 'Please enter price' }]}
+                    rules={[{ required: true, message: <FormattedMessage id="product.priceRequired" /> }]}
                 />
 
                 <InputPrimary
                     name="stock_qty"
-                    label="Quantity"
-                    placeholder="Quantity"
+                    label={<FormattedMessage id="product.quantity" />}
+                    placeholder={intl.formatMessage({ id: 'product.enterQuantity' })}
                     type="number"
                     rules={[
-                        { required: true, message: 'Please enter quantity' },
+                        { required: true, message: <FormattedMessage id="product.quantityRequired" /> },
                         {
                             validator: (_: any, value: any) => {
                                 if (value > 100000) {
-                                    return Promise.reject('Quantity cannot be greater than 100000');
+                                    return Promise.reject(<FormattedMessage id="product.quantityLimit" />);
                                 }
                                 return Promise.resolve();
                             },
@@ -91,7 +91,7 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
 
                 <Categories />
             </div>
-            <Form.Item label="Status" className="font-medium" name="status">
+            <Form.Item label={<FormattedMessage id="product.status" />} className="font-medium" name="status">
                 <Switch className="w- text-16px font-medium" />
             </Form.Item>
             <ModalImage images={images} handleSetImages={setImages} />
@@ -107,7 +107,10 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
                         },
                     }}
                 >
-                    <Form.Item name="image_url" rules={[{ required: true, message: 'Choose main image' }]}>
+                    <Form.Item
+                        name="image_url"
+                        rules={[{ required: true, message: <FormattedMessage id="product.chooseMainImage" /> }]}
+                    >
                         <Radio.Group buttonStyle="solid" defaultValue={initialValues?.image_url}>
                             <div className="grid grid-cols-12 gap-x-6 mt-10">
                                 {images.images.map((image: any, index: number) => (
@@ -138,7 +141,9 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
             )}
 
             <div className="my-20">
-                <h5 className="text-[14px] font-medium color-primary mb-5">Short Description</h5>
+                <h5 className="text-[14px] font-medium color-primary mb-5">
+                    <FormattedMessage id="product.shortDescription" />
+                </h5>
                 <EditorComponent
                     initialValues={initialValues?.description}
                     setDescription={(content: string) => {
@@ -148,7 +153,9 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
             </div>
 
             <div>
-                <h5 className="text-[14px] font-medium color-primary mb-5">Description</h5>
+                <h5 className="text-[14px] font-medium color-primary mb-5">
+                    <FormattedMessage id="product.description" />
+                </h5>
 
                 <EditorComponent
                     initialValues={initialValues?.short_description}

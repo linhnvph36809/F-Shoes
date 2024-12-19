@@ -5,6 +5,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { IImage } from '../../../../interfaces/IImage';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import PaginationComponent from '../../../../components/Pagination';
+import { FormattedMessage } from 'react-intl';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -52,7 +53,9 @@ const UploadImage = ({
     const uploadButton = (
         <button style={{ border: 0, background: 'none' }} type="button">
             <PlusOutlined />
-            <div style={{ marginTop: 8 }}>Upload</div>
+            <div style={{ marginTop: 8 }}>
+                <FormattedMessage id="Upload Image" />
+            </div>
         </button>
     );
 

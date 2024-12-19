@@ -1,71 +1,134 @@
 import { useEffect, useState } from 'react';
-import { Form } from 'antd';
-import ButtonPrimary from '../../../../components/Button';
-import InputPrimary from '../../../../components/Input';
-
+import { Button, Form, Switch, Upload } from 'antd';
+import InputPrimary from '../../components/Forms/InputPrimary';
+import { showMessageAdmin } from '../../../../utils/messages';
+import { UploadOutlined } from '@ant-design/icons';
+import SelectPrimary from '../../components/Forms/SelectPrimary';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
+import { API_GROUP, KEY_GROUP } from '../../../../hooks/useGroup';
+import ButtonSubmit from '../../components/Button/ButtonSubmit';
 interface FormUserProps {
     onFinish: (values: any) => void;
     initialValues?: any;
+    loading: boolean;
 }
 
-const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues }) => {
+const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading }) => {
     const [form] = Form.useForm();
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (initialValues) {
-            form.setFieldsValue(initialValues); // Load initial values when editing
-            if (initialValues.avatar_url) {
-                setPreviewUrl(initialValues.avatar_url);
-            }
-        }
-    }, [initialValues, form]);
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            setSelectedImage(file);
-            setPreviewUrl(URL.createObjectURL(file));
-        }
-    };
+    const { data, isFetching } = useQueryConfig([KEY_GROUP, 'all-groups'], API_GROUP);
+    const groups = data?.data || [];
+    const [imageFile, setImageFile] = useState(null);
+    console.log(initialValues);
 
     const handleSubmit = async (values: any) => {
         const formData = new FormData();
-        formData.append('name', values.name);
+        formData.append('name', `${values.given_name} ${values.family_name}`);
         formData.append('email', values.email);
         formData.append('password', values.password);
+        formData.append('group_id', values.group_id);
+        formData.append('is_admin', values.is_admin);
+        formData.append('birth_date', values.birth_date);
 
-        if (selectedImage) {
-            formData.append('avatar_url', selectedImage);
+        if (imageFile) {
+            formData.append('avatar', imageFile);
         }
 
         onFinish(formData);
     };
 
+    const handleImageUpload = (file: any) => {
+        const isImage = file.type.startsWith('image/');
+        if (!isImage) {
+            showMessageAdmin('You can only upload image files!', '', 'warning');
+        } else {
+            setImageFile(file);
+        }
+        return false;
+    };
+
+    useEffect(() => {
+        form.setFieldsValue({
+            email: initialValues?.email,
+            birth_date: initialValues?.birth_date,
+            given_name: initialValues?.name,
+            family_name: initialValues?.name,
+            group_id: initialValues?.group_id,
+            is_admin: initialValues?.is_admin,
+        });
+    }, [form, initialValues]);
+
     return (
         <Form form={form} initialValues={initialValues} onFinish={handleSubmit}>
             <div className="grid grid-cols-2 gap-5">
-                <Form.Item name="name" rules={[{ required: true, message: 'Please enter name' }]}>
-                    <InputPrimary placeholder="Name" />
-                </Form.Item>
-                <Form.Item name="email" rules={[{ required: true, message: 'Please enter Email' }]}>
-                    <InputPrimary placeholder="Email" />
-                </Form.Item>
-                <Form.Item name="password" rules={[{ required: true, message: 'Please enter Password' }]}>
-                    <InputPrimary placeholder="Password" />
-                </Form.Item>
-                <Form.Item>
-                    <input type="file" accept="image/*" onChange={handleFileChange} />
-                    {previewUrl && (
-                        <img src={previewUrl} alt="Avatar Preview" className="mt-2 w-20 h-20 object-cover" />
-                    )}
-                </Form.Item>
+                <InputPrimary
+                    name="given_name"
+                    label="Given Name"
+                    placeholder="Enter Given Name"
+                    rules={[{ required: true, message: 'Please enter given name' }]}
+                ></InputPrimary>
+                <InputPrimary
+                    name="family_name"
+                    label="Family Name"
+                    placeholder="Enter Family Name"
+                    rules={[{ required: true, message: 'Please enter family name' }]}
+                ></InputPrimary>
+                <InputPrimary
+                    name="email"
+type="email"
+                    label="Email"
+                    placeholder="Enter Email"
+                    rules={[
+                        { required: true, message: 'Please enter Email' },
+                        {
+                            type: 'email',
+                            message: 'Please enter a valid email address!',
+                        },
+                    ]}
+                ></InputPrimary>
+
+                <InputPrimary
+                    label="Password"
+                    type="password"
+                    name="password"
+                    placeholder="Enter Password"
+                    rules={[
+                        { required: true, message: 'Please enter Password' },
+                        { min: 8, message: 'Password must be at least 8 characters!' },
+                    ]}
+                ></InputPrimary>
+                <InputPrimary name="birth_date" label="Date Of Birth" type="date"></InputPrimary>
+                <SelectPrimary
+                    name="group_id"
+                    rules={[{ required: true, message: 'Please enter group' }]}
+                    allowClear
+                    label="Group"
+                    placeholder="Choose groups"
+                    optionFilterProp="group_name"
+                    fieldNames={{ label: 'group_name', value: 'id' }}
+                    key={'value'}
+                    options={groups}
+                    loading={isFetching}
+                />
             </div>
+            <Form.Item label="Is Admin" className="font-medium" name="is_admin">
+                <Switch className="w- text-16px font-medium" />
+            </Form.Item>
+
+            {initialValues?.avatar_url && !imageFile ? (
+                <div>
+                    <img src={initialValues.avatar_url} className="w-[80px] mb-10" alt="" />
+                </div>
+            ) : (
+                ''
+            )}
+
+            <Form.Item className="font-medium" name="theme">
+                <Upload name="image" listType="picture" accept="image/*" beforeUpload={handleImageUpload}>
+                    <Button icon={<UploadOutlined />}>Upload Image</Button>
+                </Upload>
+            </Form.Item>
             <div className="text-end mt-10">
-                <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
-                    Submit
-                </ButtonPrimary>
+                <ButtonSubmit loading={loading} />
             </div>
         </Form>
     );

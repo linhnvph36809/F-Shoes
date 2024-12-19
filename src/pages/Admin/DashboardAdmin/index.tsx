@@ -336,7 +336,9 @@ const AdminDashboard = () => {
                 <BestSellingProduct data={productBestSellingData} />
             </div>
             <div>
-                <h3 className="text-[18px] font-bold m-4 border-b-[1px]"><FormattedMessage id="admin.Annual_Revenue_Statistics_Chart" /></h3>
+                <h3 className="text-[18px] font-bold m-4 border-b-[1px]">
+                    <FormattedMessage id="admin.Annual_Revenue_Statistics_Chart" />
+                </h3>
                 <div className="flex justify-end my-4">
                     <DatePicker
                         placeholder="Select a year"

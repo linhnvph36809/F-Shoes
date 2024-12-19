@@ -1,19 +1,20 @@
 import { formatPrice } from '../../../utils';
 import { STAR } from '../../../constants/icons';
+import { FormattedMessage } from 'react-intl';
 
 export const columnsAttribute = [
     {
-        title: 'ID',
+        title: <FormattedMessage id="admin.id" />,
         dataIndex: 'id',
         key: '1',
     },
     {
-        title: 'Product Name',
+        title: <FormattedMessage id="admin.name" />,
         dataIndex: 'name',
         key: '2',
     },
     {
-        title: 'Image',
+        title: <FormattedMessage id="admin.image" />,
         dataIndex: 'image_url',
         key: '3',
         render: (image_url: string) => {
@@ -25,23 +26,23 @@ export const columnsAttribute = [
         },
     },
     {
-        title: 'Price',
+        title: <FormattedMessage id="admin.price" />,
         dataIndex: 'price',
         key: '5',
         render: (price: number) => <p className="text-[15px] font-medium">{formatPrice(price)}đ</p>,
     },
     {
-        title: 'Quantity Sold',
+        title: <FormattedMessage id="admin.qty_sold" />,
         dataIndex: 'qty_sold',
         key: '5',
     },
     {
-        title: 'Stock Quantity',
+        title: <FormattedMessage id="admin.stock_qty" />,
         dataIndex: 'stock_qty',
         key: '6',
     },
     {
-        title: 'Rating',
+        title: <FormattedMessage id="Rating" />,
         dataIndex: 'rating',
         key: '7',
         render: (rating: string) => (

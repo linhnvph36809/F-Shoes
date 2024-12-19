@@ -20,10 +20,12 @@ import { formatPrice } from '../../../../utils';
 import SelectPrimary from '../../components/Forms/SelectPrimary';
 
 import ButtonDelete from '../../components/Button/ButtonDelete';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const API_ATTRIBUTE_GET = '/api/get/attribute/values/product/';
 
 const AddVariant = () => {
+    const intl = useIntl();
     const { slug } = useParams();
     let id: string | number | undefined;
     if (slug) {
@@ -34,7 +36,7 @@ const AddVariant = () => {
     const [variantsChanges, setVariantsChanges] = useState<IAttribute[]>([]);
     const [variantId, setVariantId] = useState<number[]>([]);
     const [listAttribute, setListAttribute] = useState<any>([]);
-    const { loading:loadingPostAttribute, postAttribute } = useAttribute();
+    const { loading: loadingPostAttribute, postAttribute } = useAttribute();
     const [datas, setDatas] = useState<any>([]);
     const [errors, setError] = useState<any>([]);
     const { data: attributeByIds, refetch } = useQueryConfig('attribute', API_ATTRIBUTE_GET + id);
@@ -51,15 +53,14 @@ const AddVariant = () => {
             });
         }
     };
-    
+
     const handleChange = useCallback((listId: number[]) => {
         setVariantId([...listId]);
         setVariantsChanges((preVariantChanges) =>
             preVariantChanges.filter((preVariantChange) => listId.includes(+preVariantChange.id)),
         );
     }, []);
-    
-    
+
     const handleChangeItem = useCallback(
         (values: number[], id: number) => {
             const attribute = attributeByIds?.data?.find((attribute: any) => attribute.id === id);
@@ -125,196 +126,200 @@ const AddVariant = () => {
         });
         setListAttribute(variantCombine);
     }, [variantsChanges]);
-   
-    const deleteVariations = (i:any) => {
-        showMessageActive('Are you sure you want to delete?','','warning',() => {
+
+    const deleteVariations = (i: any) => {
+        showMessageActive('Are you sure you want to delete?', '', 'warning', () => {
             const listOriginAttribute = JSON.parse(JSON.stringify([...listAttribute]));
-            listOriginAttribute.splice(i,1);
+            listOriginAttribute.splice(i, 1);
             setListAttribute([...listOriginAttribute]);
             const listOriginData = JSON.parse(JSON.stringify([...datas]));
-            listOriginData.splice(i,1);
-            
+            listOriginData.splice(i, 1);
+
             setDatas([...listOriginData]);
-            console.log(listOriginData,'data');
-            
-        })
-        
-    }
+            console.log(listOriginData, 'data');
+        });
+    };
     return (
         <>
-                <section>
-                    <ButtonBack to={PATH_ADMIN.LIST_PRODUCT} />
-                    <Heading>Add Variant</Heading>
-                    <div className="grid grid-cols-2 gap-x-10">
+            <section>
+                <ButtonBack to={PATH_ADMIN.LIST_PRODUCT} />
+                <Heading>
+                    <FormattedMessage id="Add_Variant" />
+                </Heading>
+                <div className="grid grid-cols-2 gap-x-10">
+                    <div>
+                        <SelectPrimary
+                            mode="multiple"
+                            allowClear
+                            className="text-20px font-medium w-full"
+                            style={{
+                                height: '64px',
+                            }}
+                            placeholder={intl.formatMessage({ id: 'Please_select_attributes' })}
+                            onChange={handleChange}
+                            optionFilterProp="name"
+                            fieldNames={{ label: 'name', value: 'id' }}
+                            options={attributeByIds?.data}
+                            value={variantId}
+                        />
                         <div>
-                            <SelectPrimary
-                                mode="multiple"
-                                allowClear
-                                className="text-20px font-medium w-full"
-                                style={{
-                                    height: '64px',
-                                }}
-                                placeholder="Please select attributes"
-                                onChange={handleChange}
-                                optionFilterProp="name"
-                                fieldNames={{ label: 'name', value: 'id' }}
-                                options={attributeByIds?.data}
-                                value={variantId}
-                            />
-                            <div>
-                                {variants?.map((variant) => (
-                                    <div className="p-5 bg-gray-200 rounded-lg mb-10 relative" key={variant.id}>
-                                        <h3 className="color-primary text-16px font-medium mb-5 uppercase">
-                                            {variant.name}
-                                        </h3>
-                                        <div>
-                                            <ConfigProvider
-                                                theme={{
-                                                    components: {
-                                                        Select: {
-                                                            multipleItemHeight: 30,
-                                                        },
+                            {variants?.map((variant) => (
+                                <div className="p-5 bg-gray-200 rounded-lg mb-10 relative" key={variant.id}>
+                                    <h3 className="color-primary text-16px font-medium mb-5 uppercase">
+                                        {variant.name}
+                                    </h3>
+                                    <div>
+                                        <ConfigProvider
+                                            theme={{
+                                                components: {
+                                                    Select: {
+                                                        multipleItemHeight: 30,
                                                     },
-                                                }}
-                                            >
-                                                <SelectPrimary
-                                                    mode="multiple"
-                                                    allowClear
-                                                    className="text-20px font-medium w-full sm:h-[35px] md:h-[40px] border-1 border-[#111111] mb-5"
-                                                    placeholder="Please select variant"
-                                                    optionFilterProp="value"
-                                                    fieldNames={{ label: 'value', value: 'id' }}
-                                                    options={variant.values}
-                                                    onChange={(value: any) => handleChangeItem(value, +variant.id)}
-                                                />
-                                            </ConfigProvider>
-                                        </div>
+                                                },
+                                            }}
+                                        >
+                                            <SelectPrimary
+                                                mode="multiple"
+                                                allowClear
+                                                className="text-20px font-medium w-full sm:h-[35px] md:h-[40px] border-1 border-[#111111] mb-5"
+                                                placeholder={intl.formatMessage({ id: 'Please select variant' })}
+                                                optionFilterProp="value"
+                                                fieldNames={{ label: 'value', value: 'id' }}
+                                                options={variant.values}
+                                                onChange={(value: any) => handleChangeItem(value, +variant.id)}
+                                            />
+                                        </ConfigProvider>
                                     </div>
-                                ))}
-                            </div>
-                            <div className="mt-10">
-                                <FormAttribute 
-                                    loading={loadingPostAttribute}
-                                    handlePostAttributes={handlePostAttributes}
-                                    setVariantId={setVariantId}
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <ConfigProvider
-                                theme={{
-                                    components: {
-                                        Table: {
-                                            headerBg: '#e5e7eb',
-                                            headerBorderRadius: 10,
-                                            fontSize: 15,
-                                            padding: 20,
-                                        },
-                                    },
-                                }}
-                            >
-                                <Table
-                                    pagination={false}
-                                    className="font-medium"
-                                    expandable={{
-                                        expandedRowRender: (record: any) => {
-                                            const values = datas[record.index];
-                                            return (
-                                                <>
-                                                    {values ? (
-                                                        <div>
-                                                            <div className="flex items-center gap-x-5 pb-5 border-b">
-                                                                <p className="text-[14px] color-primary">
-                                                                    Variant Name :{' '}
-                                                                </p>
-                                                                <p>{record.variant_name}</p>
-                                                            </div>
-                                                            <div className="flex items-center gap-x-5 py-5 border-b">
-                                                                <p className="text-[14px] color-primary">Price : </p>
-                                                                <p>{formatPrice(values.price)}đ</p>
-                                                            </div>
-                                                            <div className="flex items-center gap-x-5 py-5 border-b">
-                                                                <p className="text-[14px] color-primary">SKU : </p>
-                                                                <p>{values.sku}</p>
-                                                            </div>
-                                                            <div className="flex items-center gap-x-5 py-5 border-b">
-                                                                <p className="text-[14px] color-primary">Images : </p>
-                                                                <div className="grid grid-cols-6 gap-5">
-                                                                    {images[record.index].map((image: any) => (
-                                                                        <img
-                                                                            src={image.url}
-                                                                            alt=""
-                                                                            className="w-[80px] object-cover h-[80px] border"
-                                                                        />
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="text-center color-gray text-[14px]">Empty</div>
-                                                    )}
-                                                </>
-                                            );
-                                        },
-
-                                        rowExpandable: (record) => record.id !== '',
-                                    }}
-                                    rowKey={(record) => `table2-${record.id}`}
-                                    columns={[
-                                        {
-                                            title: 'Variant Name ',
-                                            dataIndex: 'variant_name',
-                                            key: '2',
-                                        },
-                                        {
-                                            title: 'Action',
-                                            key: '3',
-                                            render: (_, { id }: any, index: number) => {
-                                                return (
-                                                    <div className="flex items-center gap-x-4">
-                                                        <ModalFormVariant
-                                                            index={index}
-                                                            ids={id}
-                                                            setDatas={setDatas}
-                                                            setError={setError}
-                                                            setImages={setImages}
-                                                        />
-                                                        {errors[index] === null ? (
-                                                            <span className="text-[12px] text-red-500">
-                                                                Please enter a valid variant
-                                                            </span>
-                                                        ) : (
-                                                            ''
-                                                        )}
-                                                        <ButtonDelete onClick={() => deleteVariations(index)
-                                                        } />
-                                                    </div>
-                                                );
-                                            },
-                                        },
-                                    ]}
-                                    dataSource={listAttribute.map((attribute: any, index: number) => ({
-                                        id: attribute.ids,
-                                        variant_name: attribute.values.join('-'),
-                                        index,
-                                    }))}
-                                />
-
-                                <div className="text-end mt-10">
-                                    <ButtonSubmit
-                                        loading={loadingPostVariant}
-                                        onClick={
-                                            listAttribute.length
-                                                ? () => onFinish()
-                                                : () => showMessageClient('Please choose variant', '', 'warning')
-                                        }
-                                    />
                                 </div>
-                            </ConfigProvider>
+                            ))}
+                        </div>
+                        <div className="mt-10">
+                            <FormAttribute
+                                loading={loadingPostAttribute}
+                                handlePostAttributes={handlePostAttributes}
+                                setVariantId={setVariantId}
+                            />
                         </div>
                     </div>
-                </section>
-           
+                    <div>
+                        <ConfigProvider
+                            theme={{
+                                components: {
+                                    Table: {
+                                        headerBg: '#e5e7eb',
+                                        headerBorderRadius: 10,
+                                        fontSize: 15,
+                                        padding: 20,
+                                    },
+                                },
+                            }}
+                        >
+                            <Table
+                                pagination={false}
+                                className="font-medium"
+                                expandable={{
+                                    expandedRowRender: (record: any) => {
+                                        const values = datas[record.index];
+                                        return (
+                                            <>
+                                                {values ? (
+                                                    <div>
+                                                        <div className="flex items-center gap-x-5 pb-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="Variant Name" /> :{' '}
+                                                            </p>
+                                                            <p>{record.variant_name}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="admin.price" /> :{' '}
+                                                            </p>
+                                                            <p>{formatPrice(values.price)}đ</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">SKU : </p>
+                                                            <p>{values.sku}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="admin.image" /> :{' '}
+                                                            </p>
+                                                            <div className="grid grid-cols-6 gap-5">
+                                                                {images[record.index].map((image: any) => (
+                                                                    <img
+                                                                        src={image.url}
+                                                                        alt=""
+                                                                        className="w-[80px] object-cover h-[80px] border"
+                                                                    />
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <div className="text-center color-gray text-[14px]">
+                                                        <FormattedMessage id="Empty" />
+                                                    </div>
+                                                )}
+                                            </>
+                                        );
+                                    },
+
+                                    rowExpandable: (record) => record.id !== '',
+                                }}
+                                rowKey={(record) => `table2-${record.id}`}
+                                columns={[
+                                    {
+                                        title: <FormattedMessage id="Variant Name" />,
+                                        dataIndex: 'variant_name',
+                                        key: '2',
+                                    },
+                                    {
+                                        title: <FormattedMessage id="category.table.action" />,
+                                        key: '3',
+                                        render: (_, { id }: any, index: number) => {
+                                            return (
+                                                <div className="flex items-center gap-x-4">
+                                                    <ModalFormVariant
+                                                        index={index}
+                                                        ids={id}
+                                                        setDatas={setDatas}
+                                                        setError={setError}
+                                                        setImages={setImages}
+                                                    />
+                                                    <ButtonDelete onClick={() => deleteVariations(index)} />
+                                                    {errors[index] === null ? (
+                                                        <div className="text-[12px] text-red-500">
+                                                            <FormattedMessage id="Please enter a valid variant" />
+                                                        </div>
+                                                    ) : (
+                                                        ''
+                                                    )}
+                                                </div>
+                                            );
+                                        },
+                                    },
+                                ]}
+                                dataSource={listAttribute.map((attribute: any, index: number) => ({
+                                    id: attribute.ids,
+                                    variant_name: attribute.values.join('-'),
+                                    index,
+                                }))}
+                            />
+
+                            <div className="text-end mt-10">
+                                <ButtonSubmit
+                                    loading={loadingPostVariant}
+                                    onClick={
+                                        listAttribute.length
+                                            ? () => onFinish()
+                                            : () => showMessageClient('Please choose variant', '', 'warning')
+                                    }
+                                />
+                            </div>
+                        </ConfigProvider>
+                    </div>
+                </div>
+            </section>
         </>
     );
 };

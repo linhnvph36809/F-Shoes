@@ -67,7 +67,7 @@ const usePost = () => {
     const patchPost = async (id: string | number, post: any) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('post', API_POST + `/${id}`, post, {
+            tokenManagerInstance('post', API_POST + `/${id}`, post, {
                 headers: { 'Content-Type': 'application/form-data' },
             });
             navigate('/admin/posts');

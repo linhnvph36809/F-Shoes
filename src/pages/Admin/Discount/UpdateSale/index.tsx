@@ -1,7 +1,7 @@
 import { Input, Button, DatePicker, Table, Switch, Flex, Radio } from 'antd';
 import Heading from '../../components/Heading';
 import { useEffect, useState } from 'react';
-import "./style.scss";
+import './style.scss';
 import { IProduct } from '../../../../interfaces/IProduct.ts';
 import { IVariation } from '../../../../interfaces/IVariation.ts';
 import useQueryConfig from '../../../../hooks/useQueryConfig.tsx';
@@ -9,13 +9,14 @@ import { showMessageActive, showMessageAdmin, showMessageClient } from '../../..
 import useSale, { QUERY_KEY } from '../../../../hooks/useSale.tsx';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall.tsx';
 import { BadgeCentIcon, CircleX, Filter } from 'lucide-react';
-import {  useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { ISale } from '../../../../interfaces/ISale.ts';
 import LoadingPage from '../../../../components/Loading/LoadingPage.tsx';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const UpdateSale = () => {
-    
+    const intl = useIntl();
     const { id } = useParams();
     const { data: dataCachingSale,isFetching:loadingSale } = useQueryConfig(
         [QUERY_KEY, `sale/data/update/${id}`],
@@ -36,7 +37,6 @@ const UpdateSale = () => {
     const [arrSelectedVariationsOfMultipleSelectedProduct, setArrSelectedVariationsOfMultipleSelectedProduct] =
         useState<IVariation[]>([]);
     const onSelectSelectedSimpleProduct = (product: IProduct, checked: boolean) => {
-        
         if (checked) {
             const filtered = arrSelectOneSelectedProduct.filter((item) => item.id !== product.id);
             setArrSelectOneSelectedProduct([...filtered, product]);
@@ -69,8 +69,8 @@ const UpdateSale = () => {
         setArrSelectedVariationsOfMultipleSelectedProduct([...variations]);
     };
     const onDeleteSimpleProduct = (record?: IProduct) => {
-        if(saleEndDate < timeNow){
-            showMessageClient('This sale has expired, you can not modifier anymore.','','warning');
+        if (saleEndDate < timeNow) {
+            showMessageClient('This sale has expired, you can not modifier anymore.', '', 'warning');
             return;
         }
         showMessageActive('Delete', 'Are you sure you want to delete', 'warning', () => {
@@ -83,8 +83,8 @@ const UpdateSale = () => {
         });
     };
     const onFilterSimpleProduct = (record?: IProduct) => {
-        if(saleStartDate < timeNow){
-            showMessageClient('This sale has expired, you can not modifier anymore.','','warning');
+        if (saleStartDate < timeNow) {
+            showMessageClient('This sale has expired, you can not modifier anymore.', '', 'warning');
             return;
         }
         showMessageActive(
@@ -101,8 +101,8 @@ const UpdateSale = () => {
         );
     };
     const onDeleteVariation = (record?: IVariation) => {
-        if(saleStartDate < timeNow){
-            showMessageClient('This sale has expired, you can not modifier anymore.','','warning');
+        if (saleStartDate < timeNow) {
+            showMessageClient('This sale has expired, you can not modifier anymore.', '', 'warning');
             return;
         }
         showMessageActive('Delete', 'Are you sure you want to delete', 'warning', () => {
@@ -118,8 +118,8 @@ const UpdateSale = () => {
         });
     };
     const onFilterVariation = (record?: IVariation) => {
-        if(saleEndDate < timeNow){
-            showMessageClient('This sale has expired, you can not modifier anymore.','','warning');
+        if (saleEndDate < timeNow) {
+            showMessageClient('This sale has expired, you can not modifier anymore.', '', 'warning');
             return;
         }
         showMessageActive(
@@ -138,38 +138,41 @@ const UpdateSale = () => {
                 setDataSourceVariation([...filtered]);
             },
         );
-    }
+    };
     console.log(dataSourceVariation);
-    const [searchKeyVariation,setSearchKeyVariation] = useState('');
-    const onSearchVariation = (e:any) => {
+    const [searchKeyVariation, setSearchKeyVariation] = useState('');
+    const onSearchVariation = (e: any) => {
         setSearchKeyVariation(e.target.value);
-    }
-    const [searchKeyProduct,setSearchKeyProduct] = useState('');
-    const onSearchProduct = (e:any) => {
+    };
+    const [searchKeyProduct, setSearchKeyProduct] = useState('');
+    const onSearchProduct = (e: any) => {
         setSearchKeyProduct(e.target.value);
-    }
-    
+    };
+
     const columnsVariations = [
         {
-            title: 'ID',
+            title: <FormattedMessage id="admin.id" />,
             dataIndex: 'id',
             key: 'id',
             filteredValue: [searchKeyVariation],
-            onFilter: (value:any, record:IVariation) => {
-               if(value){
-                return record.name.toLowerCase().includes(value.toLowerCase()) || record.id.toString().includes(value.toLowerCase());
-               }
+            onFilter: (value: any, record: IVariation) => {
+                if (value) {
+                    return (
+                        record.name.toLowerCase().includes(value.toLowerCase()) ||
+                        record.id.toString().includes(value.toLowerCase())
+                    );
+                }
                 return true;
-            }
+            },
         },
         {
-            title: 'Image',
+            title: <FormattedMessage id="admin.image" />,
             dataIndex: 'image_url',
             key: 'image_url',
             render: (image_url: string) => <img src={image_url} alt="product" style={{ width: 50, height: 50 }} />,
         },
         {
-            title: 'Name',
+            title: <FormattedMessage id="admin.name" />,
             dataIndex: 'name',
             key: 'name',
             render: (name: string) => {
@@ -177,18 +180,17 @@ const UpdateSale = () => {
             },
         },
         {
-            title: 'Price',
+            title: <FormattedMessage id="admin.price" />,
             dataIndex: 'price',
             key: 'price',
         },
         {
-            title: 'Quantity Sold',
+            title: <FormattedMessage id="body.Detail.Quantity" />,
             dataIndex: 'qty_sale',
             key: 'qty_sale',
-           
         },
         {
-            title: 'Action',
+            title: <FormattedMessage id="category.table.action" />,
             dataIndex: 'action',
             key: 'action',
             render: (_: any, record: any) => {
@@ -205,29 +207,31 @@ const UpdateSale = () => {
             },
         },
     ];
-    
 
     const columnsProduct = [
         {
-            title: 'ID',
+            title: <FormattedMessage id="admin.id" />,
             dataIndex: 'id',
             key: 'id',
             filteredValue: [searchKeyProduct],
-            onFilter: (value:any, record:IVariation) => {
-               if(value){
-                return record.name.toLowerCase().includes(value.toLowerCase()) || record.id.toString().includes(value.toLowerCase());
-               }
+            onFilter: (value: any, record: IVariation) => {
+                if (value) {
+                    return (
+                        record.name.toLowerCase().includes(value.toLowerCase()) ||
+                        record.id.toString().includes(value.toLowerCase())
+                    );
+                }
                 return true;
-            }
+            },
         },
         {
-            title: 'Image',
+            title: <FormattedMessage id="admin.image" />,
             dataIndex: 'image_url',
             key: 'image_url',
             render: (image_url: string) => <img src={image_url} alt="product" style={{ width: 50, height: 50 }} />,
         },
         {
-            title: 'Name',
+            title: <FormattedMessage id="admin.name" />,
             dataIndex: 'name',
             key: 'name',
             render: (name: string) => {
@@ -235,17 +239,17 @@ const UpdateSale = () => {
             },
         },
         {
-            title: 'Price',
+            title: <FormattedMessage id="admin.price" />,
             dataIndex: 'price',
             key: 'price',
         },
         {
-            title: 'Quantity Sold',
+            title: <FormattedMessage id="body.Detail.Quantity" />,
             dataIndex: 'qty_sale',
             key: 'qty_sale',
         },
         {
-            title: 'Action',
+            title: <FormattedMessage id="category.table.action" />,
             dataIndex: 'action',
             key: 'action',
             render: (_: any, record: any) => {
@@ -317,8 +321,6 @@ const UpdateSale = () => {
         setDataSale({ ...dataSale, name: e.target.value });
     };
     const onChangeValuePercent = (e: any) => {
-        
-        
         if (e.target.value === '') {
             setError({ ...error, value: 'Value is required' });
         } else if (parseInt(e.target.value) > 100) {
@@ -346,7 +348,7 @@ const UpdateSale = () => {
         setDataSale({ ...dataSale, end_date: date.format('YYYY-MM-DD HH:mm:ss') });
     };
     const onChangeType = (type: 'percent' | 'fixed') => {
-        if(saleEndDate < timeNow){ 
+        if (saleEndDate < timeNow) {
             return;
         }
         if (type === theSale?.type) {
@@ -380,8 +382,6 @@ const UpdateSale = () => {
             });
         }
         if (!hasError) {
-            
-            
             if (id) {
                 await updateSale(id, dataSale);
             } else {
@@ -389,7 +389,7 @@ const UpdateSale = () => {
             }
         }
     };
-    
+
     const optionsType = [
         { label: 'Percent', value: 'percent' },
         { label: 'Fixed', value: 'fixed' },
@@ -401,15 +401,27 @@ const UpdateSale = () => {
         <div className="bg-slate-50 rounded-lg p-8">
             <div className="">
                 <div>
-                    <Heading>Update Sale</Heading>
+                    <Heading>
+                        <FormattedMessage id="Update Sale" />
+                    </Heading>
                     <BadgeCentIcon />
                     <div className="form-row my-4">
-                        <span className="text-xl my-4">Name</span>
-                        <Input value={dataSale.name} onChange={onChangeName} placeholder="Enter the sale name" />
+                        <span className="text-xl my-4">
+                            {' '}
+                            <FormattedMessage id="admin.name" />
+                        </span>
+                        <Input
+                            value={dataSale.name}
+                            onChange={onChangeName}
+                            placeholder={intl.formatMessage({ id: 'Enter_the_sale_name' })}
+                        />
                         {/* {error.name ? <span className='text-red-600'>{error.name}</span> : ''} */}
                     </div>
                     <div className="form-row my-4">
-                        <span className="text-xl mb-4">Type</span>
+                        <span className="text-xl mb-4">
+                            {' '}
+                            <FormattedMessage id="admin.type" />
+                        </span>
                         <Flex
                             aria-disabled={saleStartDate < timeNow}
                             onChange={(e: any) => onChangeType(e.target.value)}
@@ -427,7 +439,9 @@ const UpdateSale = () => {
                         </Flex>
                     </div>
                     <div className="form-row my-4">
-                        <span className="text-xl my-4">Value</span>
+                        <span className="text-xl my-4">
+                            <FormattedMessage id="admin.value" />
+                        </span>
                         {dataSale.type === 'fixed' ? (
                             <Input
                                 disabled={saleStartDate < timeNow}
@@ -435,7 +449,7 @@ const UpdateSale = () => {
                                 min={0}
                                 type="number"
                                 onChange={onChangeValueFixed}
-                                placeholder="Enter the discount fixed..."
+                                placeholder={intl.formatMessage({ id: 'Enter the discount fixed...' })}
                             />
                         ) : (
                             <Input
@@ -446,14 +460,17 @@ const UpdateSale = () => {
                                 min={0}
                                 onChange={onChangeValuePercent}
                                 suffix="%"
-                                placeholder="Enter the discount percentage..."
+                                placeholder={intl.formatMessage({ id: 'Enter the discount percentage...' })}
                             />
                         )}
 
                         {error.value ? <span className="text-red-600">{error.value}</span> : ''}
                     </div>
                     <div className="form-row my-4">
-                        <span className="text-xl my-4">Start date</span>
+                        <span className="text-xl my-4">
+                            {' '}
+                            <FormattedMessage id="admin.startDate" />
+                        </span>
                         <div>
                             <DatePicker
                                 disabled={timeNow > saleStartDate}
@@ -467,7 +484,10 @@ const UpdateSale = () => {
                         {error.start_date ? <span className="text-red-600">{error.start_date}</span> : ''}
                     </div>
                     <div className="form-row my-4">
-                        <span className="text-xl my-4">End date</span>
+                        <span className="text-xl my-4">
+                            {' '}
+                            <FormattedMessage id="admin.endDate" />
+                        </span>
                         <div>
                             <DatePicker
                                 disabled={saleEndDate < timeNow}
@@ -481,7 +501,9 @@ const UpdateSale = () => {
                         {error.end_date ? <span className="text-red-600">{error.end_date}</span> : ''}
                     </div>
                     <div>
-                        <span className="text-xl my-4 block">Active</span>
+                        <span className="text-xl my-4 block">
+                            <FormattedMessage id="admin.active" />
+                        </span>
                         <Switch
                             checked={dataSale.is_active}
                             onChange={() => setDataSale({ ...dataSale, is_active: !dataSale.is_active })}
@@ -493,17 +515,22 @@ const UpdateSale = () => {
             <div className="product-list">
                 <div className="my-8">
                     <div>
-                        <Heading>Simple Product</Heading>
+                        <Heading>
+                            {' '}
+                            <FormattedMessage id="Simple Product" />
+                        </Heading>
                         <div>
-                            <Input onChange={onSearchProduct} placeholder="Search a product name or id" />
+                            <Input
+                                onChange={onSearchProduct}
+                                placeholder={intl.formatMessage({ id: 'Search a product name or id' })}
+                            />
                         </div>
                         <Table
                             virtual
                             expandable={{
                                 expandedRowRender: (record) => <p>{record.name}</p>,
-                                rowExpandable: (record) => record.name !== '', 
+                                rowExpandable: (record) => record.name !== '',
                                 columnWidth: 50,
-                               
                             }}
                             rowKey={(record) => `table-update-${record.id}`}
                             rowSelection={{
@@ -519,37 +546,41 @@ const UpdateSale = () => {
                             pagination={{ pageSize: 5 }}
                         />
                     </div>
-                    
                 </div>
                 <div>
-                        <Heading>Variation Product</Heading>
-                        <div>
-                            <Input onChange={onSearchVariation} placeholder="Search a variation name or id" />
-                        </div>
-                        <Table
-                            virtual
-                            tableLayout="fixed"
-                            expandable={{
-                                expandedRowRender: (record) => <p>{record.name}</p>,
-                                rowExpandable: (record) => record.name !== '', 
-                                columnWidth: 50,
-                               
-                            }}
-                            rowKey={(record) => `table3-${record.id}`}
-                            rowSelection={{
-                                type: 'checkbox',
-                                selections: false,
-                                onSelect: (record, e) => onSelectSelectedVariation(record, e),
-                                onSelectAll: (selected: boolean, records: IVariation[]) =>
-                                    onSelectMultipleSelectedVariation(selected, records),
-                               
-                                columnWidth: 50,
-                            }}
-                            dataSource={dataSourceVariation}
-                            columns={columnsVariations}
-                            pagination={{ pageSize: 5 }}
+                    <Heading>
+                        {' '}
+                        <FormattedMessage id="Variation Product" />
+                    </Heading>
+                    <div>
+                        <Input
+                            onChange={onSearchVariation}
+                            placeholder={intl.formatMessage({ id: 'Search a product name or id' })}
                         />
                     </div>
+                    <Table
+                        virtual
+                        tableLayout="fixed"
+                        expandable={{
+                            expandedRowRender: (record) => <p>{record.name}</p>,
+                            rowExpandable: (record) => record.name !== '',
+                            columnWidth: 50,
+                        }}
+                        rowKey={(record) => `table3-${record.id}`}
+                        rowSelection={{
+                            type: 'checkbox',
+                            selections: false,
+                            onSelect: (record, e) => onSelectSelectedVariation(record, e),
+                            onSelectAll: (selected: boolean, records: IVariation[]) =>
+                                onSelectMultipleSelectedVariation(selected, records),
+
+                            columnWidth: 50,
+                        }}
+                        dataSource={dataSourceVariation}
+                        columns={columnsVariations}
+                        pagination={{ pageSize: 5 }}
+                    />
+                </div>
             </div>
             <div className="flex items-center justify-center">
                 {loadingUpdateSale ? (
@@ -557,8 +588,8 @@ const UpdateSale = () => {
                         <LoadingSmall />
                     </Button>
                 ) : (
-                    <Button className="h-16 w-32 rounded-3xl " onClick={onSubmit}>
-                        Save Sale
+                    <Button className="h-16 rounded-3xl " onClick={onSubmit}>
+                        <FormattedMessage id="Save Sale" />
                     </Button>
                 )}
             </div>

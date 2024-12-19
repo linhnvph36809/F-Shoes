@@ -6,10 +6,15 @@ import InputPrimary from '../../components/Forms/InputPrimary';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { IImage } from '../../../../interfaces/IImage';
 import PaginationComponent from '../../../../components/Pagination';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) => {
+    const intl = useIntl();
     const [currentPage, setCurrentPage] = useState(1);
-    const { data, isFetching, refetch } = useQueryConfig('image-add-product', `/api/image?paginate=true&page=${currentPage}`);
+    const { data, isFetching, refetch } = useQueryConfig(
+        'image-add-product',
+        `/api/image?paginate=true&page=${currentPage}`,
+    );
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
     const images = data?.data.data || [];
@@ -97,7 +102,11 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) =>
                 <CopyPlus />
             </ButtonEdit>
             <Modal
-                title={<h3 className="text-[25px] font-medidum">Add Value Variant</h3>}
+                title={
+                    <h3 className="text-[25px] font-medidum">
+                        <FormattedMessage id="variant.addValue" />
+                    </h3>
+                }
                 open={isModalOpen}
                 onOk={handleOk}
                 closeIcon={<X onClick={handleClose} />}
@@ -109,7 +118,7 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) =>
                         rounded-lg transition-global hover:text-white"
                             onClick={handleCancel}
                         >
-                            Cancel
+                            <FormattedMessage id="button.cancel" />
                         </button>
                         <button
                             key="ok"
@@ -117,25 +126,25 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) =>
                         hover:opacity-80 transition-global"
                             onClick={handleOk}
                         >
-                            Submit
+                            <FormattedMessage id="button.submit" />
                         </button>
                     </div>,
                 ]}
             >
                 <Form form={form} onFinish={onFinish}>
                     <InputPrimary
-                        label="Price"
-                        placeholder="Enter Price"
+                        label={<FormattedMessage id="admin.price" />}
+                        placeholder={intl.formatMessage({ id: 'product.enterPrice' })}
                         name="price"
                         type="number"
-                        rules={[{ required: true, message: 'Please enter price' }]}
+                        rules={[{ required: true, message: <FormattedMessage id="product.priceRequired" /> }]}
                     />
                     <InputPrimary
-                        label="Stock Quantity"
-                        placeholder="Enter Stock Quantity"
+                        label={<FormattedMessage id="product.stockQuantity" />}
+                        placeholder={intl.formatMessage({ id: 'product.enterStockQuantity' })}
                         name="stock_qty"
                         type="number"
-                        rules={[{ required: true, message: 'Please enter stock quantity' }]}
+                        rules={[{ required: true, message: <FormattedMessage id="product.quantityRequired" /> }]}
                     />
                     <InputPrimary label="SKU" placeholder="Enter SKU" name="sku" />
 
@@ -153,7 +162,7 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) =>
                         ) : (
                             <Form.Item
                                 name="images"
-                                label="Choose Images"
+                                label={<FormattedMessage id="admin.image" />}
                                 className="font-medium"
                                 labelCol={{ span: 24 }}
                             >

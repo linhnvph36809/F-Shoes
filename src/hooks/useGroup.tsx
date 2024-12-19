@@ -5,7 +5,8 @@ import { IGroup } from '../interfaces/IGroup';
 import { useNavigate } from 'react-router-dom';
 import { showMessageAdmin } from '../utils/messages';
 
-const API_GROUP = '/api/groups';
+export const API_GROUP = '/api/groups';
+export const KEY_GROUP = 'key-group';
 
 const useGroups = () => {
     const [groups, setGroups] = useState<IGroup[]>([]);

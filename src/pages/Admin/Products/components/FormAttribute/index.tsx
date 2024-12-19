@@ -4,6 +4,7 @@ import { Plus, X } from 'lucide-react';
 import ButtonPrimary from '../../../../../components/Button';
 import InputPrimary from '../../../components/Forms/InputPrimary';
 import LoadingSmall from '../../../../../components/Loading/LoadingSmall';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const FormAttribute = ({
     handlePostAttributes,
@@ -15,7 +16,7 @@ const FormAttribute = ({
     loading?: boolean;
 }) => {
     const [form] = Form.useForm();
-
+    const intl = useIntl();
     const handleAddSubmit = (name: string, remove: any) => {
         form.validateFields([['inputs', name]])
             .then((values) => {
@@ -44,7 +45,7 @@ const FormAttribute = ({
                                     {...restField}
                                     name={[name, 'attribute']}
                                     fieldKey={[fieldKey, 'attribute']}
-                                    placeholder="Attribute Name"
+                                    placeholder={intl.formatMessage({ id: 'Attribute_name' })}
                                 />
 
                                 <Form.List initialValue={['']} name={[name, 'values']}>
@@ -65,7 +66,9 @@ const FormAttribute = ({
                                                                 name={valueName}
                                                                 fieldKey={valueFieldKey}
                                                                 className="w-full"
-                                                                placeholder="Attribute Value"
+                                                                placeholder={intl.formatMessage({
+                                                                    id: 'Attribute Value',
+                                                                })}
                                                             />
 
                                                             <X
@@ -116,7 +119,7 @@ const FormAttribute = ({
                                                 width="w-[100px]"
                                                 height="h-[50px]"
                                             >
-                                                Save
+                                                <FormattedMessage id="save" />
                                             </ButtonPrimary>
                                         )}
                                     </div>
@@ -130,7 +133,7 @@ const FormAttribute = ({
                                 onClick={() => add()}
                                 block
                             >
-                                <Plus /> Add Attribute
+                                <Plus /> <FormattedMessage id="Add Attribute" />
                             </Button>
                         </Form.Item>
                     </>

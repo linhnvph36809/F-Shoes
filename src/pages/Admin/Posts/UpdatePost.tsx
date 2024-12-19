@@ -7,8 +7,10 @@ import LoadingBlock from '../../../components/Loading/LoadingBlock';
 import { PATH_ADMIN } from '../../../constants/path';
 import { KEY } from './index';
 import ButtonBack from '../components/ButtonBack';
+import { useIntl } from 'react-intl';
 
 const UpdatePost = () => {
+    const intl = useIntl()
     const { id } = useParams();
     const { loading, patchPost } = usePost();
     const { data, isFetching, refetch } = useQueryConfig(KEY, API_POST);
@@ -20,7 +22,7 @@ const UpdatePost = () => {
 
     const onFinish = async (value: any) => {
         if (id) {
-            await patchPost(id, value);
+            patchPost(id, value);
             refetch();
         }
 
@@ -33,7 +35,7 @@ const UpdatePost = () => {
             ) : (
                 <div>
                     <ButtonBack to="/admin/posts" />
-                    <FormPost title="Update Post" onFinish={onFinish} initialValues={initialValues} loading={loading} />
+                    <FormPost title={intl.formatMessage({ id: 'post.add' })} onFinish={onFinish} initialValues={initialValues} loading={loading} />
                 </div>
             )}
         </>

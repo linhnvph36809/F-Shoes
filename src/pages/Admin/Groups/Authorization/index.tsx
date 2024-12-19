@@ -1,4 +1,4 @@
-import { Card, Switch, Typography, Row, Col, Checkbox } from 'antd';
+import { Switch, Typography, Row, Col, Checkbox } from 'antd';
 import Heading from '../../components/Heading';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -8,12 +8,14 @@ import { ACTIONS, ACTIONS_LIST, PERMISSION } from '../../../../constants';
 import LoadingPage from '../../../../components/Loading/LoadingPage';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import ButtonBack from '../../components/ButtonBack';
+import { FormattedMessage } from 'react-intl';
 
 const { Title } = Typography;
 
 const permissionList = [
     { name: 'Dashboard', key: PERMISSION.PERMISSION_DASHBOARD, actions: ACTIONS.ACTIONS_VIEW },
     { name: 'Categories', key: PERMISSION.PERMISSION_CATEGORY, actions: ACTIONS_LIST },
+    { name: 'Order', key: PERMISSION.PERMISSION_ORDER, actions: ACTIONS_LIST },
     { name: 'Products', key: PERMISSION.PERMISSION_PRODUCT, actions: ACTIONS_LIST },
     { name: 'Users', key: PERMISSION.PERMISSION_USER, actions: ACTIONS_LIST },
     { name: 'Topic', key: PERMISSION.PERMISSION_TOPIC, actions: ACTIONS_LIST },
@@ -28,6 +30,7 @@ const Authorization = () => {
     const { loadingDelete, getOneGroup, patchGroup } = useGroups();
     const [permissions, setPermissions] = useState<any>();
     const [groupName, setGroupName] = useState<string>('');
+    console.log(permissions);
 
     const handleSwitchChange = useCallback(
         (checked: boolean, key: string, action: string) => {
@@ -88,10 +91,10 @@ const Authorization = () => {
     return (
         <div>
             <ButtonBack to="/admin/groups" />
-            <Heading>Authorization : Customer</Heading>
+            <Heading><FormattedMessage id="group.Authorization_Customer" /></Heading>
             <hr className="my-4" />
             <Title level={2} style={{ fontSize: '24px', color: '#595959', marginBottom: '20px' }}>
-                Permission
+            <FormattedMessage id="group.permission" />
             </Title>
             <div className="min-h-[200px] relative">
                 {permissions ? (

@@ -51,6 +51,7 @@ export const items: MenuProps['items'] = [
         key: '4',
         icon: <ListOrdered className="w-[18px]" />,
         label: <FormattedMessage id="admin.order" />,
+        permissionName: PERMISSION.PERMISSION_ORDER,
         children: [
             {
                 key: '4-1',
@@ -76,6 +77,8 @@ export const items: MenuProps['items'] = [
         key: '5',
         icon: <TicketPercent className="w-[18px]" />,
         label: <FormattedMessage id="admin.sale" />,
+        permissionName: PERMISSION.PERMISSION_SALE,
+
         children: [
             {
                 key: '5-1',
@@ -136,6 +139,8 @@ export const items: MenuProps['items'] = [
         key: '7',
         icon: <Users className="w-[18px]" />,
         label: <FormattedMessage id="admin.groups" />,
+        permissionName: PERMISSION.PERMISSION_GROUP,
+
         children: [
             {
                 key: '7-1',
@@ -152,6 +157,8 @@ export const items: MenuProps['items'] = [
         key: '8',
         icon: <User className="w-[18px]" />,
         label: <FormattedMessage id="admin.user" />,
+        permissionName: PERMISSION.PERMISSION_USER,
+
         children: [
             {
                 key: '8-1',
@@ -177,6 +184,8 @@ export const items: MenuProps['items'] = [
         key: '9',
         icon: <File className="w-[18px]" />,
         label: <FormattedMessage id="admin.topic" />,
+        permissionName: PERMISSION.PERMISSION_TOPIC,
+
         children: [
             {
                 key: '9-1',
@@ -193,6 +202,8 @@ export const items: MenuProps['items'] = [
         key: '10',
         icon: <BookOpen className="w-[18px]" />,
         label: <FormattedMessage id="admin.post" />,
+        permissionName: PERMISSION.PERMISSION_POST,
+
         children: [
             {
                 key: '10-1',
@@ -218,6 +229,8 @@ export const items: MenuProps['items'] = [
         key: '11',
         icon: <Image className="w-[18px]" />,
         label: <FormattedMessage id="admin.media" />,
+        permissionName: PERMISSION.PERMISSION_MEDIA,
+
         children: [
             {
                 key: '11-1',
@@ -234,12 +247,14 @@ export const items: MenuProps['items'] = [
         key: '12',
         icon: <TicketCheck className="w-[18px]" />,
         label: <FormattedMessage id="admin.voucher" />,
+        permissionName: PERMISSION.PERMISSION_VOUCHER,
+
         children: [
             {
                 key: '12-1',
                 label: (
                     <Link to="voucher" className="text-[14px]">
-                        <FormattedMessage id="Featureadmin.listVoucherd" />
+                        <FormattedMessage id="admin.listVoucher" />
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
@@ -250,6 +265,7 @@ export const items: MenuProps['items'] = [
         key: '13',
         icon: <Star className="w-[18px]" />,
         label: <FormattedMessage id="admin.review" />,
+        permissionName: PERMISSION.PERMISSION_REVIEW,
         children: [
             {
                 key: '13-1',
@@ -269,3 +285,4 @@ export const items: MenuProps['items'] = [
     children: item.children,
     permissionName: item.permissionName,
 }));
+/*333*/

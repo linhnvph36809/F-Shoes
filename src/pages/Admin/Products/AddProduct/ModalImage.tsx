@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, Modal } from 'antd';
 import UploadImage from './UploadImage';
 import { IImage } from '../../../../interfaces/IImage';
+import { FormattedMessage } from 'react-intl';
 
 const ModalImage = ({ images, handleSetImages, indexVariant, setImagesVariants }: any) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,21 +62,23 @@ const ModalImage = ({ images, handleSetImages, indexVariant, setImagesVariants }
     return (
         <section>
             <Button type="default" className="bg-primary text-white text-16px font-medium h-[40px]" onClick={showModal}>
-                Choose Image
+                <FormattedMessage id="product.Choose Image" />
             </Button>
             <Modal
-                title={<h3 className='font-medium text-[28px] mb-10'>Image Product</h3>}
+                title={
+                    <h3 className="font-medium text-[28px] mb-10">
+                        <FormattedMessage id="product.Choose Image" />
+                    </h3>
+                }
                 width={1200}
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                okText={
-                    "Save"
-                }
+                okText={'Save'}
             >
                 <UploadImage imagesObj={images} handleCheckboxChange={handleCheckboxChange} />
-            </Modal >
-        </section >
+            </Modal>
+        </section>
     );
 };
 

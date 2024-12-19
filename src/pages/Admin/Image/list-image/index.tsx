@@ -5,6 +5,7 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { IImage } from '../../../../interfaces/IImage';
 import LoadingBlock from '../../../../components/Loading/LoadingBlock';
 import useImage from '../../../../hooks/useImage';
+import { FormattedMessage } from 'react-intl';
 
 const getBase64 = (file: any) =>
     new Promise((resolve, reject) => {
@@ -54,7 +55,7 @@ const MediaLibrary = () => {
             }}
             type="button"
         >
-            +<div style={{ marginTop: 8 }}>Upload</div>
+            +<div style={{ marginTop: 8 }}><FormattedMessage id="media.upload" /></div>
         </button>
     );
 
@@ -84,7 +85,7 @@ const MediaLibrary = () => {
                 <LoadingBlock />
             ) : (
                 <section>
-                    <Heading>Media</Heading>
+                    <Heading><FormattedMessage id="media.List_Media" /></Heading>
                     <Upload
                         action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                         listType="picture-card"
