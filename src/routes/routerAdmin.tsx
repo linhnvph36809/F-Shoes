@@ -64,19 +64,36 @@ const routerAdmin = [
             },
             {
                 path: 'update-category/:id',
-                element: <UpdateCategory />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
+                        <UpdateCategory />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'list-product',
-                element: <ListProduct />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_PRODUCT} action={ACTIONS.ACTIONS_VIEW}>
+                        {' '}
+                        <ListProduct />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'add-product',
-                element: <AddProduct />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_PRODUCT} action={ACTIONS.ACTIONS_ADD}>
+                        <AddProduct />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'update-product/:slug',
-                element: <UpdateProduct />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_PRODUCT} action={ACTIONS.ACTIONS_EDIT}>
+                        <UpdateProduct />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'add-attribute',
@@ -108,19 +125,35 @@ const routerAdmin = [
             },
             {
                 path: 'orderlist',
-                element: <OrderList />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_VIEW}>
+                        <OrderList />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'orderadd',
-                element: <Addorder />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_ADD}>
+                        <Addorder />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'create-order',
-                element: <CreateOrder />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_ADD}>
+                        <CreateOrder />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'orderupdate/:id',
-                element: <UpdateOrder />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
+                        <UpdateOrder />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'list-user',
@@ -152,39 +185,75 @@ const routerAdmin = [
             },
             {
                 path: 'topic',
-                element: <ListTopic />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_VIEW}>
+                        <ListTopic />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'topic/:id',
-                element: <UpdateTopic />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_EDIT}>
+                        <UpdateTopic />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'posts',
-                element: <ListPost />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_POST} action={ACTIONS.ACTIONS_VIEW}>
+                        <ListPost />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'add-posts',
-                element: <AddPost />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_POST} action={ACTIONS.ACTIONS_ADD}>
+                        <AddPost />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'update-posts/:id',
-                element: <UpdatePost />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_POST} action={ACTIONS.ACTIONS_EDIT}>
+                        <UpdatePost />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'media',
-                element: <MediaLibrary />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_MEDIA} action={ACTIONS.ACTIONS_VIEW}>
+                        <MediaLibrary />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'voucher',
-                element: <ListVouCher />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_VOUCHER} action={ACTIONS.ACTIONS_VIEW}>
+                        <ListVouCher />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'add-voucher',
-                element: <AddVoucher />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_VOUCHER} action={ACTIONS.ACTIONS_ADD}>
+                        <AddVoucher />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'voucher/:id',
-                element: <UpdateVoucher />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_VOUCHER} action={ACTIONS.ACTIONS_EDIT}>
+                        <UpdateVoucher />
+                    </PermissionPage>
+                ),
             },
         ],
     },

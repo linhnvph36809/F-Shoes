@@ -15,6 +15,8 @@ import Heading from '../components/Heading';
 import ButtonAdd from '../components/Button/ButtonAdd';
 import ButtonDelete from '../components/Button/ButtonDelete';
 import { FormattedMessage, useIntl } from 'react-intl';
+import PermissionElement from '../../../components/Permissions/PermissionElement';
+import { ACTIONS, PERMISSION } from '../../../constants';
 
 export const KEY = 'list-posts';
 
@@ -56,12 +58,12 @@ const ListPost = () => {
             key: '1',
         },
         {
-            title: <FormattedMessage id="post.table.title"/>,
+            title: <FormattedMessage id="post.table.title" />,
             dataIndex: 'title',
             key: '2',
         },
         {
-            title: <FormattedMessage id="post.table.image"/>,
+            title: <FormattedMessage id="post.table.image" />,
             dataIndex: 'theme',
             key: '3',
             render: (_: any, { theme }: { theme: string }) => (
@@ -74,7 +76,7 @@ const ListPost = () => {
         //     key: '4',
         // },
         {
-            title: <FormattedMessage id="post.table.author"/>,
+            title: <FormattedMessage id="post.table.author" />,
             dataIndex: 'topic_id',
             key: '5',
             render: (_: any, post: any) => (
@@ -90,34 +92,42 @@ const ListPost = () => {
             ),
         },
         {
-            title:<FormattedMessage id="post.table.Created_At"/>,
+            title: <FormattedMessage id="post.table.Created_At" />,
             dataIndex: 'created_at',
             key: '6',
         },
         {
-            title: <FormattedMessage id="post.table.Action"/>,
+            title: <FormattedMessage id="post.table.Action" />,
             dataIndex: 'id',
             key: '7',
             render: (_: any, post: IPost) => (
                 <div className="flex gap-2">
-                    <Link to={`/admin/update-posts/${post.id}`}>
-                        <ButtonEdit>
-                            <SquarePen />
-                        </ButtonEdit>
-                    </Link>
+                    <PermissionElement keyName={PERMISSION.PERMISSION_POST} action={ACTIONS.ACTIONS_EDIT}>
+                        <Link to={`/admin/update-posts/${post.id}`}>
+                            <ButtonEdit>
+                                <SquarePen />
+                            </ButtonEdit>
+                        </Link>
+                    </PermissionElement>
                     {post.deleted_at ? (
-                        <ButtonEdit onClick={() => handleRestorePost(post.id)} >
-                            <RefreshCcw />
-                        </ButtonEdit>
+                        <PermissionElement keyName={PERMISSION.PERMISSION_POST} action={ACTIONS.ACTIONS_EDIT}>
+                            <ButtonEdit onClick={() => handleRestorePost(post.id)}>
+                                <RefreshCcw />
+                            </ButtonEdit>
+                        </PermissionElement>
                     ) : (
-                        <ButtonEdit onClick={() => handleSoftPost(post.id)}>
-                            <CircleX />
-                        </ButtonEdit>
+                        <PermissionElement keyName={PERMISSION.PERMISSION_POST} action={ACTIONS.ACTIONS_EDIT}>
+                            <ButtonEdit onClick={() => handleSoftPost(post.id)}>
+                                <CircleX />
+                            </ButtonEdit>
+                        </PermissionElement>
                     )}
                     {post.deleted_at ? (
                         ''
                     ) : (
-                        <ButtonDelete onClick={() => handleDeletePost(post.id)}>{<Trash2 />}</ButtonDelete>
+                        <PermissionElement keyName={PERMISSION.PERMISSION_POST} action={ACTIONS.ACTIONS_DELETE}>
+                            <ButtonDelete onClick={() => handleDeletePost(post.id)}>{<Trash2 />}</ButtonDelete>
+                        </PermissionElement>
                     )}
                 </div>
             ),
@@ -130,10 +140,15 @@ const ListPost = () => {
                 <LoadingBlock />
             ) : (
                 <div>
-                    <Heading><FormattedMessage id="post.List_Post" /></Heading>
+                    <Heading>
+                        <FormattedMessage id="post.List_Post" />
+                    </Heading>
                     <div className="flex justify-between">
                         <div>
-                            <ButtonAdd to={PATH_ADMIN.ADD_POST} title={intl.formatMessage({ id: 'post.add' })} ></ButtonAdd>
+                            <ButtonAdd
+                                to={PATH_ADMIN.ADD_POST}
+                                title={intl.formatMessage({ id: 'post.add' })}
+                            ></ButtonAdd>
                         </div>
                         <div className="mb-4">
                             <Input
