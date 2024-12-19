@@ -10,7 +10,7 @@ import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
 
 export const QUERY_KEY = 'variations';
-const useVariant = () => {
+const useVariant = () => {  
     const {  locale } = useContextGlobal();
     const queryClient = useQueryClient();
     const [loading, setLoading] = useState<boolean>(false);
@@ -80,7 +80,7 @@ const useVariant = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('delete', `/api/product/${id}}/variation/${idVariant}`);
-            queryClient.invalidateQueries({ queryKey: [QUERY_KEY,QUERY_KEY_PRODUCT] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(handleChangeMessage(locale,'Delete Variant Sussccess','Xóa biến thể thành công'), '', 'success');
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');

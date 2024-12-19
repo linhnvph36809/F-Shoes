@@ -22,8 +22,8 @@ const UpdateVariant = () => {
         id = slug.substring(index + 1);
     }
 
-    const { data, isFetching, refetch } = useQueryConfig(
-        [QUERY_KEY,`update-product-variant-${id}`],
+    const { data, refetch } = useQueryConfig(
+        [QUERY_KEY, `update-product-variant-${id}`],
         `/api/product/${id}}/variation`,
     );
     const [variantDeleteId, setVariantDeleteId] = useState<number>(0);
