@@ -31,7 +31,7 @@ const UpdateCategory = () => {
     const handleDeleteProduct = async (productId: string | number) => {
         showMessageActive('Are you sure you want to delete this product?', '', 'warning', async () => {
             try {
-                await deleteProductFromCategory(categoryId, [productId]);
+                await deleteProductFromCategory(categoryId, productId);
                 setProducts((prev) => prev.filter((product) => product.id !== productId));
                 showMessageAdmin('Product removed successfully!', '', 'success');
             } catch (error) {

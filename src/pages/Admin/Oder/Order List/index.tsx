@@ -26,7 +26,7 @@ const OrderList = () => {
         orderDetail: null,
     });
 
-    const { data: orders,isFetching } = useQueryConfig([QUERY_KEY,'order-admin'], API_ORDER);
+    const { data: orders, isFetching } = useQueryConfig([QUERY_KEY, 'order-admin'], API_ORDER);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -86,8 +86,8 @@ const OrderList = () => {
     const handleCancel = () => {
         setOrderDetail((preData: any) => ({ ...preData, isModalOpen: false }));
     };
-    if(isFetching){
-        return <LoadingPage/>
+    if (isFetching) {
+        return <LoadingPage />;
     }
     return (
         <div>
