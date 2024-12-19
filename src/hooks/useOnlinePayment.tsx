@@ -29,6 +29,7 @@ const useOnlinePayment = () => {
             refetchQuantityCart();
             navigate('/order-cash-on-delivery');
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_ORDER] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -72,7 +73,6 @@ const useOnlinePayment = () => {
                 window.location.href = data;
             }
             refetchQuantityCart();
-
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
