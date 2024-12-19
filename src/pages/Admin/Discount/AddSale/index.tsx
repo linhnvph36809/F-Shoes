@@ -3,7 +3,7 @@ import Heading from '../../components/Heading';
 import { useEffect, useState } from 'react';
 
 import { IProduct } from '../../../../interfaces/IProduct.ts';
-import { formatPrice } from '../../../../utils';
+import { formatPrice, handleChangeMessage } from '../../../../utils';
 import { IVariation } from '../../../../interfaces/IVariation.ts';
 import useQueryConfig from '../../../../hooks/useQueryConfig.tsx';
 import { showMessageActive, showMessageAdmin } from '../../../../utils/messages.ts';
@@ -11,8 +11,10 @@ import useSale from '../../../../hooks/useSale.tsx';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall.tsx';
 import { BadgeCentIcon, CircleX, Filter } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useContextGlobal } from '../../../../contexts/index.tsx';
 
 const AddSale = () => {
+    const {  locale } = useContextGlobal();
     const intl = useIntl();
     const { data: productList } = useQueryConfig(
         `sale-list_products-add_sale_page`,
@@ -118,7 +120,7 @@ const AddSale = () => {
         setArrSelectedVariationsOfMultipleSelectedProduct([...variations]);
     };
     const onDeleteSimpleProduct = (record?: IProduct) => {
-        showMessageActive('Delete', 'Are you sure you want to delete', 'warning', () => {
+        showMessageActive(intl.formatMessage({ id: 'discount.delete' }), intl.formatMessage({ id: 'discount.delete.success' }), 'warning', () => {
             const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
 
             const filtered = dataSourceProduct.filter((product) => {
@@ -128,7 +130,7 @@ const AddSale = () => {
         });
     };
     const onDeleteVariation = (record?: IVariation) => {
-        showMessageActive('Delete', 'Are you sure you want to delete', 'warning', () => {
+        showMessageActive(intl.formatMessage({ id: 'discount.delete' }), intl.formatMessage({ id: 'discount.delete.success' }), 'warning', () => {
             const arrSelect = [
                 ...arrSelectVariationsOfOneSelectedProduct,
                 ...arrSelectedVariationsOfMultipleSelectedProduct,
@@ -156,8 +158,9 @@ const AddSale = () => {
     };
     const onFilterSimpleProduct = (record?: IProduct) => {
         showMessageActive(
-            'Delete',
-            'Are you sure you only want to keep these products and delete the others?',
+            intl.formatMessage({ id: 'discount.delete' }),
+            intl.formatMessage({ id: 'discount.success.delete' })
+            ,
             'warning',
             () => {
                 const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
@@ -171,8 +174,8 @@ const AddSale = () => {
 
     const onFilterVariation = (record?: IVariation) => {
         showMessageActive(
-            'Delete',
-            'Are you sure you only want to keep these products and delete the others?',
+            intl.formatMessage({ id: 'discount.delete' }),
+            intl.formatMessage({ id: 'discount.success.delete' }),
             'warning',
             () => {
                 const arrSelect = [
@@ -394,7 +397,7 @@ const AddSale = () => {
 
     const onChangeValuePercent = (e: any) => {
         if (e.target.value === '') {
-            setError({ ...error, value: 'Value is required' });
+            setError({ ...error, value: intl.formatMessage({ id: 'Value is required' })});
         } else if (parseInt(e.target.value) > 100) {
             setError({ ...error, value: 'Value must be less than or equal to 100' });
         } else {
@@ -404,7 +407,7 @@ const AddSale = () => {
     };
     const onChangeValueFixed = (e: any) => {
         if (e.target.value === '') {
-            setError({ ...error, value: 'Value is required' });
+            setError({ ...error, value: intl.formatMessage({ id: 'Value is required' }) });
         } else {
             setError({ ...error, value: '' });
         }
@@ -424,15 +427,15 @@ const AddSale = () => {
         let hasError = false;
         if (!dataSale.value) {
             hasError = true;
-            setError({ ...error, value: 'Value is required' });
+            setError({ ...error, value:intl.formatMessage({ id: 'Value is required' }) });
         } else if (error.value) {
             setError({ ...error });
         } else if (dataSale.start_date === '') {
             hasError = true;
-            setError({ ...error, start_date: 'Start date is required' });
+            setError({ ...error, start_date: intl.formatMessage({ id: 'Start date is required' })});
         } else if (dataSale.end_date === '') {
             hasError = true;
-            setError({ ...error, end_date: 'End date is required' });
+            setError({ ...error, end_date: intl.formatMessage({ id: 'End date is required' }) });
         } else if (dataSale.applyAll === false) {
             if (dataSourceProduct.length === 0 && dataSourceVariation.length === 0) {
                 setError({ ...error, empty: true });
@@ -451,9 +454,9 @@ const AddSale = () => {
 
         if (!hasError) {
             if (dataSale.applyAll) {
-                showMessageActive(
-                    'Warning',
+                showMessageActive(handleChangeMessage(locale,
                     'Are you sure you want to apply the sale to all products and variations ?',
+                    'Bạn có chắc chắn muốn áp dụng chương trình giảm giá cho tất cả sản phẩm và biến thể không?'),'',
                     'warning',
                     () => {
                         createSale(dataSale);
