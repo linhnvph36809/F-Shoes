@@ -67,9 +67,11 @@ const OrderVnpayComplete = () => {
                             <div className="bg-green-100 p-4 rounded-full mb-10">
                                 <CheckCircleOutlined className="text-[50px] text-green-500" />
                             </div>
-                            <h1 className="text-[25px] font-bold mb-4 color-primary">Thank you for your purchase</h1>
+                            <h1 className="text-[25px] font-bold mb-4 color-primary">
+                                <FormattedMessage id="thank_you_purchase" />
+                            </h1>
                             <h3 className="text-[14px] text-gray-600 mb-8">
-                                We've received your order and it will ship in 5-7 business days.
+                                <FormattedMessage id="order_received_message" />
                                 <br />
                             </h3>
                         </div>

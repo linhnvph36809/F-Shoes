@@ -192,7 +192,7 @@ const ProfilePage = () => {
                                                     href={`detail/${item.slug}`}
                                                     className="inline-block border rounded-full px-6 py-2 text-15px font-medium text-gray-700 hover:bg-gray-100"
                                                 >
-                                                    Xem sản phẩm
+                                                    <FormattedMessage id="View products" />
                                                 </a>
                                                 <div className="px-3 pb-3">
                                                     <h5 className="text-[#707072] text-[14px]">

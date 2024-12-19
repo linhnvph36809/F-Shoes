@@ -3,12 +3,16 @@ import Title from './components/Title';
 import InputPrimary from '../../../components/Input';
 import ButtonComponent from './components/Button';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const CheckEmail = ({ handleCheckEmail, loading }: any) => {
+    const intl = useIntl();
     return (
         <section>
             <div className="my-10">
-                <Title>Enter your email address to register or log in.</Title>
+                <Title>
+                    <FormattedMessage id="Enter your email address to register or log in." />
+                </Title>
             </div>
             <div>
                 <Form
@@ -21,31 +25,33 @@ const CheckEmail = ({ handleCheckEmail, loading }: any) => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please enter email',
+                                message: <FormattedMessage id="emailPlaceholder" />,
                             },
                             {
                                 type: 'email',
-                                message: 'Please enter a valid email address!',
+                                message: <FormattedMessage id="Please enter a valid email address!" />,
                             },
                         ]}
                     >
-                        <InputPrimary placeholder="Email" type="email" />
+                        <InputPrimary placeholder={intl.formatMessage({ id: 'Email' })} type="email" />
                     </Form.Item>
 
                     <p className="w-[80%] text-[#757575] sm:text-[12px] md:text-base font-medium sm:my-5 md:my-10">
-                        By continuing, I agree to Nike's
+                        <FormattedMessage id="By continuing, I agree to Nike's" />
                         <a href="#" className="underline">
                             {' '}
-                            Privacy Policy
+                            <FormattedMessage id="Privacy Policy" />
                         </a>{' '}
-                        and
+                        <FormattedMessage id="And" />
                         <a href="#" className="ml-2 underline">
-                            Terms of Service.
+                            <FormattedMessage id="Terms of Service." />
                         </a>{' '}
-                        de Nike.
+                        <FormattedMessage id="de Nike." />
                     </p>
                     <div className="flex justify-end">
-                        <ButtonComponent htmlType="submit">{loading ? <LoadingSmall /> : 'Continuer'}</ButtonComponent>
+                        <ButtonComponent htmlType="submit">
+                            {loading ? <LoadingSmall /> : <FormattedMessage id="Continuer" />}
+                        </ButtonComponent>
                     </div>
                 </Form>
             </div>

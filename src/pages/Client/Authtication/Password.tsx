@@ -2,8 +2,10 @@ import { Form, Input } from 'antd';
 import Title from './components/Title';
 import ButtonComponent from './components/Button';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const Password = ({ handleLogin, handleForgotPassword, email, loading }: any) => {
+    const intl = useIntl();
     const onFinish = async (values: { password: string }) => {
         handleLogin({
             ...email,
@@ -14,7 +16,9 @@ const Password = ({ handleLogin, handleForgotPassword, email, loading }: any) =>
     return (
         <section>
             <div className="my-10">
-                <Title>What is your password?.</Title>
+                <Title>
+                    <FormattedMessage id="passwordTitle" />
+                </Title>
             </div>
             <div>
                 <Form onFinish={onFinish} layout="vertical">
@@ -23,12 +27,12 @@ const Password = ({ handleLogin, handleForgotPassword, email, loading }: any) =>
                         rules={[
                             {
                                 required: true,
-                                message: 'Please enter your password!',
+                                message: <FormattedMessage id="passwordRequired" />,
                             },
                         ]}
                     >
                         <Input.Password
-                            placeholder="Password"
+                            placeholder={intl.formatMessage({ id: 'passwordPlaceholder' })}
                             type="password"
                             className={`w-full h-[56px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] px-8 rounded-[8px] text-[18px]`}
                         />
@@ -39,11 +43,13 @@ const Password = ({ handleLogin, handleForgotPassword, email, loading }: any) =>
                     underline hover:cursor-pointer hover:text-gray-400 transition-global"
                         onClick={() => handleForgotPassword(email)}
                     >
-                        Forgotten password ?
+                        <FormattedMessage id="forgotPassword" />
                     </p>
 
                     <div className="flex justify-end">
-                        <ButtonComponent htmlType="submit">{loading ? <LoadingSmall /> : 'Login'}</ButtonComponent>
+                        <ButtonComponent htmlType="submit">
+                            {loading ? <LoadingSmall /> : <FormattedMessage id="Login" />}
+                        </ButtonComponent>
                     </div>
                 </Form>
             </div>

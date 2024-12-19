@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Form, Input } from 'antd';
 
@@ -7,6 +6,7 @@ import InputPrimary from '../../../components/Input';
 import ButtonComponent from './components/Button';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
 import useAuth from '../../../hooks/useAuth';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const ForgotPassword = ({
     email,
@@ -19,6 +19,7 @@ const ForgotPassword = ({
     loading: boolean;
     timeSendEmail: number;
 }) => {
+    const intl = useIntl();
     const [timeOut, setTimeOut] = useState<number>(timeSendEmail || 0);
     const { postForgotPassword } = useAuth();
     const onFinish = async (values: any) => {
@@ -41,11 +42,12 @@ const ForgotPassword = ({
         }
     }, [timeSendEmail, timeOut]);
 
-
     return (
         <section>
             <div className="my-10">
-                <Title>Reset password</Title>
+                <Title>
+                    <FormattedMessage id="title" />
+                </Title>
             </div>
             <div>
                 <Form onFinish={onFinish} layout="vertical">
@@ -53,14 +55,15 @@ const ForgotPassword = ({
                         <Form.Item
                             name="verify_code"
                             style={{ marginBottom: 0 }}
-                            rules={[{ required: true, message: 'Please enter code!' }]}
+                            rules={[{ required: true, message: <FormattedMessage id="enterCode" /> }]}
                         >
-                            <InputPrimary placeholder="Code" margin="mb-0" />
+                            <InputPrimary placeholder={intl.formatMessage({ id: 'codePlaceholder' })} margin="mb-0" />
                         </Form.Item>
                         <div className="mb-2">
                             {timeOut > 0 ? (
                                 <div className="text-end text-gray">
-                                    Resend code after <span className="font-medium">{timeOut}</span> seconds
+                                    <FormattedMessage id="resendCodeAfter" />{' '}
+                                    <span className="font-medium">{timeOut}</span> <FormattedMessage id="seconds" />
                                 </div>
                             ) : (
                                 <p
@@ -70,12 +73,11 @@ const ForgotPassword = ({
                                             setTimeOut(60);
                                         } catch (error) {
                                             console.log(error);
-
                                         }
                                     }}
                                     className={`text-end color-gray hover hover:cursor-pointer hover:opacity-80 underline`}
                                 >
-                                    Resend the code
+                                    <FormattedMessage id="resendCode" />
                                 </p>
                             )}
                         </div>
@@ -84,12 +86,12 @@ const ForgotPassword = ({
                     <Form.Item
                         name="password"
                         rules={[
-                            { required: true, message: 'Please enter your password!' },
-                            { min: 6, message: 'Password must be at least 6 characters long!' },
+                            { required: true, message: <FormattedMessage id="enterPassword" /> },
+                            { min: 6, message: <FormattedMessage id="passwordMinLength" /> },
                         ]}
                     >
                         <Input.Password
-                            placeholder="Password"
+                            placeholder={intl.formatMessage({ id: 'passwordPlaceholder' })}
                             type="password"
                             className={`w-full h-[56px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] px-8 rounded-[8px] text-[18px]`}
                         />
@@ -99,26 +101,28 @@ const ForgotPassword = ({
                         name="confirm_password"
                         dependencies={['password']}
                         rules={[
-                            { required: true, message: 'Please enter your confirm password!' },
+                            { required: true, message: <FormattedMessage id="enterConfirmPassword" /> },
                             ({ getFieldValue }) => ({
                                 validator(_, value) {
                                     if (!value || getFieldValue('password') === value) {
                                         return Promise.resolve();
                                     }
-                                    return Promise.reject(new Error('Confirm Password does not match the password!'));
+                                    return Promise.reject(new Error(intl.formatMessage({ id: 'passwordMismatch' })));
                                 },
                             }),
                         ]}
                     >
                         <Input.Password
-                            placeholder="Confirm Password"
+                            placeholder={intl.formatMessage({ id: 'confirmPasswordPlaceholder' })}
                             type="password"
                             className={`w-full h-[56px] border-1 border-[#111111] focus:shadow font-medium focus:border-[#111111] hover:border-[#111111] px-8 rounded-[8px] text-[18px]`}
                         />
                     </Form.Item>
 
                     <div className="flex justify-end">
-                        <ButtonComponent htmlType="submit">{loading ? <LoadingSmall /> : 'Submit'}</ButtonComponent>
+                        <ButtonComponent htmlType="submit">
+                            {loading ? <LoadingSmall /> : <FormattedMessage id="button.submit" />}
+                        </ButtonComponent>
                     </div>
                 </Form>
             </div>
