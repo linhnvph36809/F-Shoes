@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { tokenManagerInstance } from '../api';
 import { PATH_LIST_CATEGORY } from '../constants';
 import { ICategory } from '../interfaces/ICategory';
-import { showMessageAdmin } from '../utils/messages';
+import { showMessageAdmin, showMessageClient } from '../utils/messages';
 import { useQueryClient } from 'react-query';
 import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
@@ -29,7 +29,31 @@ const useCategory = () => {
 
             setCategories(data.categories.data);
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -41,7 +65,31 @@ const useCategory = () => {
             const { data } = await tokenManagerInstance('get', 'api/main/categories?include=children');
             setMainCategoires(data.categories.data);
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -55,7 +103,31 @@ const useCategory = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(handleChangeMessage(locale,'Delete Topic successfully','Xóa chủ đề thành công'), '', 'success');
         } catch (error) {
-            showMessageAdmin('Error', (error as any).message, 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -69,7 +141,31 @@ const useCategory = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(handleChangeMessage(locale,'Create Topic successfully','Tạo chủ đề thành công'), '', 'success');
         } catch (error) {
-            showMessageAdmin('Error', (error as any).message, 'error');
+            if ((error as any).response.data.message) {
+                            showMessageClient((error as any)?.response?.data?.message, '', 'error');
+                        } else if ((error as any)?.response?.data?.errors) {
+                            showMessageClient(
+                                handleChangeMessage(
+                                    locale,
+                                    'Something is missing.Please check again!',
+                                    'Một số trường đã bị sót.Hãy kiểm tra lại',
+                                ),
+                                '',
+                                'error',
+                            );
+                        } else if ((error as any)?.response?.data?.error) {
+                            showMessageClient((error as any)?.response?.data?.error, '', 'error');
+                        } else {
+                            showMessageClient(
+                                handleChangeMessage(
+                                    locale,
+                                    'Something went wrong!',
+                                    'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                                ),
+                                '',
+                                'error',
+                            );
+                        }
         } finally {
             setLoading(false);
         }
@@ -84,7 +180,31 @@ const useCategory = () => {
             navigate(PATH_LIST_CATEGORY);
             showMessageAdmin(handleChangeMessage(locale,'Update Topic successfully','Cập nhật chủ đề thành công'), '', 'success');
         } catch (error) {
-            showMessageAdmin('Error', (error as any).message, 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -113,10 +233,30 @@ const useCategory = () => {
                 throw new Error('Failed to add products.');
             }
         } catch (error: any) {
-            if (error.response) {
-                console.error('API Error:', error.response.data);
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
             } else {
-                console.error('Error adding products:', error);
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
             }
             throw error;
         }
@@ -146,7 +286,31 @@ const useCategory = () => {
             const { data } = await tokenManagerInstance('get', `${API_CATEGORY}/${id}`);
             return data.category; // Assuming the response has a `category` field
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
             throw error;
         } finally {
             setLoading(false);

@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { tokenManagerInstance } from '../api';
 import { useNavigate } from 'react-router-dom';
-import { showMessageAdmin } from '../utils/messages';
+import { showMessageAdmin, showMessageClient } from '../utils/messages';
 import { useQueryClient } from 'react-query';
 import { QUERY_KEY as QUERY_KEY_PRODUCT } from './useProduct';
 import { handleChangeMessage } from '../utils';
@@ -10,7 +10,7 @@ import { useContextGlobal } from '../contexts';
 export const API_ORDER = '/api/orders';
 export const QUERY_KEY = 'orders';
 const useOrder = () => {
-    const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const queryClient = useQueryClient();
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -19,13 +19,21 @@ const useOrder = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', API_ORDER, order);
-            showMessageAdmin(handleChangeMessage(locale,'Create Order Sussccess','Tạo đơn hàng thành công'), '', 'success');
-            queryClient.invalidateQueries({queryKey:[QUERY_KEY,QUERY_KEY_PRODUCT]});
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Create Order Sussccess', 'Tạo đơn hàng thành công'),
+                '',
+                'success',
+            );
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY, QUERY_KEY_PRODUCT] });
             navigate('/admin/orderlist');
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            showMessageAdmin(
+                (error as any)?.response?.data?.message ||
+                    handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                '',
+                'error',
+            );
             console.log(error);
-            
         } finally {
             setLoading(false);
         }
@@ -36,10 +44,38 @@ const useOrder = () => {
             setLoading(true);
             await tokenManagerInstance('patch', API_ORDER + `/${id}`, order);
             navigate('/admin/orderlist');
-            showMessageAdmin(handleChangeMessage(locale,'Update Order Sussccess','Cập nhật đơn hàng thành công'), '', 'success');
-            queryClient.invalidateQueries({queryKey:[QUERY_KEY,QUERY_KEY_PRODUCT]});
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Update Order Sussccess', 'Cập nhật đơn hàng thành công'),
+                '',
+                'success',
+            );
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY, QUERY_KEY_PRODUCT] });
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }

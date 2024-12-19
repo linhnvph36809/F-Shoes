@@ -22,6 +22,31 @@ const useVoucher = () => {
             showMessageClient(handleChangeMessage(locale,'Voucher Valid','Phiếu quà tặng hợp lệ'), '', 'success');
             setVoucher(data);
         } catch (error) {
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
             if ((error as any)?.response?.data?.message) {
                 showMessageClient((error as any).response.data.message, '', 'warning');
                 setVoucher([]);
@@ -40,7 +65,31 @@ const useVoucher = () => {
             tokenManagerInstance('delete', `api/vouchers/forceDelete/${id}`);
             showMessageAdmin(handleChangeMessage(locale,'Delete Voucher successfully','Xóa voucher thành công'), '', 'success');
         } catch (error) {
-            showMessageClient('Error', (error as any).message, 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -53,10 +102,30 @@ const useVoucher = () => {
             showMessageAdmin(handleChangeMessage(locale,'Add Voucher successfully','Thêm mã giảm giá thành công'), '', 'success');
             navigate(PATH_ADMIN.VOUCHER);
         } catch (error) {
-            if ((error as any)?.response?.data?.message) {
-                showMessageAdmin('Error', (error as any).response.data.message, 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
             } else {
-                showMessageAdmin('Error', (error as any).message, 'error');
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
             }
         } finally {
             setLoading(false);
@@ -70,7 +139,31 @@ const useVoucher = () => {
             navigate('/admin/voucher');
             showMessageAdmin(handleChangeMessage(locale,'Update Voucher successfully','Cập nhật voucher thành công'), '', 'success');
         } catch (error) {
-            showMessageClient('Error', (error as any).message, 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -81,7 +174,31 @@ const useVoucher = () => {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_VOUCHER}/${id}`);
         } catch (error) {
-            showMessageClient('Error', (error as any).message, 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -92,7 +209,31 @@ const useVoucher = () => {
             setLoading(true);
             await tokenManagerInstance('post', `${API_VOUCHER}/restore/` + id);
         } catch (error) {
-            showMessageClient('Error', (error as any).message, 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }

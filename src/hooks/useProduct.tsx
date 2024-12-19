@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { IProduct } from '../interfaces/IProduct';
 import { tokenManagerInstance } from '../api';
 import { PATH_LIST_PRODUCT } from '../constants';
-import { showMessageAdmin } from '../utils/messages';
+import { showMessageAdmin, showMessageClient } from '../utils/messages';
 import { useQueryClient } from 'react-query';
 import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
@@ -12,7 +12,7 @@ export const QUERY_KEY = 'products';
 export const API_PRODUCT = '/api/product';
 
 const useProduct = () => {
-    const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const queryClient = useQueryClient();
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -31,9 +31,37 @@ const useProduct = () => {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_PRODUCT}/${id}`);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-            showMessageAdmin(handleChangeMessage(locale,'Delete Product Sussccess','Xóa sản phẩm thành công'), '', 'success');
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Delete Product Sussccess', 'Xóa sản phẩm thành công'),
+                '',
+                'success',
+            );
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -45,9 +73,18 @@ const useProduct = () => {
             await tokenManagerInstance('post', API_PRODUCT, product);
             navigate(PATH_LIST_PRODUCT);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-            showMessageAdmin(handleChangeMessage(locale,'Add Product Sussccess','Thêm sản phẩm thành công'), '', 'success');
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Add Product Sussccess', 'Thêm sản phẩm thành công'),
+                '',
+                'success',
+            );
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            showMessageAdmin(
+                (error as any)?.response?.data?.message ||
+                    handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                '',
+                'error',
+            );
         } finally {
             setLoading(false);
         }
@@ -59,9 +96,18 @@ const useProduct = () => {
             await tokenManagerInstance('put', `${API_PRODUCT}/${id}`, product);
             navigate(PATH_LIST_PRODUCT);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-            showMessageAdmin(handleChangeMessage(locale,'Update Product Sussccess','Cập nhật sản phẩm thành công'), '', 'success');
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Update Product Sussccess', 'Cập nhật sản phẩm thành công'),
+                '',
+                'success',
+            );
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            showMessageAdmin(
+                (error as any)?.response?.data?.message ||
+                    handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                '',
+                'error',
+            );
         } finally {
             setLoading(false);
         }

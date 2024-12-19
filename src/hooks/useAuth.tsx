@@ -55,7 +55,31 @@ const useAuth = () => {
             setTimeSendEmail(60);
         } catch (error) {
             setTimeSendEmail(0);
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
             throw new Error((error as any)?.response?.data?.message);
         } finally {
             setUser(email);
@@ -70,8 +94,31 @@ const useAuth = () => {
             showMessageClient(data?.message, '', 'success');
             setPage('login');
         } catch (error) {
-            console.log(error);
-            showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -95,11 +142,30 @@ const useAuth = () => {
             navigate('/');
             showMessageClient(handleChangeMessage(locale, 'Login Successfuly', 'Đăng nhập thành công'), '', 'success');
         } catch (error) {
-            if ((error as any)?.response?.data?.message) {
-                console.log(error as any);
-                showMessageClient((error as any).response.data.message, '', 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
             } else {
-                showMessageClient('Something went wrong!', '', 'error');
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
             }
         } finally {
             setLoading(false);
@@ -157,11 +223,30 @@ const useAuth = () => {
             navigate('/admin');
             return data;
         } catch (error) {
-            if ((error as any)?.response?.data?.message) {
-                console.log(error as any);
-                showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
             } else {
-                showMessageClient('Something went wrong!', '', 'error');
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
             }
         } finally {
             setLoading(false);
@@ -188,7 +273,31 @@ const useAuth = () => {
             if ((error as any)?.response?.data?.message) {
                 showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
             } else {
-                showMessageClient('Something went wrong!', '', 'error');
+                if ((error as any).response.data.message) {
+                    showMessageClient((error as any)?.response?.data?.message, '', 'error');
+                } else if ((error as any)?.response?.data?.errors) {
+                    showMessageClient(
+                        handleChangeMessage(
+                            locale,
+                            'Something is missing.Please check again!',
+                            'Một số trường đã bị sót.Hãy kiểm tra lại',
+                        ),
+                        '',
+                        'error',
+                    );
+                } else if ((error as any)?.response?.data?.error) {
+                    showMessageClient((error as any)?.response?.data?.error, '', 'error');
+                } else {
+                    showMessageClient(
+                        handleChangeMessage(
+                            locale,
+                            'Something went wrong!',
+                            'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                        ),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
