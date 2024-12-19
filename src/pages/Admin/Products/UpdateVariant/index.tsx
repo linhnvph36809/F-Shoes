@@ -44,12 +44,15 @@ const UpdateVariant = () => {
             setListVariations([...filtered]);
         }
     }, [loadingDeleteVariant]);
+
     const [listVariations, setListVariations] = useState<any>([]);
+
     useEffect(() => {
         if (data?.data?.data?.variations) {
             setListVariations([...data?.data?.data?.variations]);
         }
     }, [data]);
+
     const variantByIds = data?.data.data || [];
 
     const [idVariant, setIdVariant] = useState([]);
