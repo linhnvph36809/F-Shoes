@@ -11,6 +11,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import ButtonAdd from '../../components/Button/ButtonAdd';
 import { FormattedMessage, useIntl } from 'react-intl';
+import PermissionElement from '../../../../components/Permissions/PermissionElement';
+import { ACTIONS, PERMISSION } from '../../../../constants';
 
 const { Option } = Select;
 
@@ -92,7 +94,9 @@ const OrderList = () => {
                 <FormattedMessage id="admin.orderList" />
             </Heading>
             <div className="flex justify-between">
-                <ButtonAdd title={<FormattedMessage id="admin.addOrder" />} to="/admin/orderadd" />
+                <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_ADD}>
+                    <ButtonAdd title={<FormattedMessage id="admin.addOrder" />} to="/admin/orderadd" />
+                </PermissionElement>
                 <div className="flex justify-end items-center gap-x-5">
                     <div className="relative">
                         <Input

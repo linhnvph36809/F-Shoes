@@ -145,10 +145,12 @@ const ListPost = () => {
                     </Heading>
                     <div className="flex justify-between">
                         <div>
-                            <ButtonAdd
-                                to={PATH_ADMIN.ADD_POST}
-                                title={intl.formatMessage({ id: 'post.add' })}
-                            ></ButtonAdd>
+                            <PermissionElement keyName={PERMISSION.PERMISSION_POST} action={ACTIONS.ACTIONS_ADD}>
+                                <ButtonAdd
+                                    to={PATH_ADMIN.ADD_POST}
+                                    title={intl.formatMessage({ id: 'post.add' })}
+                                ></ButtonAdd>
+                            </PermissionElement>
                         </div>
                         <div className="mb-4">
                             <Input
