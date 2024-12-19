@@ -64,9 +64,9 @@ const useReview = () => {
 
     const postLikeReview = async (id: number) => {
         try {
-            setLoading(true);
+          
             await tokenManagerInstance('post', `api/review/${id}/like`);
-            showMessageClient(handleChangeMessage(locale,'Likes success reviews','Thích đánh giá thành công'), '', 'success');
+            
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
             if ((error as any).response.data.message) {

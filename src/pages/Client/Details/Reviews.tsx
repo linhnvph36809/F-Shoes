@@ -50,7 +50,7 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
         postLikeReview(id);
         refetch();
     };
-
+    
     return (
         <ul>
             <Collapse
@@ -153,7 +153,7 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
                                                         className="flex items-center gap-x-2 text-[14px] font-medium pr-2"
                                                         onClick={() => handleLikeReview(review?.id)}
                                                     >
-                                                        <Heart className="w-[15px] hover:text-red-500 hover:cursor-pointer" />{' '}
+                                                        <Heart className={`"w-[15px] ${review?.liked ? 'text-rose-500' : ''}  hover:cursor-pointer" `}/>{' '}
                                                         {review.likes_count}
                                                     </p>
 
