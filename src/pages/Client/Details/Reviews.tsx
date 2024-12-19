@@ -7,7 +7,7 @@ import './style.scss';
 
 const { Panel } = Collapse;
 
-import useReview from '../../../hooks/useReview';
+import useReview, { QUERY_KEY } from '../../../hooks/useReview';
 import ReviewForm from '../../../components/FormReview';
 import { useContextGlobal } from '../../../contexts';
 import useQueryConfig from '../../../hooks/useQueryConfig';
@@ -24,7 +24,7 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
         id = slug.substring(index + 1);
     }
     const { loading, deleteReview, postReview, postLikeReview } = useReview();
-    const { data, refetch } = useQueryConfig('get-review', `/api/product/${id}/reviews?times=review`);
+    const { data, refetch } = useQueryConfig([QUERY_KEY,`get-review/${id}`], `/api/product/${id}/reviews?times=review`);
     const { user } = useContextGlobal();
 
     const starElements = (rating: number) => {
