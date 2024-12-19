@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import FormUpdateVariant from './FormUpdateVariant';
 import { formatPrice } from '../../../../utils';
 import ButtonDelete from '../../components/Button/ButtonDelete';
-import useVariant from '../../../../hooks/useVariant';
+import useVariant, { QUERY_KEY } from '../../../../hooks/useVariant';
 import ButtonBack from '../../components/ButtonBack';
 import { PATH_ADMIN } from '../../../../constants/path';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
@@ -23,7 +23,7 @@ const UpdateVariant = () => {
     }
 
     const { data, isFetching, refetch } = useQueryConfig(
-        `update-product-variant-${id}`,
+        [QUERY_KEY,`update-product-variant-${id}`],
         `/api/product/${id}}/variation`,
     );
     const [variantDeleteId, setVariantDeleteId] = useState<number>(0);

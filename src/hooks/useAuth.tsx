@@ -15,6 +15,7 @@ const removeAllLocal = () => {
     handleRemoveLocalStorage(INFO_AUTH.userId);
     handleRemoveLocalStorage(INFO_AUTH.isAdmin);
     handleRemoveLocalStorage(INFO_AUTH.adminName);
+    handleRemoveLocalStorage(INFO_AUTH.groupId);
     handleRemoveLocalStorage(INFO_AUTH.adminId);
     handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
     handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
@@ -39,7 +40,15 @@ const useAuth = () => {
                 return;
             }
             localStorage.setItem('code', data.code);
-            showMessageClient(handleChangeMessage(locale, 'Verify code has been sent to your email', 'Mã xác minh đã được gửi đến email của bạn'), '', 'success');
+            showMessageClient(
+                handleChangeMessage(
+                    locale,
+                    'Verify code has been sent to your email',
+                    'Mã xác minh đã được gửi đến email của bạn',
+                ),
+                '',
+                'success',
+            );
             setPage('register');
         } catch (error) {
             showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
@@ -135,7 +144,6 @@ const useAuth = () => {
                 handleSetLocalStorage(INFO_AUTH.userId, data.user.id);
                 handleSetLocalStorage(INFO_AUTH.isAdmin, data.user.is_admin);
                 handleSetLocalStorage(INFO_AUTH.groupId, data.user.group_id);
-
             }
             setUserGlobal(data.user);
             refetchQuantityCart();
@@ -216,8 +224,6 @@ const useAuth = () => {
                 handleSetLocalStorage(INFO_AUTH.userName, data.user.name);
                 handleSetLocalStorage(INFO_AUTH.userId, data.user.id);
                 handleSetLocalStorage(INFO_AUTH.groupId, data.user.group_id);
-
-
             }
             setUserGlobal(data.user);
             navigate('/admin');

@@ -239,7 +239,10 @@
     "admin.listProduct": "List Product",
     "admin.addProduct": "Add Product",
     "admin.attribute": "Attribute",
+    "group.editGroup": "Update Group",
     "admin.groups": "Groups",
+    "group.addGroup": "Add Group",
+    "group.groupName": "Please enter group name",
     "admin.listGroup": "List Group",
     "admin.user": "User",
     "admin.listUser": "List User",
@@ -301,7 +304,7 @@
     "group.succese.add.fail": "Fail to add group",
     "group.succese.update.pass": "Group updated successfully!",
     "group.succese.update.fail": "Fail to updated group!",
-    "group.Authorization_Customer": "Authorization : Customer",
+    "group.Authorization_Customer": "Update Authorization",
     "group.permission": "Permission",
 
     "user.List_User": "List Users",
@@ -566,5 +569,7 @@
     "attribute.name_placeholder": "Enter Attribute Name",
     "attribute.name_required": "Please enter attribute name",
     "product.priceInvalid": "Please enter a price greater than 0",
-    "product.quantityInvalid": "Please enter quantity greater than 0"
+    "product.quantityInvalid": "Please enter quantity greater than 0",
+    "page.notFoundTile": "Sorry, we couldn't find the page you're looking for.",
+    "page.noAccessTile": "You do not have permission to access the page"
 }

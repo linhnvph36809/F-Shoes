@@ -8,13 +8,13 @@ import { items } from './datas';
 import { db } from '../../../../firebaseConfig';
 import { useContextGlobal } from '../../../contexts';
 import Logo from '../../Logo';
-import { Bell, Globe, LogOut } from 'lucide-react';
-import useQueryConfig from '../../../hooks/useQueryConfig';
+import { Globe, LogOut } from 'lucide-react';
+
 import useAuth from '../../../hooks/useAuth';
-import { LANGUAGE_EN, LANGUAGE_VI } from '../../../constants';
+import { INFO_AUTH, LANGUAGE_EN, LANGUAGE_VI } from '../../../constants';
 import { FormattedMessage } from 'react-intl';
 import { showMessageAdmin } from '../../../utils/messages';
-import { handleChangeMessage } from '../../../utils';
+import {  handleGetLocalStorage } from '../../../utils';
 
 const { Header, Content, Sider } = Layout;
 
@@ -36,11 +36,12 @@ export const usePermissionContext = () => useContext(ContextAdmin);
 
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
-    const { locale, changeLanguage, user } = useContextGlobal();
+    const { locale, changeLanguage } = useContextGlobal();
+    const groupId = handleGetLocalStorage(INFO_AUTH.groupId);
     const { logoutAdmin } = useAuth();
 
     useEffect(() => {
-        const starCountRef = ref(db, `groups/${user?.group_id}`);
+        const starCountRef = ref(db, `groups/${groupId}`);
         const unsubscribe = onValue(starCountRef, (snapshot) => {
             try {
                 const data = snapshot.val();
@@ -52,8 +53,8 @@ const LayoutAdmin: React.FC = () => {
         });
 
         return () => unsubscribe();
-    }, [user]);
-    
+    }, [groupId]);
+
     const itemsPermission = useMemo(() => {
         return items?.filter((item: any) => {
             if (item.permissionName !== undefined) {
@@ -66,11 +67,8 @@ const LayoutAdmin: React.FC = () => {
                 return true;
             }
         });
-    }, [permissions, user]);
-    const { data: countOrderWaiting } = useQueryConfig(
-        ['orders', 'products', 'count-order-waiting'],
-        'api/v1/statistics/count/order/waitings',
-    );
+    }, [permissions, groupId]);
+   
     const [messageWaitingConfirm, setMessageWaitingConfirm] = useState(false);
 
     return (
@@ -109,12 +107,7 @@ const LayoutAdmin: React.FC = () => {
                         </h3>
                         <div
                             className="flex items-center gap-x-12"
-                            onMouseEnter={() => {
-                                if (countOrderWaiting?.data?.data > 0) {
-                                    setMessageWaitingConfirm(true);
-                                }
-                            }}
-                            onMouseLeave={() => setMessageWaitingConfirm(false)}
+                            
                         >
                             <Dropdown
                                 className="hover:cursor-pointer"
@@ -131,36 +124,7 @@ const LayoutAdmin: React.FC = () => {
                                     {locale === LANGUAGE_VI ? 'Viet Nam' : 'English'}
                                 </p>
                             </Dropdown>
-                            <div className="relative">
-                                {countOrderWaiting?.data?.data ? (
-                                    <span className="absolute -right-3 -top-2 flex items-center justify-center w-[18px] h-[18px] text-white font-medium text-[12px] rounded-full bg-[#d33918]">
-                                        {countOrderWaiting?.data?.data}
-                                    </span>
-                                ) : (
-                                     handleChangeMessage(
-                                                            locale,
-                                                            'There\'s nothing here!',
-                                                            'Hiện chưa có gì mới!',
-                                                        )
-                                )}
-                                <Bell className="size-10" />
-                                {messageWaitingConfirm ? (
-                                    <div className="w-[480px] h-[40px] absolute bg-slate-200 right-0 rounded-lg flex items-center justify-center text-gray-500 transition-all">
-                                        {countOrderWaiting?.data?.data ? (
-                                            <p>
-                                                {`You have ${countOrderWaiting?.data?.data} orders on waiting confirmation. `}
-                                                <Link to={`/admin/orderlist?status=waiting_confirm`}>
-                                                    <FormattedMessage id="admin.Checkout!" />
-                                                </Link>
-                                            </p>
-                                        ) : (
-                                            ''
-                                        )}
-                                    </div>
-                                ) : (
-                                    ''
-                                )}
-                            </div>
+                            
                             <div
                                 className="flex items-center gap-x-2 text-[16px] font-medium hover:cursor-pointer hover:opacity-50 transition-global"
                                 onClick={() => logoutAdmin()}

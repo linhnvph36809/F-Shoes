@@ -5,10 +5,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { tokenManagerInstance } from '../api';
 import { PATH_LIST_PRODUCT } from '../constants';
 import { showMessageAdmin, showMessageClient } from '../utils/messages';
-import { QUERY_KEY } from './useProduct';
+import { QUERY_KEY as QUERY_KEY_PRODUCT } from './useProduct';
 import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
 
+export const QUERY_KEY = 'variations';
 const useVariant = () => {
     const {  locale } = useContextGlobal();
     const queryClient = useQueryClient();
@@ -29,7 +30,7 @@ const useVariant = () => {
             await tokenManagerInstance('post', `/api/product/${id}}/variation`, value);
             showMessageAdmin(handleChangeMessage(locale,'Add Variant Sussccess','Thêm Biến Thể Thành Công'), '', 'success');
             navigate(PATH_LIST_PRODUCT);
-            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY,QUERY_KEY_PRODUCT] });
         } catch (error) {
             if ((error as any).response.data.message) {
                             showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -66,7 +67,7 @@ const useVariant = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('put', `/api/product/${id}}/variation/${idVariant}`, value);
-            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY,QUERY_KEY_PRODUCT] });
             showMessageAdmin(handleChangeMessage(locale,'Update Variant Sussccess','Cập nhật biến thể thành công'), '', 'success');
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
@@ -79,7 +80,7 @@ const useVariant = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('delete', `/api/product/${id}}/variation/${idVariant}`);
-            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY,QUERY_KEY_PRODUCT] });
             showMessageAdmin(handleChangeMessage(locale,'Delete Variant Sussccess','Xóa biến thể thành công'), '', 'success');
         } catch (error) {
             showMessageAdmin((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');

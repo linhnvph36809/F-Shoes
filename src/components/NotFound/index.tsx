@@ -1,10 +1,11 @@
+import { FormattedMessage } from "react-intl";
+
 const NotFound = () => {
     return (
         <div>
             <p className="color-primary text-center text-[32px] font-medium">
-                Sorry, we couldn't find the page you're looking for.
+                <FormattedMessage id="page.notFoundTile" />
             </p>
-            <p className="color-primary text-center text-[20]px] font-medium">These popular items might interest you</p>
         </div>
     );
 };
