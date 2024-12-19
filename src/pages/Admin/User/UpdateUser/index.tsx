@@ -17,7 +17,7 @@ const UpdateUser: React.FC = () => {
     const { editUser, loading } = useUser();
 
     const handleUpdateUser = async (values: any) => {
-        // editUser(id, values);
+        editUser(data?.data?.user.id, values);
     };
 
     return (
