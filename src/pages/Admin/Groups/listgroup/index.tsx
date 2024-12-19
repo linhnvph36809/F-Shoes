@@ -1,25 +1,29 @@
-import { Form } from 'antd';
-import { Link, Navigate } from 'react-router-dom';
+import { Form, Skeleton } from 'antd';
+import { Link } from 'react-router-dom';
 import { CircleX, Hand, RefreshCcw } from 'lucide-react';
 
 import Heading from '../../components/Heading';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import TableAdmin from '../../components/Table';
-import useGroups from '../../../../hooks/useGroup';
+import useGroups, { API_GROUP, KEY_GROUP } from '../../../../hooks/useGroup';
 import { IGroup } from '../../../../interfaces/IGroup';
-import LoadingPage from '../../../../components/Loading/LoadingPage';
-import InputPrimary from '../../components/Forms/InputPrimary';
-import ButtonSubmit from '../../components/Button/ButtonSubmit';
-import ButtonUpdate from '../../components/Button/ButtonUpdate';
 import ButtonDelete from '../../components/Button/ButtonDelete';
-import { handleGetLocalStorage } from '../../../../utils';
+import { handleChangeMessage, handleGetLocalStorage } from '../../../../utils';
 import { INFO_AUTH } from '../../../../constants';
 import { FormattedMessage } from 'react-intl';
+import NotFound from '../../../../components/NotFound';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
+import ModalAddGroup from './ModalAddGroup';
+import { showMessageActive } from '../../../../utils/messages';
+import { useContextGlobal } from '../../../../contexts';
 
 const ListGroups = ({ initialValues }: any) => {
     const [form] = Form.useForm();
-    const { loading, groups, postGroup, deleteGroup, softGroup, restoreGroup } = useGroups();
+    const { postGroup, deleteGroup, softGroup, restoreGroup } = useGroups();
+    const { data, isFetching } = useQueryConfig([KEY_GROUP, 'all-groups'], API_GROUP);
     const groupId = handleGetLocalStorage(INFO_AUTH.groupId) || 0;
+    const groups = data?.data || [];
+    const { locale } = useContextGlobal();
 
     const onFinish = (value: any) => {
         postGroup(value);
@@ -27,7 +31,14 @@ const ListGroups = ({ initialValues }: any) => {
 
     const handleDeleteGroup = (id?: string | number) => {
         if (id) {
-            deleteGroup(id);
+            showMessageActive(
+                handleChangeMessage(locale, 'Are you sure you want to delete?', 'Bạn có chắc chắn muốn xóa không?'),
+                '',
+                'warning',
+                () => {
+                    deleteGroup(id);
+                },
+            );
         }
     };
 
@@ -48,15 +59,21 @@ const ListGroups = ({ initialValues }: any) => {
             key: '4',
             render: (_: any, group: IGroup) => (
                 <div className="flex gap-2">
-                    <ButtonUpdate to={`/admin/update-group/${group.id}`}></ButtonUpdate>
+                    <ModalAddGroup initialValues={group} isUpdate={true} />
                     {group.deleted_at ? (
                         ''
                     ) : (
-                        <Link to={`/admin/permissions/${group.id}`}>
-                            <ButtonEdit>
-                                <Hand />
-                            </ButtonEdit>
-                        </Link>
+                        <>
+                            {+groupId !== group.id ? (
+                                <Link to={`/admin/permissions/${group.id}`}>
+                                    <ButtonEdit>
+                                        <Hand />
+                                    </ButtonEdit>
+                                </Link>
+                            ) : (
+                                ''
+                            )}
+                        </>
                     )}
                     {group.deleted_at ? (
                         <ButtonEdit onClick={() => restoreGroup(group.id)}>
@@ -73,35 +90,22 @@ const ListGroups = ({ initialValues }: any) => {
         },
     ];
 
-    // if (+groupId !== 1) {
-    //     return <Navigate to="/admin" />;
-    // }
-
+    if (+groupId !== 1) {
+        return <NotFound />;
+    }
     return (
         <>
-            {loading ? (
-                <LoadingPage />
-            ) : (
-                <Form form={form} initialValues={initialValues} onFinish={onFinish} layout="vertical">
-                    <Heading>
-                        <FormattedMessage id="group.List_Groups" />
-                    </Heading>
-                    <div className="my-4 w-6/12">
-                        <InputPrimary
-                            label={<FormattedMessage id="group.Group_name_form" />}
-                            name="group_name"
-                            rules={[{ required: true, message: <FormattedMessage id="group.Group_name_requie" /> }]}
-                        ></InputPrimary>
-
-                        <Form.Item>
-                            <ButtonSubmit loading={loading}>
-                                <FormattedMessage id="group.Group_button" />{' '}
-                            </ButtonSubmit>
-                        </Form.Item>
-                    </div>
+            <Form form={form} initialValues={initialValues} onFinish={onFinish} layout="vertical">
+                <Heading>
+                    <FormattedMessage id="group.List_Groups" />
+                </Heading>
+                <ModalAddGroup />
+                {isFetching ? (
+                    <Skeleton className="mt-10" />
+                ) : (
                     <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={groups} />
-                </Form>
-            )}
+                )}
+            </Form>
         </>
     );
 };

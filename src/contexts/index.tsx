@@ -31,7 +31,7 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
         data,
         refetch: refetchUser,
         isFetching,
-    } = useQueryConfig('user-infor', '/api/auth/me', {
+    } = useQueryConfig('user-infor', '/api/auth/me?include=group', {
         cacheTime: 1000 * 60 * 30,
         staleTime: 1000 * 60 * 30,
         enabled: false,

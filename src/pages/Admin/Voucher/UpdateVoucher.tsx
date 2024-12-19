@@ -12,7 +12,6 @@ const UpdateVoucher = () => {
     const intl = useIntl();
     const { loading, patchVoucher } = useVoucher();
     const { id } = useParams();
-    const { cookies } = useCookiesConfig('user');
     const { data, isFetching, refetch } = useQueryConfig(KEY, API_VOUCHER);
     const initialValues = data?.data.find((item: any) => item.id == id);
 
@@ -21,7 +20,7 @@ const UpdateVoucher = () => {
     }
 
     const onFinish = (value: any) => {
-        if (cookies?.adminId && id) {
+        if (id) {
             patchVoucher(id, value);
             refetch();
         }
@@ -33,7 +32,7 @@ const UpdateVoucher = () => {
                 <LoadingBlock />
             ) : (
                 <FormVoucher
-                title={intl.formatMessage({ id: 'voucher.update' })}
+                    title={intl.formatMessage({ id: 'voucher.update' })}
                     initialValues={initialValues}
                     onFinish={onFinish}
                     loading={loading}

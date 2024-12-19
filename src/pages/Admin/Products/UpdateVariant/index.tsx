@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import FormUpdateVariant from './FormUpdateVariant';
 import { formatPrice } from '../../../../utils';
 import ButtonDelete from '../../components/Button/ButtonDelete';
-import useVariant from '../../../../hooks/useVariant';
+import useVariant, { QUERY_KEY } from '../../../../hooks/useVariant';
 import ButtonBack from '../../components/ButtonBack';
 import { PATH_ADMIN } from '../../../../constants/path';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
@@ -22,8 +22,8 @@ const UpdateVariant = () => {
         id = slug.substring(index + 1);
     }
 
-    const { data, isFetching, refetch } = useQueryConfig(
-        `update-product-variant-${id}`,
+    const { data, refetch } = useQueryConfig(
+        [QUERY_KEY, `update-product-variant-${id}`],
         `/api/product/${id}}/variation`,
     );
     const [variantDeleteId, setVariantDeleteId] = useState<number>(0);
@@ -44,12 +44,15 @@ const UpdateVariant = () => {
             setListVariations([...filtered]);
         }
     }, [loadingDeleteVariant]);
+
     const [listVariations, setListVariations] = useState<any>([]);
+
     useEffect(() => {
         if (data?.data?.data?.variations) {
             setListVariations([...data?.data?.data?.variations]);
         }
     }, [data]);
+
     const variantByIds = data?.data.data || [];
 
     const [idVariant, setIdVariant] = useState([]);

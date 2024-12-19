@@ -238,8 +238,11 @@
     "admin.addProduct": "Thêm sản phẩm",
     "admin.attribute": "Thuộc tính",
     "admin.groups": "Nhóm",
+    "group.addGroup": "Thêm nhóm",
+    "group.editGroup": "Cập nhật nhóm",
     "admin.listGroup": "Danh sách nhóm",
     "admin.user": "Người dùng",
+    "group.groupName": "Vui lòng nhập tên nhóm",
     "admin.listUser": "Danh sách người dùng",
     "admin.addUser": "Thêm người dùng",
     "admin.topic": "Chủ đề",
@@ -298,7 +301,7 @@
     "group.succese.delete": "Xóa nhóm thành công",
     "group.succese.add.pass": "Thêm nhóm thành công",
     "group.succese.update.pass": "Cập nhật nhóm thành công",
-    "group.Authorization_Customer": "Ủy quyền : Khách hàng",
+    "group.Authorization_Customer": "Cập nhật ủy quyền",
     "group.permission": "Giấy phép",
 
     "user.List_User": "Danh sách người dùng",
@@ -562,5 +565,7 @@
     "attribute.name_placeholder": "Nhập tên thuộc tính",
     "attribute.name_required": "Vui lòng nhập tên thuộc tính",
     "product.priceInvalid": "Vui lòng nhập giá lớn hơn 0",
-    "product.quantityInvalid": "Vui lòng nhập số lượng lớn hơn 0"
+    "product.quantityInvalid": "Vui lòng nhập số lượng lớn hơn 0",
+    "page.notFoundTile": "Xin lỗi, chúng tôi không thể tìm thấy trang bạn đang tìm kiếm.",
+    "page.noAccessTile": "Bạn không có quyền truy cập vào trang "
 }

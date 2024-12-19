@@ -11,7 +11,7 @@ import Heading from '../components/Heading';
 import FormCategory from './components/Form';
 import { columns } from './datas';
 import { showMessageActive } from '../../../utils/messages';
-import { ACTIONS, PERMISSION } from '../../../constants';
+import { ACTIONS, ACTIONS_CATEGORY, PERMISSION } from '../../../constants';
 import PermissionElement from '../../../components/Permissions/PermissionElement';
 import TableAdmin from '../components/Table';
 import ButtonUpdate from '../components/Button/ButtonUpdate';
@@ -69,15 +69,22 @@ const ListCategory = () => {
                     <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
                         <ButtonUpdate onClick={() => handleUpdate(values)}></ButtonUpdate>
                     </PermissionElement>
-                    <Link to={`/admin/update-category/${values.id}`}>
-                        <ButtonEdit>
-                            <CopyPlus />
-                        </ButtonEdit>
-                    </Link>
+                    <PermissionElement
+                        keyName={PERMISSION.PERMISSION_CATEGORY}
+                        action={ACTIONS_CATEGORY.ACTIONS_ADD_PRODUCT}
+                    >
+                        <Link to={`/admin/update-category/${values.id}`}>
+                            <ButtonEdit>
+                                <CopyPlus />
+                            </ButtonEdit>
+                        </Link>
+                    </PermissionElement>
                     {/* <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}> */}
-                    <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
-                        <Trash2 />
-                    </ButtonEdit>
+                    <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}>
+                        <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
+                            <Trash2 />
+                        </ButtonEdit>
+                    </PermissionElement>
                     {/* </PermissionElement> */}
                 </div>
             );
@@ -97,15 +104,17 @@ const ListCategory = () => {
                 {/* Thanh công cụ chứa Form và ô tìm kiếm */}
                 <div className="flex justify-between items-center mb-6">
                     {/* Form thêm danh mục */}
-                    <FormCategory
-                        onFinish={handleSubmit}
-                        mainCategories={mainCategories}
-                        isModalVisible={isModalVisible}
-                        setIsModalVisible={setIsModalVisible}
-                        className="flex-1"
-                        initialValues={cateUpdate}
-                        setCateUpdate={setCateUpdate}
-                    />
+                    <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_ADD}>
+                        <FormCategory
+                            onFinish={handleSubmit}
+                            mainCategories={mainCategories}
+                            isModalVisible={isModalVisible}
+                            setIsModalVisible={setIsModalVisible}
+                            className="flex-1"
+                            initialValues={cateUpdate}
+                            setCateUpdate={setCateUpdate}
+                        />
+                    </PermissionElement>
 
                     {/* Ô tìm kiếm */}
                     <div className="relative w-full max-w-[300px]">
