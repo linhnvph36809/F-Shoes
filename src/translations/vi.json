@@ -466,7 +466,7 @@
     "product.quantity": "Số lượng",
     "product.enterQuantity": "Nhập số lượng",
     "product.quantityRequired": "Vui lòng nhập số lượng",
-    "product.quantityLimit": "Số lượng không được lớn hơn 100000",
+    "product.quantityLimit": "Số lượng không được lớn hơn 10000",
     "product.status": "Trạng thái",
     "product.chooseMainImage": "Chọn ảnh chính",
     "product.shortDescription": "Mô tả ngắn",
@@ -562,5 +562,5 @@
     "attribute.name_placeholder": "Nhập tên thuộc tính",
     "attribute.name_required": "Vui lòng nhập tên thuộc tính",
     "product.priceInvalid": "Vui lòng nhập giá lớn hơn 0",
-    "product.quantityInvalid": "Vui lòng nhập giá lớn hơn 0"
+    "product.quantityInvalid": "Vui lòng nhập số lượng lớn hơn 0"
 }
