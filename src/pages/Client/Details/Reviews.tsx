@@ -1,6 +1,6 @@
 import { Dropdown, Menu, Skeleton, Collapse } from 'antd';
 import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ChevronDown, Ellipsis, Heart, Star } from 'lucide-react';
 
 import './style.scss';
@@ -16,7 +16,7 @@ import { FormattedMessage } from 'react-intl';
 
 const Reviews = ({ productId }: { productId?: string | number }) => {
     const { slug } = useParams();
-
+    const navigate = useNavigate();
     let id: string | number | undefined;
 
     if (slug) {
@@ -47,8 +47,14 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
     };
 
     const handleLikeReview = (id: number) => {
-        postLikeReview(id);
-        refetch();
+        if(user){
+            postLikeReview(id);
+            refetch();
+        }else{
+            navigate('/authentication')
+            
+        }
+        
     };
     
     return (
