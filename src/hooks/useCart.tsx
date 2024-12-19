@@ -18,7 +18,18 @@ const useCart = () => {
             showMessageClient(handleChangeMessage(locale, 'Add to cart successfully','Thêm vào giỏ hàng thành công'), '', 'success');
             refetchQuantityCart();
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
+            if((error as any).response.data.message){
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            }else if((error as any)?.response?.data?.errors){
+                showMessageClient('Something is missing.Please check again!', '', 'error');
+            }
+            else if((error as any)?.response?.data?.error){
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            }else{
+                showMessageClient('Something went wrong!', '', 'error');
+            }
+            
+            
         } finally {
             setLoading(false);
         }
