@@ -323,11 +323,11 @@
     "user.User_Update": "Cập nhật người dùng",
     "user.User_Update_succes_pass": "Cập nhật người dùng thành công",
     "user.User_Update_succes_fail": "Cập nhật người dùng thất bại",
-    "user.User_Upload_image":"Tải ảnh lên",
+    "user.User_Upload_image": "Tải ảnh lên",
     "user.User_family": " Nhóm người dùng",
-    "user.User_gmail":"Email",
-    "user.Is_admin":"Quản trị viên",
-    "user.date":"Ngày sinh",
+    "user.User_gmail": "Email",
+    "user.Is_admin": "Quản trị viên",
+    "user.date": "Ngày sinh",
 
     "topic.List_Topic": "Danh sách topic",
     "topic.message": "Tìm kiếm theo Tên Chủ Đề",
@@ -556,5 +556,11 @@
     "Reason": "Lý do",
     "Enter_Reason": "Nhập lý do",
     "Please enter reason for cancellation": "Vui lòng nhập lý do hủy",
-    "Statistics": "Thống kê"
+    "Statistics": "Thống kê",
+    "attribute.add_button": "Thêm thuộc tính",
+    "attribute.attribute_name": "Tên thuộc tính",
+    "attribute.name_placeholder": "Nhập tên thuộc tính",
+    "attribute.name_required": "Vui lòng nhập tên thuộc tính",
+    "product.priceInvalid": "Vui lòng nhập giá lớn hơn 0",
+    "product.quantityInvalid": "Vui lòng nhập giá lớn hơn 0"
 }

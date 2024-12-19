@@ -326,11 +326,11 @@
     "user.User_Update": "Update User",
     "user.User_Update_succes_pass": "User updated successfully",
     "user.User_Update_succes_fail": "Failed to updated user",
-    "user.User_Upload_image":"Upload Image",
+    "user.User_Upload_image": "Upload Image",
     "user.User_family": " User Family",
-    "user.User_gmail":"Email",
-    "user.Is_admin":"Is Admin",
-    "user.date":"Date Of Birth",
+    "user.User_gmail": "Email",
+    "user.Is_admin": "Is Admin",
+    "user.date": "Date Of Birth",
 
     "topic.List_Topic": "List Topic",
     "topic.message": "Search by Topic Name",
@@ -559,5 +559,12 @@
     "Reason": "Reason",
     "Enter_Reason": "Enter Reason",
     "Please enter reason for cancellation": "Please enter reason for cancellation",
-    "Statistics": "Statistics"
+    "Statistics": "Statistics",
+
+    "attribute.add_button": "Add Attribute",
+    "attribute.attribute_name": "Attribute Name",
+    "attribute.name_placeholder": "Enter Attribute Name",
+    "attribute.name_required": "Please enter attribute name",
+    "product.priceInvalid": "Please enter a price greater than 0",
+    "product.quantityInvalid" : "Please enter a price greater than 0"
 }

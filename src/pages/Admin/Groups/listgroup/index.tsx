@@ -17,7 +17,6 @@ import { INFO_AUTH } from '../../../../constants';
 import { FormattedMessage } from 'react-intl';
 
 const ListGroups = ({ initialValues }: any) => {
-
     const [form] = Form.useForm();
     const { loading, groups, postGroup, deleteGroup, softGroup, restoreGroup } = useGroups();
     const groupId = handleGetLocalStorage(INFO_AUTH.groupId) || 0;
@@ -74,9 +73,9 @@ const ListGroups = ({ initialValues }: any) => {
         },
     ];
 
-    if (+groupId !== 1) {
-        return <Navigate to="/admin" />;
-    }
+    // if (+groupId !== 1) {
+    //     return <Navigate to="/admin" />;
+    // }
 
     return (
         <>
@@ -84,18 +83,20 @@ const ListGroups = ({ initialValues }: any) => {
                 <LoadingPage />
             ) : (
                 <Form form={form} initialValues={initialValues} onFinish={onFinish} layout="vertical">
-                    <Heading><FormattedMessage id="group.List_Groups" /></Heading>
+                    <Heading>
+                        <FormattedMessage id="group.List_Groups" />
+                    </Heading>
                     <div className="my-4 w-6/12">
                         <InputPrimary
                             label={<FormattedMessage id="group.Group_name_form" />}
                             name="group_name"
-
                             rules={[{ required: true, message: <FormattedMessage id="group.Group_name_requie" /> }]}
                         ></InputPrimary>
 
                         <Form.Item>
-                            <ButtonSubmit loading={loading} >
-                                <FormattedMessage id="group.Group_button" /> </ButtonSubmit>
+                            <ButtonSubmit loading={loading}>
+                                <FormattedMessage id="group.Group_button" />{' '}
+                            </ButtonSubmit>
                         </Form.Item>
                     </div>
                     <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={groups} />

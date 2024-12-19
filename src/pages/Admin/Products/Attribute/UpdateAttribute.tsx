@@ -1,44 +1,44 @@
 import { CircleX } from 'lucide-react';
 import { Button, Form, Input, Space } from 'antd';
 import { useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import useQueryConfig from '../../../../hooks/useQueryConfig';
-import { KEY, API_ATTRIBUTE_ADD } from './index';
-import { PATH_ADMIN } from '../../../../constants/path';
 import Heading from '../../components/Heading';
 import useAttribute from '../../../../hooks/useAttribute';
 import ButtonBack from '../../components/ButtonBack';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import { FormattedMessage } from 'react-intl';
+import useQueryConfig from '../../../../hooks/useQueryConfig';
 
 const UpdateAttribute = () => {
     const [form] = Form.useForm();
     const { id } = useParams();
-    const { data, refetch } = useQueryConfig(KEY, API_ATTRIBUTE_ADD);
     const { loading, postAttributeValue, deleteAttributeValue } = useAttribute();
     const [attributeValues, setAttributeValues] = useState<any>([]);
-    const initialValues = data?.data[0]?.data?.find((item: any) => item.id == id);
+    const { data } = useQueryConfig(`attribute-detail-${id}`, `/api/attribute/${id}?include=values`,
+        {
+            cacheTime: 0,
+            staleTime: 0,
+            retry: false,
+        }
+    );
 
-    if (!initialValues) {
-        return <Navigate to={PATH_ADMIN.ADD_ATTRIBUTE} />;
-    }
+    const initialValues = data?.data.attribute.values || [];
 
     const onFinish = (value: any) => {
         const { newAttribute } = value;
 
         const newAttributeValues = newAttribute
             ? newAttribute?.map((newAttribute: any) => ({
-                  id: '',
-                  value: newAttribute,
-              }))
+                id: '',
+                value: newAttribute,
+            }))
             : [];
 
         if (id) {
             postAttributeValue(id, {
                 values: [...attributeValues, ...newAttributeValues],
             });
-            refetch();
         }
     };
 
@@ -55,8 +55,8 @@ const UpdateAttribute = () => {
     };
 
     useEffect(() => {
-        setAttributeValues(initialValues.values);
-    }, []);
+        setAttributeValues(initialValues);
+    }, [id, data, initialValues]);
 
     return (
         <>

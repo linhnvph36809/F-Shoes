@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ConfigProvider, Form, Radio, Switch } from 'antd';
 import { X } from 'lucide-react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import '../../style.scss';
 
 import { IImage } from '../../../../../interfaces/IImage';
@@ -11,7 +12,6 @@ import EditorComponent from './Editor';
 import { showMessageClient } from '../../../../../utils/messages';
 import InputPrimary from '../../../components/Forms/InputPrimary';
 import ButtonSubmit from '../../../components/Button/ButtonSubmit';
-import { FormattedMessage, useIntl } from 'react-intl';
 
 const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: any) => {
     const [form] = Form.useForm();
@@ -67,8 +67,19 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
                     label={<FormattedMessage id="product.price" />}
                     placeholder={intl.formatMessage({ id: 'product.enterPrice' })}
                     name="price"
+                    min={0}
                     type="number"
-                    rules={[{ required: true, message: <FormattedMessage id="product.priceRequired" /> }]}
+                    rules={[
+                        { required: true, message: <FormattedMessage id="product.priceRequired" /> },
+                        {
+                            validator: (_: any, value: number) => {
+                                if (value > 0) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(<FormattedMessage id="product.priceInvalid" />);
+                            },
+                        },
+                    ]}
                 />
 
                 <InputPrimary
@@ -76,14 +87,23 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
                     label={<FormattedMessage id="product.quantity" />}
                     placeholder={intl.formatMessage({ id: 'product.enterQuantity' })}
                     type="number"
+                    min={0}
                     rules={[
                         { required: true, message: <FormattedMessage id="product.quantityRequired" /> },
                         {
                             validator: (_: any, value: any) => {
-                                if (value > 100000) {
+                                if (value > 10000) {
                                     return Promise.reject(<FormattedMessage id="product.quantityLimit" />);
                                 }
                                 return Promise.resolve();
+                            },
+                        },
+                        {
+                            validator: (_: any, value: number) => {
+                                if (value > 0) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(<FormattedMessage id="product.quantityInvalid" />);
                             },
                         },
                     ]}
