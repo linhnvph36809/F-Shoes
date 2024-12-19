@@ -38,9 +38,9 @@ const ModalAddGroup = ({ initialValues, isUpdate }: any) => {
 
     useEffect(() => {
         if (initialValues) {
-            form.setFieldValue('group_name', initialValues.group_name)
+            form.setFieldValue('group_name', initialValues.group_name);
         }
-    }, [initialValues])
+    }, [initialValues]);
 
     return (
         <>
