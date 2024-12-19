@@ -437,6 +437,7 @@
     "admin.pleaseSelectProducts": "Please select products",
     "admin.pleaseEnterAmount": "Please enter amount collected",
     "admin.Select_Variant": "Select Variant",
+    "admin.Select_Quantity": "Select Quantity",
     "admin.Please_select_a_variant": "Please select a variant",
     "admin.Please_enter_a_quantity": "Please enter a quantity",
     "Error.Amount_must": "Amount must be greater than or equal to 0",

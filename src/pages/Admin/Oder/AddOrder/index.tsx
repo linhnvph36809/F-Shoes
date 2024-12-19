@@ -1,16 +1,23 @@
-import { Form, Input, Select, Radio } from 'antd';
+import { Form, Input, Radio, ConfigProvider, Button, Collapse } from 'antd';
+const { Panel } = Collapse;
 import TextArea from 'antd/es/input/TextArea';
 import { useMemo, useState } from 'react';
 import Heading from '../../components/Heading';
 import useDelivery from '../../../../hooks/useDelivery';
 import useOrder from '../../../../hooks/useOrder';
-import { formatPrice } from '../../../../utils';
+import { formatPrice, handleChangeMessage } from '../../../../utils';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import SelectPrimary from '../../components/Forms/SelectPrimary';
 import InputPrimary from '../../components/Forms/InputPrimary';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import ButtonBack from '../../components/ButtonBack';
 import { FormattedMessage, useIntl } from 'react-intl';
+import useVoucher from '../../../../hooks/useVoucher';
+import { showMessageClient } from '../../../../utils/messages';
+import LoadingSmall from '../../../../components/Loading/LoadingSmall';
+import ModalAddOrder from './ModalAddOrder';
+import { useContextGlobal } from '../../../../contexts';
+import { FREE_SHIP } from '../../../../constants';
 
 const Addorder = () => {
     const intl = useIntl();
@@ -22,54 +29,97 @@ const Addorder = () => {
     const { refetch } = useQueryConfig('order-admin', '/api/orders');
 
     const products = data?.data.data;
-   
-    const { data:dataListUser} = useQueryConfig(
-        ['users','add/order/list/users'],
-        '/api/user'
-    );
-    const users = dataListUser?.data?.users?.data || [];    
+    const { loading: loadingVoucher, voucher, postVoucher, setVoucher } = useVoucher();
+    const { data: dataListUser } = useQueryConfig(['users', 'add/order/list/users'], '/api/user');
+    const users = dataListUser?.data?.users?.data || [];
     const { postOrder, loading } = useOrder();
     const [productSelected, setProductSelected] = useState<any>([]);
     const { provinces, districts, fee, wards, getAllWard, getAllDistrict, getFee } = useDelivery();
     const [province, setProvince] = useState<any>('');
     const [districtId, setDistrictId] = useState<number | null>(null);
     const [wardCode, setWardCode] = useState<string | null>(null);
-    const [listQuantity, setListQuantity] = useState<number[] | string[]>([]);
-    const [variants, setVariants] = useState<any>([]);
+    const [code, setCode] = useState<string>('');
+    const [orderDetail, setOrderDetail] = useState<any>([]);
+    const { locale } = useContextGlobal();
 
-    const handlerChangeQuantity = (index: number, value: string | number) => {
-        setListQuantity((preValue: any) => {
-            preValue[index] = +value;
-            return [...preValue];
-        });
+    const handleProductChange = (ids: number[]) => {
+        if (ids.length) {
+            setProductSelected(products.filter((product: any) => ids.includes(product.id)));
+        } else {
+            setProductSelected([]);
+        }
     };
 
-    const handlerChangeVariant = (index: number, id: string | number) => {
-        const variant = productSelected[index]?.variations?.find((variation: any) => variation.id == id);
-
-        setVariants((preValue: any) => {
-            preValue[index] = variant;
-            return [...preValue];
-        });
+    const handleGetVoucher = () => {
+        if (code) {
+            postVoucher(code);
+            setCode('');
+        } else {
+            showMessageClient('Please enter code', '', 'warning');
+        }
     };
+
+    const handleTotalPrice = useMemo(() => {
+        return orderDetail?.reduce((sum: any, curr: any) => {
+            if (curr?.variant?.id) {
+                return sum + (curr.variant.sale_price || curr.variant.price) * +curr.quantity;
+            } else {
+                return sum + (curr.sale_price || curr.price) * +curr.quantity;
+            }
+        }, 0);
+    }, [orderDetail]);
+
+    const totalAmount = useMemo(() => {
+        let sum = 0;
+        if (handleTotalPrice >= FREE_SHIP) {
+            sum = handleTotalPrice;
+        } else {
+            sum = handleTotalPrice + (fee.total || 0);
+        }
+        if (voucher?.min_total_amount > sum) {
+            showMessageClient(
+                handleChangeMessage(
+                    locale,
+                    `The order must be larger than ${formatPrice(voucher.min_total_amount)}đ`,
+                    `Đơn hàng phải lớn hơn ${formatPrice(voucher.min_total_amount)}đ`,
+                ),
+                '',
+                'warning',
+            );
+            setVoucher([]);
+            return sum;
+        } else if (voucher.discount && voucher?.type && voucher?.type === 'fixed') {
+            if (sum - +voucher.discount > 0) {
+                return sum - +voucher.discount;
+            }
+            return 0;
+        } else if (voucher?.type && voucher?.type === 'percentage') {
+            if (sum - (sum * +voucher.discount) / 100 > 0) {
+                return sum - (sum * +voucher.discount) / 100;
+            }
+            return 0;
+        } else {
+            return sum;
+        }
+    }, [handleTotalPrice, fee, voucher]);
+
 
     const onFinish = (value: any) => {
-        const order_details = productSelected.map((product: any, index: number) => {
-            const variant = product?.variations?.find((variation: any) => variation.id == value[`variant-${index}`]);
-            if (variant) {
+        const order_details = orderDetail.map((product: any, index: number) => {
+            if (product?.variant?.id) {
                 return {
-                    product_variation_id: variant.id,
-                    product_id: product.id,
-                    quantity: value[`quantity-${index}`],
-                    price: variant.price,
-                    total_amount: +variant.price * +value[`quantity-${index}`],
+                    product_variation_id: product?.variant?.id,
+                    product_id: null,
+                    quantity: +product.quantity,
+                    price: +product?.variant?.price || +product?.variant?.sale_price,
+                    total_amount: +product?.variant?.price * +product.quantity,
                 };
             } else {
                 return {
                     product_id: product.id,
-                    quantity: value[`quantity-${index}`],
-                    price: product.price,
-                    total_amount: +product.price * value[`quantity-${index}`],
+                    quantity: +product.quantity,
+                    price: +product?.price || +product?.sale_price,
+                    total_amount: +product?.price * +product.quantity,
                 };
             }
         });
@@ -83,12 +133,10 @@ const Addorder = () => {
             shipping_method = 'Saving shipping';
         }
 
-        const total_amount =
-            order_details.reduce((total: number, amount: any) => total + amount.total_amount, 0) + fee?.total || 0;
 
         const newValues = {
             user_id: value.user_id,
-            total_amount,
+            total_amount: totalAmount,
             payment_method: 'cash_on_delivery',
             payment_status: 'not_yet_paid',
             shipping_method,
@@ -98,21 +146,22 @@ const Addorder = () => {
             amount_collected: value.amount_collected || 0,
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
-                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-            } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+                } - ${province}`,
             city: province,
             country: 'Viet Nam',
-            voucher_id: null,
+            voucher_id: voucher?.id ? voucher.id : null,
             status: 1,
             note: value.note,
             order_details,
             cart_ids: [],
         };
+        console.log(newValues);
 
         postOrder(newValues);
         refetch();
     };
+
     const handleCityChange = (cityId: number) => {
         getAllDistrict(cityId);
         setProvince(provinces.find((province: any) => province.ProvinceID == cityId).ProvinceName);
@@ -146,23 +195,6 @@ const Addorder = () => {
             alert('Please select a code');
         }
     };
-
-    const handleProductChange = (ids: number[]) => {
-        if (ids.length) {
-            setProductSelected(products.filter((product: any) => ids.includes(product.id)));
-        } else {
-            setProductSelected([]);
-            setListQuantity([]);
-        }
-    };
-
-    const totalAmount = useMemo(() => {
-        return variants.reduce((total: any, item: any, index: number) => {
-            const quantity = (listQuantity[index] as number) || 0;
-            const price = parseFloat(item.price);
-            return total + Math.round(price * quantity);
-        }, 0);
-    }, [variants, listQuantity, fee]);
 
     return (
         <div style={{ fontSize: '20px' }}>
@@ -198,56 +230,42 @@ const Addorder = () => {
                 ></SelectPrimary>
 
                 {/* Display selected variants and quantities */}
-                {productSelected.map((product: any, index: number) => (
-                    <div key={index} className="ml-20 mb-10">
-                        <Form.Item
-                            className="mb-5 font-medium"
-                            label={
-                                <>
-                                    <FormattedMessage id="admin.Select_Variant" />: {product.name}
-                                </>
-                            }
-                            name={`variant-${index}`}
-                            rules={[
-                                { required: true, message: <FormattedMessage id="admin.Please_select_a_variant" /> },
-                            ]}
-                        >
-                            <Select
-                                placeholder={intl.formatMessage({ id: 'admin.Select_Variant' })}
-                                optionFilterProp="name"
-                                options={product.variations}
-                                fieldNames={{ label: 'classify', value: 'id' }}
-                                onChange={(value) => handlerChangeVariant(index, value)}
-                            />
-                        </Form.Item>
 
-                        <Form.Item
-                            label={<FormattedMessage id="body.Detail.Quantity" />}
-                            className="font-medium"
-                            name={`quantity-${index}`}
-                            rules={[
-                                { required: true, message: <FormattedMessage id="admin.Please_enter_a_quantity" /> },
-                                {
-                                    validator: (_, value) => {
-                                        if (value && variants[index]?.stock_qty && +value > variants[index].stock_qty) {
-                                            return Promise.reject(
-                                                `Quantity cannot be more than ${variants[index]?.stock_qty}`,
-                                            );
-                                        }
-                                        return Promise.resolve();
-                                    },
-                                },
-                            ]}
-                        >
-                            <Input
-                                placeholder={intl.formatMessage({ id: 'body.Detail.Quantity' })}
-                                type="number"
-                                value={listQuantity[index]}
-                                onChange={(e) => handlerChangeQuantity(index, e.target.value)}
-                            />
-                        </Form.Item>
-                    </div>
-                ))}
+                <Collapse defaultActiveKey={['1']} accordion className="mb-10 px-5">
+                    {productSelected.map((product: any, index: number) => {
+                        return (
+                            <Panel
+                                header={
+                                    <div className="flex items-start justify-between">
+                                        {product.name}
+                                        <img src={product.image_url} alt="" className="w-[30px]" />
+                                    </div>
+                                }
+                                key={index}
+                            >
+                                <div>
+                                    <ModalAddOrder
+                                        initialValues={product}
+                                        index={index}
+                                        setOrderDetail={setOrderDetail}
+                                    />
+                                    <p className="border-b py-5 font-medium">Product Name : {product?.name}</p>
+                                    <p className="border-b py-5 font-medium">
+                                        Price : {formatPrice(product?.price) || formatPrice(product?.sale_price)}đ
+                                    </p>
+                                    <p className="border-b py-5 font-medium">
+                                        Description:{' '}
+                                        <span dangerouslySetInnerHTML={{ __html: product?.short_description }}></span>{' '}
+                                    </p>
+                                    <p className="border-b py-5 font-medium">Stock quantity : {product?.stock_qty}</p>
+                                    <p className="border-b py-5 font-medium">
+                                        Image: <img src={product?.image_url} className="w-[80px]" />
+                                    </p>
+                                </div>
+                            </Panel>
+                        );
+                    })}
+                </Collapse>
 
                 <InputPrimary
                     label={<FormattedMessage id="admin.amountCollected" />}
@@ -368,16 +386,64 @@ const Addorder = () => {
                     <TextArea placeholder={intl.formatMessage({ id: 'note_placeholder' })} rows={9} />
                 </Form.Item>
 
-                {fee.service_fee && totalAmount ? (
+                <div className="flex items-center justify-end gap-x-4 mb-10">
+                    <div>
+                        <ConfigProvider
+                            theme={{
+                                components: {
+                                    Input: {
+                                        hoverBorderColor: '#ccc',
+                                        activeBorderColor: '#111111',
+                                        activeShadow: '0 0 1px #111111',
+                                    },
+                                },
+                            }}
+                        >
+                            <Input
+                                value={code}
+                                placeholder={intl.formatMessage({ id: 'Voucher_code' })}
+                                className="w-[150px]"
+                                onChange={(e: any) => setCode(e.target.value)}
+                            />
+                        </ConfigProvider>
+                    </div>
+                    <div>
+                        <Button className="transition-global" onClick={handleGetVoucher}>
+                            {loadingVoucher ? <LoadingSmall /> : <FormattedMessage id="Get" />}
+                        </Button>
+                    </div>
+                </div>
+
+                {fee.service_fee ? (
                     <div className="text-end my-10">
                         <p className="font-medium text-[16px] color-gray">
-                            <FormattedMessage id="box.Cart.Subtotal" />: {formatPrice(totalAmount)} đ{' '}
+                            <FormattedMessage id="box.Cart.Subtotal" />: {formatPrice(totalAmount)}đ
                         </p>
                         <p className="font-medium text-[16px] color-gray">
                             <FormattedMessage id="shipping" />: {formatPrice(fee.service_fee)} đ
                         </p>
+                        {voucher.discount ? (
+                            <div className="flex justify-end items-center gap-x-2">
+                                <p className="color-primary font-medium">Voucher :</p>
+                                <p className="color-primary font-medium">
+                                    -
+                                    {formatPrice(
+                                        voucher.type === 'fixed'
+                                            ? voucher.discount
+                                            : ((handleTotalPrice >= FREE_SHIP
+                                                ? handleTotalPrice
+                                                : handleTotalPrice + (fee?.total || 0)) *
+                                                +voucher.discount) /
+                                            100,
+                                    )}
+                                    đ
+                                </p>
+                            </div>
+                        ) : (
+                            ''
+                        )}
                         <h1 className="font-medium text-[20px] text-red-500">
-                            <FormattedMessage id="box.Cart.Total" />: {formatPrice(totalAmount + +fee.service_fee)} đ
+                            <FormattedMessage id="box.Cart.Total" />: {formatPrice(totalAmount)} đ
                         </h1>
                     </div>
                 ) : (
