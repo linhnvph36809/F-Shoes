@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Switch, Upload } from 'antd';
+import dayjs from 'dayjs';
+
 import InputPrimary from '../../components/Forms/InputPrimary';
 import { showMessageAdmin } from '../../../../utils/messages';
 import { UploadOutlined } from '@ant-design/icons';
@@ -20,24 +22,24 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
     const { data, isFetching } = useQueryConfig([KEY_GROUP, 'all-groups'], API_GROUP);
     const groups = data?.data || [];
     const [imageFile, setImageFile] = useState(null);
-    console.log(initialValues);
 
     const handleSubmit = async (values: any) => {
-        
+
         const formData = new FormData();
         formData.append('name', `${values.given_name} ${values.family_name}`);
         formData.append('email', values.email);
-        formData.append('password', values.password);
+        values.password && formData.append('password', values.password);
         formData.append('group_id', values.group_id);
-        formData.append('is_admin', values.is_admin);
+        formData.append('is_admin', values?.is_admin ? true : false);
+        formData.append('status', values?.active ? 'active' : 'banned');
         formData.append('profile[given_name]', values.given_name);
         formData.append('profile[family_name]', values.family_name);
         formData.append('profile[birth_date]', values.birth_date);
+        formData.append('_method', initialValues ? 'put' : 'post');
 
         if (imageFile) {
             formData.append('avatar', imageFile);
         }
-
         onFinish(formData);
     };
 
@@ -54,13 +56,21 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
     useEffect(() => {
         form.setFieldsValue({
             email: initialValues?.email,
-            birth_date: initialValues?.birth_date,
+            birth_date: dayjs(initialValues?.profile?.birth_date).format('YYYY-MM-DD'),
             given_name: initialValues?.name,
             family_name: initialValues?.name,
             group_id: initialValues?.group_id,
-            is_admin: initialValues?.is_admin,
+            is_admin: initialValues?.is_admin ? true : false,
+            active: initialValues?.status === 'active' ? true : false,
         });
     }, [form, initialValues]);
+
+    const validatePassword = initialValues
+        ? null
+        : [
+            { required: true, message: 'Please enter Password' },
+            { min: 8, message: 'Password must be at least 8 characters!' },
+        ];
 
     return (
         <Form form={form} initialValues={initialValues} onFinish={handleSubmit}>
@@ -69,7 +79,7 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                     name="given_name"
                     label={intl.formatMessage({ id: 'user.User_Form_name' })}
                     placeholder={intl.formatMessage({ id: 'user.User_Form_name' })}
-                    rules={[{ required: true, message: <FormattedMessage id="user.User_Form_name_required" />}]}
+                    rules={[{ required: true, message: <FormattedMessage id="user.User_Form_name_required" /> }]}
                 ></InputPrimary>
                 <InputPrimary
                     name="family_name"
@@ -83,10 +93,10 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                     label={intl.formatMessage({ id: 'user.User_gmail' })}
                     placeholder={intl.formatMessage({ id: 'user.User_gmail' })}
                     rules={[
-                        { required: true, message:<FormattedMessage id="user.User_Form_email_required" />  },
+                        { required: true, message: <FormattedMessage id="user.User_Form_email_required" /> },
                         {
                             type: 'email',
-                            message: 'Please enter a valid email address!' ,
+                            message: 'Please enter a valid email address!',
                         },
                     ]}
                 ></InputPrimary>
@@ -95,13 +105,11 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                     label={intl.formatMessage({ id: 'user.User_Form_password' })}
                     type="password"
                     name="password"
-                    placeholder={intl.formatMessage({ id: 'user.User_Form_password' })}
-                    rules={[
-                        { required: true, message: <FormattedMessage id="user.User_Form_password_required" /> },
-                        { min: 8, message: 'Password must be at least 8 characters!' },
-                    ]}
+                    placeholder="Enter Password"
+                    rules={validatePassword}
                 ></InputPrimary>
-                <InputPrimary name="birth_date" label={intl.formatMessage({ id: 'user.date' })} type="date"></InputPrimary>
+
+                <InputPrimary name="birth_date" label="Date Of Birth" type="date"></InputPrimary>
                 <SelectPrimary
                     name="group_id"
                     rules={[{ required: true, message: 'Please enter group' }]}
@@ -115,9 +123,14 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                     loading={isFetching}
                 />
             </div>
-            <Form.Item label={intl.formatMessage({ id: 'user.Is_admin' })} className="font-medium" name="is_admin">
-                <Switch className="w- text-16px font-medium" />
-            </Form.Item>
+            <div className="flex items-center gap-x-5">
+                <Form.Item label="Is Admin" className="font-medium" name="is_admin">
+                    <Switch className="w- text-16px font-medium" />
+                </Form.Item>
+                <Form.Item label="Active" className="font-medium" name="active">
+                    <Switch className="w- text-16px font-medium" />
+                </Form.Item>
+            </div>
 
             {initialValues?.avatar_url && !imageFile ? (
                 <div>

@@ -3,14 +3,17 @@ import { Avatar, Card, Col, Input, Row, Skeleton, Tag, Typography } from 'antd';
 import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { QUERY_KEY } from '../../../../hooks/useUser';
+import useUser, { QUERY_KEY } from '../../../../hooks/useUser';
 import { IUser } from '../../../../interfaces/IUser';
 import Heading from '../../components/Heading';
 import TableAdmin from '../../components/Table';
-import { formatTime } from '../../../../utils';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import ButtonAdd from '../../components/Button/ButtonAdd';
 import ButtonUpdate from '../../components/Button/ButtonUpdate';
+import ButtonDelete from '../../components/Button/ButtonDelete';
+import { showMessageActive } from '../../../../utils/messages';
+import { useContextGlobal } from '../../../../contexts';
+import { formatTime, handleChangeMessage } from '../../../../utils';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 const { Text } = Typography;
@@ -18,11 +21,24 @@ const { Text } = Typography;
 const ListUser = () => {
     const intl = useIntl();
     const { data: dataCountHasOrder } = useQueryConfig([QUERY_KEY, 'count/has/order'], `api/count/user/has/orders`);
+    const { deleteUser } = useUser();
     const [users, setUsers] = useState<IUser[]>([]);
-    const { data: dataUser, isFetching: loading } = useQueryConfig(
+    const { locale } = useContextGlobal();
+    const { data: dataUser, isFetching } = useQueryConfig(
         [QUERY_KEY, 'list/user'],
         'api/user?include=profile,group&times=user',
     );
+
+    const handleDeleteUser = (id: number | string) => {
+        showMessageActive(
+            handleChangeMessage(locale, 'Are you sure you want to delete?', 'Bạn có chắc chắn muốn xóa không '),
+            '',
+            'warning',
+            () => {
+                deleteUser(id);
+            },
+        );
+    };
 
     useEffect(() => {
         if (dataUser?.data.users.data) {
@@ -64,7 +80,17 @@ const ListUser = () => {
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Avatar src={record.avatar_url} size={40} icon={<UserOutlined />} />
                     <div style={{ marginLeft: '10px' }}>
-                        <Text strong>{record.name}</Text>
+                        <Text
+                            style={{
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap',
+                                textOverflow: 'ellipsis',
+                                width: '250px',
+                                display: 'inline-block',
+                            }}
+                        >
+                            {record.name}
+                        </Text>
                         <br />
                         <Text type="secondary">{record.email}</Text>
                     </div>
@@ -78,14 +104,14 @@ const ListUser = () => {
             render: (status: any) => {
                 let color = status === 'active' ? 'green' : 'gray';
                 return (
-<Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color={color}>
+                    <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color={color}>
                         {status}
                     </Tag>
                 );
             },
         },
         {
-            title:<FormattedMessage id="user.table.group" />,
+            title: <FormattedMessage id="user.table.group" />,
             dataIndex: 'group',
             key: 'group',
             render: (group: any) => {
@@ -97,7 +123,7 @@ const ListUser = () => {
             },
         },
         {
-            title:<FormattedMessage id="user.table.Email_verified_at" />,
+            title: <FormattedMessage id="user.table.Email_verified_at" />,
             dataIndex: 'email_verified_at',
             key: 'email_verified_at',
             render: (email_verified_at: string) => {
@@ -110,6 +136,7 @@ const ListUser = () => {
             render: (_: any, values: IUser) => (
                 <div className="flex-row-center gap-x-5">
                     <ButtonUpdate to={`/admin/update-user/${values.nickname}`}></ButtonUpdate>
+                    <ButtonDelete onClick={() => handleDeleteUser(values.id)} />
                 </div>
             ),
         },
@@ -150,7 +177,9 @@ const ListUser = () => {
 
     return (
         <div>
-            <Heading><FormattedMessage id="user.List_User" /></Heading>
+            <Heading>
+                <FormattedMessage id="user.List_User" />
+            </Heading>
             <Row gutter={[16, 16]} className="mb-12">
                 <Col span={6}>
                     <StatCard
@@ -162,8 +191,8 @@ const ListUser = () => {
                     />
                 </Col>
                 <Col span={6}>
-<StatCard
-                        title={intl.formatMessage({ id: 'user.User_Inactive_Users' })}
+                    <StatCard
+                        title="Inactive Users"
                         value={users?.filter((u: IUser) => u.status !== 'active').length}
                         description={intl.formatMessage({ id: 'user.User_Inactive_Users' })}
                         color="#ffd6d6"
@@ -192,7 +221,7 @@ const ListUser = () => {
 
             {/* User management table with loading state */}
             <>
-                {loading ? (
+                {isFetching ? (
                     <Skeleton />
                 ) : (
                     <section>
