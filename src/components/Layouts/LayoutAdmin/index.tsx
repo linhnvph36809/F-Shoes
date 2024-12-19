@@ -1,8 +1,10 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { ConfigProvider, Dropdown, Layout, Menu } from 'antd';
+import { Avatar, ConfigProvider, Dropdown, Layout, Menu } from 'antd';
 import { ref, onValue } from 'firebase/database';
 import './style.scss';
+import { UserOutlined } from '@ant-design/icons';
+
 
 import { items } from './datas';
 import { db } from '../../../../firebaseConfig';
@@ -16,7 +18,7 @@ import { FormattedMessage } from 'react-intl';
 import { showMessageAdmin } from '../../../utils/messages';
 import { handleGetLocalStorage } from '../../../utils';
 
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 
 const siderStyle: React.CSSProperties = {
     overflow: 'auto',
@@ -34,11 +36,14 @@ const siderStyle: React.CSSProperties = {
 const ContextAdmin = createContext<any>({});
 export const usePermissionContext = () => useContext(ContextAdmin);
 
+const userName = handleGetLocalStorage(INFO_AUTH.userName);
+
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
-    const { locale, changeLanguage } = useContextGlobal();
+    const { locale, changeLanguage, user } = useContextGlobal();
     const groupId = handleGetLocalStorage(INFO_AUTH.groupId);
     const { logoutAdmin } = useAuth();
+    console.log(user);
 
     useEffect(() => {
         const starCountRef = ref(db, `groups/${groupId}`);
@@ -104,7 +109,7 @@ const LayoutAdmin: React.FC = () => {
                     </ConfigProvider>
                 </Sider>
                 <Layout className="ml-[250px] relative min-h-[100vh]">
-                    <Header className="bg-white px-5 py-10 flex justify-between items-center h-[70px]">
+                    <header className="bg-white px-5 py-10 flex justify-between items-center h-[70px]">
                         <h3 className="text-[32px] font-semibold pl-5">
                             <FormattedMessage id="admin.Overview" />
                         </h3>
@@ -158,14 +163,23 @@ const LayoutAdmin: React.FC = () => {
                                     ''
                                 )}
                             </div>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Avatar src={user?.avatar_url} size={40} icon={<UserOutlined />} />
+                                <div style={{ marginLeft: '10px' }}>
+                                    <p className='text-[15px] font-medium'>{userName}</p>
+                                    <p className='text-[12px] color-gray'>{user?.group?.group_name}</p>
+
+                                </div>
+                            </div>
                             <div
                                 className="flex items-center gap-x-2 text-[16px] font-medium hover:cursor-pointer hover:opacity-50 transition-global"
                                 onClick={() => logoutAdmin()}
                             >
                                 <FormattedMessage id="admin.logout" /> <LogOut />
                             </div>
+
                         </div>
-                    </Header>
+                    </header>
                     <Content className=" my-4 p-10 bg-[#F5F6FA]">
                         <div className="bg-white p-10 rounded-[14px] min-h-[100vh]">
                             <Outlet />
