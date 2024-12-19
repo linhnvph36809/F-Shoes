@@ -231,11 +231,11 @@ const Detail = () => {
                                             }
                                     }
                                     className={`${user
-                                            ? (productD?.variations?.length == 0 && productD?.stock_qty) ||
-                                                (variant && variant?.stock_qty)
-                                                ? 'bg-primary'
-                                                : 'bg-[#f4f4f4] cursor-default'
+                                        ? (productD?.variations?.length == 0 && productD?.stock_qty) ||
+                                            (variant && variant?.stock_qty)
+                                            ? 'bg-primary'
                                             : 'bg-[#f4f4f4] cursor-default'
+                                        : 'bg-[#f4f4f4] cursor-default'
                                         }           text-16px font-medium h-[58px] text-white
                                                 rounded-[30px] w-full hover-opacity transition-global`}
                                 >
@@ -280,9 +280,9 @@ const Detail = () => {
                                     ? productD?.suggestedProduct?.map((item: any) => (
                                         <SwiperSlide key={item.id}>
                                             <div>
-                                                <Link to={`/detail/${item.slug}`}>
+                                                <Link to={`/detail/${item.slug}`} className="flex flex-col justify-between">
                                                     <div>
-                                                        <img src={item.image_url} alt={item.name} />
+                                                        <img src={item.image_url} alt={item.name} className="h-[678px] object-cover" />
                                                     </div>
                                                     <div>
                                                         <h3 className="text-15px color-primary font-medium pt-4">

@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { usePermissionContext } from '../Layouts/LayoutAdmin';
+import { FormattedMessage } from 'react-intl';
 
 const PermissionPage = ({ keyName, action, children }: { keyName: string; action: string; children: ReactNode }) => {
     const { permissions } = usePermissionContext();
@@ -11,7 +12,7 @@ const PermissionPage = ({ keyName, action, children }: { keyName: string; action
                 permissions?.[keyName].includes(action) ? (
                     children
                 ) : (
-                    <h1 className="text-center">404 Not found</h1>
+                    <h1 className="text-center font-medium text-[18px]"><FormattedMessage id="page.noAccessTile" /></h1>
                 )
             ) : (
                 ''

@@ -1,6 +1,6 @@
 import { Skeleton, Tag } from 'antd';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { ArrowLeftToLine } from 'lucide-react';
 
 import UseOrder from '../../../../hooks/profile/useOrder';
@@ -22,6 +22,7 @@ const OrderDetail = () => {
     const location = useLocation();
     const prevUrl = location.state?.prevUrl;
     const navigator = useNavigate();
+    console.log(data);
 
     if (error) {
         return <NotFound />;
@@ -51,9 +52,9 @@ const OrderDetail = () => {
 
     const status:
         | {
-              className: string;
-              text: string;
-          }
+            className: string;
+            text: string;
+        }
         | undefined = statusString(order?.status);
 
     return (
@@ -130,10 +131,10 @@ const OrderDetail = () => {
                                                     ? order.total_amount <= 0
                                                         ? 0
                                                         : formatPrice(
-                                                              +order.total_amount /
-                                                                  (1 - +order?.voucher_id?.discount / 100) -
-                                                                  +order.shipping_cost,
-                                                          )
+                                                            +order.total_amount /
+                                                            (1 - +order?.voucher_id?.discount / 100) -
+                                                            +order.shipping_cost,
+                                                        )
                                                     : formatPrice(+order.total_amount - +order.shipping_cost)}
                                                 đ
                                             </p>
@@ -190,7 +191,10 @@ const OrderDetail = () => {
                                             </p>
                                         </div>
                                         <div className="mt-10 flex justify-end gap-x-3">
-                                            {order.status && order.status !== 0 && order.status < 3 ? (
+                                            {order.status &&
+                                                order.status !== 0 &&
+                                                order.status < 3 &&
+                                                order.payment_method === 'cash_on_delivery' ? (
                                                 <>
                                                     <button
                                                         onClick={() => handleCanCelOrder(order?.id)}
