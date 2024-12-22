@@ -18,13 +18,13 @@ export const columns = [
         title: <FormattedMessage id="admin.customer" />,
         key: 'customer',
         dataIndex: 'user',
-        render: (_: any, { user }: any) => (
+        render: (_: any, order: any) => (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar src={user?.avatar_url} size={40} />
+                <Avatar src={order?.user?.avatar_url} size={40} />
                 <div style={{ marginLeft: '10px' }}>
-                    <Text strong>{user?.name}</Text>
+                    <Text strong>{order?.receiver_full_name}</Text>
                     <br />
-                    <Text type="secondary">{user?.email}</Text>
+                    <Text type="secondary">{order?.user?.email}</Text>
                 </div>
             </div>
         ),

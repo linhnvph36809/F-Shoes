@@ -3,7 +3,7 @@ import { IOrderDetail } from './IOrderDetail.ts';
 import { IUser } from './IUser.ts';
 
 export const statusString = (id: number) => {
-    const language = handleGetLocalStorage('language') as string;
+    const language = handleGetLocalStorage('language') || 'vi';
     if (id === 0)
         return {
             className: 'text-red-500',
@@ -53,7 +53,7 @@ export const statusString = (id: number) => {
 };
 
 export const paymentMethodString = (method: string) => {
-    const language = handleGetLocalStorage('language') as string;
+    const language = handleGetLocalStorage('language') || 'vi';
 
     if (typeof method !== 'string') {
         return '...';
