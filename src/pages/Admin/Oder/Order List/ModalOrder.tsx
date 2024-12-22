@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { formatPrice, formatTime, handleChangeMessage } from '../../../../utils';
 import { ACTIONS, PERMISSION, STATUS_ORDER } from '../../../../constants';
 import { Option } from 'antd/es/mentions';
-import useOrder, { API_ORDER } from '../../../../hooks/useOrder';
-import useQueryConfig from '../../../../hooks/useQueryConfig';
+import useOrder from '../../../../hooks/useOrder';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { paymentMethodString, paymentStatusString } from '../../../../interfaces/IOrder';
 import ButtonDelete from '../../components/Button/ButtonDelete';
@@ -14,7 +13,6 @@ import PermissionElement from '../../../../components/Permissions/PermissionElem
 
 const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCancel: () => void }) => {
     const intl = useIntl();
-    const { refetch } = useQueryConfig('order-admin', API_ORDER);
     const { putOrder, deleteOrder } = useOrder();
     const { locale } = useContextGlobal();
 
@@ -24,7 +22,6 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                 status,
             });
             handleCancel();
-            refetch();
         }
     };
 
@@ -45,7 +42,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     <div className="grid grid-cols-2 mb-10">
                         <div>
                             <div className="font-medium text-[14px] color-gray mb-2">
-                                <FormattedMessage id="admin.name" /> : {orderDetail.orderDetail?.user?.name}
+                                <FormattedMessage id="admin.name" /> : {orderDetail.orderDetail?.receiver_full_name}
                             </div>
                             <div className="font-medium text-[14px] color-gray mb-2">
                                 <FormattedMessage id="receiver_email" /> : {orderDetail.orderDetail?.user?.email}
@@ -106,9 +103,12 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     })}
                                 </Select>
                             </PermissionElement>
-                            <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_ADD}>
-                                <ButtonDelete onClick={() => handleDeleteOrder()} />
-                            </PermissionElement>
+                            {
+                                orderDetail?.orderDetail?.status < 3 ?
+                                    < PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_ADD}>
+                                        <ButtonDelete onClick={() => handleDeleteOrder()} />
+                                    </PermissionElement> : ""
+                            }
 
                         </div>
                     )}
