@@ -5,7 +5,7 @@ import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 const ButtonDelete = ({ children, loading, ...props }: any) => {
     return (
         <Button {...props} className="w-[50px] h-[40px] font-medium">
-            {loading ? <LoadingSmall /> : <Trash2 />}
+            {loading ? <LoadingSmall color='color-primary' /> : <Trash2 />}
         </Button>
     );
 };

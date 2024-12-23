@@ -306,11 +306,10 @@
     "group.succese.update.fail": "Fail to updated group!",
     "group.Authorization_Customer": "Update Authorization",
     "group.permission": "Permission",
-    "group.form_password":"Please enter password",
-    "group.form_password.success":"Please enter password",
-    "user.password_8":"Password must be at least 8 characters!",
-    "user.email.vaild":"Please enter a valid email address!",
-
+    "group.form_password": "Please enter password",
+    "group.form_password.success": "Please enter password",
+    "user.password_8": "Password must be at least 8 characters!",
+    "user.email.vaild": "Please enter a valid email address!",
 
     "user.List_User": "List Users",
     "user.User_Total_Users": "Total Users",
@@ -403,8 +402,8 @@
     "voucher.required.date_end": "Please enter date end",
     "voucher.required.quantity": "Please enter quantity",
     "voucher.required.min_total_amount": "Please enter min total amount",
-    "voucher.table.fixed":"Fixed",
-    "voucher.percentage":"Percentage",
+    "voucher.table.fixed": "Fixed",
+    "voucher.percentage": "Percentage",
 
     "category.search": "Search by category name",
     "order.Search_Order": "Search Order",
@@ -573,7 +572,6 @@
     "Please enter reason for cancellation": "Please enter reason for cancellation",
     "Statistics": "Statistics",
 
-
     "attribute.add_button": "Add Attribute",
     "attribute.attribute_name": "Attribute Name",
     "attribute.name_placeholder": "Enter Attribute Name",
@@ -582,18 +580,21 @@
     "product.quantityInvalid": "Please enter quantity greater than 0",
     "page.notFoundTile": "Sorry, we couldn't find the page you're looking for.",
     "page.noAccessTile": "You do not have permission to access the page",
-    "attribute_value":"Attribute Value",
-    "attribute_add_value":"Add Attribute Value",
-    "attribute.succcess":"Please enter a value",
-    "attribute.succcess.value":"Please enter Attribute Value",
+    "attribute_value": "Attribute Value",
+    "attribute_add_value": "Add Attribute Value",
+    "attribute.succcess": "Please enter a value",
+    "attribute.succcess.value": "Please enter Attribute Value",
 
-    "discount.delete":"Delete",
-    "discount.delete.success":"Are you sure you want to delete",
-    "discount.success.delete":"Are you sure you only want to keep these products and delete the others?",
-    "Value is required":"Value is required",
-    "Value must be less than or equal to 100":"Value must be less than or equal to 100",
-    "Start date is required":"Start date is required",
-    "End date is required":"End date is required"
-
-    
+    "discount.delete": "Delete",
+    "discount.delete.success": "Are you sure you want to delete",
+    "discount.success.delete": "Are you sure you only want to keep these products and delete the others?",
+    "Value is required": "Value is required",
+    "Value must be less than or equal to 100": "Value must be less than or equal to 100",
+    "Start date is required": "Start date is required",
+    "End date is required": "End date is required",
+    "topic.addTopic": "Add Topic",
+    "topic.updateTopic": "Update Topic",
+    "topic.placeholderTopicName": "Enter topic name",
+    "topic.placeholderSlug": "Enter slug",
+    "topic.placeholderParentTopic": "Enter parent topic"
 }

@@ -1,15 +1,11 @@
-import { Link } from 'react-router-dom';
-import { CircleX, RefreshCcw, SquarePen } from 'lucide-react';
-import { Input } from 'antd';
+import { CircleX, RefreshCcw, Search } from 'lucide-react';
 import { useState } from 'react';
 
 import { ITopic } from '../../../interfaces/ITopic';
 import ButtonEdit from '../components/Button/ButtonEdit';
 import TableAdmin from '../components/Table';
 import useQueryConfig from '../../../hooks/useQueryConfig';
-import LoadingBlock from '../../../components/Loading/LoadingBlock';
-import useTopic, { API_TOPIC } from '../../../hooks/useTopic';
-import FormTopic from './FormTopic';
+import useTopic, { API_TOPIC, QUERY_KEY_TOPIC } from '../../../hooks/useTopic';
 import { showMessageActive } from '../../../utils/messages';
 import ButtonDelete from '../components/Button/ButtonDelete';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -17,42 +13,60 @@ import { handleChangeMessage } from '../../../utils';
 import { useContextGlobal } from '../../../contexts';
 import PermissionElement from '../../../components/Permissions/PermissionElement';
 import { ACTIONS, PERMISSION } from '../../../constants';
-
+import ModalTopic from './ModalTopic';
+import Heading from '../components/Heading';
+import SkeletonComponent from '../components/Skeleton';
+import LoadingSmall from '../../../components/Loading/LoadingSmall';
 
 export const KEY = 'list-topic';
 
-const ListTopic = ({ initialValues }: any) => {
+const ListTopic = () => {
     const { locale } = useContextGlobal();
     const intl = useIntl();
-    const { data, isFetching, refetch } = useQueryConfig(KEY, API_TOPIC);
-    const { deleteTopic, postTopic, restoreTopic, softTopic } = useTopic();
+    const { data, isLoading } = useQueryConfig([QUERY_KEY_TOPIC, KEY], API_TOPIC);
+    const { loading, deleteTopic, restoreTopic, softTopic } = useTopic();
     const [searchTerm, setSearchTerm] = useState('');
+    const [indexLoading, setIndexLoading] = useState<any>();
 
-    const onFinish = (value: any) => {
-        postTopic(value);
-        refetch();
-    };
-
-    const handleDeleteTopic = (id?: string | number) => {
+    const handleDeleteTopic = (index: number, id?: string | number) => {
         if (id) {
-            showMessageActive(handleChangeMessage(locale, 'Are you sure you want to delete the topic?', 'Bạn có chắc chắn muốn xóa chủ đề này không?'), '', 'warning', () => {
-                deleteTopic(id);
-                refetch();
-            });
+            setIndexLoading((preId: any) => ({
+                ...preId,
+                deleteId: index,
+            }));
+            showMessageActive(
+                handleChangeMessage(
+                    locale,
+                    'Are you sure you want to delete the topic?',
+                    'Bạn có chắc chắn muốn xóa chủ đề này không?',
+                ),
+                '',
+                'warning',
+                () => {
+                    deleteTopic(id);
+                },
+            );
         }
     };
 
-    const handleRestoreTopic = (id?: string | number) => {
+    const handleRestoreTopic = (index: number, id?: string | number) => {
         if (id) {
+            setIndexLoading((preId: any) => ({
+                ...preId,
+                restoreId: index,
+            }));
+
             restoreTopic(id);
-            refetch();
         }
     };
 
-    const handleSoftTopic = (id?: string | number) => {
+    const handleSoftTopic = (index: number, id?: string | number) => {
         if (id) {
+            setIndexLoading((preId: any) => ({
+                ...preId,
+                softId: index,
+            }));
             softTopic(id);
-            refetch();
         }
     };
 
@@ -85,24 +99,24 @@ const ListTopic = ({ initialValues }: any) => {
             title: <FormattedMessage id="topic.Topic_Action" />,
             dataIndex: 'id',
             key: '5',
-            render: (_: any, topic: ITopic) => (
+            render: (_: any, topic: ITopic, index: number) => (
                 <div className="flex gap-2">
                     <PermissionElement keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_EDIT}>
-                        <Link to={`/admin/topic/${topic.id}`}>
-                            <ButtonEdit>
-                                <SquarePen />
-                            </ButtonEdit>
-                        </Link>
+                        <ModalTopic initialValues={topic} isUpdate={true} />
                     </PermissionElement>
                     {topic.deleted_at ? (
                         <PermissionElement keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_EDIT}>
-                            <ButtonEdit onClick={() => handleRestoreTopic(topic.id)}>
-                                <RefreshCcw />
+                            <ButtonEdit onClick={() => handleRestoreTopic(index, topic.id)}>
+                                {loading && indexLoading.restoreId === index ? (
+                                    <LoadingSmall color="color-primary" />
+                                ) : (
+                                    <RefreshCcw />
+                                )}
                             </ButtonEdit>
                         </PermissionElement>
                     ) : (
                         <PermissionElement keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_EDIT}>
-                            <ButtonEdit onClick={() => handleSoftTopic(topic.id)}>
+                            <ButtonEdit onClick={() => handleSoftTopic(index, topic.id)}>
                                 <CircleX />
                             </ButtonEdit>
                         </PermissionElement>
@@ -112,7 +126,10 @@ const ListTopic = ({ initialValues }: any) => {
                         ''
                     ) : (
                         <PermissionElement keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_DELETE}>
-                            <ButtonDelete onClick={() => handleDeleteTopic(topic.id)}></ButtonDelete>
+                            <ButtonDelete
+                                loading={loading && indexLoading.deleteId === index}
+                                onClick={() => handleDeleteTopic(index, topic.id)}
+                            ></ButtonDelete>
                         </PermissionElement>
                     )}
                 </div>
@@ -122,29 +139,30 @@ const ListTopic = ({ initialValues }: any) => {
 
     return (
         <>
-            {isFetching ? (
-                <LoadingBlock />
-            ) : (
-                <div>
+            <div>
+                <Heading>
+                    <FormattedMessage id="admin.listTopic" />{' '}
+                </Heading>
+                <div className="flex justify-between">
                     <PermissionElement keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_ADD}>
-                        <FormTopic
-                            title={intl.formatMessage({ id: 'topic.List_Topic' })}
-                            initialValues={initialValues}
-                            onFinish={onFinish}
-                        />
+                        <ModalTopic />
                     </PermissionElement>
-                    <div className="mb-4 text-end">
-                        <Input
+                    <div className="mb-4 text-end relative">
+                        <input
                             placeholder={intl.formatMessage({ id: 'topic.message' })}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            allowClear
-                            className={`w-[250px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                            className={`w-[280px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                         />
+                        <Search className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
                     </div>
-                    <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={filteredData} />
                 </div>
-            )}
+                {isLoading ? (
+                    <SkeletonComponent className="mt-10" />
+                ) : (
+                    <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={filteredData} />
+                )}
+            </div>
         </>
     );
 };
