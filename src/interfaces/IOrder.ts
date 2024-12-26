@@ -12,37 +12,47 @@ export const statusString = (id: number) => {
     else if (id === 1)
         return {
             className: 'text-gray-500',
-            text: handleChangeMessage(language, 'Waiting Confirm', 'Chờ xác nhận'),
+            text: handleChangeMessage(language, 'Waiting Payment', 'Chờ thanh toán'),
         };
     else if (id === 2)
         return {
             className: 'text-yellow-500',
-            text: handleChangeMessage(language, 'Confirmed', 'Đã xác nhận'),
+            text: handleChangeMessage(language, 'Waiting Confirm', 'Chờ xác nhận'),
         };
     else if (id === 3)
         return {
             className: 'text-orange-500',
-            text: handleChangeMessage(language, 'Delivering', 'Đang giao'),
+            text: handleChangeMessage(language, 'Confirmed', 'Xác nhận'),
         };
     else if (id === 4)
         return {
             className: 'text-blue-500',
-            text: handleChangeMessage(language, 'Delivered', 'Đã giao'),
+            text: handleChangeMessage(language, 'Delivering ', 'Đang giao'),
         };
     else if (id === 5)
         return {
             className: 'text-gray-500',
-            text: handleChangeMessage(language, 'Return Processing', 'Đang hoàn trả'),
+            text: handleChangeMessage(language, 'Delivered ', 'Đã giao'),
         };
     else if (id === 6)
         return {
             className: 'text-gray-500',
-            text: handleChangeMessage(language, 'Denied Return', 'Từ chối hoàn trả'),
+            text: handleChangeMessage(language, 'Waiting Accept Return', 'Chờ chấp nhận'),
         };
     else if (id === 7)
         return {
             className: 'text-gray-500',
-            text: handleChangeMessage(language, 'Returned', 'Đã hoàn trả'),
+            text: handleChangeMessage(language, 'Return Processing', 'Xử lý trả lại'),
+        };
+    else if (id === 8)
+        return {
+            className: 'text-gray-500',
+            text: handleChangeMessage(language, 'Denied Return', 'Trả lại bị từ chối'),
+        };
+    else if (id === 9)
+        return {
+            className: 'text-gray-500',
+            text: handleChangeMessage(language, 'Returned', 'Đã trả lại'),
         };
     else {
         return {
@@ -91,10 +101,12 @@ export const paymentStatusString = (status: any) => {
 
 export const statusArr = [
     'cancelled',
+    'waiting_payment',
     'waiting_confirm',
     'confirmed',
     'delivering',
     'delivered',
+    'waiting_accept_return',
     'return_processing',
     'denied_return',
     'returned',

@@ -24,7 +24,7 @@ export const columns = [
                 <div style={{ marginLeft: '10px' }}>
                     <Text strong>{order?.receiver_full_name}</Text>
                     <br />
-                    <Text type="secondary">{order?.user?.email}</Text>
+                    <Text type="secondary">{order?.receiver_email}</Text>
                 </div>
             </div>
         ),

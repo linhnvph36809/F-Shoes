@@ -20,7 +20,6 @@ export const PERMISSION = {
     PERMISSION_DISCOUNT: 'discount',
     PERMISSION_REVIEW: 'review',
     PERMISSION_SALE: 'sale',
-
 };
 
 export const ACTIONS = {
@@ -32,17 +31,18 @@ export const ACTIONS = {
 
 export const ACTIONS_CATEGORY = {
     ACTIONS_ADD_PRODUCT: 'add-product',
-
-}
+};
 
 export const ACTIONS_LIST = Object.values(ACTIONS);
 
 export const STATUS_ORDER = [
     'Cancelled',
+    'Waiting Payment',
     'Waiting Confirm',
     'Confirmed',
     'Delivering',
     'Delivered',
+    'Waiting Accept Return',
     'Return Processing',
     'Denied Return',
     'Returned',
