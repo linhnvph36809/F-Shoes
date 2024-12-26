@@ -111,14 +111,14 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                         </div>
                     </div>
                     <div className="py-5">
-                        {orderDetail?.orderDetail?.order_details.map((orderDetail: any) => (
-                            <div className="flex justify-between items-center mb-5 pb-5 border-b">
+                        {orderDetail?.orderDetail?.order_details.map((orderDetail: any, index: number) => (
+                            <div key={index} className="flex justify-between items-center mb-5 pb-5 border-b">
                                 <div className="flex gap-x-5 items-start">
                                     <img
                                         className="w-[80px] h-[80px] object-cover"
                                         src={
                                             orderDetail?.product_variation_id
-                                                ? orderDetail?.variation?.image_url
+                                                ? orderDetail?.variation?.product?.image_url
                                                 : orderDetail?.product?.image_url
                                         }
                                         alt=""
@@ -127,7 +127,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                         <h3 className="font-medium text-[16px]">
                                             {' '}
                                             {orderDetail?.product_variation_id
-                                                ? orderDetail?.variation?.name
+                                                ? orderDetail?.variation?.product?.name
                                                 : orderDetail?.product?.name}{' '}
                                         </h3>
                                         <p className="color-gray text-[13px] font-medium">
@@ -225,7 +225,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     </div>
                     {!orderDetail?.orderDetail?.status ||
                     orderDetail?.orderDetail?.status == 0 ||
-                    orderDetail?.orderDetail?.status == 9 || 
+                    orderDetail?.orderDetail?.status == 9 ||
                     orderDetail?.orderDetail?.status == 1 ? (
                         ''
                     ) : (

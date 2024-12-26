@@ -42,7 +42,6 @@ const Order = () => {
     const { data, isFetching: loadingCart } = useQueryConfig('cart', '/api/cart');
 
     const carts = data?.data ? data.data.filter((cart: any) => orderId.includes(cart.id)) : null;
-    console.log(carts);
 
     const { loading: loadingVoucher, voucher, postVoucher, setVoucher } = useVoucher();
     const { loading: loadingCheckOut, postVNPAY, postOrder, postMomo } = useOnlinePayment();
@@ -162,6 +161,15 @@ const Order = () => {
                     quantity: cart.quantity,
                     price: +cart.product_variation.sale_price || +cart.product_variation.price,
                     total_amount: +cart.product_variation.sale_price || +cart.product_variation.price * cart.quantity,
+                    detail_item: JSON.stringify(
+                        cart?.product_variation.values?.reduce(
+                            (acc: Record<string, string>, item: { attribute: string; values: string }) => {
+                                acc[item.attribute] = item.values;
+                                return acc;
+                            },
+                            {},
+                        ) || null,
+                    ),
                 };
             } else if (cart?.product) {
                 return {
@@ -173,6 +181,7 @@ const Order = () => {
                     quantity: cart.quantity,
                     price: +cart.product.sale_price || +cart.product.price,
                     total_amount: +cart.product.sale_price || +cart.product.price * cart.quantity,
+                    detail_item: null,
                 };
             }
         });
@@ -719,7 +728,6 @@ const Order = () => {
                                                             className="font-medium"
                                                             style={styles.radioButton}
                                                             disabled={totalAmount <= 100000 || totalAmount > 50000000}
-
                                                         >
                                                             <div className="text-[15px] flex items-center gap-x-3">
                                                                 <img
