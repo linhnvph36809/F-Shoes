@@ -151,15 +151,6 @@ const Order = () => {
     };
 
     const onFinish = async (value: any) => {
-        let shipping_method;
-        if (value.shipping_method == 1) {
-            shipping_method = 'Express Shipping';
-        } else if (value.shipping_method == 2) {
-            shipping_method = 'Standard shipping';
-        } else if (value.shipping_method == 3) {
-            shipping_method = 'Saving shipping';
-        }
-
         const order_details = carts?.map((cart: any) => {
             if (cart?.product_variation) {
                 return {
@@ -189,9 +180,9 @@ const Order = () => {
         const newValues = {
             user_id: user.id,
             total_amount: totalAmount,
-            payment_method: 'cash_on_delivery',
+            payment_method: value.payment_method,
             payment_status: 'not_yet_paid',
-            shipping_method,
+            shipping_method: 'Standard shipping',
             phone: value.phone,
             shipping_cost: handleTotalPrice >= FREE_SHIP ? '0' : fee?.total,
             tax_amount: null,
@@ -224,8 +215,11 @@ const Order = () => {
             new Date(Date.now() + 20 * 60 * 1000),
         );
 
-        if (value.payment_method == 'cash on delivery') {
-            postOrder(newValues);
+        if (value.payment_method == 'cash_on_delivery') {
+            postOrder({
+                ...newValues,
+                status: 2,
+            });
         } else if (value.payment_method == 'vnpay') {
             showMessageActive(
                 handleChangeMessage(
@@ -417,6 +411,7 @@ const Order = () => {
                                         <InputPrimary
                                             placeholder={intl.formatMessage({ id: 'phone_placeholder' })}
                                             margin="mb-0"
+                                            type="number"
                                         />
                                     </Form.Item>
 
@@ -708,6 +703,7 @@ const Order = () => {
                                                             value="momo"
                                                             className="font-medium"
                                                             style={styles.radioButton}
+                                                            disabled={totalAmount <= 100000 || totalAmount > 50000000}
                                                         >
                                                             <div className="text-[15px] flex items-center gap-x-3">
                                                                 <img
@@ -722,6 +718,8 @@ const Order = () => {
                                                             value="vnpay"
                                                             className="font-medium"
                                                             style={styles.radioButton}
+                                                            disabled={totalAmount <= 100000 || totalAmount > 50000000}
+
                                                         >
                                                             <div className="text-[15px] flex items-center gap-x-3">
                                                                 <img
@@ -733,7 +731,7 @@ const Order = () => {
                                                             </div>
                                                         </Radio.Button>
                                                         <Radio.Button
-                                                            value="cash on delivery"
+                                                            value="cash_on_delivery"
                                                             className="font-medium"
                                                             style={styles.radioButton}
                                                         >

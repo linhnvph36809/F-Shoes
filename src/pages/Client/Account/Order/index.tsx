@@ -35,7 +35,7 @@ const OrderProfile = () => {
 
 
     const { data, isFetching } = useQueryConfig(
-        [QUERY_KEY_ORDER,`order-all-${page}-status-${indexStatus || indexStatus === 0 ? indexStatus : 'empty'}`],
+        [QUERY_KEY_ORDER, `order-all-${page}-status-${indexStatus || indexStatus === 0 ? indexStatus : 'empty'}`],
         `/api/me/orders?per_page=5&page=${page}&status=${indexStatus || indexStatus === 0 ? indexStatus : ''}`,
     );
 

@@ -27,15 +27,15 @@ const OrderList = () => {
         orderDetail: null,
     });
 
-    const { data: orders, isFetching } = useQueryConfig([QUERY_KEY, 'order-admin'], API_ORDER);
+    const { data: orders, isLoading } = useQueryConfig([QUERY_KEY, 'order-admin'], API_ORDER);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchText(value);
         if (value.trim() === '') {
-            setFilteredData(orders?.data);
+            setFilteredData(orders?.data?.data);
         } else {
-            const filtered = orders?.data.filter((order: any) => {
+            const filtered = orders?.data?.data.filter((order: any) => {
                 return (
                     order?.user?.name.toLowerCase().includes(value.toLowerCase()) ||
                     order.id.toString().includes(value.toLowerCase())
@@ -69,7 +69,7 @@ const OrderList = () => {
     };
 
     useEffect(() => {
-        const originData = orders?.data ? JSON.parse(JSON.stringify([...orders.data])) : [];
+        const originData = orders?.data?.data ? JSON.parse(JSON.stringify([...orders.data.data])) : [];
         if (searchStatus !== '' && searchStatus !== 'all') {
             const filtered = originData.filter((order: any) => {
                 return statusArr[order?.status] === searchStatus;
@@ -176,7 +176,7 @@ const OrderList = () => {
             </div>
 
             {/* Bảng hiển thị đơn hàng */}
-            {isFetching ? (
+            {isLoading ? (
                 <Skeleton className="mt-10" />
             ) : (
                 <TableAdmin

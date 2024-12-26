@@ -45,12 +45,6 @@ const useOrder = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('patch', API_ORDER + `/${id}`, order);
-            navigate('/admin/orderlist');
-            showMessageAdmin(
-                handleChangeMessage(locale, 'Update Order Sussccess', 'Cập nhật đơn hàng thành công'),
-                '',
-                'success',
-            );
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
         } catch (error) {
