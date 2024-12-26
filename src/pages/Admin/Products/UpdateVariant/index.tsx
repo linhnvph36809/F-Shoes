@@ -151,11 +151,17 @@ const UpdateVariant = () => {
                                                     </p>
                                                     <p>{record.classify}</p>
                                                 </div>
-                                                <div className="flex items-center gap-x-5 pb-5 border-b">
+                                                <div className="flex items-center gap-x-5 py-5 border-b">
                                                     <p className="text-[14px] color-primary">
                                                         <FormattedMessage id="admin.stock_qty" /> :{' '}
                                                     </p>
                                                     <p>{record.stock_qty}</p>
+                                                </div>
+                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                    <p className="text-[14px] color-primary">
+                                                        <FormattedMessage id="admin.qty_sold" /> :{' '}
+                                                    </p>
+                                                    <p>{record.qty_sold}</p>
                                                 </div>
                                                 <div className="flex items-center gap-x-5 py-5 border-b">
                                                     <p className="text-[14px] color-primary">

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { showMessageClient } from '../utils/messages';
 import useCookiesConfig from './useCookiesConfig';
 import { useContextGlobal } from '../contexts';
-import { handleChangeMessage } from '../utils';
+import { handleChangeMessage, handleRemoveLocalStorage } from '../utils';
 import { useQueryClient } from 'react-query';
 import { QUERY_KEY as QUERY_KEY_ORDER } from './useOrder';
 import { QUERY_KEY as QUERY_KEY_PRODUCT } from './useProduct';
@@ -28,6 +28,7 @@ const useOnlinePayment = () => {
             showMessageClient(handleChangeMessage(locale, 'Order successfully', 'Đặt hàng thành công'), '', 'success');
             refetchQuantityCart();
             navigate('/order-cash-on-delivery');
+            handleRemoveLocalStorage('orderId');
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_ORDER] });
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
         } catch (error) {
@@ -73,6 +74,7 @@ const useOnlinePayment = () => {
                 window.location.href = data;
             }
             refetchQuantityCart();
+            handleRemoveLocalStorage('orderId');
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -114,6 +116,7 @@ const useOnlinePayment = () => {
                 window.location.href = data.payUrl;
             }
             refetchQuantityCart();
+            handleRemoveLocalStorage('orderId');
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');

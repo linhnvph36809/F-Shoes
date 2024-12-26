@@ -33,7 +33,6 @@ const OrderDetail = () => {
     };
 
     const order: any = data?.data;
-    console.log(order);
 
     const handleCanCelOrder = (id: string) => {
         if (id) {
@@ -193,7 +192,7 @@ const OrderDetail = () => {
                                         <div className="mt-10 flex justify-end gap-x-3">
                                             {order.status &&
                                                 order.status !== 0 &&
-                                                order.status < 3 &&
+                                                order.status < 4 &&
                                                 order.payment_method === 'cash_on_delivery' ? (
                                                 <>
                                                     <button

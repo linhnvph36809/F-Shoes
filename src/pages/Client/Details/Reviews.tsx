@@ -145,7 +145,7 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
                                                     <img
                                                         src={review.user.avatar_url}
                                                         alt=""
-                                                        className="w-[40px] h-[40px] rounded-full mb-3"
+                                                        className="w-[50px] h-[50px] object-cover rounded-full mb-3"
                                                     />
                                                 </div>
                                                 <p className="color-primary text-16px font-medium mb-3">
