@@ -561,7 +561,7 @@
     "of Nike.": "của Nike",
     "Order Detail": "Chi tiết đơn hàng",
     "Ordering information": "Thông tin đặt hàng",
-    "The Order is": "Lệnh là",
+    "The_Order_is": "Đơn hàng",
     "Buy Again": "Mua lại",
     "Variant": "Khác nhau",
     "Reason": "Lý do",
@@ -592,5 +592,7 @@
     "topic.updateTopic": "Cập nhật chủ đề",
     "topic.placeholderTopicName": "Nhập tên chủ đề",
     "topic.placeholderSlug": "Nhập slug",
-    "topic.placeholderParentTopic": "Nhập chủ đề cha"
+    "topic.placeholderParentTopic": "Nhập chủ đề cha",
+    "orderDetail.return": "Trả hàng",
+    "orderDetail.reasonOrder": "Lý do trả hàng"
 }

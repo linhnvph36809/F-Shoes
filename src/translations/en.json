@@ -147,7 +147,7 @@
     "Get": "Get",
     "box.Add 1.000.000₫ more to earn Free Shipping!": "Add 1.000.000₫ more to earn Free Shipping!",
 
-    "title.Payment": "Payment",
+    "title.Payment": "Payment Method",
     "title.Payment.CASH ON DELIVERY": "CASH ON DELIVERY",
 
     "thank_you_purchase": "Thank you for your purchase",
@@ -266,7 +266,7 @@
     "admin.Best_Selling_Product": "Best Selling Product",
     "admin.Annual_Revenue_Statistics_Chart": "Annual Revenue Statistics Chart",
 
-    "admin.id": "Id",
+    "admin.id": "ID",
     "admin.name": "Name",
     "admin.image": "Image",
     "admin.price": "Price",
@@ -426,7 +426,7 @@
     "admin.actions": "Actions",
     "Shipping_Cost": "Shipping Cost ",
     "Please_select_status": "Please select status",
-    "Payment_status": "Payment status",
+    "Payment_status": "Payment Status",
     "Remove": "Remove",
     "Back": "Back",
     "admin.selectUser": "Select User",
@@ -564,7 +564,7 @@
     "of Nike.": "of Nike.",
     "Order Detail": "Order Detail",
     "Ordering information": "Ordering information",
-    "The Order is": "The Order is",
+    "The_Order_is": "The Order is",
     "Buy Again": "Buy Again",
     "Variant": "Variant",
     "Reason": "Reason",
@@ -596,5 +596,7 @@
     "topic.updateTopic": "Update Topic",
     "topic.placeholderTopicName": "Enter topic name",
     "topic.placeholderSlug": "Enter slug",
-    "topic.placeholderParentTopic": "Enter parent topic"
+    "topic.placeholderParentTopic": "Enter parent topic",
+    "orderDetail.return": "Return Order",
+    "orderDetail.reasonOrder": "Reason Return Order"
 }

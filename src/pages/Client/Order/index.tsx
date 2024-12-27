@@ -155,7 +155,7 @@ const Order = () => {
                 return {
                     product_variation_id: cart.product_variation.id,
                     product_image: cart?.product_variation?.product?.image_url,
-                    product_name: cart?.product_variation?.name,
+                    product_name: cart?.product_variation?.product?.name,
                     classify: cart?.product_variation?.classify,
                     product_id: null,
                     quantity: cart.quantity,
@@ -641,49 +641,66 @@ const Order = () => {
                                     </div>
 
                                     <Divider />
-                                    {carts?.map((cart: any) => (
-                                        <div className="flex gap-x-10" key={cart.id}>
-                                            <Row justify="start">
-                                                <img
-                                                    src={
-                                                        cart?.product
-                                                            ? cart?.product?.image_url
-                                                            : cart?.product_variation?.product?.image_url
-                                                    }
-                                                    alt="Tatum 3 PF 'Zero Days Off' Basketball Shoes"
-                                                    style={{ width: '200px', marginTop: '12px' }}
-                                                />
-                                            </Row>
-
-                                            <div>
-                                                <Title level={5}>
-                                                    {cart?.product?.name
-                                                        ? cart.product.name
-                                                        : cart?.product_variation?.product?.name}
-                                                </Title>
-                                                <div style={{ marginTop: '8px' }}>
-                                                    <div>
-                                                        <p className="text-[15px] color-gray font-medium">
-                                                            {cart?.product_variation?.classify}
-                                                        </p>
-                                                    </div>
-                                                    <Text className="block my-2 text-[15px] color-gray">
-                                                        {<FormattedMessage id="body.Detail.Quantity" />}:{' '}
-                                                        {cart?.quantity}
-                                                    </Text>
-                                                    <Text className="block font-medium text-[18px] color-primary">
-                                                        {formatPrice(
+                                    <div className="h-[500px] overflow-auto">
+                                        {carts?.map((cart: any) => (
+                                            <div className="flex gap-x-10" key={cart.id}>
+                                                <Row justify="start">
+                                                    <img
+                                                        src={
                                                             cart?.product
-                                                                ? cart?.product.price
-                                                                : cart?.product_variation?.sale_price ||
-                                                                cart?.product_variation?.price,
-                                                        )}{' '}
-                                                        ₫
-                                                    </Text>
+                                                                ? cart?.product?.image_url
+                                                                : cart?.product_variation?.product?.image_url
+                                                        }
+                                                        alt="Tatum 3 PF 'Zero Days Off' Basketball Shoes"
+                                                        className="w-[200px] h-[220px] mb-5 object-cover"
+                                                    />
+                                                </Row>
+
+                                                <div>
+                                                    <Title level={5}>
+                                                        {cart?.product?.name
+                                                            ? cart.product.name
+                                                            : cart?.product_variation?.product?.name}
+                                                    </Title>
+                                                    <div style={{ marginTop: '8px' }}>
+                                                        <div>
+                                                            {cart?.product_variation_id ? (
+                                                                <div>
+                                                                    <p className="text-[14px] color-gray font-medium">
+                                                                        {cart?.product_variation?.values.map(
+                                                                            (value: any, index: number) => (
+                                                                                <p
+                                                                                    key={index}
+                                                                                    className="color-gray text-[13px] font-medium"
+                                                                                >
+                                                                                    {value.attribute} : {value.values}
+                                                                                </p>
+                                                                            ),
+                                                                        )}
+                                                                    </p>
+                                                                </div>
+                                                            ) : (
+                                                                ''
+                                                            )}
+                                                        </div>
+                                                        <Text className="block my-2 text-[15px] color-gray">
+                                                            {<FormattedMessage id="body.Detail.Quantity" />}:{' '}
+                                                            {cart?.quantity}
+                                                        </Text>
+                                                        <Text className="block font-medium text-[18px] color-primary">
+                                                            {formatPrice(
+                                                                cart?.product
+                                                                    ? cart?.product.price
+                                                                    : cart?.product_variation?.sale_price ||
+                                                                    cart?.product_variation?.price,
+                                                            )}{' '}
+                                                            ₫
+                                                        </Text>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
 
                                     <div className="mt-10">
                                         <Title level={3}>{<FormattedMessage id="title.Payment" />}</Title>

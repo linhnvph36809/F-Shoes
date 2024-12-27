@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import ModalReason from './components/ModalReason';
+import ModalDeniedReturn from './components/ModalDeniedReturn';
 
 const statusColors: Record<string, string> = {
     '0': 'red',
@@ -39,7 +40,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
     const { loading, putOrder } = useOrder();
     const { locale } = useContextGlobal();
 
-    const handleChangeStatus = async (status: string) => {
+    const handleChangeStatus = async (status: number) => {
         if (orderDetail?.orderDetail?.id) {
             await putOrder(orderDetail.orderDetail.id, {
                 status,
@@ -49,8 +50,6 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
     };
 
     const color = statusColors[orderDetail?.orderDetail?.status] || 'default';
-
-    console.log(orderDetail);
 
     return (
         <>
@@ -172,7 +171,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                         <TicketPercent className="w-7" /> <FormattedMessage id="voucher" /> :
                                     </p>
                                     {orderDetail?.orderDetail?.voucher &&
-                                    orderDetail?.orderDetail?.voucher?.type == 'fixed' ? (
+                                        orderDetail?.orderDetail?.voucher?.type == 'fixed' ? (
                                         <p className="font-medium color-gray">
                                             -{formatPrice(orderDetail?.orderDetail?.voucher?.discount)}đ
                                         </p>
@@ -247,16 +246,16 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     </div>
                     <div className="flex justify-end items-center gap-x-5 mt-3">
                         {orderDetail?.orderDetail?.status &&
-                        orderDetail?.orderDetail?.status !== 0 &&
-                        orderDetail?.orderDetail?.status < 4 ? (
+                            orderDetail?.orderDetail?.status !== 0 &&
+                            orderDetail?.orderDetail?.status < 4 ? (
                             <ModalReason orderId={orderDetail?.orderDetail?.id} handleCancelDetail={handleCancel} />
                         ) : (
                             ''
                         )}
 
                         {orderDetail?.orderDetail?.status &&
-                        orderDetail?.orderDetail?.status > 1 &&
-                        orderDetail?.orderDetail?.status < 5 ? (
+                            orderDetail?.orderDetail?.status > 1 &&
+                            orderDetail?.orderDetail?.status < 5 ? (
                             <div>
                                 <button
                                     style={{
@@ -275,9 +274,53 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                         ) : (
                             ''
                         )}
+
+
+                        {orderDetail?.orderDetail?.status && orderDetail?.orderDetail?.status === 6 ? (
+                            <div className="flex items-center gap-x-5">
+                                {
+                                    orderDetail?.orderDetail?.reason_return ?
+                                        <p className="text-[16px] font-medium text-red-500">
+                                            Reason Return : {orderDetail.orderDetail.reason_return}
+                                        </p> : ""
+                                }
+                                <ModalDeniedReturn
+                                    orderId={orderDetail?.orderDetail?.id}
+                                    handleCancelDetail={handleCancel}
+                                />
+                                <button
+                                    onClick={() => handleChangeStatus(7)}
+                                    className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
+                                >
+                                    {loading ? <LoadingSmall /> : "Return Processing"}
+                                </button>
+                            </div>
+                        ) : (
+                            ''
+                        )}
+
+                        {orderDetail?.orderDetail?.status == 8 && orderDetail?.orderDetail?.reason_denied_return ? (
+                            <p className="text-[16px] font-medium text-red-500">
+                                Reason Denied Return : {orderDetail?.orderDetail?.reason_denied_return}
+                            </p>
+                        ) : (
+                            ''
+                        )}
+
+
+
+                        {
+                            orderDetail?.orderDetail?.status && orderDetail?.orderDetail?.status === 7 ?
+                                < button
+                                    onClick={() => handleChangeStatus(9)}
+                                    className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
+                                >
+                                    {loading ? <LoadingSmall /> : "Returned"}
+                                </button> : ""
+                        }
                     </div>
                 </div>
-            </Modal>
+            </Modal >
         </>
     );
 };

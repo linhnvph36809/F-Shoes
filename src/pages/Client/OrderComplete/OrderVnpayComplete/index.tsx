@@ -8,6 +8,7 @@ import useCookiesConfig from '../../../../hooks/useCookiesConfig';
 import { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import useOrder from '../../../../hooks/useOrder';
+import { paymentMethodString, paymentStatusString } from '../../../../interfaces/IOrder';
 
 const OrderVnpayComplete = () => {
     const location = useLocation();
@@ -79,14 +80,25 @@ const OrderVnpayComplete = () => {
                                         <img
                                             src={order?.product_image}
                                             alt="Nike Air Force One"
-                                            className="w-[80px] h-[100px] object-cover rounded-md"
+                                            className="w-[100px] h-[120px] object-cover rounded-md"
                                         />
                                         <div className="flex-1 ml-6 text-left">
                                             <p className="font-medium color-primary text-[15px]">
                                                 {order?.product_name}
                                             </p>
-                                            <p className="text-[13px] color-gray font-medium">{order?.classify}</p>
-                                            <p className="color-primary text-[13px]">Qty: {order?.quantity}</p>
+
+                                            <p className="color-gray text-[12px] font-medium my-2">
+                                                {Object.entries(JSON.parse(order?.detail_item) || {}).map(
+                                                    ([key, value]: any) => (
+                                                        <li key={key}>
+                                                            <strong>{key}:</strong> {value}
+                                                        </li>
+                                                    ),
+                                                )}
+                                            </p>
+                                            <p className="color-primary text-[13px]">
+                                                {<FormattedMessage id="body.Detail.Quantity" />}: {order?.quantity}
+                                            </p>
                                         </div>
                                         <p className="font-semibold text-gray-800 text-2xl">
                                             {' '}
@@ -108,17 +120,48 @@ const OrderVnpayComplete = () => {
                                     <span className="text-[14px] font-medium color-primary">
                                         {<FormattedMessage id="title.Payment" />}
                                     </span>
-                                    <span className="font-semibold text-xl text-gray-800"> VNPAY</span>
+                                    <span className="font-semibold text-xl text-gray-800">
+                                        {' '}
+                                        {paymentMethodString(order?.payment_method)}
+                                    </span>
+                                </div>
+                                <div className="flex justify-between items-center mt-6 border-t pt-4">
+                                    <span className="text-[14px] font-medium color-primary">
+                                        {<FormattedMessage id="Payment_status" />}
+                                    </span>
+                                    <span className="font-semibold text-xl text-gray-800">
+                                        {' '}
+                                        {paymentStatusString(order?.payment_status)}
+                                    </span>
                                 </div>
 
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
                                     <span className="text-[14px] font-medium color-primary">
-                                        {<FormattedMessage id="shipping" />}
+                                        {<FormattedMessage id="shipping_method" />}
                                     </span>
                                     <span className="font-semibold text-xl text-gray-800">
-                                        {order.shipping_method}-{formatPrice(+order.shipping_cost)}đ
+                                        {order?.shipping_method}
                                     </span>
                                 </div>
+                                <div className="flex justify-between items-center mt-6 border-t pt-4">
+                                    <span className="text-[14px] font-medium color-primary">
+                                        {<FormattedMessage id="Shipping_Cost" />}
+                                    </span>
+                                    <span className="font-semibold text-xl text-gray-800">
+                                        {formatPrice(+order?.shipping_cost)}đ
+                                    </span>
+                                </div>
+                                {
+                                    order?.note ?
+                                        <div className="flex justify-between items-center mt-6 border-t pt-4">
+                                            <span className="text-[14px] font-medium color-primary">
+                                                {<FormattedMessage id="note" />}
+                                            </span>
+                                            <span className="font-semibold text-xl text-gray-800">
+                                                {order?.note}
+                                            </span>
+                                        </div> : ""
+                                }
                                 {order?.voucher_cost ? (
                                     <div className="flex justify-between items-center mt-6 border-t pt-4">
                                         <span className="text-[14px] font-medium color-primary">
@@ -126,7 +169,7 @@ const OrderVnpayComplete = () => {
                                         </span>
                                         <span className="font-semibold text-xl text-gray-800">
                                             {' '}
-                                            {formatPrice(+order.voucher_cost)} đ
+                                            -{formatPrice(+order.voucher_cost)}đ
                                         </span>
                                     </div>
                                 ) : (
@@ -137,7 +180,7 @@ const OrderVnpayComplete = () => {
                                     <span className="font-semibold text-[18px] color-primary">
                                         {<FormattedMessage id="box.Cart.Total" />}
                                     </span>
-                                    <span className="font-semibold text-[18px] text-gray-800">
+                                    <span className="font-semibold text-[20px] text-red-500">
                                         {' '}
                                         {formatPrice(order.total_amount)}đ
                                     </span>
