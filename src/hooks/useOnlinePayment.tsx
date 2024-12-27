@@ -73,8 +73,7 @@ const useOnlinePayment = () => {
             } else {
                 window.location.href = data;
             }
-            refetchQuantityCart();
-            handleRemoveLocalStorage('orderId');
+            await refetchQuantityCart();
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -115,8 +114,7 @@ const useOnlinePayment = () => {
             if (data?.payUrl) {
                 window.location.href = data.payUrl;
             }
-            refetchQuantityCart();
-            handleRemoveLocalStorage('orderId');
+            await refetchQuantityCart();
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
