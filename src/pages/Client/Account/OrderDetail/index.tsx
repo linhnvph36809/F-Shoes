@@ -9,10 +9,11 @@ import ButtonPrimary from '../../../../components/Button';
 import NotFound from '../../../../components/NotFound';
 import ModalCancel from './components/ModalCancel';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
-import { paymentMethodString, statusString } from '../../../../interfaces/IOrder';
+import { paymentMethodString, paymentStatusString, statusString } from '../../../../interfaces/IOrder';
 import { formatPrice, formatTime } from '../../../../utils';
 import { showMessageActive } from '../../../../utils/messages';
 import { FormattedMessage } from 'react-intl';
+import ModalReturnOrder from './components/ModalReturnOrder';
 
 const OrderDetail = () => {
     const { reOrder } = UseOrder();
@@ -22,7 +23,6 @@ const OrderDetail = () => {
     const location = useLocation();
     const prevUrl = location.state?.prevUrl;
     const navigator = useNavigate();
-    console.log(data);
 
     if (error) {
         return <NotFound />;
@@ -48,7 +48,6 @@ const OrderDetail = () => {
             navigator('/cart');
         });
     };
-
     const status:
         | {
             className: string;
@@ -75,50 +74,79 @@ const OrderDetail = () => {
                         <FormattedMessage id="Back" />
                     </Link>
                     <div>
-                        <div className="bg-whitesmoke p-8 rounded-lg min-h-[650px]">
+                        <div className="bg-whitesmoke p-10 rounded-[18px] min-h-[650px]">
                             <div>
                                 <div className="flex justify-between items-center mb-6">
                                     <h3 className="font-medium text-[25px]">
                                         <FormattedMessage id="Ordering information" />
                                     </h3>
                                     <div className="flex items-center gap-x-2">
-                                        <Tag
-                                            className={`flex justify-center items-center text-[16px]
-                                        rounded-lg px-6 py-2 ${status?.className}`}
-                                        >
-                                            {status?.text}
-                                        </Tag>
-                                        <p className="text-[15px] color-gray">
+                                        <p className="text-[15px] color-gray font-medium">
                                             <FormattedMessage id="admin.id" /> : {order?.id}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="flex gap-x-10">
                                     <div className="w-6/12">
-                                        <h3 className="text-[15px] font-medium color-primary">
-                                            <FormattedMessage id="admin.name" /> : {order?.user.name}
+                                        <h3 className="text-[15px] color-gray my-3">
+                                            <span className="font-medium">
+                                                <FormattedMessage id="admin.name" />
+                                            </span>{' '}
+                                            : {order?.receiver_full_name}
+                                        </h3>
+                                        <h3 className="text-[15px] color-gray my-3">
+                                            <span className="font-medium">
+                                                {' '}
+                                                <FormattedMessage id="user.User_gmail" />{' '}
+                                            </span>{' '}
+                                            : {order?.receiver_email}
                                         </h3>
                                         <p className="text-[14px] color-gray my-3">
-                                            <FormattedMessage id="phone" /> : {order?.phone}{' '}
+                                            <span className="font-medium">
+                                                {' '}
+                                                <FormattedMessage id="phone" />{' '}
+                                            </span>{' '}
+                                            : {order?.phone}{' '}
                                         </p>
                                         <p className="text-[14px] color-gray mb-3">
-                                            <FormattedMessage id="address" /> : {order?.address}
+                                            <span className="font-medium">
+                                                {' '}
+                                                <FormattedMessage id="address" />{' '}
+                                            </span>{' '}
+                                            : {order?.address}
+                                        </p>
+                                        <p className="text-[14px] color-gray mb-3">
+                                            <span className="font-medium">
+                                                {' '}
+                                                <FormattedMessage id="country" />{' '}
+                                            </span>{' '}
+                                            : {order?.country}
                                         </p>
                                         <p className="text-[14px] color-gray my-3">
-                                            <FormattedMessage id="admin.date" /> : {formatTime(order?.created_at)}
+                                            <span className="font-medium">
+                                                {' '}
+                                                <FormattedMessage id="admin.date" />{' '}
+                                            </span>{' '}
+                                            : {formatTime(order?.created_at)}
                                         </p>
                                     </div>
                                     <div className="w-6/12 pl-10 border-l">
-                                        <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+                                        <div className="flex items-center justify-between pb-5 mb-5 border-b text-[14px] color-gray">
                                             <p>
                                                 {' '}
                                                 <p>
-                                                    <FormattedMessage id="shipping_method" /> :
+                                                    <FormattedMessage id="admin.status" /> :
                                                 </p>
                                             </p>
-                                            <p className="font-medium">{order?.shipping_method}</p>
+                                            <Tag
+                                                className={`flex justify-center items-center text-[16px]
+                                                rounded-lg px-6 py-2 m-0 ${status?.className}`}
+                                            >
+                                                {status?.text}
+                                            </Tag>
                                         </div>
-                                        <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+
+                                        <div className="flex justify-between pb-5 items-center mb-5 border-b text-[14px] color-gray">
                                             <p>
                                                 {' '}
                                                 <p>
@@ -139,7 +167,17 @@ const OrderDetail = () => {
                                             </p>
                                         </div>
 
-                                        <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+                                        <div className="flex justify-between pb-5 items-center mb-5 border-b text-[14px] color-gray">
+                                            <p>
+                                                {' '}
+                                                <p>
+                                                    <FormattedMessage id="shipping_method" /> :
+                                                </p>
+                                            </p>
+                                            <p className="font-medium">{order?.shipping_method}</p>
+                                        </div>
+
+                                        <div className="flex justify-between pb-5 items-center mb-5 border-b text-[14px] color-gray">
                                             <p>
                                                 {' '}
                                                 <p>
@@ -150,7 +188,7 @@ const OrderDetail = () => {
                                         </div>
 
                                         {order?.voucher_id ? (
-                                            <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+                                            <div className="flex justify-between pb-5 items-center mb-5 border-b text-[14px] color-gray">
                                                 <p>
                                                     {' '}
                                                     <p>
@@ -169,7 +207,18 @@ const OrderDetail = () => {
                                         ) : (
                                             ''
                                         )}
-                                        <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+
+                                        <div className="flex justify-between pb-5 items-center mb-5 border-b text-[14px] color-gray">
+                                            <p>
+                                                {' '}
+                                                <p>
+                                                    <FormattedMessage id="Payment_status" /> :
+                                                </p>
+                                            </p>
+                                            <p className="font-medium">{paymentStatusString(order?.payment_status)}</p>
+                                        </div>
+
+                                        <div className="flex justify-between pb-5 items-center mb-5 border-b text-[14px] color-gray">
                                             <p>
                                                 {' '}
                                                 <p>
@@ -178,7 +227,21 @@ const OrderDetail = () => {
                                             </p>
                                             <p className="font-medium">{paymentMethodString(order?.payment_method)}</p>
                                         </div>
-                                        <div className="flex justify-between pb-5 mb-5 border-b text-[14px] color-gray">
+                                        {order?.note ? (
+                                            <div className="flex justify-between pb-5 items-center mb-5 border-b text-[14px] color-gray">
+                                                <p>
+                                                    {' '}
+                                                    <p>
+                                                        <FormattedMessage id="note" /> :
+                                                    </p>
+                                                </p>
+                                                <p className="font-medium">{order?.note}</p>
+                                            </div>
+                                        ) : (
+                                            ''
+                                        )}
+
+                                        <div className="flex justify-between pb-5 items-center mb-5 border-b text-[14px] color-gray">
                                             <p>
                                                 {' '}
                                                 <p className="font-medium text-[20px]">
@@ -189,7 +252,7 @@ const OrderDetail = () => {
                                                 {formatPrice(order?.total_amount)}đ
                                             </p>
                                         </div>
-                                        <div className="mt-10 flex justify-end gap-x-3">
+                                        <div className="mt-10 flex justify-end items-center gap-x-5">
                                             {order.status &&
                                                 order.status !== 0 &&
                                                 order.status < 4 &&
@@ -210,9 +273,19 @@ const OrderDetail = () => {
                                                     />
                                                 </>
                                             ) : order.status > 3 ? (
-                                                <p className="text-[16px] color-gray">
-                                                    <FormattedMessage id="The Order is" />{' '}
-                                                    <span className="color-primary">{status.text}</span>
+                                                <p className="text-[16px] font-medium text-red-500">
+                                                    <span>
+                                                        {' '}
+                                                        <FormattedMessage id="The_Order_is" /> {status.text}
+                                                    </span>
+                                                </p>
+                                            ) : (
+                                                ''
+                                            )}
+
+                                            {order?.status === 8 && order?.reason_denied_return ? (
+                                                <p className="text-[16px] font-medium color-primary">
+                                                    Reason Denied Return : {order.reason_denied_return}
                                                 </p>
                                             ) : (
                                                 ''
@@ -228,6 +301,7 @@ const OrderDetail = () => {
                                             ) : (
                                                 ''
                                             )}
+                                            {order?.status === 5 ? <ModalReturnOrder refetch={refetch} /> : ''}
                                         </div>
                                     </div>
                                 </div>
@@ -255,26 +329,32 @@ const OrderDetail = () => {
                                                             ? orderDetail?.product.name
                                                             : orderDetail?.variation?.name}
                                                     </h3>
-                                                    {orderDetail?.variation?.classify ? (
-                                                        <p className="font-medium color-gray text-[14px] my-2">
-                                                            <FormattedMessage id="Variant" /> :{' '}
-                                                            {orderDetail?.variation?.classify}
+                                                    {orderDetail?.detail_item ? (
+                                                        <p className="color-gray text-[13px] font-medium my-2">
+                                                            {Object.entries(
+                                                                JSON.parse(orderDetail?.detail_item) || {},
+                                                            ).map(([key, value]: any) => (
+                                                                <p className="color-gray text-[13px] font-medium">
+                                                                    {key}: {value}
+                                                                </p>
+                                                            ))}
                                                         </p>
                                                     ) : (
                                                         ''
                                                     )}
-                                                    <p className="font-medium color-gray text-[14px]">
-                                                        x{orderDetail?.quantity}
-                                                    </p>
                                                 </div>
                                             </div>
                                             <div className="flex flex-col justify-between items-end h-full">
                                                 <p className="font-medium text-[18px] text-red-500">
                                                     {formatPrice(orderDetail?.total_amount)}đ
+                                                    <p className="font-medium color-gray text-[14px] text-end">
+                                                        x{orderDetail?.quantity}
+                                                    </p>
                                                 </p>
+
                                                 {order.status > 3 ? (
                                                     <Link to={`/detail/${orderDetail?.product?.slug}`}>
-                                                        <button className="w-[80px] h-[36px] bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">
+                                                        <button className="h-[36px] px-5 bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">
                                                             <FormattedMessage id="admin.review" />
                                                         </button>
                                                     </Link>

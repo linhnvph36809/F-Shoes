@@ -6,12 +6,12 @@ const Outstanding = ({
     title,
     description,
 }: //path,
-{
-    category: string | ReactNode;
-    title: string | ReactNode;
-    description: string | ReactNode;
-    path?: string;
-}) => {
+    {
+        category: string | ReactNode;
+        title: string | ReactNode;
+        description: string | ReactNode;
+        path?: string;
+    }) => {
     return (
         <>
             <div className="text-center mt-12">

@@ -74,7 +74,7 @@ const HomePage = () => {
                                                     <img
                                                         src={item.image_url}
                                                         alt=""
-                                                        className="h-[678px] object-cover"
+                                                        className="w-full h-[678px] object-cover"
                                                     />
                                                 </div>
                                                 <div>
@@ -130,7 +130,7 @@ const HomePage = () => {
                             productsDisplay2.map((item: IProduct, index: number) => (
                                 <SwiperSlide key={index}>
                                     <div className="relative">
-                                        <img src={item.image_url} alt="" className="h-[678px] object-cover" />
+                                        <img src={item.image_url} alt="" className="w-full h-[678px] object-cover" />
                                         <Link
                                             to={`detail/${item.slug}`}
                                             className="absolute left-[5%] bottom-[5%] px-8 py-4

@@ -5,7 +5,6 @@ import 'swiper/css/pagination';
 import { FreeMode, Navigation } from 'swiper/modules';
 import SkeletonComponent from '../../Admin/components/Skeleton';
 import { Link } from 'react-router-dom';
-import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import { IProduct } from '../../../interfaces/IProduct.ts';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ICategory } from '../../../interfaces/ICategory.ts';
