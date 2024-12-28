@@ -14,13 +14,14 @@ const OrderVnpayComplete = () => {
     const location = useLocation();
     const {
         cookies: { order },
-        removeCookie,
     } = useCookiesConfig('order');
 
     const {
         cookies: { orderId },
         removeCookie: removeCookieOrderId,
     } = useCookiesConfig('orderId');
+
+    const { handleSetCookie } = useCookiesConfig(`order${orderId}`);
 
     const { putOrder } = useOrder();
 
@@ -40,8 +41,8 @@ const OrderVnpayComplete = () => {
         vnp_SecureHash: queryParams.get('vnp_SecureHash'),
     };
 
-    if (params.vnp_TransactionStatus != '00' || !order) {
-        removeCookie('order');
+    if (params.vnp_TransactionStatus != '00') {
+        handleSetCookie(`order${orderId}`, order, new Date(Date.now() + 60 * 60 * 1000));
         return <Navigate to="/profile/orders" />;
     }
 
@@ -49,6 +50,8 @@ const OrderVnpayComplete = () => {
         if (orderId) {
             putOrder(orderId, {
                 status: 2,
+                payment_status: 'paid',
+                payment_method: "vnpay"
             });
             removeCookieOrderId('orderId');
         }
@@ -131,7 +134,7 @@ const OrderVnpayComplete = () => {
                                     </span>
                                     <span className="font-semibold text-xl text-gray-800">
                                         {' '}
-                                        {paymentStatusString(order?.payment_status)}
+                                        {paymentStatusString('paid')}
                                     </span>
                                 </div>
 
@@ -151,17 +154,16 @@ const OrderVnpayComplete = () => {
                                         {formatPrice(+order?.shipping_cost)}đ
                                     </span>
                                 </div>
-                                {
-                                    order?.note ?
-                                        <div className="flex justify-between items-center mt-6 border-t pt-4">
-                                            <span className="text-[14px] font-medium color-primary">
-                                                {<FormattedMessage id="note" />}
-                                            </span>
-                                            <span className="font-semibold text-xl text-gray-800">
-                                                {order?.note}
-                                            </span>
-                                        </div> : ""
-                                }
+                                {order?.note ? (
+                                    <div className="flex justify-between items-center mt-6 border-t pt-4">
+                                        <span className="text-[14px] font-medium color-primary">
+                                            {<FormattedMessage id="note" />}
+                                        </span>
+                                        <span className="font-semibold text-xl text-gray-800">{order?.note}</span>
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
                                 {order?.voucher_cost ? (
                                     <div className="flex justify-between items-center mt-6 border-t pt-4">
                                         <span className="text-[14px] font-medium color-primary">

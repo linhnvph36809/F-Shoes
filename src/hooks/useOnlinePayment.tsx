@@ -62,11 +62,13 @@ const useOnlinePayment = () => {
         }
     };
 
-    const postVNPAY = async (value: any, orders: any) => {
+    const postVNPAY = async (value: any, orders: any, isAddOrder: boolean = true) => {
         try {
             setLoading(true);
-            const order = await tokenManagerInstance('post', API_ORDER, orders);
-            handleSetCookie('orderId', order?.data?.order?.id, new Date(Date.now() + 20 * 60 * 1000));
+            if (isAddOrder) {
+                const order = await tokenManagerInstance('post', API_ORDER, orders);
+                handleSetCookie('orderId', order?.data?.order?.id, new Date(Date.now() + 20 * 60 * 1000));
+            }
             const { data } = await tokenManagerInstance('post', API + 'vnpay', value);
             if (data?.data) {
                 window.location.href = data.data;
@@ -105,11 +107,13 @@ const useOnlinePayment = () => {
         }
     };
 
-    const postMomo = async (value: any, orders: any) => {
+    const postMomo = async (value: any, orders: any, isAddOrder: boolean = true) => {
         try {
             setLoading(true);
-            const order = await tokenManagerInstance('post', API_ORDER, orders);
-            handleSetCookie('orderId', order?.data?.order?.id, new Date(Date.now() + 20 * 60 * 1000));
+            if (isAddOrder) {
+                const order = await tokenManagerInstance('post', API_ORDER, orders);
+                handleSetCookie('orderId', order?.data?.order?.id, new Date(Date.now() + 20 * 60 * 1000));
+            }
             const { data } = await tokenManagerInstance('post', API + 'momo', value);
             if (data?.payUrl) {
                 window.location.href = data.payUrl;

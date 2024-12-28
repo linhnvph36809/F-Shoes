@@ -69,8 +69,6 @@ export const handleChangeMessage: (language: string, enMessage: string, viMessag
     enMessage,
     viMessage,
 ) => {
-    console.log(language);
-
     if (language === LANGUAGE_EN) {
         return enMessage;
     } else if (language === LANGUAGE_VI) {

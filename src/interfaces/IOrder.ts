@@ -31,27 +31,27 @@ export const statusString = (id: number) => {
         };
     else if (id === 5)
         return {
-            className: 'text-gray-500',
+            className: 'text-[#00f227]',
             text: handleChangeMessage(language, 'Delivered ', 'Đã giao'),
         };
     else if (id === 6)
         return {
-            className: 'text-gray-500',
-            text: handleChangeMessage(language, 'Waiting Accept Return', 'Chờ chấp nhận'),
+            className: 'text-[#294781]',
+            text: handleChangeMessage(language, 'Waiting Accept Return', 'Chờ chấp nhận trả hàng'),
         };
     else if (id === 7)
         return {
-            className: 'text-gray-500',
+            className: 'text-[#d67309]',
             text: handleChangeMessage(language, 'Return Processing', 'Xử lý trả lại'),
         };
     else if (id === 8)
         return {
-            className: 'text-gray-500',
+            className: 'text-[#741111]',
             text: handleChangeMessage(language, 'Denied Return', 'Trả lại bị từ chối'),
         };
     else if (id === 9)
         return {
-            className: 'text-gray-500',
+            className: 'text-[#125070]',
             text: handleChangeMessage(language, 'Returned', 'Đã trả lại'),
         };
     else {

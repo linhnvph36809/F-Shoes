@@ -22,6 +22,8 @@ const OrderMomoComplete = () => {
         removeCookie: removeCookieOrderId,
     } = useCookiesConfig('orderId');
 
+    const { handleSetCookie } = useCookiesConfig(`order${orderId}`);
+
     const { putOrder } = useOrder();
 
     const searchParams = new URLSearchParams(location.search);
@@ -41,18 +43,19 @@ const OrderMomoComplete = () => {
         signature: searchParams.get('signature'),
     };
 
-    if (paramsObj.resultCode != '0' || !order) {
-        removeCookie('order');
+    if (paramsObj.resultCode != '0') {
+        handleSetCookie(`order${orderId}`, order, new Date(Date.now() + 60 * 60 * 1000));
         return <Navigate to="/profile/orders" />;
     }
 
     useEffect(() => {
         if (orderId) {
-            putOrder(
-                orderId, {
+            putOrder(orderId, {
                 status: 2,
-            }
-            );
+                payment_status: 'paid',
+                payment_method: "momo"
+
+            });
             removeCookieOrderId('orderId');
         }
     }, []);
@@ -125,7 +128,7 @@ const OrderMomoComplete = () => {
                                     </span>
                                     <span className="font-semibold text-xl text-gray-800">
                                         {' '}
-                                        {paymentMethodString(order?.payment_method)}
+                                        Momo
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
@@ -134,7 +137,7 @@ const OrderMomoComplete = () => {
                                     </span>
                                     <span className="font-semibold text-xl text-gray-800">
                                         {' '}
-                                        {paymentStatusString(order?.payment_status)}
+                                        {paymentStatusString('paid')}
                                     </span>
                                 </div>
 
@@ -154,17 +157,16 @@ const OrderMomoComplete = () => {
                                         {formatPrice(+order?.shipping_cost)}đ
                                     </span>
                                 </div>
-                                {
-                                    order?.note ?
-                                        <div className="flex justify-between items-center mt-6 border-t pt-4">
-                                            <span className="text-[14px] font-medium color-primary">
-                                                {<FormattedMessage id="note" />}
-                                            </span>
-                                            <span className="font-semibold text-xl text-gray-800">
-                                                {order?.note}
-                                            </span>
-                                        </div> : ""
-                                }
+                                {order?.note ? (
+                                    <div className="flex justify-between items-center mt-6 border-t pt-4">
+                                        <span className="text-[14px] font-medium color-primary">
+                                            {<FormattedMessage id="note" />}
+                                        </span>
+                                        <span className="font-semibold text-xl text-gray-800">{order?.note}</span>
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
                                 {order?.voucher_cost ? (
                                     <div className="flex justify-between items-center mt-6 border-t pt-4">
                                         <span className="text-[14px] font-medium color-primary">

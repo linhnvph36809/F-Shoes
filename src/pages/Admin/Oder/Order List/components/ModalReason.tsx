@@ -37,11 +37,15 @@ const ModalReason = ({ orderId, handleCancelDetail }: any) => {
         <>
             <div onClick={showModal}>
                 <button className="px-8 py-3 bg-red-500 text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80">
-                    Cancel
+                    <FormattedMessage id="button.cancel" />
                 </button>
             </div>
             <Modal
-                title={<h3 className="text-[28px]">Reason Return</h3>}
+                title={
+                    <h3 className="text-[28px]">
+                        <FormattedMessage id="reason_cancelled" />
+                    </h3>
+                }
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}

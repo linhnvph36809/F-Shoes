@@ -10,13 +10,10 @@ export const useContextClient = () => useContext(ContextClient);
 
 const LayoutClient = () => {
     const [userName, setUserName] = useState<any>();
-    const userNameLocal = localStorage.getItem('userName');
     const { user } = useContextGlobal();
 
     useEffect(() => {
-        if (userNameLocal) {
-            setUserName(userNameLocal);
-        } else if (user?.name) {
+        if (user?.name) {
             setUserName(user.name);
         }
     }, [user]);

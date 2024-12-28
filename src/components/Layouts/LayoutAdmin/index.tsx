@@ -35,8 +35,6 @@ const siderStyle: React.CSSProperties = {
 const ContextAdmin = createContext<any>({});
 export const usePermissionContext = () => useContext(ContextAdmin);
 
-const userName = handleGetLocalStorage(INFO_AUTH.userName);
-
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
     const { locale, changeLanguage, user } = useContextGlobal();
@@ -127,7 +125,7 @@ const LayoutAdmin: React.FC = () => {
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Avatar src={user?.avatar_url} size={40} icon={<UserOutlined />} />
                                 <div style={{ marginLeft: '10px' }}>
-                                    <p className="text-[15px] font-medium">{userName || user?.name}</p>
+                                    <p className="text-[15px] font-medium">{user?.name || 'loading...'}</p>
                                     <p className="text-[12px] color-gray">{user?.group?.group_name}</p>
                                 </div>
                             </div>
