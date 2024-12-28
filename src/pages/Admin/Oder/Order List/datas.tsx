@@ -1,11 +1,12 @@
 import { Avatar, Button, Tag, Typography } from 'antd';
-import { SquarePen } from 'lucide-react';
+import { Eye, SquarePen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ACTIONS, PERMISSION, STATUS_ORDER } from '../../../../constants';
 import { formatPrice, formatTime } from '../../../../utils';
 import { paymentMethodString } from '../../../../interfaces/IOrder';
 import { FormattedMessage } from 'react-intl';
 import PermissionElement from '../../../../components/Permissions/PermissionElement';
+import ButtonEdit from '../../components/Button/ButtonEdit';
 const { Text } = Typography;
 
 export const columns = [
@@ -99,7 +100,7 @@ export const columns = [
         key: 'actions',
         dataIndex: 'id',
         render: (_: any, { id }: any) => (
-            <div>
+            <div className='flex gap-x-5'>
                 <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
                     <Link to={`/admin/orderupdate/${id}`}>
                         <Button className="w-[50px] h-[40px] font-medium">
@@ -107,6 +108,9 @@ export const columns = [
                         </Button>
                     </Link>
                 </PermissionElement>
+                <ButtonEdit>
+                    <Eye />
+                </ButtonEdit>
             </div>
         ),
     },

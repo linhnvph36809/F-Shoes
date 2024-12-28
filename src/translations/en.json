@@ -412,6 +412,8 @@
     "order.Sort descending by date": "Sort descending by date",
     "status.cancelled": "Cancelled",
     "status.waiting_confirm": "Waiting Confirm",
+    "status.waiting_payment": "Waiting Payment",
+    "status.waitingAcceptReturn": "Waiting Accept Return",
     "status.pending": "Pending",
     "status.transporting": "Transporting",
     "status.done": "Done",
@@ -598,5 +600,14 @@
     "topic.placeholderSlug": "Enter slug",
     "topic.placeholderParentTopic": "Enter parent topic",
     "orderDetail.return": "Return Order",
-    "orderDetail.reasonOrder": "Reason Return Order"
+    "orderDetail.reasonOrder": "Reason Return Order",
+    "orderId": "ORDER ID",
+    "delivery_address": "Delivery address",
+    "Information": "Order Information",
+    "date": "Date",
+    "reason_cancelled": "Reason Cancelled",
+    "Reason_Denied_Return": "Reason Denied Return",
+    "Denied_Return": " Denied Return",
+    "Payment_again": "Payment again",
+    "strange_payment": "Strange payment"
 }

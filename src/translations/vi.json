@@ -408,6 +408,8 @@
     "order.Sort descending by date": "Sắp xếp giảm dần theo ngày",
     "status.cancelled": "Đã hủy",
     "status.waiting_confirm": "Chờ xác nhận",
+    "status.waiting_payment": "Chờ thanh toán",
+    "status.waitingAcceptReturn": "Chờ chấp nhận trả hàng",
     "status.pending": "Đang chờ",
     "status.transporting": "Đang vận chuyển",
     "status.done": "Hoàn thành",
@@ -594,5 +596,14 @@
     "topic.placeholderSlug": "Nhập slug",
     "topic.placeholderParentTopic": "Nhập chủ đề cha",
     "orderDetail.return": "Trả hàng",
-    "orderDetail.reasonOrder": "Lý do trả hàng"
+    "orderDetail.reasonOrder": "Lý do trả hàng",
+    "orderId": "Mã đơn hàng",
+    "delivery_address": "Địa chỉ giao hàng",
+    "Information": "Thông tin đơn hàng",
+    "date": "Ngày",
+    "reason_cancelled": "Lý do hủy đơn",
+    "Reason_Denied_Return": "Lý do từ chối trả hàng",
+    "Denied_Return": "Trả lại bị từ chối",
+    "Payment_again": "Thanh toán lại",
+    "strange_payment": "Thanh toán lại"
 }

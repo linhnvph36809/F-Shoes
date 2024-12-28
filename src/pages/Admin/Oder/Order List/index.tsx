@@ -13,6 +13,8 @@ import ButtonAdd from '../../components/Button/ButtonAdd';
 import { FormattedMessage, useIntl } from 'react-intl';
 import PermissionElement from '../../../../components/Permissions/PermissionElement';
 import { ACTIONS, PERMISSION } from '../../../../constants';
+import PaginationComponent from '../../../../components/Pagination';
+import StatusItem from './components/StatusItem';
 
 const { Option } = Select;
 
@@ -27,7 +29,13 @@ const OrderList = () => {
         orderDetail: null,
     });
 
-    const { data: orders, isLoading } = useQueryConfig([QUERY_KEY, 'order-admin'], API_ORDER);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+
+    const { data: orders, isLoading } = useQueryConfig(
+        [QUERY_KEY, `order-admin-${currentPage}`],
+        `${API_ORDER}?page=${currentPage}`,
+    );
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -44,6 +52,7 @@ const OrderList = () => {
             setFilteredData(filtered);
         }
     };
+
     const handleSort = (value: number) => {
         if (value === 1) {
             setFilteredData((preData: any) => {
@@ -59,6 +68,13 @@ const OrderList = () => {
                     .sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
                 return sortedAsc;
             });
+        }
+    };
+
+    const handlePageChange = (page: number, size?: number) => {
+        setCurrentPage(page);
+        if (size) {
+            setPageSize(size);
         }
     };
 
@@ -93,6 +109,19 @@ const OrderList = () => {
             <Heading>
                 <FormattedMessage id="admin.orderList" />
             </Heading>
+            <div className="grid grid-cols-10 gap-x-5 mb-12">
+                <StatusItem bgColor="bg-red-500" status={0} onChangeStatus={onChangeStatus} />
+                <StatusItem bgColor="bg-gray-500" status={1} onChangeStatus={onChangeStatus} />
+                <StatusItem bgColor="bg-yellow-500" status={2} onChangeStatus={onChangeStatus} />
+                <StatusItem bgColor="bg-orange-500" status={3} onChangeStatus={onChangeStatus} />
+                <StatusItem bgColor="bg-blue-500" status={4} onChangeStatus={onChangeStatus} />
+                <StatusItem bgColor="bg-[#00f227]" status={5} onChangeStatus={onChangeStatus} />
+                <StatusItem bgColor="bg-[#294781]" status={6} onChangeStatus={onChangeStatus} />
+                <StatusItem bgColor="bg-[#d67309]" status={7} onChangeStatus={onChangeStatus} />
+                <StatusItem bgColor="bg-[#741111]" status={8} onChangeStatus={onChangeStatus} />
+                <StatusItem bgColor="bg-[#125070]" status={9} onChangeStatus={onChangeStatus} />
+
+            </div>
             <div className="flex justify-between">
                 <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_ADD}>
                     <ButtonAdd title={<FormattedMessage id="admin.addOrder" />} to="/admin/orderadd" />
@@ -133,45 +162,6 @@ const OrderList = () => {
                             </Select>
                         </ConfigProvider>
                     </div>
-                    <div>
-                        <ConfigProvider
-                            theme={{
-                                components: {
-                                    Select: {
-                                        multipleSelectorBgDisabled: '#fff',
-                                        optionFontSize: 16,
-                                    },
-                                },
-                            }}
-                        >
-                            <Select
-                                className="font-medium"
-                                defaultValue={searchStatus ? searchStatus : 'all'}
-                                style={{ width: 250, height: '52px' }}
-                                placeholder="Select a status"
-                                onChange={onChangeStatus}
-                            >
-                                <Option value="all">
-                                    <FormattedMessage id="body.category.All" />
-                                </Option>
-                                <Option value={statusArr[0]}>
-                                    <FormattedMessage id="status.cancelled" />
-                                </Option>
-                                <Option value={statusArr[1]}>
-                                    <FormattedMessage id="status.waiting_confirm" />
-                                </Option>
-                                <Option value={statusArr[2]}>
-                                    <FormattedMessage id="status.confirmed" />
-                                </Option>
-                                <Option value={statusArr[3]}>
-                                    <FormattedMessage id="status.delivering" />
-                                </Option>
-                                <Option value={statusArr[4]}>
-                                    <FormattedMessage id="status.delivered" />
-                                </Option>
-                            </Select>
-                        </ConfigProvider>
-                    </div>
                 </div>
             </div>
 
@@ -179,15 +169,35 @@ const OrderList = () => {
             {isLoading ? (
                 <Skeleton className="mt-10" />
             ) : (
-                <TableAdmin
-                    columns={columns}
-                    rowKey="id"
-                    dataSource={filteredData}
-                    onRow={(record: any) => ({
-                        onClick: () => handleRowClick(record),
-                    })}
-                />
+                <ConfigProvider
+                    theme={{
+                        components: {
+                            Table: {
+                                rowHoverBg: '#e2e0e0',
+                            },
+                        },
+                    }}
+                >
+                    <TableAdmin
+                        className="table-order-admin my-10"
+                        columns={columns}
+                        rowKey="id"
+                        dataSource={filteredData}
+                        onRow={(record: any) => ({
+                            onClick: () => handleRowClick(record),
+                        })}
+                        pagination={false}
+                    />
+                </ConfigProvider>
             )}
+            <PaginationComponent
+                className="mt-4"
+                page={currentPage}
+                pageSize={pageSize}
+                totalItems={orders?.data?.total || 0}
+                handlePageChange={handlePageChange}
+            />
+
             <ModalOrder orderDetail={orderDetail} handleCancel={handleCancel} />
         </div>
     );

@@ -54,9 +54,13 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
     return (
         <>
             <Modal
-                width={600}
+                width={700}
                 footer={''}
-                title={<h3 className="text-[28px] font-medium color-primary">Order Detail</h3>}
+                title={
+                    <h3 className="text-[28px] font-medium color-primary">
+                        <FormattedMessage id="Order Detail" />
+                    </h3>
+                }
                 open={orderDetail.isModalOpen}
                 onCancel={handleCancel}
             >
@@ -67,7 +71,9 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                 <BringToFront className="w-6 color-gray" />
                             </div>
                             <div>
-                                <p className="font-medium text-[15px] color-primary">Order Id</p>
+                                <p className="font-medium text-[15px] color-primary">
+                                    <FormattedMessage id="orderId" />
+                                </p>
                                 <span className="color-gray text-[14px]">{orderDetail?.orderDetail?.id}</span>
                             </div>
                         </div>
@@ -76,7 +82,9 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                 <MapPin className="w-6 color-gray" />
                             </div>
                             <div>
-                                <p className="font-medium text-[15px] color-primary">Delivery address</p>
+                                <p className="font-medium text-[15px] color-primary">
+                                    <FormattedMessage id="delivery_address" />
+                                </p>
                                 <span className="color-gray text-[14px]">{orderDetail?.orderDetail?.address}</span>
                             </div>
                         </div>
@@ -85,25 +93,38 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                 <CircleUserRound className="w-6 color-gray" />
                             </div>
                             <div>
-                                <p className="font-medium text-[15px] color-primary">Information</p>
+                                <p className="font-medium text-[15px] color-primary">
+                                    <FormattedMessage id="Information" />
+                                </p>
                                 <div>
                                     <p className="color-gray text-[13px]">
-                                        <span className="font-medium">Name</span> :{' '}
-                                        {orderDetail?.orderDetail?.receiver_full_name}{' '}
+                                        <span className="font-medium">
+                                            <FormattedMessage id="admin.name" />
+                                        </span>{' '}
+                                        : {orderDetail?.orderDetail?.receiver_full_name}{' '}
                                     </p>
                                     <p className="color-gray text-[13px]">
-                                        <span className="font-medium">Email</span> :{' '}
-                                        {orderDetail?.orderDetail?.receiver_email}
+                                        <span className="font-medium">
+                                            <FormattedMessage id="email" />
+                                        </span>{' '}
+                                        : {orderDetail?.orderDetail?.receiver_email}
                                     </p>
                                     <p className="color-gray text-[13px]">
-                                        <span className="font-medium">Phone</span> : {orderDetail?.orderDetail?.phone}
+                                        <span className="font-medium">
+                                            <FormattedMessage id="phone" />
+                                        </span>{' '}
+                                        : {orderDetail?.orderDetail?.phone}
                                     </p>
                                     <p className="color-gray text-[13px]">
-                                        <span className="font-medium">Country</span> :{' '}
-                                        {orderDetail?.orderDetail?.country}
+                                        <span className="font-medium">
+                                            <FormattedMessage id="country" />
+                                        </span>{' '}
+                                        : {orderDetail?.orderDetail?.country}
                                     </p>
                                     <p className="color-gray text-[13px]">
-                                        <span className="font-medium">Date :</span>{' '}
+                                        <span className="font-medium">
+                                            <FormattedMessage id="date" /> :
+                                        </span>{' '}
                                         {formatTime(orderDetail?.orderDetail?.created_at)}
                                     </p>
                                 </div>
@@ -154,7 +175,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                         <div>
                             <div className="flex justify-between items-center py-2">
                                 <p className="flex items-center color-gray gap-x-3 text-[14px]">
-                                    <Repeat className="w-7" /> Status :{' '}
+                                    <Repeat className="w-7" /> <FormattedMessage id="status" /> :{' '}
                                 </p>
                                 <p className="color-gray text-[14px] flex justify-end">
                                     <Tag
@@ -186,7 +207,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                             )}
                             <div className="flex justify-between items-center py-2">
                                 <p className="flex items-center color-gray gap-x-3 text-[14px]">
-                                    <Truck className="w-7" /> Shipping Method :{' '}
+                                    <Truck className="w-7" /> <FormattedMessage id="shipping_method" /> :{' '}
                                 </p>
                                 <p className="color-gray text-[14px] font-medium">
                                     {orderDetail?.orderDetail?.shipping_method}
@@ -194,7 +215,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                             </div>
                             <div className="flex justify-between items-center py-2">
                                 <p className="flex items-center color-gray gap-x-3 text-[14px]">
-                                    <DollarSign className="w-7" /> Shipping Cost :{' '}
+                                    <DollarSign className="w-7" /> <FormattedMessage id="Shipping_Cost" /> :{' '}
                                 </p>
                                 <p className="color-gray text-[14px] font-medium">
                                     {formatPrice(orderDetail?.orderDetail?.shipping_cost)}đ
@@ -202,7 +223,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                             </div>
                             <div className="flex justify-between items-center py-2">
                                 <p className="flex items-center color-gray gap-x-3 text-[14px]">
-                                    <Repeat className="w-7" /> Payment Status :{' '}
+                                    <Repeat className="w-7" /> <FormattedMessage id="Payment_status" /> :{' '}
                                 </p>
                                 <p className="color-gray text-[14px] font-medium">
                                     {paymentStatusString(orderDetail?.orderDetail?.payment_status)}
@@ -210,7 +231,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                             </div>
                             <div className="flex justify-between items-center py-2">
                                 <p className="flex items-center color-gray gap-x-3 text-[14px]">
-                                    <CreditCard className="w-7" /> Payment Method :{' '}
+                                    <CreditCard className="w-7" /> <FormattedMessage id="payment_method" /> :{' '}
                                 </p>
                                 <p className="color-gray text-[14px] font-medium">
                                     {paymentMethodString(orderDetail?.orderDetail?.payment_method)}
@@ -218,14 +239,14 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                             </div>
                             <div className="flex justify-between items-center py-2">
                                 <p className="flex items-center color-gray gap-x-3 text-[14px]">
-                                    <NotebookPen className="w-7" /> Note :{' '}
+                                    <NotebookPen className="w-7" /> <FormattedMessage id="note" /> :{' '}
                                 </p>
                                 <p className="color-gray text-[14px] font-medium">{orderDetail?.orderDetail?.note}</p>
                             </div>
                             {orderDetail?.orderDetail?.reason_cancelled ? (
                                 <div className="flex justify-between items-center py-2">
                                     <p className="flex items-center color-gray gap-x-3 text-[14px]">
-                                        <MessageCircleX className="w-7" /> Reason Cancelled :{' '}
+                                        <MessageCircleX className="w-7" /> <FormattedMessage id="reason_cancelled" /> :{' '}
                                     </p>
                                     <p className="color-gray text-[14px] font-medium">
                                         {orderDetail.orderDetail.reason_cancelled}
@@ -236,7 +257,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                             )}
                             <div className="flex justify-between items-center font-medium py-2">
                                 <p className="flex items-center color-gray gap-x-3 text-[18px]">
-                                    <CircleDollarSign className="w-7" /> Total :{' '}
+                                    <CircleDollarSign className="w-7" /> <FormattedMessage id="box.Cart.Total" /> :{' '}
                                 </p>
                                 <p className="font-medium text-red-500 text-[18px]">
                                     {formatPrice(orderDetail?.orderDetail?.total_amount)}đ
@@ -275,15 +296,16 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                             ''
                         )}
 
-
                         {orderDetail?.orderDetail?.status && orderDetail?.orderDetail?.status === 6 ? (
                             <div className="flex items-center gap-x-5">
-                                {
-                                    orderDetail?.orderDetail?.reason_return ?
-                                        <p className="text-[16px] font-medium text-red-500">
-                                            Reason Return : {orderDetail.orderDetail.reason_return}
-                                        </p> : ""
-                                }
+                                {orderDetail?.orderDetail?.reason_return ? (
+                                    <p className="text-[16px] font-medium text-red-500">
+                                        <FormattedMessage id="orderDetail.reasonOrder" /> :{' '}
+                                        {orderDetail.orderDetail.reason_return}
+                                    </p>
+                                ) : (
+                                    ''
+                                )}
                                 <ModalDeniedReturn
                                     orderId={orderDetail?.orderDetail?.id}
                                     handleCancelDetail={handleCancel}
@@ -292,7 +314,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     onClick={() => handleChangeStatus(7)}
                                     className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
                                 >
-                                    {loading ? <LoadingSmall /> : "Return Processing"}
+                                    {loading ? <LoadingSmall /> : 'Return Processing'}
                                 </button>
                             </div>
                         ) : (
@@ -301,26 +323,26 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
 
                         {orderDetail?.orderDetail?.status == 8 && orderDetail?.orderDetail?.reason_denied_return ? (
                             <p className="text-[16px] font-medium text-red-500">
-                                Reason Denied Return : {orderDetail?.orderDetail?.reason_denied_return}
+                                <FormattedMessage id="Reason_Denied_Return" /> :{' '}
+                                {orderDetail?.orderDetail?.reason_denied_return}
                             </p>
                         ) : (
                             ''
                         )}
 
-
-
-                        {
-                            orderDetail?.orderDetail?.status && orderDetail?.orderDetail?.status === 7 ?
-                                < button
-                                    onClick={() => handleChangeStatus(9)}
-                                    className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
-                                >
-                                    {loading ? <LoadingSmall /> : "Returned"}
-                                </button> : ""
-                        }
+                        {orderDetail?.orderDetail?.status && orderDetail?.orderDetail?.status === 7 ? (
+                            <button
+                                onClick={() => handleChangeStatus(9)}
+                                className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
+                            >
+                                {loading ? <LoadingSmall /> : 'Returned'}
+                            </button>
+                        ) : (
+                            ''
+                        )}
                     </div>
                 </div>
-            </Modal >
+            </Modal>
         </>
     );
 };

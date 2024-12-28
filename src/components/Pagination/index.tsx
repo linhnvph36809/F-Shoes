@@ -17,6 +17,7 @@ const PaginationComponent = ({ page, totalItems, pageSize, handlePageChange, ...
                 total={totalItems}
                 pageSize={pageSize}
                 onChange={handlePageChange}
+                showSizeChanger={false}
             />
         </ConfigProvider>
     );
