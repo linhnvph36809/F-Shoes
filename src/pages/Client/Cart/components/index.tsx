@@ -22,21 +22,24 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
         }
     }, [product]);
     const onChange = (value: any) => {
-        if (!value || +value === product.quantity) {
-        } else {
+        if (!value || +value === product.quantity ) {
+            
+        }else {
             setCartQty(value);
+            
         }
     };
     const onChangeQuantity = (qty: any) => {
         if (!qty || +qty === product.quantity) {
             setCartQty(product?.quantity);
-        } else if (+qty > 10) {
+        }else if(+qty > 10){
             setCartQty(10);
             putCart(product.id, {
                 quantity: 10,
             });
             refetch();
-        } else {
+        } 
+         else {
             setCartQty(qty);
             putCart(product.id, {
                 quantity: qty,
@@ -90,19 +93,12 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
                             </div>
                             <p className="color-gray text-[15px]">{product?.description}</p>
                             <p className="color-gray text-[15px]">{product?.color}</p>
-                            {product?.product_variation_id ? (
-                                <div>
-                                    <p className="text-[14px] color-gray font-medium my-3">
-                                        {product?.product_variation?.values.map((value: any, index: number) => (
-                                            <p key={index} className="color-gray text-[13px] font-medium">
-                                                {value.attribute} : {value.values}
-                                            </p>
-                                        ))}
-                                    </p>
-                                </div>
-                            ) : (
-                                ''
-                            )}
+
+                            <div>
+                                <p className="text-[14px] color-gray font-medium">
+                                    {product?.product_variation?.classify}
+                                </p>
+                            </div>
 
                             <div className="flex items-center space-x-4 mt-2 text-[15px] color-gray">
                                 <div>
