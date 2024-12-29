@@ -21,7 +21,6 @@ const OrderProfile = () => {
         indexInArr = index;
         return s === statusQueryUrl;
     });
-    console.log(statusQueryUrl);
 
     useEffect(() => {
         if (!statusQueryUrl) {

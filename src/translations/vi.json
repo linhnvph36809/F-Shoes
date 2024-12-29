@@ -605,5 +605,6 @@
     "Reason_Denied_Return": "Lý do từ chối trả hàng",
     "Denied_Return": "Trả lại bị từ chối",
     "Payment_again": "Thanh toán lại",
-    "strange_payment": "Thanh toán lại"
+    "strange_payment": "Thanh toán lại",
+    "variant": "Biến thể"
 }
