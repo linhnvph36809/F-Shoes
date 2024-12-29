@@ -6,47 +6,54 @@ import Heading from '../../components/Heading';
 
 import { ISale } from '../../../../interfaces/ISale.ts';
 import { formatTime, handleChangeMessage } from '../../../../utils';
-import { STREAM_SALE_LIST_URL } from '../../../../constants/index.ts';
+
 
 import { showMessageActive, showMessageClient } from '../../../../utils/messages.ts';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall.tsx';
 import { tokenManagerInstance } from '../../../../api/index.tsx';
-import { API_SALE } from '../../../../hooks/useSale.tsx';
+import { API_SALE, QUERY_KEY } from '../../../../hooks/useSale.tsx';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useContextGlobal } from '../../../../contexts/index.tsx';
+import useQueryConfig from '../../../../hooks/useQueryConfig.tsx';
+
 const ListSale = () => {
     const {  locale } = useContextGlobal();
     const intl = useIntl();
     const navigate = useNavigate();
     const urlQuery = new URLSearchParams(useLocation().search);
-
+    const {data:dataCachingSale, refetch} = useQueryConfig(
+        [QUERY_KEY,'list/sales'],
+        'api/sale'
+    );
+  
+    
     const [data, setData] = useState<ISale[]>([]);
     const [loadingDeleteSale, setLoadingDeleteSale] = useState<boolean>(false);
     const [deletedSaleID, setDeletedSaleID] = useState<number | string>(0);
     const keySearch = urlQuery.get('search');
     const keyStatus = urlQuery.get('status') || 'all';
     const [dataSearch, setDataSearch] = useState<ISale[]>([]);
-
     useEffect(() => {
-        const eventSource = new EventSource(STREAM_SALE_LIST_URL);
-        eventSource.onmessage = (event) => {
-            const sales = JSON.parse(event.data);
-            if (sales.data) {
-                setData(sales.data);
-            }
-        };
-        eventSource.onerror = (error) => {
-            console.error('Something went wrong!:', error);
-            eventSource.close();
-        };
+        if(dataCachingSale?.data?.data?.data){
+            setData(dataCachingSale?.data?.data?.data);
+            
+        }
+    },[dataCachingSale]);
+    useEffect(() => {
+     
 
         const deleteSale = async (id: string | number) => {
             try {
-                eventSource.close();
                 setLoadingDeleteSale(true);
-
-                const { data } = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
-                showMessageClient(handleChangeMessage(locale, 'Sale deleted successfully!','Xóa giảm giá thành công'),'', 'success');
+               
+                const { data:dataReturn } = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
+                if(dataReturn?.status){
+                    
+                setData([...data.filter((sale:any) => sale.id !== id)]);
+                    refetch();
+                    showMessageClient(handleChangeMessage(locale, 'Sale deleted successfully!','Xóa giảm giá thành công'),'', 'success');
+                }
+               
             } catch (error) {
                 if ((error as any)?.response?.data?.message) {
                     showMessageClient('Error', (error as any)?.response?.data?.message, 'error');
@@ -68,10 +75,6 @@ const ListSale = () => {
         if (deletedSaleID !== 0) {
             deleteSale(deletedSaleID);
         }
-
-        return () => {
-            eventSource.close();
-        };
     }, [deletedSaleID]);
 
     useEffect(() => {
