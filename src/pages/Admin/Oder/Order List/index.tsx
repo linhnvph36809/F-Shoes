@@ -120,7 +120,6 @@ const OrderList = () => {
                 <StatusItem bgColor="bg-[#d67309]" status={7} onChangeStatus={onChangeStatus} />
                 <StatusItem bgColor="bg-[#741111]" status={8} onChangeStatus={onChangeStatus} />
                 <StatusItem bgColor="bg-[#125070]" status={9} onChangeStatus={onChangeStatus} />
-
             </div>
             <div className="flex justify-between">
                 <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_ADD}>
