@@ -1,6 +1,8 @@
 import ReactApexChart from 'react-apexcharts';
 import { IOrder } from '../../../../../interfaces/IOrder';
-import { oneMonthAgo } from '../../../../../utils';
+import { handleChangeMessage, oneMonthAgo } from '../../../../../utils';
+import { useContextGlobal } from '../../../../../contexts';
+
 
 interface Props {
     orders?: IOrder[] | [];
@@ -21,10 +23,93 @@ const generateOrdersData = (records: IOrder[]) => {
 };
 
 const BrushChart = ({ orders, startDate, endDate }: Props) => {
+    const { locale } = useContextGlobal();
+   
     const chartData = generateOrdersData(orders || []);
     const minDate = startDate ? new Date(`${startDate}`).getTime() : oneMonthAgo().getTime();
     const maxDate = endDate ? new Date(`${endDate}`).getTime() : new Date().getTime();
-
+    const localeChart = [
+        {
+            name: 'en',
+            options: {
+                months: [
+                    'January',
+                    'February',
+                    'March',
+                    'April',
+                    'May',
+                    'June',
+                    'July',
+                    'August',
+                    'September',
+                    'October',
+                    'November',
+                    'December',
+                ],
+                shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                shortDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                toolbar: {
+                    exportToSVG: 'Download SVG',
+                    exportToPNG: 'Download PNG',
+                    menu: 'Menu',
+                    selection: 'Selection',
+                    selectionZoom: 'Selection Zoom',
+                    zoomIn: 'Zoom In',
+                    zoomOut: 'Zoom Out',
+                    pan: 'Panning',
+                    reset: 'Reset Zoom',
+                },
+            },
+        },
+        {
+            name: 'vi',
+            options: {
+                months: [
+                    'Tháng một',
+                    'Tháng hai',
+                    'Tháng ba',
+                    'Tháng tư',
+                    'Tháng năm',
+                    'Tháng sáu',
+                    'Tháng bảy',
+                    'Tháng tám',
+                    'Tháng chín',
+                    'Tháng mười',
+                    'Tháng 11',
+                    'Tháng 12',
+                ],
+                shortMonths: [
+                    'Tháng một',
+                    'Tháng hai',
+                    'Tháng ba',
+                    'Tháng tư',
+                    'Tháng năm',
+                    'Tháng sáu',
+                    'Tháng bảy',
+                    'Tháng tám',
+                    'Tháng chín',
+                    'Tháng mười',
+                    'Tháng mười một',
+                    'Tháng mười hai',
+                ],
+                days: ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'],
+                shortDays: ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'],
+                toolbar: {
+                    exportToSVG: 'Tải xuống SVG',
+                    exportToPNG: 'tải xuống PNG',
+                    menu: 'Danh sách',
+                    selection: 'Lựa chọn',
+                    selectionZoom: 'Thu phóng lựa chọn',
+                    zoomIn: 'Phóng to',
+                    zoomOut: 'Phóng nhỏ',
+                    pan: 'Xoay',
+                    reset: 'Làm mới thu phóng',
+                },
+            },
+        },
+    ];
+    
     const options1 = {
         chart: {
             id: 'chart2',
@@ -35,6 +120,8 @@ const BrushChart = ({ orders, startDate, endDate }: Props) => {
                 autoSelected: 'pan',
                 show: false,
             },
+            defaultLocale: locale,
+            locales: [...localeChart],
         },
         colors: ['#00BAEC'],
         stroke: {
@@ -67,6 +154,7 @@ const BrushChart = ({ orders, startDate, endDate }: Props) => {
         },
         series: [
             {
+                name: handleChangeMessage(locale,'Number of Orders','Số lượng đơn hàng'),
                 data: chartData,
             },
         ],
@@ -81,7 +169,8 @@ const BrushChart = ({ orders, startDate, endDate }: Props) => {
             tickAmount: 4,
         },
     };
-
+  
+    
     const options2 = {
         chart: {
             id: 'chart1',
@@ -103,6 +192,8 @@ const BrushChart = ({ orders, startDate, endDate }: Props) => {
                     max: new Date(maxDate).getTime(),
                 },
             },
+            defaultLocale: locale,
+            locales: [...localeChart],
         },
         colors: ['#FF0080'],
         series: [
@@ -129,14 +220,14 @@ const BrushChart = ({ orders, startDate, endDate }: Props) => {
             tickAmount: 2,
         },
     };
-
+    
     return (
         <div>
             <div id="chart-area">
-                <ReactApexChart options={options1 as any} series={options1.series as any} type="area" height={230} />
+                <ReactApexChart key={locale} options={options1 as any} series={options1.series as any} type="area" height={230} />
             </div>
             <div id="chart-bar">
-                <ReactApexChart options={options2 as any} series={options2.series as any} type="bar" height={130} />
+                <ReactApexChart key={locale} options={options2 as any} series={options2.series as any} type="bar" height={130} />
             </div>
         </div>
     );

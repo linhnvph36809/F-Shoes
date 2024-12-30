@@ -1,5 +1,6 @@
 import ReactApexChart from 'react-apexcharts';
 import { formatPrice } from '../../../../../utils';
+import { useContextGlobal } from '../../../../../contexts';
 
 interface Props {
     year1?: number | string;
@@ -8,6 +9,7 @@ interface Props {
     data2?: Array<any>;
 }
 const ColumnChart = ({ data1, data2, year1, year2 }: Props) => {
+    const {  locale } = useContextGlobal();
     const series = [
         {
             name: year1,
@@ -18,11 +20,15 @@ const ColumnChart = ({ data1, data2, year1, year2 }: Props) => {
             data: data2,
         },
     ];
+    const categoriesEn = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const categoriesVi = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
+    
     if (year1 === year2) {
         series.splice(1);
     }
     const chartState = {
         series: series,
+        locale: locale,
         options: {
             chart: {
                 type: 'bar',
@@ -44,7 +50,7 @@ const ColumnChart = ({ data1, data2, year1, year2 }: Props) => {
                 colors: ['transparent'],
             },
             xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                categories: locale === 'vi' ? categoriesVi : categoriesEn,
             },
             yaxis: {
                 title: {
