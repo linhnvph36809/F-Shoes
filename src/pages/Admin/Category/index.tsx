@@ -1,10 +1,10 @@
 import { CopyPlus, Search, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import './style.scss';
 
-import useCategory from '../../../hooks/useCategory';
+import useCategory, { API_CATEGORY, QUERY_KEY } from '../../../hooks/useCategory';
 import { ICategory } from '../../../interfaces/ICategory';
 import ButtonEdit from '../components/Button/ButtonEdit';
 import Heading from '../components/Heading';
@@ -16,27 +16,70 @@ import PermissionElement from '../../../components/Permissions/PermissionElement
 import TableAdmin from '../components/Table';
 import ButtonUpdate from '../components/Button/ButtonUpdate';
 import { FormattedMessage, useIntl } from 'react-intl';
+import useQueryConfig from '../../../hooks/useQueryConfig';
+import { ConfigProvider, Pagination } from 'antd';
+import LoadingPage from '../../../components/Loading/LoadingPage';
 
 const ListCategory = () => {
     const intl = useIntl();
-    const { deleteCategory, categories, mainCategories, postCategory, getAllCategory, putCategory } = useCategory();
-
+    const navigate = useNavigate();
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const page = params.get('page') || 1;
+    const searchKey = params.get('search') || '';
+    const { deleteCategory, mainCategories, postCategory, getAllCategory, putCategory } = useCategory();
+    const {data:dataCachingCategory,isFetching} = useQueryConfig(
+        [QUERY_KEY,`category/list/category/${page}`],
+        API_CATEGORY + `?include=parents&times=category&paginate=true&per_page=10&page=${page}`,
+    );
+    
+    
+    const totalItems = dataCachingCategory?.data?.categories?.paginator.total_item || 0;
+    const pageSize = dataCachingCategory?.data?.categories?.paginator.per_page || 10;
+  
+    
+    const [data,setData] = useState<ICategory[]>([]);
+    useEffect(() => {
+       
+        if(dataCachingCategory?.data?.categories?.data){
+            const originData = JSON.parse(JSON.stringify([...dataCachingCategory?.data?.categories?.data]));
+            
+            
+            if(searchKey !== ''){
+                const filtered = originData.filter((item: ICategory) => {
+                    return item.name.toLowerCase().includes(searchKey.toLowerCase()) || item.id.toString().includes(searchKey.toLowerCase());
+                });
+                setData([...filtered]);
+            }else {
+                setData([...originData]);
+            }
+            
+        }
+    },[dataCachingCategory,searchKey]);
+    
+    const handlePageChange = (page: number) => {
+        params.set('page', `${page}`);
+        navigate(`?${params.toString()}`, { replace: true });
+    };
+    
+    
+   
+    const handleSearch = (e:any) => {
+        params.set('search', e.target.value);
+            navigate(`?${params.toString()}`, { replace: true });
+    }
+    
     const [cateUpdate, setCateUpdate] = useState<any>();
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [filteredCategories, setFilteredCategories] = useState<ICategory[]>(categories);
+   
+    
 
     const handleUpdate = (value: ICategory) => {
         setIsModalVisible(true);
         setCateUpdate(value);
     };
 
-    useEffect(() => {
-        const filtered = categories.filter((category) =>
-            category.name.toLowerCase().includes(searchTerm.toLowerCase()),
-        );
-        setFilteredCategories(filtered);
-    }, [searchTerm, categories]);
+    
 
     // DELETE CATEGORY
     const handleDeleteCategory = (id?: string | number) => {
@@ -90,12 +133,12 @@ const ListCategory = () => {
             );
         },
     };
-
+    if(isFetching){
+        return <LoadingPage/>
+    }
     return (
         <>
-            {/* {loading ? (
-                <SkeletonComponent />
-            ) : ( */}
+            
             <section>
                 <Heading>
                     <FormattedMessage id="admin.listCategory" />
@@ -139,8 +182,8 @@ const ListCategory = () => {
                             <input
                                 type="text"
                                 placeholder={intl.formatMessage({ id: 'category.search' })}
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onChange={handleSearch}
+                               
                                 className={`w-full h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                             />
                             <Search className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
@@ -150,8 +193,24 @@ const ListCategory = () => {
 
                 {/* Bảng dữ liệu */}
                 <div className="w-full">
-                    <TableAdmin columns={[...columns, columnDelete]} dataSource={[...filteredCategories]} />
+                    <TableAdmin columns={[...columns, columnDelete]} pagination={false}  dataSource={[...data]} />
                 </div>
+                <ConfigProvider
+                theme={{
+                    token: {
+                        colorPrimary: '#11111',
+                    },
+                }}
+            >
+                {' '}
+                <Pagination
+                    align="end"
+                    current={page || (1 as any)}
+                    total={totalItems}
+                    pageSize={pageSize}
+                    onChange={handlePageChange}
+                />
+            </ConfigProvider>
             </section>
             {/* )} */}
         </>
