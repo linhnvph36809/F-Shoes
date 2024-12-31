@@ -37,13 +37,23 @@ const ListProduct = () => {
 
     const { data: products, isFetching } = useQueryConfig(
         [QUERY_KEY, `all-product-admin-${page}-${search}`],
-        API_PRODUCT + `?per_page=8&page=${page}&search=${search}&include=categories,sale_price,variations`,
+        API_PRODUCT +
+        `?paginate=true&per_page=8&page=${page}&search=${search}&include=categories,sale_price,variations`,
     );
 
     const handleDeleteProduct = (id: string | number) => {
-        showMessageActive(handleChangeMessage(locale, 'Are you sure you want to delete this product', 'Bạn có chắc chắn muốn xóa sản phẩm này không?'), '', 'warning', () => {
-            deleteProduct(id);
-        });
+        showMessageActive(
+            handleChangeMessage(
+                locale,
+                'Are you sure you want to delete this product',
+                'Bạn có chắc chắn muốn xóa sản phẩm này không?',
+            ),
+            '',
+            'warning',
+            () => {
+                deleteProduct(id);
+            },
+        );
     };
 
     const handlePageChange = (page: number) => {
@@ -67,7 +77,6 @@ const ListProduct = () => {
         render: (slug: string | number, values: IProduct) => {
             return (
                 <div className="flex-row-center gap-x-3">
-
                     <Link
                         state={{ prevUrl: currentUrl }}
                         to={`/admin/${values?.variations && values.variations.length ? 'update-variant' : 'add-variant'

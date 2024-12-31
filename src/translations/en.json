@@ -609,5 +609,6 @@
     "Reason_Denied_Return": "Reason Denied Return",
     "Denied_Return": " Denied Return",
     "Payment_again": "Payment again",
-    "strange_payment": "Strange payment"
+    "strange_payment": "Strange payment",
+    "variant": "Variant"
 }

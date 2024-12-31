@@ -93,12 +93,19 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
                             </div>
                             <p className="color-gray text-[15px]">{product?.description}</p>
                             <p className="color-gray text-[15px]">{product?.color}</p>
-
-                            <div>
-                                <p className="text-[14px] color-gray font-medium">
-                                    {product?.product_variation?.classify}
-                                </p>
-                            </div>
+                            {product?.product_variation_id ? (
+                                <div>
+                                    <p className="text-[14px] color-gray font-medium my-3">
+                                        {product?.product_variation?.values?.map((value: any, index: number) => (
+                                            <p key={index} className="color-gray text-[13px] font-medium">
+                                                {value.attribute} : {value.values}
+                                            </p>
+                                        ))}
+                                    </p>
+                                </div>
+                            ) : (
+                                ''
+                            )}
 
                             <div className="flex items-center space-x-4 mt-2 text-[15px] color-gray">
                                 <div>

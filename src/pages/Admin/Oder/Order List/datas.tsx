@@ -21,7 +21,7 @@ export const columns = [
         dataIndex: 'user',
         render: (_: any, order: any) => (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar src={order?.user?.avatar_url} size={40} />
+                <Avatar src={order?.user?.image?.url || '../public/images/default_avatar.png'} size={40} />
                 <div style={{ marginLeft: '10px' }}>
                     <Text strong>{order?.receiver_full_name}</Text>
                     <br />
@@ -100,7 +100,7 @@ export const columns = [
         key: 'actions',
         dataIndex: 'id',
         render: (_: any, { id }: any) => (
-            <div className='flex gap-x-5'>
+            <div className="flex gap-x-5">
                 <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
                     <Link to={`/admin/orderupdate/${id}`}>
                         <Button className="w-[50px] h-[40px] font-medium">
