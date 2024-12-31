@@ -30,7 +30,7 @@ export const columns = [
         title: <FormattedMessage id="body.Detail.Quantity" />,
         dataIndex: 'quantity',
         key: '6',
-        render: (quantity: number) => <p className="text-[15px] font-medium">{quantity}đ</p>,
+        render: (quantity: number) => <p className="text-[15px] font-medium">{quantity}</p>,
     },
     {
         title: <FormattedMessage id="variant" />,
