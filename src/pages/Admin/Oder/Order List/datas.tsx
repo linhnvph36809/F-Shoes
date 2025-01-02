@@ -1,9 +1,9 @@
 import { Avatar, Button, Tag, Typography } from 'antd';
 import { Eye, SquarePen } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ACTIONS, PERMISSION, STATUS_ORDER } from '../../../../constants';
+import { ACTIONS, PERMISSION } from '../../../../constants';
 import { formatPrice, formatTime } from '../../../../utils';
-import { paymentMethodString } from '../../../../interfaces/IOrder';
+import { paymentMethodString, statusString } from '../../../../interfaces/IOrder';
 import { FormattedMessage } from 'react-intl';
 import PermissionElement from '../../../../components/Permissions/PermissionElement';
 import ButtonEdit from '../../components/Button/ButtonEdit';
@@ -59,21 +59,23 @@ export const columns = [
         key: 'status',
         render: (_: any, { status }: any) => {
             const statusColors: Record<string, string> = {
-                '0': 'red',
-                '1': 'purple',
-                '2': 'orange',
-                '3': 'blue',
-                '4': 'green',
-                '5': 'pink',
-                '6': '#930510',
-                '7': 'gray',
+                '0': '#EF4444',
+                '1': '#6B7280',
+                '2': '#F59E0B',
+                '3': '#F97316',
+                '4': '#3B82F6',
+                '5': '#00f227',
+                '6': '#294781',
+                '7': '#d67309',
+                '8': '#741111',
+                '9': '#125070',
             };
 
             const color = statusColors[status] || 'default';
 
             return (
                 <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color={color}>
-                    {STATUS_ORDER[status]}
+                    {statusString(status).text}
                 </Tag>
             );
         },
