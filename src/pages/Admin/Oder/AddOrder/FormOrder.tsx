@@ -113,10 +113,9 @@ const FormOrder = () => {
         return products?.reduce((sum: any, curr: any) => {
             if (curr?.product_variation_id) {
                 return sum + (curr.sale_price || curr.price) * curr.quantity;
-            } else if (curr?.product_variation?.price) {
+            } else {
                 return sum + (curr.sale_price || curr.price) * curr.quantity;
             }
-            return sum;
         }, 0);
     }, [products]);
 
