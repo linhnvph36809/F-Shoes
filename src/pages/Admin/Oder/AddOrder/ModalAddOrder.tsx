@@ -23,9 +23,13 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
 
     const handleClose = () => {
         setIsModalOpen(false);
+
     };
 
-    const handleCancel = () => { };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+        handleHidden();
+    };
 
     const handleGetQuantity = (id: number) => {
         const variation = initialValues?.variations?.find((variations: any) => variations.id === id);
