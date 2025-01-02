@@ -2,9 +2,8 @@ import { Modal, Tag } from 'antd';
 import { formatPrice, formatTime } from '../../../../utils';
 import { STATUS_ORDER } from '../../../../constants';
 import useOrder from '../../../../hooks/useOrder';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { paymentMethodString, paymentStatusString } from '../../../../interfaces/IOrder';
-import { useContextGlobal } from '../../../../contexts';
+import { FormattedMessage } from 'react-intl';
+import { paymentMethodString, paymentStatusString, statusString } from '../../../../interfaces/IOrder';
 import {
     BringToFront,
     CircleDollarSign,
@@ -23,22 +22,20 @@ import ModalReason from './components/ModalReason';
 import ModalDeniedReturn from './components/ModalDeniedReturn';
 
 const statusColors: Record<string, string> = {
-    '0': 'red',
-    '1': 'purple',
-    '2': 'orange',
-    '3': 'blue',
-    '4': 'green',
-    '5': 'pink',
-    '6': '#930510',
-    '7': 'gray',
-    '8': '#9c27b0',
-    '9': '#000000',
+    '0': '#EF4444',
+    '1': '#6B7280',
+    '2': '#F59E0B',
+    '3': '#F97316',
+    '4': '#3B82F6',
+    '5': '#00f227',
+    '6': '#294781',
+    '7': '#d67309',
+    '8': '#741111',
+    '9': '#125070',
 };
 
 const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCancel: () => void }) => {
-    const intl = useIntl();
     const { loading, putOrder } = useOrder();
-    const { locale } = useContextGlobal();
 
     const handleChangeStatus = async (status: number) => {
         if (orderDetail?.orderDetail?.id) {
@@ -182,7 +179,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                         className="px-5 rounded-[30px] w-[90%] flex items-center justify-center m-0"
                                         color={color}
                                     >
-                                        {STATUS_ORDER[orderDetail?.orderDetail?.status]}
+                                        {statusString(orderDetail?.orderDetail?.status).text}
                                     </Tag>
                                 </p>
                             </div>
@@ -314,7 +311,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     onClick={() => handleChangeStatus(7)}
                                     className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
                                 >
-                                    {loading ? <LoadingSmall /> : 'Return Processing'}
+                                    {loading ? <LoadingSmall /> : <FormattedMessage id="agree" />}
                                 </button>
                             </div>
                         ) : (
