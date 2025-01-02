@@ -109,9 +109,12 @@ const ListCategory = () => {
         render: (_: any, values: ICategory) => {
             return (
                 <div className="flex-row-center gap-x-5">
-                    <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
+                    {
+                        values.is_main != 1 ? <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
                         <ButtonUpdate onClick={() => handleUpdate(values)}></ButtonUpdate>
-                    </PermissionElement>
+                    </PermissionElement> : ''
+                    }
+                    
                     <PermissionElement
                         keyName={PERMISSION.PERMISSION_CATEGORY}
                         action={ACTIONS_CATEGORY.ACTIONS_ADD_PRODUCT}
@@ -123,11 +126,14 @@ const ListCategory = () => {
                         </Link>
                     </PermissionElement>
                     {/* <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}> */}
-                    <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}>
+                    {
+                        values.is_main != 1 ? !values?.display ? <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}>
                         <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
                             <Trash2 />
                         </ButtonEdit>
-                    </PermissionElement>
+                    </PermissionElement> : '' : ''
+                    }
+                    
                     {/* </PermissionElement> */}
                 </div>
             );
@@ -138,7 +144,6 @@ const ListCategory = () => {
     }
     return (
         <>
-            
             <section>
                 <Heading>
                     <FormattedMessage id="admin.listCategory" />

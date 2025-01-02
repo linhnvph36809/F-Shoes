@@ -610,5 +610,6 @@
     "Denied_Return": " Denied Return",
     "Payment_again": "Payment again",
     "strange_payment": "Strange payment",
-    "variant": "Variant"
+    "variant": "Variant",
+    "category_display" : "Display"
 }
