@@ -85,7 +85,7 @@ export const paymentMethodString = (method: string) => {
 };
 
 export const paymentStatusString = (status: any) => {
-    const language = handleGetLocalStorage('language') as string;
+    const language = handleGetLocalStorage('language') || ('vi' as string);
     if (typeof status !== 'string') {
         return '...';
     }

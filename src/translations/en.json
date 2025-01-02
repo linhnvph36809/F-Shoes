@@ -611,5 +611,6 @@
     "Payment_again": "Payment again",
     "strange_payment": "Strange payment",
     "variant": "Variant",
-    "category_display" : "Display"
+    "category_display" : "Display",
+    "agree": "Agree"
 }

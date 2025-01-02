@@ -117,6 +117,7 @@ const useDelivery = () => {
         getFee,
         handleReset,
         setDistricts,
+        setFee,
     };
 };
 

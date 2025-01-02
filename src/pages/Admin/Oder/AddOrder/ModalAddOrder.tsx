@@ -1,122 +1,73 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Form, Modal, Radio } from 'antd';
 import ButtonEdit from '../../components/Button/ButtonEdit';
-import { SquarePen, X } from 'lucide-react';
+import { CopyPlus, X } from 'lucide-react';
 import InputPrimary from '../../components/Forms/InputPrimary';
 import { FormattedMessage } from 'react-intl';
+import { formatPrice } from '../../../../utils';
 
-const ModalAddOrder = ({ initialValues, index, setOrderDetail }: any) => {
+const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
+    const [quantity, setQuantity] = useState<any>();
 
     const showModal = () => {
         setIsModalOpen(true);
     };
 
     const handleOk = () => {
-        form.submit();
+        if (quantity !== 0) {
+            form.submit();
+        }
     };
 
     const handleClose = () => {
         setIsModalOpen(false);
+
     };
 
     const handleCancel = () => {
-        setOrderDetail((preDetail: any) => {
-            const newData = preDetail.slice(index);
-            return newData;
-        });
         setIsModalOpen(false);
-        form.setFieldsValue({
-            variantId: null,
-            quantity: '',
-        });
+        handleHidden();
+    };
+
+    const handleGetQuantity = (id: number) => {
+        const variation = initialValues?.variations?.find((variations: any) => variations.id === id);
+        setQuantity(variation.stock_qty);
     };
 
     const onFinish = async (values: any) => {
         if (initialValues.variations.length) {
-            setOrderDetail((preDetail: any) => {
-                const variant = initialValues.variations.find((variations: any) => variations.id == values.variantId);
-                const newData = [...preDetail];
-                newData[index] = {
-                    ...newData[index],
-                    quantity: values.quantity,
-                    variant,
-                };
-                return newData;
+            const variation = initialValues?.variations?.find((variations: any) => variations.id === values.variantId);
+            handleSetProducts({
+                product_id: null,
+                product_variation_id: variation?.id,
+                product_name: initialValues?.name,
+                product_image: variation?.image_url,
+                classify: variation?.classify,
+                quantity: +values.quantity,
+                price: +variation?.sale_price || +variation?.price,
+                total_amount: (+variation?.sale_price || +variation?.price) * +values.quantity,
             });
         } else {
-            setOrderDetail((preDetail: any) => {
-                const newData = [...preDetail];
-                newData[index] = {
-                    ...initialValues,
-                    quantity: values.quantity,
-                };
-                return newData;
+            handleSetProducts({
+                product_variation_id: null,
+                product_id: initialValues?.id,
+                product_name: initialValues?.name,
+                product_image: initialValues?.image_url,
+                quantity: +values.quantity,
+                price: +initialValues?.sale_price || +initialValues?.price,
+                total_amount: (+initialValues?.sale_price || +initialValues?.price) * +values.quantity,
             });
         }
-
-        setIsModalOpen(false);
+        handleHidden();
+        handleClose();
     };
-
-    useEffect(() => {
-        form.setFieldsValue({});
-    }, [initialValues]);
-
-    // let validateVariant;
-
-    // if (initialValues?.variations?.length) {
-    //     validateVariant = [
-    //         { required: true, message: <FormattedMessage id="product.priceRequired" /> },
-    //         ({ getFieldValue }: any) => ({
-    //             validator: (_: any, value: any) => {
-    //                 if (!value) {
-    //                     return Promise.resolve();
-    //                 }
-    //                 if (value <= 0) {
-    //                     return Promise.reject(new Error('Số lượng phải lớn hơn 0'));
-    //                 }
-    //                 const selectedVariantId = getFieldValue('images');
-    //                 const selectedVariant = initialValues.variations.find(
-    //                     (variant: any) => variant.id === selectedVariantId,
-    //                 );
-
-    //                 if (!selectedVariant) {
-    //                     return Promise.reject(new Error('Bạn phải chọn một biến thể trước.'));
-    //                 }
-
-    //                 if (value >= selectedVariant.stock_qty) {
-    //                     return Promise.reject(new Error(`Số lượng phải nhỏ hơn ${selectedVariant.stock_qty}`));
-    //                 }
-
-    //                 return Promise.resolve();
-    //             },
-    //         }),
-    //     ];
-    // } else {
-    //     validateVariant = [
-    //         { required: true, message: <FormattedMessage id="product.priceRequired" /> },
-    //         {
-    //             validator: (_: any, value: any) => {
-    //                 if (!value) {
-    //                     return Promise.resolve(); // Bỏ qua nếu value không tồn tại (đã có required check).
-    //                 }
-    //                 if (value <= 0) {
-    //                     return Promise.reject(new Error('Số lượng phải lớn hơn 0'));
-    //                 }
-    //                 if (value >= +initialValues.stock_qty) {
-    //                     return Promise.reject(new Error(`Số lượng phải nhỏ hơn ${+initialValues.stock_qty}`));
-    //                 }
-    //                 return Promise.resolve();
-    //             },
-    //         },
-    //     ];
-    // }
 
     return (
         <>
             <ButtonEdit onClick={showModal}>
-                <SquarePen />
+                <CopyPlus />
             </ButtonEdit>
             <Modal
                 title={
@@ -149,39 +100,89 @@ const ModalAddOrder = ({ initialValues, index, setOrderDetail }: any) => {
                 ]}
             >
                 <Form form={form} onFinish={onFinish} initialValues={initialValues}>
-                    {initialValues.variations.length ? (
-                        <Form.Item
-                            name="variantId"
-                            label={<FormattedMessage id="admin.image" />}
-                            className="font-medium"
-                            labelCol={{ span: 24 }}
-                            rules={[{ required: true, message: <FormattedMessage id="product.priceRequired" /> }]}
-                        >
-                            <>
-                                <Radio.Group
-                                    options={initialValues?.variations?.map((image: any) => ({
-                                        label: (
-                                            <div>
-                                                <img className="w-[60px] h-[60px] object-cover" src={image.image_url} />
-                                                <p className="text-center">{image?.classify}</p>
-                                            </div>
-                                        ),
-                                        value: image.id,
-                                    }))}
-                                />
-                            </>
-                        </Form.Item>
+                    {initialValues?.variations?.length ? (
+                        <>
+                            <Form.Item
+                                name="variantId"
+                                label={<FormattedMessage id="variant" />}
+                                className="font-medium"
+                                labelCol={{ span: 24 }}
+                                rules={[{ required: true, message: <FormattedMessage id="product.priceRequired" /> }]}
+                            >
+                                <>
+                                    <Radio.Group
+                                        onChange={(e) => handleGetQuantity(e.target.value)}
+                                        options={initialValues?.variations?.map((variation: any) => ({
+                                            label: (
+                                                <div>
+                                                    <img
+                                                        className="w-[60px] h-[60px] object-cover"
+                                                        src={variation.image_url}
+                                                    />
+                                                    <p className="text-center">{variation?.classify}</p>
+                                                    <p className="text-center">
+                                                        {formatPrice(variation?.sale_price || variation?.price)}đ
+                                                    </p>
+                                                </div>
+                                            ),
+                                            value: variation.id,
+                                        }))}
+                                    />
+                                </>
+                            </Form.Item>
+                            <InputPrimary
+                                label={'Số lượng sản phẩm'}
+                                placeholder={'Nhập số lượng sản phẩm'}
+                                name="quantity"
+                                type="number"
+                                rules={[
+                                    { required: true, message: <FormattedMessage id="product.priceRequired" /> },
+                                    {
+                                        validator: (_: any, value: any) => {
+                                            if (value <= 0) {
+                                                return Promise.reject(
+                                                    new Error('Số lượng phải lớn hơn 0 và không được là số âm.'),
+                                                );
+                                            }
+                                            if (value > quantity) {
+                                                return Promise.reject(
+                                                    new Error(`Số lượng không được lớn hơn ${quantity}`),
+                                                );
+                                            }
+                                            return Promise.resolve();
+                                        },
+                                    },
+                                ]}
+                            />
+                        </>
                     ) : (
-                        ''
+                        <InputPrimary
+                            label={'Số lượng sản phẩm'}
+                            placeholder={'Nhập số lượng sản phẩm'}
+                            name="quantity"
+                            type="number"
+                            rules={[
+                                { required: true, message: <FormattedMessage id="product.priceRequired" /> },
+                                {
+                                    validator: (_: any, value: any) => {
+                                        if (value <= 0) {
+                                            return Promise.reject(
+                                                new Error('Số lượng phải lớn hơn 0 và không được là số âm.'),
+                                            );
+                                        }
+                                        if (value > initialValues.stock_qty) {
+                                            return Promise.reject(
+                                                new Error(`Số lượng không được lớn hơn ${initialValues.stock_qty}`),
+                                            );
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                },
+                            ]}
+                        />
                     )}
-
-                    <InputPrimary
-                        label={'Số lượng sản phẩm'}
-                        placeholder={'Nhập số lượng sản phẩm'}
-                        name="quantity"
-                        type="number"
-                    />
                 </Form>
+                {quantity == 0 ? <p className="text-red-500 text-end font-medium">Hết hàng</p> : ''}
             </Modal>
         </>
     );
