@@ -22,21 +22,18 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
         }
     }, [product]);
     const onChange = (value: any) => {
-        if (!value || +value === product.quantity) {
-        } else {
+        if (!value || +value === product.quantity ) {
+            
+        }else {
             setCartQty(value);
+            
         }
     };
     const onChangeQuantity = (qty: any) => {
         if (!qty || +qty === product.quantity) {
             setCartQty(product?.quantity);
-        } else if (+qty > 10) {
-            setCartQty(10);
-            putCart(product.id, {
-                quantity: 10,
-            });
-            refetch();
-        } else {
+        } 
+         else {
             setCartQty(qty);
             putCart(product.id, {
                 quantity: qty,
@@ -110,7 +107,6 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
                                     <InputNumber
                                         className="w-[60px] text-center ml-5"
                                         min={1}
-                                        max={10}
                                         value={cartQty}
                                         defaultValue={product.quantity}
                                         type="number"

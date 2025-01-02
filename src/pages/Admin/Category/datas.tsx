@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 import { formatTime } from '../../../utils';
 import { ICategory } from '../../../interfaces/ICategory';
 import { FormattedMessage } from 'react-intl';
+import { Tag } from 'antd';
+
 
 export interface DataType {
     key: string;
@@ -21,7 +23,19 @@ export const columns: any['columns'] = [
         title: <FormattedMessage id="category.table.category_name" />,
         dataIndex: 'name',
         key: 'name',
-        render: (name: string) => {
+        render: (name: string,record:any) => {
+            console.log(record);
+            if(record?.display){
+                return <div className='flex space-x-2'>
+                    
+                    <Tag color='red'>
+                    {
+                        name.length > 100 ?  name.slice(1, 100) + '...' : name
+                    }
+                </Tag>
+                <span className='text-[12px] font-mono'>( Trưng Bày )</span>
+                </div>
+            }
             if (name.length > 100) {
                 return name.slice(1, 100) + '...';
             } else {

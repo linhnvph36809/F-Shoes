@@ -313,13 +313,20 @@ const UpdateSale = () => {
         setDataSale({ ...dataSale, products: formatDataProduct, variations: formatDataVariation });
     }, [dataSourceProduct, dataSourceVariation]);
     const [error, setError] = useState({
+        name: '',
         value: '',
         start_date: '',
         end_date: '',
         empty: false,
     });
     const onChangeName = (e: any) => {
-        setDataSale({ ...dataSale, name: e.target.value });
+        if(e.target.value === ''){
+            setDataSale({ ...dataSale, name: e.target.value });
+            setError({ ...error, name: 'Name is required' });
+        }else{
+            setDataSale({ ...dataSale, name: e.target.value });
+        }
+     
     };
     const onChangeValuePercent = (e: any) => {
         if (e.target.value === '') {
@@ -362,7 +369,11 @@ const UpdateSale = () => {
     const { updateSale, loadingUpdateSale } = useSale();
     const onSubmit = async () => {
         let hasError = false;
-        if (!dataSale.value) {
+        if(!dataSale.name){
+            hasError = true;
+            setError({ ...error, value:intl.formatMessage({ id: 'Name is required' }) });
+        }
+        else if (!dataSale.value) {
             hasError = true;
             setError({ ...error, value:intl.formatMessage({ id: 'Value is required' }) });
         } else if (error.value) {
@@ -376,6 +387,7 @@ const UpdateSale = () => {
         } else {
             hasError = false;
             setError({
+                name: '',
                 value: '',
                 start_date: '',
                 end_date: '',
@@ -400,8 +412,8 @@ const UpdateSale = () => {
     };
 
     const optionsType = [
-        { label: 'Percent', value: <FormattedMessage id="voucher.percentage" /> },
-        { label: 'Fixed', value: <FormattedMessage id="voucher.table.fixed" /> },
+        { label: 'Percent', value: 'percent' },
+        { label: 'Fixed', value: 'fixed'},
     ];
     if(loadingSale){
         return <LoadingPage/>
@@ -424,7 +436,7 @@ const UpdateSale = () => {
                             onChange={onChangeName}
                             placeholder={intl.formatMessage({ id: 'Enter_the_sale_name' })}
                         />
-                        {/* {error.name ? <span className='text-red-600'>{error.name}</span> : ''} */}
+                        {error.name ? <span className='text-red-600'>{error.name}</span> : ''}
                     </div>
                     <div className="form-row my-4">
                         <span className="text-xl mb-4">

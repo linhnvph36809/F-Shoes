@@ -4,25 +4,31 @@ import { DatePicker, Skeleton } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import Heading from '../components/Heading';
 import useQueryConfig from '../../../hooks/useQueryConfig';
-import { formatPrice, formatTime } from '../../../utils';
+import { formatPrice, formatTime, handleChangeMessage } from '../../../utils';
 import BrushChart from './components/BrushChart';
 import ColumnChart from './components/ColumnChart';
 import BestSellingProduct from './components/BestSellingProduct';
 import { FormattedMessage } from 'react-intl';
-
+import { useContextGlobal } from '../../../contexts';
+import dayjs from 'dayjs';
 const { RangePicker } = DatePicker;
-
+import viVN from 'antd/es/locale/vi_VN';
+import enUS from 'antd/es/locale/en_US';
 type Date = {
     date_start: string;
     date_end: string;
 };
 
 const AdminDashboard = () => {
+       const {  locale } = useContextGlobal();
     const [dates, setDates] = useState<Date>({
         date_start: '',
         date_end: '',
     });
-
+    
+    console.log(viVN);
+    
+    
     const { data, isFetching } = useQueryConfig(
         `statistics/overall/from=${dates.date_start}&to=$${dates.date_end}`,
         `/api/v1/statistics/overall?from=${dates.date_start}&to=$${dates.date_end}`,
@@ -78,21 +84,23 @@ const AdminDashboard = () => {
     };
     const UptoFrom = (
         <span>
-            from {dates.date_start ? formatTime(dates.date_start) : 'last month'} to{' '}
-            {dates.date_end ? formatTime(dates.date_end) : 'present'}
+            {handleChangeMessage(locale,'from','từ')} {dates.date_start ? formatTime(dayjs(dates.date_start).startOf('day').format("YYYY-MM-DD HH:mm:ss")) : handleChangeMessage(locale,'last 7 days','7 ngày trước')} {handleChangeMessage(locale,'to','đến')}{' '}
+            {dates.date_end ? formatTime(dayjs(dates.date_end).endOf('day').format("YYYY-MM-DD HH:mm:ss")) : handleChangeMessage(locale,'present','hiện tại')}
         </span>
     );
-
+   
+    
     return (
         <Content>
             <div className="flex justify-between items-center">
                 <Heading>
-                    <FormattedMessage id="Statistics" />
+                    <FormattedMessage id="Statistics" /> 
                 </Heading>
                 <div className="flex gap-x-5 mb-10">
                     <RangePicker
                         onChange={handleChange}
                         className="active:border-[#111111] border-[#111111] hover:border-[#ccc]"
+                        locale={locale === 'vi' ? viVN.DatePicker : enUS.DatePicker}
                     />
                 </div>
             </div>
@@ -338,11 +346,11 @@ const AdminDashboard = () => {
             </div>
             <div>
                 <h3 className="text-[18px] font-bold m-4 border-b-[1px]">
-                    <FormattedMessage id="admin.Annual_Revenue_Statistics_Chart" />
+                    <FormattedMessage id="admin.Annual_Revenue_Statistics_Chart" /> {yearOfRevenueChart == yearOfRevenueChart2 ? yearOfRevenueChart : `${yearOfRevenueChart} ${handleChangeMessage(locale,'And','Và')} ${yearOfRevenueChart2} `}
                 </h3>
                 <div className="flex justify-end my-4">
                     <DatePicker
-                        placeholder="Select a year"
+                        placeholder={handleChangeMessage(locale,'Select a year','Xem dữ liệu một năm bất kì')}
                         picker="year"
                         className="w-[20%] focus:border-none focus:outline-none"
                         format="YYYY"
@@ -354,6 +362,7 @@ const AdminDashboard = () => {
                         className="w-[20%] focus:border-none focus:outline-none"
                         format="YYYY"
                         onChange={onChangeYearOfRevenueStatisticsChart2}
+                        
                     />
                 </div>
                 <ColumnChart
