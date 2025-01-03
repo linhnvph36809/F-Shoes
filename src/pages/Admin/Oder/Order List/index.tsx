@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import { ConfigProvider, Input, Select, Skeleton } from 'antd';
+import { Button, ConfigProvider, Input, Select, Skeleton } from 'antd';
 import Heading from '../../components/Heading';
 import { columns } from './datas';
 import { API_ORDER, QUERY_KEY } from '../../../../hooks/useOrder';
 import ModalOrder from './ModalOrder';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import TableAdmin from '../../components/Table';
-import { statusArr } from '../../../../interfaces/IOrder';
+import { statusArr, statusToNumber } from '../../../../interfaces/IOrder';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Search } from 'lucide-react';
+import { RotateCcw, Search } from 'lucide-react';
 import ButtonAdd from '../../components/Button/ButtonAdd';
 import { FormattedMessage, useIntl } from 'react-intl';
 import PermissionElement from '../../../../components/Permissions/PermissionElement';
@@ -21,36 +21,32 @@ const { Option } = Select;
 const OrderList = () => {
     const intl = useIntl();
     const navigate = useNavigate();
-    const urlQuery = new URLSearchParams(useLocation().search);
+    const location = useLocation();
+    const urlQuery = new URLSearchParams(location.search);
     const [searchText, setSearchText] = useState('');
     const [filteredData, setFilteredData] = useState<any>([]);
     const [orderDetail, setOrderDetail] = useState<any>({
         isModalOpen: false,
         orderDetail: null,
     });
-
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-
+    const searchKey = urlQuery.get('search') || '';
+    const page = urlQuery.get('page') || 1;
+    const status = urlQuery.get('status') || '';
+    
     const { data: orders, isLoading } = useQueryConfig(
-        [QUERY_KEY, `order-admin-${currentPage}`],
-        `${API_ORDER}?page=${currentPage}`,
+        [QUERY_KEY, `order-admin-${page}-search=${searchKey}-status=${status}`],
+        `${API_ORDER}?page=${page}&search=${searchKey}${status && status !== '' ? '&status='+statusToNumber(status) :'' }`,
     );
-
+  
+    const totalItems = orders?.data?.paginator.total_item || 0;
+    const pageSize = orders?.data?.paginator.per_page || 10;
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchText(value);
-        if (value.trim() === '') {
-            setFilteredData(orders?.data?.data);
-        } else {
-            const filtered = orders?.data?.data.filter((order: any) => {
-                return (
-                    order?.user?.name.toLowerCase().includes(value.toLowerCase()) ||
-                    order.id.toString().includes(value.toLowerCase())
-                );
-            });
-            setFilteredData(filtered);
-        }
+    };
+    const submitSearch = () => {
+        urlQuery.set('search', searchText);
+        navigate(`?${urlQuery.toString()}`, { replace: true });
     };
 
     const handleSort = (value: number) => {
@@ -70,20 +66,19 @@ const OrderList = () => {
             });
         }
     };
-
-    const handlePageChange = (page: number, size?: number) => {
-        setCurrentPage(page);
-        if (size) {
-            setPageSize(size);
-        }
+    const handlePageChange = (page: number) => {
+        urlQuery.set('page', `${page}`);
+        navigate(`?${urlQuery.toString()}`, { replace: true });
     };
 
     const searchStatus = urlQuery.get('status') || '';
     const onChangeStatus = (e: any) => {
-        urlQuery.set('status', e);
-        navigate(`?${urlQuery.toString()}`, { replace: true });
+        navigate(`?status=${e}`, { replace: true });
     };
-
+    const onUndoFilter = () => {
+        const currentPath = location.pathname;
+        navigate(`${currentPath}`, { replace: true });
+    }
     useEffect(() => {
         const originData = orders?.data?.data ? JSON.parse(JSON.stringify([...orders.data.data])) : [];
         if (searchStatus !== '' && searchStatus !== 'all') {
@@ -125,15 +120,25 @@ const OrderList = () => {
                 <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_ADD}>
                     <ButtonAdd title={<FormattedMessage id="admin.addOrder" />} to="/admin/orderadd" />
                 </PermissionElement>
+
                 <div className="flex justify-end items-center gap-x-5">
+                    <div className="flex items-center justify-center ">
+                        <button onClick={onUndoFilter} className='border hover:bg-slate-200 rounded-lg flex items-center justify-center w-[40px] h-[40px]'>
+                            <RotateCcw />
+                        </button>
+                    </div>
                     <div className="relative">
+                        
                         <Input
                             placeholder={intl.formatMessage({ id: 'order.Search_Order' })}
                             className={`w-[250px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                             value={searchText}
                             onChange={handleSearch}
                         />
-                        <Search className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
+                        <Search
+                            onClick={submitSearch}
+                            className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global"
+                        />
                     </div>
                     <div>
                         <ConfigProvider
@@ -191,9 +196,9 @@ const OrderList = () => {
             )}
             <PaginationComponent
                 className="mt-4"
-                page={currentPage}
+                page={page}
                 pageSize={pageSize}
-                totalItems={orders?.data?.total || 0}
+                totalItems={totalItems}
                 handlePageChange={handlePageChange}
             />
 

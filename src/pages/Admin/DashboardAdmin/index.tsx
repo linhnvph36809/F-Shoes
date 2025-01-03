@@ -54,7 +54,8 @@ const AdminDashboard = () => {
         `/api/v1/statistics/product/bestselling?from=${dates.date_start}&to=${dates.date_end}`,
     );
     const productBestSellingData = productBestSellingCaching?.data?.data || [];
-
+    console.log(productBestSellingCaching,'abc');
+    
     const revenueOfYearData = revenueOfYearCaching?.data?.data || [];
     const revenueOfYearData2 = revenueOfYearCaching2?.data?.data || [];
 
@@ -84,7 +85,7 @@ const AdminDashboard = () => {
     };
     const UptoFrom = (
         <span>
-            {handleChangeMessage(locale,'from','từ')} {dates.date_start ? formatTime(dayjs(dates.date_start).startOf('day').format("YYYY-MM-DD HH:mm:ss")) : handleChangeMessage(locale,'last 7 days','7 ngày trước')} {handleChangeMessage(locale,'to','đến')}{' '}
+            {handleChangeMessage(locale,'from','từ')} {dates.date_start ? formatTime(dayjs(dates.date_start).startOf('day').format("YYYY-MM-DD HH:mm:ss")) : handleChangeMessage(locale,'7 days ago','7 ngày trước')} {handleChangeMessage(locale,'to','đến')}{' '}
             {dates.date_end ? formatTime(dayjs(dates.date_end).endOf('day').format("YYYY-MM-DD HH:mm:ss")) : handleChangeMessage(locale,'present','hiện tại')}
         </span>
     );
@@ -92,9 +93,9 @@ const AdminDashboard = () => {
     
     return (
         <Content>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center"> 
                 <Heading>
-                    <FormattedMessage id="Statistics" /> 
+                    <FormattedMessage id="Statistics" /> {dates.date_start && dates.date_end ? `${handleChangeMessage(locale,'From','Từ ngày')} ${dates.date_start} ${handleChangeMessage(locale,'To','Đến ngày')} ${dates.date_end}` : handleChangeMessage(locale,'7 days ago','7 ngày trước') }
                 </Heading>
                 <div className="flex gap-x-5 mb-10">
                     <RangePicker
