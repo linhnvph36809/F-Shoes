@@ -7,4 +7,6 @@ export interface ICategory {
     products?: IProduct[];
     children?: ICategory[];
     parents?: ICategory[];
+    display?:boolean;
+    is_main?:boolean|number;
 }

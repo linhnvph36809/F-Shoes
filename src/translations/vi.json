@@ -402,7 +402,7 @@
     "voucher.table.fixed": "Cố định",
     "voucher.percentage": "Phần trăm",
 
-    "order.Search_Order": "Tìm kiếm đơn hàng",
+    "order.Search_Order": "Tìm kiếm email người nhận",
     "order.Please_select": "Vui lòng chọn",
     "order.Sort_ascending_by_date": "Sắp xếp tăng dần theo ngày",
     "order.Sort descending by date": "Sắp xếp giảm dần theo ngày",
@@ -607,5 +607,6 @@
     "Payment_again": "Thanh toán lại",
     "strange_payment": "Thanh toán lại",
     "variant": "Biến thể",
+    "category_display" : "Trưng bày",
     "agree": "Đồng ý"
 }

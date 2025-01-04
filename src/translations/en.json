@@ -406,7 +406,7 @@
     "voucher.percentage": "Percentage",
 
     "category.search": "Search by category name",
-    "order.Search_Order": "Search Order",
+    "order.Search_Order": "Search Receiver Email",
     "order.Please_select": "Please select",
     "order.Sort_ascending_by_date": "Sort ascending by date",
     "order.Sort descending by date": "Sort descending by date",
@@ -611,5 +611,6 @@
     "Payment_again": "Payment again",
     "strange_payment": "Strange payment",
     "variant": "Variant",
+    "category_display" : "Display",
     "agree": "Agree"
 }
