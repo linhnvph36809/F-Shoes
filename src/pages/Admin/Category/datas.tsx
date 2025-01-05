@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 import { formatTime } from '../../../utils';
 import { ICategory } from '../../../interfaces/ICategory';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Tag } from 'antd';
-
+import { useContextGlobal } from '../../../contexts';
 
 export interface DataType {
     key: string;
@@ -12,6 +12,7 @@ export interface DataType {
     categoryParent: number;
     createdAt: string;
 }
+
 
 export const columns: any['columns'] = [
     {
@@ -23,21 +24,41 @@ export const columns: any['columns'] = [
         title: <FormattedMessage id="category.table.category_name" />,
         dataIndex: 'name',
         key: 'name',
-        render: (name: string,record:any) => {
-            if(record?.display || record.is_main){
-                return <div className='flex space-x-2'>
-                    <Tag color='red'>
-                    {
-                        name.length > 100 ?  name.slice(1, 100) + '...' : name
-                    }
-                </Tag>
-                <span className='text-[12px] font-mono'>( <FormattedMessage id='category_display' /> )</span>
-                </div>
+        render: (name: string, record: ICategory) => {
+            const { locale } = useContextGlobal();
+            let categoryName = name;
+            switch (record.id) {
+                case 1:
+                    categoryName = locale === 'vi' ? 'Mới và Nổi bật' : 'New and Featured';
+                    break;
+                case 2:
+                    categoryName = locale === 'vi' ? 'Đàn Ông' : 'Men';
+                    break;
+                case 3:
+                    categoryName = locale === 'vi' ? 'Phụ Nữ' : 'Women';
+                    break;
+                case 4:
+                    categoryName = locale === 'vi' ? 'Trẻ Con' : 'Kids';
+                    break;
+                default: 
+                    categoryName = name;
             }
-            if (name.length > 100) {
+            if (record?.display || record.is_main) {
+                return (
+                    <div className="flex space-x-2">
+                        <Tag color="red">
+                            {categoryName.length > 100 ? categoryName.slice(1, 100) + '...' : categoryName}
+                        </Tag>
+                        <span className="text-[12px] font-mono">
+                            ( <FormattedMessage id="category_display" /> )
+                        </span>
+                    </div>
+                );
+            }
+            if (categoryName.length > 100) {
                 return name.slice(1, 100) + '...';
             } else {
-                return name;
+                return categoryName;
             }
         },
     },

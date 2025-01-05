@@ -616,5 +616,7 @@
     "messageTypeProduct": "Please select product type",
     "singleProduct": "Single product",
     "variantProducts": "Variant products",
-    "category_display": "Display"
+    "category_display": "Display",
+    "sale_qty_sold" : "Quantity Sold",
+     "type_of_product" : "Having variations"
 }

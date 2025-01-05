@@ -612,5 +612,7 @@
     "singleProduct": "Sản phẩm đơn",
     "variantProducts": "Sản phẩm biến thể",
     "category_display": "Trưng bày",
-    "agree": "Đồng ý"
+    "agree": "Đồng ý",
+    "sale_qty_sold" : "Số lượng đã bán",
+    "type_of_product" : "Biến thể"
 }

@@ -101,7 +101,7 @@ export const paymentMethodString = (method: string) => {
         case 'vnpay':
             return 'VNPAY';
         case 'banking':
-            return 'Banking Transfer';
+           return handleChangeMessage(language, 'Banking Transfer', 'Chuyển khoản ngân hàng ');
         case 'visa':
             return 'VISA';
         default:
