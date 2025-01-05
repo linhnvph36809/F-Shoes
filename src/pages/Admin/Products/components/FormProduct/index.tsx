@@ -12,12 +12,20 @@ import EditorComponent from './Editor';
 import { showMessageClient } from '../../../../../utils/messages';
 import InputPrimary from '../../../components/Forms/InputPrimary';
 import ButtonSubmit from '../../../components/Button/ButtonSubmit';
+import AddVariant from '../../AddVariant';
+import { handleChangeMessage } from '../../../../../utils';
+import { useContextGlobal } from '../../../../../contexts';
 
 const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: any) => {
     const [form] = Form.useForm();
     const intl = useIntl();
     const [description, setDescription] = useState<string>('');
     const [shortDescription, setShortDescription] = useState<string>('');
+    const [variants, setVariants] = useState<any>([]);
+    const [listAttribute, setListAttribute] = useState<any>([]);
+    const [errors, setError] = useState<any>([]);
+    const [isVariant, setIsVariant] = useState<boolean>(false);
+    const { locale } = useContextGlobal();
 
     const handleDeleteImage = useCallback((id: string | number) => {
         setImages((preImage: any) => ({
@@ -26,26 +34,35 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
         }));
     }, []);
 
-    const handleFinish = useCallback(
-        (values: IProduct) => {
-            const imageArray = images.images.map((image: IImage) => image.id);
-            if (!imageArray.length) {
-                showMessageClient('Please choose image', '', 'error');
-                return;
-            }
-            const datas = {
-                ...values,
-                description: description || initialValues?.description,
-                short_description: shortDescription || initialValues?.shortDescription,
-                images: imageArray,
-                status: values.status ? 1 : 0,
-                image_url: images.images.length == 1 ? images.images[0].url : values.image_url,
-            };
+    const handleFinish = (values: IProduct) => {
+        const imageArray = images.images.map((image: IImage) => image.id);
+        if (!imageArray.length) {
+            showMessageClient(handleChangeMessage(locale, 'Please choose image', 'Vui lòng chọn ảnh'), '', 'warning');
+            return;
+        }
 
+        if (listAttribute.length == 0 && isVariant === true) {
+            showMessageClient(handleChangeMessage(locale, 'Please choose variant', 'Vui lòng chọn biến thể'), '', 'warning');
+            return;
+        }
+
+        setError(variants);
+        const isSubmit = variants.some((data: any) => data === null);
+
+        const datas = {
+            ...values,
+            description: description || initialValues?.description,
+            short_description: shortDescription || initialValues?.shortDescription,
+            images: imageArray,
+            status: values.status ? 1 : 0,
+            image_url: images.images.length == 1 ? images.images[0].url : values.image_url,
+            variations: variants,
+        };
+
+        if (!isSubmit) {
             onFinish(datas);
-        },
-        [images, description, shortDescription, initialValues],
-    );
+        }
+    };
 
     useEffect(() => {
         form.setFieldsValue({
@@ -56,7 +73,7 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
 
     return (
         <Form onFinish={handleFinish} form={form} initialValues={initialValues}>
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-2 gap-8">
                 <InputPrimary
                     label={<FormattedMessage id="product.name" />}
                     placeholder={intl.formatMessage({ id: 'product.enterName' })}
@@ -81,39 +98,15 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
                         },
                     ]}
                 />
-
-                <InputPrimary
-                    name="stock_qty"
-                    label={<FormattedMessage id="product.quantity" />}
-                    placeholder={intl.formatMessage({ id: 'product.enterQuantity' })}
-                    type="number"
-                    min={0}
-                    rules={[
-                        { required: true, message: <FormattedMessage id="product.quantityRequired" /> },
-                        {
-                            validator: (_: any, value: any) => {
-                                if (value > 10000) {
-                                    return Promise.reject(<FormattedMessage id="product.quantityLimit" />);
-                                }
-                                return Promise.resolve();
-                            },
-                        },
-                        {
-                            validator: (_: any, value: number) => {
-                                if (value > 0) {
-                                    return Promise.resolve();
-                                }
-                                return Promise.reject(<FormattedMessage id="product.quantityInvalid" />);
-                            },
-                        },
-                    ]}
-                />
-
                 <Categories />
+                <Form.Item
+                    label={<FormattedMessage id="product.status" />}
+                    className="font-medium flex items-center"
+                    name="status"
+                >
+                    <Switch className="w- text-16px font-medium" />
+                </Form.Item>
             </div>
-            <Form.Item label={<FormattedMessage id="product.status" />} className="font-medium" name="status">
-                <Switch className="w- text-16px font-medium" />
-            </Form.Item>
             <ModalImage images={images} handleSetImages={setImages} />
             {images.isShow && (
                 <ConfigProvider
@@ -184,6 +177,37 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
                     }}
                 />
             </div>
+
+            <Form.Item
+                label={<FormattedMessage id="isVariant" />}
+                name="is_variant"
+                className="font-medium mt-10"
+                labelCol={{ span: 24 }}
+                rules={[{ required: true, message: <FormattedMessage id="messageTypeProduct" /> }]}
+            >
+                <Radio.Group onChange={(e) => setIsVariant(e.target.value)}>
+                    <Radio value={false}>
+                        <FormattedMessage id="singleProduct" />
+                    </Radio>
+                    <Radio value={true}>
+                        <FormattedMessage id="variantProducts" />
+                    </Radio>
+                </Radio.Group>
+            </Form.Item>
+            {isVariant ? (
+                <div>
+                    <AddVariant
+                        setDatas={setVariants}
+                        datas={variants}
+                        setError={setError}
+                        errors={errors}
+                        listAttribute={listAttribute}
+                        setListAttribute={setListAttribute}
+                    />
+                </div>
+            ) : (
+                ''
+            )}
             <div className="text-end mt-10">
                 <ButtonSubmit loading={loading} width={'w-[180px]'} />
             </div>

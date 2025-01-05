@@ -20,7 +20,7 @@ export const columnsAttribute = [
         render: (image_url: string) => {
             return (
                 <div>
-                    <img src={image_url} alt="" className="w-[80px] rounded-lg" />
+                    <img src={image_url} alt="" className="w-[80px] h-[100px] object-cover rounded-lg" />
                 </div>
             );
         },

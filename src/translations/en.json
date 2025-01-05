@@ -611,6 +611,10 @@
     "Payment_again": "Payment again",
     "strange_payment": "Strange payment",
     "variant": "Variant",
-    "category_display" : "Display",
-    "agree": "Agree"
+    "agree": "Agree",
+    "isVariant": "Is Variant",
+    "messageTypeProduct": "Please select product type",
+    "singleProduct": "Single product",
+    "variantProducts": "Variant products",
+    "category_display": "Display"
 }
