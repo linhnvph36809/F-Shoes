@@ -24,16 +24,14 @@ export const columns: any['columns'] = [
         dataIndex: 'name',
         key: 'name',
         render: (name: string,record:any) => {
-            console.log(record);
-            if(record?.display){
+            if(record?.display || record.is_main){
                 return <div className='flex space-x-2'>
-                    
                     <Tag color='red'>
                     {
                         name.length > 100 ?  name.slice(1, 100) + '...' : name
                     }
                 </Tag>
-                <span className='text-[12px] font-mono'>( Trưng Bày )</span>
+                <span className='text-[12px] font-mono'>( <FormattedMessage id='category_display' /> )</span>
                 </div>
             }
             if (name.length > 100) {

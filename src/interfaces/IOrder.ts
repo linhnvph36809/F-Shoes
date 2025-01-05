@@ -61,7 +61,32 @@ export const statusString = (id: number) => {
         };
     }
 };
-
+export const statusToNumber = (status: string) => {
+    switch (status.toLocaleLowerCase()) {
+        case 'cancelled':
+            return 0;
+        case 'waiting_payment':
+            return 1;
+        case 'waiting_confirm':
+            return 2;
+        case 'confirmed':
+            return 3;
+        case 'delivering':
+            return 4;
+        case 'delivered':
+            return 5;
+        case 'waiting_accept_return':
+            return 6;
+        case 'return_processing':
+            return 7;
+        case 'denied_return':
+            return 8;
+        case'returned':
+            return 9;
+        default:
+            return 0;
+    }
+}
 export const paymentMethodString = (method: string) => {
     const language = handleGetLocalStorage('language') || 'vi';
 
