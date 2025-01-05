@@ -611,5 +611,9 @@
     "Payment_again": "Payment again",
     "strange_payment": "Strange payment",
     "variant": "Variant",
-    "agree": "Agree"
+    "agree": "Agree",
+    "isVariant": "Is Variant",
+    "messageTypeProduct": "Please select product type",
+    "singleProduct": "Single product",
+    "variantProducts": "Variant products"
 }

@@ -1,58 +1,32 @@
-import { Button, ConfigProvider, Table } from 'antd';
+import { ConfigProvider, Table } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 import useAttribute from '../../../../hooks/useAttribute';
 import { IAttribute } from '../../../../interfaces/IAttribute';
 
-import Heading from '../../components/Heading';
 import FormAttribute from '../components/FormAttribute';
 
 import { combine } from './datas';
-import useVariant from '../../../../hooks/useVariant';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import ModalFormVariant from './ModalFormVariant';
-import { showMessageActive, showMessageClient } from '../../../../utils/messages';
-import ButtonSubmit from '../../components/Button/ButtonSubmit';
-import { PATH_ADMIN } from '../../../../constants/path';
-import ButtonBack from '../../components/ButtonBack';
+import { showMessageActive } from '../../../../utils/messages';
 import { formatPrice } from '../../../../utils';
 import SelectPrimary from '../../components/Forms/SelectPrimary';
 
 import ButtonDelete from '../../components/Button/ButtonDelete';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-const API_ATTRIBUTE_GET = '/api/get/attribute/values/product/';
+const API_ATTRIBUTE_GET = '/api/attribute?include=values&times=attribute';
 
-const AddVariant = () => {
+const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListAttribute }: any) => {
     const intl = useIntl();
-    const { slug } = useParams();
-    let id: string | number | undefined;
-    if (slug) {
-        const index = slug.lastIndexOf('.');
-        id = slug.substring(index + 1);
-    }
     const [variants, setVariants] = useState<IAttribute[]>([]);
     const [variantsChanges, setVariantsChanges] = useState<IAttribute[]>([]);
     const [variantId, setVariantId] = useState<number[]>([]);
-    const [listAttribute, setListAttribute] = useState<any>([]);
     const { loading: loadingPostAttribute, postAttribute } = useAttribute();
-    const [datas, setDatas] = useState<any>([]);
-    const [errors, setError] = useState<any>([]);
-    const { data: attributeByIds, refetch } = useQueryConfig('attribute', API_ATTRIBUTE_GET + id);
-    const { loading: loadingPostVariant, postVariant } = useVariant();
+    const { data: attributeByIds, refetch } = useQueryConfig('attribute', API_ATTRIBUTE_GET);
     const [images, setImages] = useState<any>([]);
 
-    const onFinish = () => {
-        setError(datas);
-        const isSubmit = datas.some((data: any) => data === null);
-
-        if (!isSubmit) {
-            postVariant({
-                variations: datas,
-            });
-        }
-    };
 
     const handleChange = useCallback((listId: number[]) => {
         setVariantId([...listId]);
@@ -63,7 +37,7 @@ const AddVariant = () => {
 
     const handleChangeItem = useCallback(
         (values: number[], id: number) => {
-            const attribute = attributeByIds?.data?.find((attribute: any) => attribute.id === id);
+            const attribute = attributeByIds?.data[0]?.data?.find((attribute: any) => attribute.id === id);
             const newValues = attribute?.values.filter((value: any) => values.includes(+value.id));
             const newAttribute = { ...attribute, values: newValues } as IAttribute;
 
@@ -98,7 +72,9 @@ const AddVariant = () => {
     };
 
     useEffect(() => {
-        const newAttributes = attributeByIds?.data?.filter((attribute: any) => variantId.includes(+attribute.id));
+        const newAttributes = attributeByIds?.data[0]?.data?.filter((attribute: any) =>
+            variantId.includes(+attribute.id),
+        );
         setVariants(newAttributes);
     }, [variantId, attributeByIds]);
 
@@ -136,16 +112,11 @@ const AddVariant = () => {
             listOriginData.splice(i, 1);
 
             setDatas([...listOriginData]);
-            console.log(listOriginData, 'data');
         });
     };
     return (
         <>
             <section>
-                <ButtonBack to={PATH_ADMIN.LIST_PRODUCT} />
-                <Heading>
-                    <FormattedMessage id="Add_Variant" />
-                </Heading>
                 <div className="grid grid-cols-2 gap-x-10">
                     <div>
                         <SelectPrimary
@@ -159,7 +130,7 @@ const AddVariant = () => {
                             onChange={handleChange}
                             optionFilterProp="name"
                             fieldNames={{ label: 'name', value: 'id' }}
-                            options={attributeByIds?.data}
+                            options={attributeByIds?.data[0]?.data}
                             value={variantId}
                         />
                         <div>
@@ -305,17 +276,6 @@ const AddVariant = () => {
                                     index,
                                 }))}
                             />
-
-                            <div className="text-end mt-10">
-                                <ButtonSubmit
-                                    loading={loadingPostVariant}
-                                    onClick={
-                                        listAttribute.length
-                                            ? () => onFinish()
-                                            : () => showMessageClient('Please choose variant', '', 'warning')
-                                    }
-                                />
-                            </div>
                         </ConfigProvider>
                     </div>
                 </div>

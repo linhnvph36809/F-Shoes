@@ -145,23 +145,24 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) =>
                         name="stock_qty"
                         type="number"
                         min={0}
-                        rules={[{ required: true, message: <FormattedMessage id="product.quantityRequired" /> },
-                        {
-                            validator: (_: any, value: number) => {
-                                if (value > 0) {
+                        rules={[
+                            { required: true, message: <FormattedMessage id="product.quantityRequired" /> },
+                            {
+                                validator: (_: any, value: number) => {
+                                    if (value > 0) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(<FormattedMessage id="product.quantityInvalid" />);
+                                },
+                            },
+                            {
+                                validator: (_: any, value: any) => {
+                                    if (value > 10000) {
+                                        return Promise.reject(<FormattedMessage id="product.quantityLimit" />);
+                                    }
                                     return Promise.resolve();
-                                }
-                                return Promise.reject(<FormattedMessage id="product.quantityInvalid" />);
+                                },
                             },
-                        },
-                        {
-                            validator: (_: any, value: any) => {
-                                if (value > 10000) {
-                                    return Promise.reject(<FormattedMessage id="product.quantityLimit" />);
-                                }
-                                return Promise.resolve();
-                            },
-                        },
                         ]}
                     />
                     <InputPrimary label="SKU" placeholder="Enter SKU" name="sku" />

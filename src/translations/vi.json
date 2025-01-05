@@ -607,5 +607,11 @@
     "Payment_again": "Thanh toán lại",
     "strange_payment": "Thanh toán lại",
     "variant": "Biến thể",
-    "agree": "Đồng ý"
+    "agree": "Đồng ý",
+    "isVariant": "Là biến thể",
+    "messageTypeProduct": "Vui lòng chọn loại sản phẩm",
+    "singleProduct": "Sản phẩm đơn",
+    "variantProducts": "Sản phẩm biến thể"
+
+
 }

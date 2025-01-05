@@ -11,8 +11,6 @@ import ButtonEdit from '../components/Button/ButtonEdit';
 import SkeletonComponent from '../components/Skeleton';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import PaginationComponent from '../../../components/Pagination';
-import { showMessageActive } from '../../../utils/messages';
-import ButtonDelete from '../components/Button/ButtonDelete';
 import ButtonUpdate from '../components/Button/ButtonUpdate';
 import ButtonAdd from '../components/Button/ButtonAdd';
 import InputSearch from '../components/Forms/InputSearch';
@@ -20,7 +18,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import PermissionElement from '../../../components/Permissions/PermissionElement';
 import { ACTIONS, PERMISSION } from '../../../constants';
 import { useContextGlobal } from '../../../contexts';
-import { handleChangeMessage } from '../../../utils';
 
 const ListProduct = () => {
     const { locale } = useContextGlobal();
@@ -33,28 +30,12 @@ const ListProduct = () => {
     const currentUrl = `${window.location.origin}${location.pathname}${location.search}`;
 
     const navigate = useNavigate();
-    const { deleteProduct } = useProduct();
 
     const { data: products, isFetching } = useQueryConfig(
         [QUERY_KEY, `all-product-admin-${page}-${search}`],
         API_PRODUCT +
-        `?paginate=true&per_page=8&page=${page}&search=${search}&include=categories,sale_price,variations`,
+        `?paginate=true&per_page=10&page=${page}&search=${search}&include=categories,sale_price,variations`,
     );
-
-    const handleDeleteProduct = (id: string | number) => {
-        showMessageActive(
-            handleChangeMessage(
-                locale,
-                'Are you sure you want to delete this product',
-                'Bạn có chắc chắn muốn xóa sản phẩm này không?',
-            ),
-            '',
-            'warning',
-            () => {
-                deleteProduct(id);
-            },
-        );
-    };
 
     const handlePageChange = (page: number) => {
         params.set('page', `${page}`);
@@ -74,24 +55,11 @@ const ListProduct = () => {
         title: <FormattedMessage id="category.table.action" />,
         dataIndex: 'slug',
         key: '8',
-        render: (slug: string | number, values: IProduct) => {
+        render: (slug: string | number) => {
             return (
                 <div className="flex-row-center gap-x-3">
-                    <Link
-                        state={{ prevUrl: currentUrl }}
-                        to={`/admin/${values?.variations && values.variations.length ? 'update-variant' : 'add-variant'
-                            }/${slug}`}
-                    >
-                        <ButtonEdit>
-                            <CopyPlus />
-                        </ButtonEdit>
-                    </Link>
-
                     <PermissionElement keyName={PERMISSION.PERMISSION_PRODUCT} action={ACTIONS.ACTIONS_EDIT}>
                         <ButtonUpdate state={{ prevUrl: currentUrl }} to={`/admin/update-product/${slug}`} />
-                    </PermissionElement>
-                    <PermissionElement keyName={PERMISSION.PERMISSION_PRODUCT} action={ACTIONS.ACTIONS_DELETE}>
-                        <ButtonDelete onClick={() => handleDeleteProduct(values.id)} />
                     </PermissionElement>
                 </div>
             );
