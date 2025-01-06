@@ -63,8 +63,6 @@ const ContextGlobal = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         if (userIdLocal || (adminId && data?.data.user)) {
             setUser(data?.data.user);
-            handleSetLocalStorage(INFO_AUTH.userName, data?.data.user.name);
-            handleSetLocalStorage(INFO_AUTH.adminName, data?.data.user.name);
         }
     }, [data]);
 

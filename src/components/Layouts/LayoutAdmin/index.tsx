@@ -125,7 +125,9 @@ const LayoutAdmin: React.FC = () => {
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Avatar src={user?.avatar_url} size={40} icon={<UserOutlined />} />
                                 <div style={{ marginLeft: '10px' }}>
-                                    <p className="text-[15px] font-medium">{user?.name || 'loading...'}</p>
+                                    <p className="text-[15px] font-medium">
+                                        {handleGetLocalStorage(INFO_AUTH.userName)}
+                                    </p>
                                     <p className="text-[12px] color-gray">{user?.group?.group_name}</p>
                                 </div>
                             </div>
