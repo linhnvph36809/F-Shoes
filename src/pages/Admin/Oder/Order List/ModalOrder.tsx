@@ -1,9 +1,8 @@
 import { Modal, Tag } from 'antd';
 import { formatPrice, formatTime, handleChangeMessage } from '../../../../utils';
-import { STATUS_ORDER } from '../../../../constants';
 import useOrder from '../../../../hooks/useOrder';
 import { FormattedMessage } from 'react-intl';
-import { paymentMethodString, paymentStatusString, statusString } from '../../../../interfaces/IOrder';
+import { paymentMethodString, paymentStatusString, shippingMessage, statusString } from '../../../../interfaces/IOrder';
 import {
     BringToFront,
     CircleDollarSign,
@@ -191,7 +190,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                         <TicketPercent className="w-7" /> <FormattedMessage id="voucher" /> :
                                     </p>
                                     {orderDetail?.orderDetail?.voucher &&
-                                    orderDetail?.orderDetail?.voucher?.type == 'fixed' ? (
+                                        orderDetail?.orderDetail?.voucher?.type == 'fixed' ? (
                                         <p className="font-medium color-gray">
                                             -{formatPrice(orderDetail?.orderDetail?.voucher?.discount)}đ
                                         </p>
@@ -209,11 +208,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     <Truck className="w-7" /> <FormattedMessage id="shipping_method" /> :{' '}
                                 </p>
                                 <p className="color-gray text-[14px] font-medium">
-                                    {handleChangeMessage(
-                                        locale,
-                                        orderDetail?.orderDetail?.shipping_method,
-                                        'Giao hàng tiêu chuẩn',
-                                    )}
+                                    {shippingMessage()}
                                 </p>
                             </div>
                             <div className="flex justify-between items-center py-2">
@@ -270,16 +265,16 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     </div>
                     <div className="flex justify-end items-center gap-x-5 mt-3">
                         {orderDetail?.orderDetail?.status &&
-                        orderDetail?.orderDetail?.status !== 0 &&
-                        orderDetail?.orderDetail?.status < 4 ? (
+                            orderDetail?.orderDetail?.status !== 0 &&
+                            orderDetail?.orderDetail?.status < 4 ? (
                             <ModalReason orderId={orderDetail?.orderDetail?.id} handleCancelDetail={handleCancel} />
                         ) : (
                             ''
                         )}
 
                         {orderDetail?.orderDetail?.status &&
-                        orderDetail?.orderDetail?.status > 1 &&
-                        orderDetail?.orderDetail?.status < 5 ? (
+                            orderDetail?.orderDetail?.status > 1 &&
+                            orderDetail?.orderDetail?.status < 5 ? (
                             <div>
                                 <button
                                     style={{
@@ -291,7 +286,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     {loading ? (
                                         <LoadingSmall />
                                     ) : (
-                                        STATUS_ORDER[(orderDetail?.orderDetail?.status || 0) + 1] || 'Empty'
+                                        statusString((orderDetail?.orderDetail?.status || 0) + 1).text || 'Trống'
                                     )}
                                 </button>
                             </div>
@@ -338,7 +333,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                 onClick={() => handleChangeStatus(9)}
                                 className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
                             >
-                                {loading ? <LoadingSmall /> : 'Returned'}
+                                {loading ? <LoadingSmall /> : <FormattedMessage id="returned" />}
                             </button>
                         ) : (
                             ''

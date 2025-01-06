@@ -105,7 +105,6 @@ const OrderDetail = () => {
         }
         | undefined = statusString(order?.status);
 
-
     const givenTime = new Date(order?.created_at || '');
     const currentTime = new Date();
     const givenTimePlusOneHour = new Date(givenTime.getTime() + 60 * 60 * 1000);
@@ -388,7 +387,7 @@ const OrderDetail = () => {
                                                             className="w-[150px] h-[50px] flex gap-x-5 items-center justify-center p-5 bg-white border
                                                             rounded-xl hover:cursor-pointer transition-global hover:opacity-70 relative"
                                                         >
-                                                            {loading && loadingPaymentOn === "momo" ? (
+                                                            {loading && loadingPaymentOn === 'momo' ? (
                                                                 <LoadingSmall color="color-primary" />
                                                             ) : (
                                                                 <>
@@ -408,7 +407,7 @@ const OrderDetail = () => {
                                                             className="w-[150px] h-[50px] flex gap-x-5 items-center justify-center p-5 bg-white border
                                                             rounded-xl hover:cursor-pointer transition-global hover:opacity-70"
                                                         >
-                                                            {loading && loadingPaymentOn === "vnpay" ? (
+                                                            {loading && loadingPaymentOn === 'vnpay' ? (
                                                                 <LoadingSmall color="color-primary" />
                                                             ) : (
                                                                 <>
