@@ -4,6 +4,7 @@ import { Star } from 'lucide-react';
 import { IReview } from '../../interfaces/IReview';
 import useQueryConfig from '../../hooks/useQueryConfig';
 import { useParams } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 const ReviewForm = ({
   productId,
@@ -52,30 +53,41 @@ const ReviewForm = ({
     }
     setIsModalVisible(false);
     refetch();
-
   };
 
   return (
     <div>
       {isUpdate ? (
         <Menu.Item key="2" onClick={showModal}>
-          Update
+          <FormattedMessage id="Update" />
         </Menu.Item>
       ) : (
         <p
           onClick={showModal}
           className="color-primary text-16px font-medium underline mt-8 hover:cursor-pointer"
         >
-          Write a Review
+          <FormattedMessage id="Write_a_Review" />
         </p>
       )}
       <Modal
-        title={<span className="text-[28px] font-semibold color-primary">Product Review</span>}
+        title={
+          <span className="text-[28px] font-semibold color-primary">
+            <FormattedMessage id="Product_Review" />
+          </span>
+        }
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        okText={<span className="text-white">Submit</span>}
-        cancelText={<div className="hover:bg-[#111111] hover:text-white transition-global">Cancel</div>}
+        okText={
+          <span className="text-white">
+            <FormattedMessage id="button.submit" />
+          </span>
+        }
+        cancelText={
+          <div className="hover:bg-[#111111] hover:text-white transition-global">
+            <FormattedMessage id="button.cancel" />
+          </div>
+        }
         okButtonProps={{ className: 'bg-black hover:opacity-90 transition-global' }}
       >
         <Form
@@ -86,7 +98,11 @@ const ReviewForm = ({
           initialValues={defaultValues}
         >
           <Form.Item
-            label={<span className="font-semibold">Rating</span>}
+            label={
+              <span className="font-semibold">
+                <FormattedMessage id="admin.rating" />
+              </span>
+            }
             name="rating"
             rules={[{ required: true, message: 'Please enter your Rate' }]}
           >
@@ -127,7 +143,11 @@ const ReviewForm = ({
             }}
           >
             <Form.Item
-              label={<span className="font-semibold">Product Review</span>}
+              label={
+                <span className="font-semibold">
+                  <FormattedMessage id="Product_Review" />
+                </span>
+              }
               name="text"
               rules={[{ required: true, message: 'Please enter your review' }]}
             >

@@ -3,6 +3,7 @@ import { Modal } from 'antd';
 import { Star } from 'lucide-react';
 
 import { formatPrice } from '../../../utils';
+import { FormattedMessage } from 'react-intl';
 
 const ModalViewDetail = ({ product }: any) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,7 +26,9 @@ const ModalViewDetail = ({ product }: any) => {
                 className="color-primary text-16px font-medium underline hover:cursor-pointer hover:text-gray-500 transition-global"
                 onClick={() => showModal()}
             >
-                View Product Details
+
+                <FormattedMessage id="View_Product_Details" />
+
             </p>
             <Modal width={600} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
                 <div>
@@ -47,28 +50,28 @@ const ModalViewDetail = ({ product }: any) => {
                         dangerouslySetInnerHTML={{ __html: product?.description }}
                     ></div>
                     <div className="font-medium text-[18px] pb-5 color-primary">
-                        Benefits
+                        <FormattedMessage id="Benefits" />
                         <ul className="list-disc list-outside pl-10 my-2">
                             <li className="color-primary text-[16px] font-normal">
-                                Leather upper is easy to clean and easy to style.
+                                <FormattedMessage id="detailDescription1" />
                             </li>
                             <li className="color-primary text-[16px] font-normal">
-                                Foam midsole with iconic wedge insert provides lightweight cushioning.
+                                <FormattedMessage id="detailDescription2" />
                             </li>
                             <li className="color-primary text-[16px] font-normal">
-                                Herringbone outsole pattern pairs durable traction and heritage style.
+                                <FormattedMessage id="detailDescription3" />
                             </li>
                             <li className="color-primary text-[16px] font-normal">
-                                Padded, low-cut collar looks sleek and feels great.
+                                <FormattedMessage id="detailDescription4" />
                             </li>
                         </ul>
                     </div>
                     <div className="font-medium text-[18px] pb-5 color-primary">
-                        Product details
+                        <FormattedMessage id="Product_details" />
                         <ul className="list-disc list-outside pl-10 my-2">
                             {product?.variations.length ? (
                                 <li className="color-primary text-[16px] font-normal">
-                                    Variants :{' '}
+                                    <FormattedMessage id="Variants" /> :{' '}
                                     {product?.variations?.map((variation: any) => (
                                         <span key={variation?.id} className="font-medium">
                                             {variation?.classify},
@@ -79,11 +82,14 @@ const ModalViewDetail = ({ product }: any) => {
                                 ''
                             )}
                             <li className="color-primary text-[16px] font-normal">
-                                Stock Quantity : <span className="font-medium">{product?.stock_qty}</span>
+                                <FormattedMessage id="admin.stock_qty" /> : <span className="font-medium">{product?.stock_qty}</span>
+                            </li>
+                            <li className="color-primary text-[16px] font-normal">
+                                <FormattedMessage id="admin.qty_sold" />  : <span className="font-medium">{product?.qty_sold}</span>
                             </li>
                             <li className="color-primary text-[16px] font-normal">
                                 <div className="flex gap-x-2 items-center">
-                                    Stars : <span className="font-medium">{product?.rating}</span>{' '}
+                                    <FormattedMessage id="Stars" /> : <span className="font-medium">{product?.rating}</span>{' '}
                                     <Star className={`w-[18px] text-yellow-500`} />
                                 </div>
                             </li>

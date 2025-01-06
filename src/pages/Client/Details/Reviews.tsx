@@ -24,7 +24,10 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
         id = slug.substring(index + 1);
     }
     const { loading, deleteReview, postReview, postLikeReview } = useReview();
-    const { data, refetch } = useQueryConfig([QUERY_KEY,`get-review/${id}`], `/api/product/${id}/reviews?times=review`);
+    const { data, refetch } = useQueryConfig(
+        [QUERY_KEY, `get-review/${id}`],
+        `/api/product/${id}/reviews?times=review`,
+    );
     const { user } = useContextGlobal();
 
     const starElements = (rating: number) => {
@@ -47,16 +50,14 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
     };
 
     const handleLikeReview = (id: number) => {
-        if(user){
+        if (user) {
             postLikeReview(id);
             refetch();
-        }else{
-            navigate('/authentication')
-            
+        } else {
+            navigate('/authentication');
         }
-        
     };
-    
+
     return (
         <ul>
             <Collapse
@@ -126,7 +127,7 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
                         <div className="my-8 h-[350px] overflow-auto relative">
                             <div className="flex-row-center gap-x-6">
                                 <p className="text-[#d33918] text-[16px] font-medium">
-                                    {isNaN(averageRating) ? 0 : averageRating} Stars
+                                    {isNaN(averageRating) ? 0 : averageRating} <FormattedMessage id="Stars" />
                                 </p>
                             </div>
                             {user?.id ? (
@@ -159,7 +160,10 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
                                                         className="flex items-center gap-x-2 text-[14px] font-medium pr-2"
                                                         onClick={() => handleLikeReview(review?.id)}
                                                     >
-                                                        <Heart className={`"w-[15px] ${review?.liked ? 'text-rose-500' : ''}  hover:cursor-pointer" `}/>{' '}
+                                                        <Heart
+                                                            className={`"w-[15px] ${review?.liked ? 'text-rose-500' : ''
+                                                                }  hover:cursor-pointer" `}
+                                                        />{' '}
                                                         {review.likes_count}
                                                     </p>
 

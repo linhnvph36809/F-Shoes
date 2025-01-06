@@ -66,8 +66,11 @@ const Order = () => {
     const handleDistrictChange = (districtId: number) => {
         getAllWard(districtId);
         setDistrictId(districtId);
-        form.setFieldValue('shipping_method', null);
-        form.setFieldValue('shipping_method', null);
+        form.setFieldsValue({
+            ward: null,
+            shipping_method: null
+        });
+
     };
 
     const handleWardChange = (code: string) => {

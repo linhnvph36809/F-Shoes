@@ -81,12 +81,12 @@ export const statusToNumber = (status: string) => {
             return 7;
         case 'denied_return':
             return 8;
-        case'returned':
+        case 'returned':
             return 9;
         default:
             return 0;
     }
-}
+};
 export const paymentMethodString = (method: string) => {
     const language = handleGetLocalStorage('language') || 'vi';
 
@@ -122,6 +122,11 @@ export const paymentStatusString = (status: any) => {
         default:
             return '...';
     }
+};
+
+export const shippingMessage = () => {
+    const language = handleGetLocalStorage('language') || ('vi' as string);
+    return handleChangeMessage(language, 'Standard Shipping', 'Giao hàng tiêu chuẩn');
 };
 
 export const statusArr = [

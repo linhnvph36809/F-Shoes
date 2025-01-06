@@ -192,7 +192,7 @@ const ListUser = () => {
                 </Col>
                 <Col span={6}>
                     <StatCard
-                        title="Inactive Users"
+                        title={<FormattedMessage id="Inactive_Users" />}
                         value={users?.filter((u: IUser) => u.status !== 'active').length}
                         description={intl.formatMessage({ id: 'user.User_Inactive_Users' })}
                         color="#ffd6d6"
@@ -219,7 +219,6 @@ const ListUser = () => {
                 </Col>
             </Row>
 
-            {/* User management table with loading state */}
             <>
                 {isFetching ? (
                     <Skeleton />

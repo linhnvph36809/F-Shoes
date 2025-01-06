@@ -69,7 +69,7 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
         ? null
         : [
             { required: true, message: <FormattedMessage id="group.form_password.success" /> },
-            { min: 8, message: <FormattedMessage id="user.password_8" />  },
+            { min: 8, message: <FormattedMessage id="user.password_8" /> },
         ];
 
     return (
@@ -85,7 +85,7 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                     name="family_name"
                     label={intl.formatMessage({ id: 'user.User_family' })}
                     placeholder={intl.formatMessage({ id: 'user.User_family' })}
-                    rules={[{ required: true, message: <FormattedMessage id="user.User_Form_name_required" /> }]}
+                    rules={[{ required: true, message: <FormattedMessage id="Please_enter_your_family_name" /> }]}
                 ></InputPrimary>
                 <InputPrimary
                     name="email"
@@ -109,13 +109,32 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                     rules={validatePassword}
                 ></InputPrimary>
 
-                <InputPrimary name="birth_date" label="Date Of Birth" type="date"></InputPrimary>
+                <InputPrimary name="birth_date" label={intl.formatMessage({ id: 'user.date' })} type="date"
+                    rules={[
+                        () => ({
+                            validator(_: any, value: any) {
+                                if (value) {
+                                    const inputDate = new Date(value);
+                                    const currentDate = new Date();
+                                    inputDate.setHours(0, 0, 0, 0);
+                                    currentDate.setHours(0, 0, 0, 0);
+
+                                    if (inputDate < currentDate) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error(intl.formatMessage({ id: 'validateDateUser' })));
+                                }
+                                return Promise.resolve();
+                            },
+                        }),
+                    ]}></InputPrimary>
+
                 <SelectPrimary
                     name="group_id"
-                    rules={[{ required: true, message: <FormattedMessage id="user.User_Form_email_required" /> }]}
                     allowClear
-                    label={intl.formatMessage({ id: 'user.User_Active_Users' })}
-                    placeholder={intl.formatMessage({ id: 'user.User_Active_Users' })}
+                    rules={[{ required: true, message: <FormattedMessage id="Please_select_a_user_group" /> }]}
+                    label={intl.formatMessage({ id: 'admin.groups' })}
+                    placeholder={intl.formatMessage({ id: 'admin.groups' })}
                     optionFilterProp="group_name"
                     fieldNames={{ label: 'group_name', value: 'id' }}
                     key={'value'}
