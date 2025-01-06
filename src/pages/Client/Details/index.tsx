@@ -36,9 +36,9 @@ const Detail = () => {
     }
 
     const { data, isFetching } = useQueryConfig([QUERY_KEY, `product-detail-${id}`], `/api/product/detail/${id}`);
-    
+
     console.log(data);
-    
+
     const products = data?.data;
     const { user } = useContextGlobal();
     const [idVariants, setIdVariants] = useState<number[]>([]);
@@ -211,7 +211,7 @@ const Detail = () => {
                                 ''
                             ) : (
                                 <Link to="/authentication" className="text-16px font-medium mt-10 block underline">
-                                    Login & Register
+                                    <FormattedMessage id="Login_&_Register" />
                                 </Link>
                             )}
                             <div className="my-20">
@@ -312,7 +312,7 @@ const Detail = () => {
                                             </div>
                                         </SwiperSlide>
                                     ))
-                                    : 'Nothing here.'}
+                                    : <FormattedMessage id="Nothing_here" />}
                             </SlidesScroll>
                         </div>
                     </div>

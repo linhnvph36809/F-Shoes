@@ -5,7 +5,6 @@ interface Price {
     sale_price: number;
 }
 export default function Price({ product, variation }: { product: Price; variation: Price | undefined }) {
-    console.log(variation);
 
     if (variation) {
         return variation?.sale_price && variation?.sale_price != variation?.price ? (

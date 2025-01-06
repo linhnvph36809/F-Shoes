@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { formatPrice } from '../../../../utils';
 import useCookiesConfig from '../../../../hooks/useCookiesConfig';
 import { FormattedMessage } from 'react-intl';
-import { paymentMethodString, paymentStatusString } from '../../../../interfaces/IOrder';
+import { paymentMethodString, paymentStatusString, shippingMessage } from '../../../../interfaces/IOrder';
 
 const OrderCashOnDelivery = () => {
     const {
@@ -99,7 +99,7 @@ const OrderCashOnDelivery = () => {
                                         {<FormattedMessage id="shipping_method" />}
                                     </span>
                                     <span className="font-semibold text-xl text-gray-800">
-                                        {order?.shipping_method}
+                                       {shippingMessage()}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">

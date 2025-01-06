@@ -32,12 +32,12 @@ const OrderList = () => {
     const searchKey = urlQuery.get('search') || '';
     const page = urlQuery.get('page') || 1;
     const status = urlQuery.get('status') || '';
-    
+
     const { data: orders, isLoading } = useQueryConfig(
         [QUERY_KEY, `order-admin-${page}-search=${searchKey}-status=${status}`],
-        `${API_ORDER}?page=${page}&search=${searchKey}${status && status !== '' ? '&status='+statusToNumber(status) :'' }`,
+        `${API_ORDER}?page=${page}&search=${searchKey}${status && status !== '' ? '&status=' + statusToNumber(status) : ''}`,
     );
-  
+
     const totalItems = orders?.data?.paginator.total_item || 0;
     const pageSize = orders?.data?.paginator.per_page || 10;
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -128,7 +128,7 @@ const OrderList = () => {
                         </button>
                     </div>
                     <div className="relative">
-                        
+
                         <Input
                             placeholder={intl.formatMessage({ id: 'order.Search_Order' })}
                             className={`w-[250px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
