@@ -353,6 +353,14 @@ const AddSale = () => {
             key: 'price',
             render: (price: number) => <span style={{ color: 'black' }}>{formatPrice(price)} đ</span>,
         },
+        {
+            title: <FormattedMessage id="type_of_product" />,
+            dataIndex: 'is_variant',
+            key: 'is_variant',
+            render: (is_variant: boolean,record:IProduct) =>
+                is_variant || record.variations.length > 0  ? <span>{handleChangeMessage(locale,'Yes','Có')}</span> : <span>{handleChangeMessage(locale,'No','Không')}</span>
+            ,
+        },
     ];
 
     const [dataSale, setDataSale] = useState({
@@ -469,8 +477,8 @@ const AddSale = () => {
     };
 
     const optionsType = [
-        { label: 'Percent', value: 'percent' },
-        { label: 'Fixed', value: 'fixed' },
+        { label: handleChangeMessage(locale,'Percent','Phần trăm'), value: 'percent' },
+        { label: handleChangeMessage(locale,'Fixed','Cố định'), value: 'fixed' },
     ];
 
     return (
@@ -601,8 +609,9 @@ const AddSale = () => {
                         open={openAddProductTable}
                         onOk={onOkSelectProduct}
                         onCancel={() => setOpenAddProductTable(false)}
+                        className='min-w-[1000px]'
                     >
-                        <div>
+                        <div className='w-full p-2'>
                             <div className="my-4">
                                 <Input onChange={onSearchKeyListProduct} placeholder="Search a name or an id" />
                             </div>

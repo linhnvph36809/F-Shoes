@@ -1,12 +1,12 @@
 import { Button, InputNumber } from 'antd';
 import { DeleteOutlined, HeartOutlined } from '@ant-design/icons';
-
 import useCart from '../../../../hooks/useCart';
 import useWishlist from '../../../../hooks/useWishlist';
 import { formatPrice } from '../../../../utils';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { FormattedMessage } from 'react-intl';
 import { useEffect, useState } from 'react';
+
 
 const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
     const { putCart } = useCart();
@@ -22,11 +22,10 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
         }
     }, [product]);
     const onChange = (value: any) => {
-        if (!value || +value === product.quantity ) {
-            
+        if (!value || +value > product.quantity ) {
+            setCartQty(product.quantity);
         }else {
             setCartQty(value);
-            
         }
     };
     const onChangeQuantity = (qty: any) => {

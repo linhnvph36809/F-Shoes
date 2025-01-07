@@ -101,7 +101,7 @@ const useCategory = () => {
             getAllCategory();
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(
-                handleChangeMessage(locale, 'Delete Topic successfully', 'Xóa chủ đề thành công'),
+                handleChangeMessage(locale, 'Delete Category successfully', 'Xóa danh mục thành công'),
                 '',
                 'success',
             );

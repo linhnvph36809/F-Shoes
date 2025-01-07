@@ -10,7 +10,7 @@ import NotFound from '../../../../components/NotFound';
 import ModalCancel from './components/ModalCancel';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { paymentMethodString, paymentStatusString, statusString } from '../../../../interfaces/IOrder';
-import { formatPrice, formatTime } from '../../../../utils';
+import { formatPrice, formatTime, handleChangeMessage } from '../../../../utils';
 import { showMessageActive, showMessageClient } from '../../../../utils/messages';
 import { FormattedMessage } from 'react-intl';
 import ModalReturnOrder from './components/ModalReturnOrder';
@@ -18,10 +18,12 @@ import useCookiesConfig from '../../../../hooks/useCookiesConfig';
 import useOnlinePayment from '../../../../hooks/useOnlinePayment';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import useOrder from '../../../../hooks/useOrder';
+import { useContextGlobal } from '../../../../contexts';
 
 const OrderDetail = () => {
     const { reOrder } = UseOrder();
     const { id } = useParams();
+    const {locale} = useContextGlobal();
     const { data, isLoading, error, refetch } = useQueryConfig(`order-detail-profile-${id}`, `api/orders/${id}`);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { loading, postMomo, postVNPAY } = useOnlinePayment();
@@ -52,12 +54,15 @@ const OrderDetail = () => {
     };
 
     const handleBuyAgain = (id: string | number) => {
-        showMessageActive('Buy Again', 'This will add the order items to your cart.Are you sure?', 'warning', () => {
+        showMessageActive(
+            handleChangeMessage(locale,'Buy Again','Mua lại'), 
+            handleChangeMessage(locale,'This will add the order items to your cart.Are you sure?','Thao tác này sẽ thêm tất cả các sản phẩm trong đơn hàng vào giỏ hàng của bạn.Bạn có chắc không?')
+            , 'warning', () => {
             reOrder(id);
             navigator('/cart');
         });
     };
-
+    
     const handlePaymentAgain = (payment: 'vnpay' | 'momo' | 'cash_on_delivery') => {
         switch (payment) {
             case 'momo':
@@ -104,7 +109,9 @@ const OrderDetail = () => {
             text: string;
         }
         | undefined = statusString(order?.status);
-
+       
+        
+        
     const givenTime = new Date(order?.created_at || '');
     const currentTime = new Date();
     const givenTimePlusOneHour = new Date(givenTime.getTime() + 60 * 60 * 1000);
@@ -498,7 +505,7 @@ const OrderDetail = () => {
                                                 </p>
 
                                                 {order.status > 4 ? (
-                                                    <Link to={`/detail/${orderDetail?.product?.slug}`}>
+                                                    <Link to={`/detail/${orderDetail?.product?.slug ?orderDetail?.product?.slug : orderDetail?.variation?.product?.slug}`}>
                                                         <button className="h-[36px] px-5 bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">
                                                             <FormattedMessage id="admin.review" />
                                                         </button>

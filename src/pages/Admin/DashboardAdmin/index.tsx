@@ -358,7 +358,7 @@ const AdminDashboard = () => {
                         onChange={onChangeYearOfRevenueStatisticsChart}
                     />
                     <DatePicker
-                        placeholder="Select a year"
+                        placeholder={handleChangeMessage(locale,'Select a year','Xem dữ liệu một năm bất kì')}
                         picker="year"
                         className="w-[20%] focus:border-none focus:outline-none"
                         format="YYYY"

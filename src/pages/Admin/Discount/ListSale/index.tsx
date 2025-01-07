@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Table, Button, Input, Radio, Tag } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined } from '@ant-design/icons';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Heading from '../../components/Heading';
 
@@ -8,10 +8,8 @@ import { ISale } from '../../../../interfaces/ISale.ts';
 import { formatTime, handleChangeMessage } from '../../../../utils';
 
 
-import { showMessageActive, showMessageClient } from '../../../../utils/messages.ts';
-import LoadingSmall from '../../../../components/Loading/LoadingSmall.tsx';
-import { tokenManagerInstance } from '../../../../api/index.tsx';
-import { API_SALE, QUERY_KEY } from '../../../../hooks/useSale.tsx';
+
+import {  QUERY_KEY } from '../../../../hooks/useSale.tsx';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useContextGlobal } from '../../../../contexts/index.tsx';
 import useQueryConfig from '../../../../hooks/useQueryConfig.tsx';
@@ -21,15 +19,14 @@ const ListSale = () => {
     const intl = useIntl();
     const navigate = useNavigate();
     const urlQuery = new URLSearchParams(useLocation().search);
-    const {data:dataCachingSale, refetch} = useQueryConfig(
+    const {data:dataCachingSale} = useQueryConfig(
         [QUERY_KEY,'list/sales'],
         'api/sale'
     );
   
     
     const [data, setData] = useState<ISale[]>([]);
-    const [loadingDeleteSale, setLoadingDeleteSale] = useState<boolean>(false);
-    const [deletedSaleID, setDeletedSaleID] = useState<number | string>(0);
+   
     const keySearch = urlQuery.get('search');
     const keyStatus = urlQuery.get('status') || 'all';
     const [dataSearch, setDataSearch] = useState<ISale[]>([]);
@@ -39,49 +36,7 @@ const ListSale = () => {
             
         }
     },[dataCachingSale]);
-    useEffect(() => {
-     
-
-        const deleteSale = async (id: string | number) => {
-            try {
-                setLoadingDeleteSale(true);
-               
-                const { data:dataReturn } = await tokenManagerInstance('delete', `${API_SALE}/${id}`);
-                if(dataReturn?.status){
-                    
-                setData([...data.filter((sale:any) => sale.id !== id)]);
-                    refetch();
-                    showMessageClient(handleChangeMessage(locale, 'Sale deleted successfully!','Xóa giảm giá thành công'),'', 'success');
-                }
-               
-            } catch (error) {
-                if ((error as any)?.response?.data?.message) {
-                    showMessageClient('Error', (error as any)?.response?.data?.message, 'error');
-                    return;
-                }
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
-            } finally {
-                setLoadingDeleteSale(false);
-            }
-        };
-        if (deletedSaleID !== 0) {
-            deleteSale(deletedSaleID);
-        }
-    }, [deletedSaleID]);
-
-    useEffect(() => {
-        if (!loadingDeleteSale) {
-            setDeletedSaleID(0);
-        }
-    }, [loadingDeleteSale]);
+   
     useEffect(() => {
         const statusData = data.filter((item: ISale) => {
             const start_date = new Date(item.start_date);
@@ -118,11 +73,7 @@ const ListSale = () => {
             setDataSearch([...statusData]);
         }
     }, [keySearch, keyStatus, data]);
-    const handleDelete = async (id: string | number) => {
-        await showMessageActive(handleChangeMessage(locale, 'Are you sure you want to delete?','Bạn có chắc chắn muốn xóa không?'),'', 'warning', () => {
-            setDeletedSaleID(id);
-        });
-    };
+    
 
     // Search
     const searchSale = (e: any) => {
@@ -155,11 +106,19 @@ const ListSale = () => {
             dataIndex: 'type',
             key: 'type',
             render: (type: string) => (
+                
+                type === 'percent' ? 
+                
                 <Tag
                     className="p-3 rounded-[30px] w-[90%] flex items-center justify-center"
-                    color={type === 'percent' ? 'blue' : 'red'}
+                    color="blue"
                 >
-                    {type}
+                    {handleChangeMessage(locale,'Percent','Phần trăm')}
+                </Tag> :  <Tag
+                    className="p-3 rounded-[30px] w-[90%] flex items-center justify-center"
+                    color="red"
+                >
+                    {handleChangeMessage(locale,'Fixed','Cố định')}
                 </Tag>
             ),
         },
@@ -219,7 +178,7 @@ const ListSale = () => {
                         <FormattedMessage id="sale.active" />
                     </Tag>
                 ) : (
-                    <Tag color="red">
+                    <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center"  color="red">
                         <FormattedMessage id="sale.inactive" />
                     </Tag>
                 );
@@ -229,31 +188,10 @@ const ListSale = () => {
             title: <FormattedMessage id="category.table.action" />,
             key: 'actions',
             render: (_: any, record: ISale) => {
-                let buttonDelete = (
-                    <Button
-                        onClick={() => handleDelete(record.id)}
-                        style={{ color: 'black' }}
-                        danger
-                        icon={<DeleteOutlined />}
-                    />
-                );
-                if (loadingDeleteSale && deletedSaleID == record.id) {
-                    buttonDelete = (
-                        <Button style={{ color: 'black' }} className="bg-black" danger icon={<LoadingSmall />} />
-                    );
-                } else if (loadingDeleteSale && deletedSaleID != record.id) {
-                    buttonDelete = (
-                        <Button
-                            style={{ color: 'black' }}
-                            className="bg-gray-400 border-none hover:bg-gray-300"
-                            danger
-                            icon={<DeleteOutlined />}
-                        />
-                    );
-                }
+                
                 return (
-                    <div className="flex gap-2">
-                        {buttonDelete}
+                    <div className="flex gap-2 items-center justify-center">
+                       
                         <Button
                             onClick={() => navigate(`/admin/sale/update/${record.id}`)}
                             style={{ color: 'black' }}

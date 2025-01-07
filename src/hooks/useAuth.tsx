@@ -272,7 +272,11 @@ const useAuth = () => {
                 setUserGlobal(data.user);
                 refetchQuantityCart();
                 navigate('/');
-                showMessageClient('Register Successfuly', '', 'success');
+                showMessageClient(handleChangeMessage(
+                    locale,
+                    'Register successfully!',
+                    'Đăng kí thành công!',
+                ), '', 'success');
             }
             return data;
         } catch (error) {

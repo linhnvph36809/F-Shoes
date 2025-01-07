@@ -72,8 +72,8 @@ const UpdateSale = () => {
         setArrSelectedVariationsOfMultipleSelectedProduct([...variations]);
     };
     const onDeleteSimpleProduct = (record?: IProduct) => {
-        if (saleEndDate < timeNow) {
-            showMessageClient(handleChangeMessage(locale,'This sale has expired, you can not modifier anymore.','Đợt giảm giá này đã hết hạn, bạn không thể sửa đổi nữa.'), '', 'warning');
+        if (saleStartDate < timeNow) {
+            showMessageClient(handleChangeMessage(locale,'This sale is ongoing, you cannot change the product anymore.','Chương trình giảm giá này đang diễn ra, bạn không thể thay đổi sản phẩm nữa.'), '', 'warning');
             return;
         }
         showMessageActive(handleChangeMessage(locale, 'Are you sure you want to delete','Bạn có chắc chắn muốn xóa không?'),'', 'warning', () => {
@@ -87,7 +87,7 @@ const UpdateSale = () => {
     };
     const onFilterSimpleProduct = (record?: IProduct) => {
         if (saleStartDate < timeNow) {
-            showMessageClient(handleChangeMessage(locale, 'This sale has expired, you can not modifier anymore.','Đợt giảm giá này đã hết hạn, bạn không thể sửa đổi nữa.'), '', 'warning');
+            showMessageClient(handleChangeMessage(locale,'This sale is ongoing, you cannot change the product anymore.','Chương trình giảm giá này đang diễn ra, bạn không thể thay đổi sản phẩm nữa.'), '', 'warning');
             return;
         }
         showMessageActive(handleChangeMessage(locale,
@@ -104,7 +104,7 @@ const UpdateSale = () => {
     };
     const onDeleteVariation = (record?: IVariation) => {
         if (saleStartDate < timeNow) {
-            showMessageClient(handleChangeMessage(locale,'This sale has expired, you can not modifier anymore.','Đợt giảm giá này đã hết hạn, bạn không thể sửa đổi nữa.'), '', 'warning');
+            showMessageClient(handleChangeMessage(locale,'This sale is ongoing, you cannot change the product anymore.','Chương trình giảm giá này đang diễn ra, bạn không thể thay đổi sản phẩm nữa.'), '', 'warning');
             return;
         }
         showMessageActive(handleChangeMessage(locale, 'Are you sure you want to delete','Bạn có chắc chắn muốn xóa không?'),'', 'warning', () => {
@@ -120,8 +120,8 @@ const UpdateSale = () => {
         });
     };
     const onFilterVariation = (record?: IVariation) => {
-        if (saleEndDate < timeNow) {
-            showMessageClient(handleChangeMessage(locale,'This sale has expired, you can not modifier anymore.','Đợt bán này đã hết hạn, bạn không thể sửa đổi nữa.'), '', 'warning');
+        if (saleStartDate < timeNow) {
+            showMessageClient(handleChangeMessage(locale,'This sale is ongoing, you cannot change the product anymore.','Chương trình giảm giá này đang diễn ra, bạn không thể thay đổi sản phẩm nữa.'), '', 'warning');
             return;
         }
         showMessageActive(handleChangeMessage(locale,
@@ -186,7 +186,7 @@ const UpdateSale = () => {
             key: 'price',
         },
         {
-            title: <FormattedMessage id="body.Detail.Quantity" />,
+            title: <FormattedMessage id="sale_qty_sold" />,
             dataIndex: 'qty_sale',
             key: 'qty_sale',
         },
@@ -245,7 +245,7 @@ const UpdateSale = () => {
             key: 'price',
         },
         {
-            title: <FormattedMessage id="body.Detail.Quantity" />,
+            title: <FormattedMessage id="sale_qty_sold" />,
             dataIndex: 'qty_sale',
             key: 'qty_sale',
         },
@@ -432,6 +432,7 @@ const UpdateSale = () => {
                             <FormattedMessage id="admin.name" />
                         </span>
                         <Input
+                         disabled={saleStartDate < timeNow}
                             value={dataSale.name}
                             onChange={onChangeName}
                             placeholder={intl.formatMessage({ id: 'Enter_the_sale_name' })}
