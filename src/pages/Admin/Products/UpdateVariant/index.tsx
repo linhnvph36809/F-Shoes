@@ -66,6 +66,9 @@ const UpdateVariant = () => {
         setIdVariant(variantByIds?.ownAttributes?.map((attribute: any) => attribute.id));
     }, [variantByIds]);
 
+    console.log(idVariant);
+
+
     return (
         <>
             <section>
@@ -91,8 +94,8 @@ const UpdateVariant = () => {
                                 placeholder="Please select"
                                 optionFilterProp="name"
                                 fieldNames={{ label: 'name', value: 'id' }}
-                                options={variantByIds?.ownAttributes}
-                                value={idVariant}
+                                options={variantByIds?.all_attribute}
+                                defaultValue={idVariant}
                             />
                         </ConfigProvider>
                         <div>

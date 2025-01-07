@@ -37,7 +37,7 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
 
     const handleChangeItem = useCallback(
         (values: number[], id: number) => {
-            const attribute = attributeByIds?.data[0]?.data?.find((attribute: any) => attribute.id === id);
+            const attribute = attributeByIds?.data?.data?.find((attribute: any) => attribute.id === id);
             const newValues = attribute?.values.filter((value: any) => values.includes(+value.id));
             const newAttribute = { ...attribute, values: newValues } as IAttribute;
 
@@ -72,7 +72,7 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
     };
 
     useEffect(() => {
-        const newAttributes = attributeByIds?.data[0]?.data?.filter((attribute: any) =>
+        const newAttributes = attributeByIds?.data?.data?.filter((attribute: any) =>
             variantId.includes(+attribute.id),
         );
         setVariants(newAttributes);
@@ -122,20 +122,20 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
                         <SelectPrimary
                             mode="multiple"
                             allowClear
-                            className="text-20px font-medium w-full"
+                            className="text-[16px] font-medium w-full"
                             style={{
-                                height: '64px',
+                                height: '50px',
                             }}
                             placeholder={intl.formatMessage({ id: 'Please_select_attributes' })}
                             onChange={handleChange}
                             optionFilterProp="name"
                             fieldNames={{ label: 'name', value: 'id' }}
-                            options={attributeByIds?.data[0]?.data}
+                            options={attributeByIds?.data?.data}
                             value={variantId}
                         />
                         <div>
                             {variants?.map((variant) => (
-                                <div className="p-5 bg-gray-200 rounded-lg mb-10 relative" key={variant.id}>
+                                <div className="px-5 py-5 bg-gray-200 rounded-lg mb-10 relative" key={variant.id}>
                                     <h3 className="color-primary text-16px font-medium mb-5 uppercase">
                                         {variant.name}
                                     </h3>
@@ -152,7 +152,7 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
                                             <SelectPrimary
                                                 mode="multiple"
                                                 allowClear
-                                                className="text-20px font-medium w-full sm:h-[35px] md:h-[40px] border-1 border-[#111111] mb-5"
+                                                className="text-[16px] font-medium w-full sm:h-[35px] md:h-[40px] border-1 border-[#111111]"
                                                 placeholder={intl.formatMessage({ id: 'Please select variant' })}
                                                 optionFilterProp="value"
                                                 fieldNames={{ label: 'value', value: 'id' }}
@@ -180,7 +180,8 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
                                         headerBg: '#e5e7eb',
                                         headerBorderRadius: 10,
                                         fontSize: 15,
-                                        padding: 20,
+                                        padding: 13,
+
                                     },
                                 },
                             }}

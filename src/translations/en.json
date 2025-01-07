@@ -612,7 +612,7 @@
     "strange_payment": "Strange payment",
     "variant": "Variant",
     "agree": "Agree",
-    "isVariant": "Is Variant",
+    "isVariant": "Type of Product",
     "messageTypeProduct": "Please select product type",
     "singleProduct": "Single product",
     "variantProducts": "Variant products",

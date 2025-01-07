@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { tokenManagerInstance } from '../api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PATH_ADMIN } from '../constants/path';
-import { showMessageAdmin, showMessageClient } from '../utils/messages';
+import { showMessageClient } from '../utils/messages';
 import { useQueryClient } from 'react-query';
 import { useContextGlobal } from '../contexts';
 import { handleChangeMessage } from '../utils';
@@ -66,11 +66,11 @@ const useAttribute = () => {
     const postAttribute = async (attribute: { attribute: string; values: string[] }) => {
         try {
             setLoading(true);
-            const { data } = await tokenManagerInstance('post', API_ATTRIBUTE_ADD + id, attribute);
+            const { data } = await tokenManagerInstance('post', '/api/add/attribute/values/product', attribute);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             return data;
         } catch (error) {
-            if ((error as any).response.data.message) {
+            if ((error as any)?.response?.data?.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
             } else if ((error as any)?.response?.data?.errors) {
                 showMessageClient(

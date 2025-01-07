@@ -3,7 +3,7 @@ import { CopyPlus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { columnsAttribute } from './datas';
-import useProduct, { API_PRODUCT, QUERY_KEY } from '../../../hooks/useProduct';
+import { API_PRODUCT, QUERY_KEY } from '../../../hooks/useProduct';
 import { IProduct } from '../../../interfaces/IProduct';
 import Heading from '../components/Heading';
 import TableAdmin from '../components/Table';
@@ -17,10 +17,8 @@ import InputSearch from '../components/Forms/InputSearch';
 import { FormattedMessage, useIntl } from 'react-intl';
 import PermissionElement from '../../../components/Permissions/PermissionElement';
 import { ACTIONS, PERMISSION } from '../../../constants';
-import { useContextGlobal } from '../../../contexts';
 
 const ListProduct = () => {
-    const { locale } = useContextGlobal();
     const intl = useIntl();
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
@@ -55,9 +53,18 @@ const ListProduct = () => {
         title: <FormattedMessage id="category.table.action" />,
         dataIndex: 'slug',
         key: '8',
-        render: (slug: string | number) => {
+        render: (slug: string | number, values: IProduct) => {
             return (
                 <div className="flex-row-center gap-x-3">
+                    {values?.is_variant ? (
+                        <Link state={{ prevUrl: currentUrl }} to={`/admin/update-variant/${slug}`}>
+                            <ButtonEdit>
+                                <CopyPlus />
+                            </ButtonEdit>
+                        </Link>
+                    ) : (
+                        ''
+                    )}
                     <PermissionElement keyName={PERMISSION.PERMISSION_PRODUCT} action={ACTIONS.ACTIONS_EDIT}>
                         <ButtonUpdate state={{ prevUrl: currentUrl }} to={`/admin/update-product/${slug}`} />
                     </PermissionElement>

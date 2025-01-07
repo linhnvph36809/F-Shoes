@@ -24,7 +24,7 @@ const FormAttribute = ({
                     attribute: values.inputs[name].attribute,
                     values: values.inputs[name].values,
                 }).then((variant: any) => {
-                    setVariantId((preId: number[]) => [...preId, variant[0].id]);
+                    setVariantId((preId: number[]) => [...preId, variant?.attribute?.id]);
                     remove(name);
                 });
             })
