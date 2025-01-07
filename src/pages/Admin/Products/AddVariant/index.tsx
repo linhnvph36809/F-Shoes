@@ -27,7 +27,6 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
     const { data: attributeByIds, refetch } = useQueryConfig('attribute', API_ATTRIBUTE_GET);
     const [images, setImages] = useState<any>([]);
 
-
     const handleChange = useCallback((listId: number[]) => {
         setVariantId([...listId]);
         setVariantsChanges((preVariantChanges) =>
@@ -72,9 +71,7 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
     };
 
     useEffect(() => {
-        const newAttributes = attributeByIds?.data?.data?.filter((attribute: any) =>
-            variantId.includes(+attribute.id),
-        );
+        const newAttributes = attributeByIds?.data?.data?.filter((attribute: any) => variantId.includes(+attribute.id));
         setVariants(newAttributes);
     }, [variantId, attributeByIds]);
 
@@ -181,7 +178,6 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
                                         headerBorderRadius: 10,
                                         fontSize: 15,
                                         padding: 13,
-
                                     },
                                 },
                             }}

@@ -1,4 +1,4 @@
-import { ConfigProvider, Select, Table } from 'antd';
+import { ConfigProvider, Form, Select, Table } from 'antd';
 import { useEffect, useState } from 'react';
 
 import Heading from '../../components/Heading';
@@ -13,8 +13,10 @@ import ButtonBack from '../../components/ButtonBack';
 import { PATH_ADMIN } from '../../../../constants/path';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import { FormattedMessage } from 'react-intl';
+import { useForm } from 'antd/es/form/Form';
 
 const UpdateVariant = () => {
+    const [form] = useForm();
     const { slug } = useParams();
     let id: string | number | undefined;
     if (slug) {
@@ -55,19 +57,15 @@ const UpdateVariant = () => {
 
     const variantByIds = data?.data.data || [];
 
-    const [idVariant, setIdVariant] = useState([]);
-
     const handleDeleteVariant = (id: number) => {
         setVariantDeleteId(id);
         refetch();
     };
 
     useEffect(() => {
-        setIdVariant(variantByIds?.ownAttributes?.map((attribute: any) => attribute.id));
+        const idVariant = variantByIds?.ownAttributes?.map((attribute: any) => attribute.id);
+        form.setFieldValue('attribute', idVariant);
     }, [variantByIds]);
-
-    console.log(idVariant);
-
 
     return (
         <>
@@ -78,26 +76,29 @@ const UpdateVariant = () => {
                 </Heading>
                 <div className="grid grid-cols-2 gap-x-10">
                     <div>
-                        <ConfigProvider
-                            theme={{
-                                components: {
-                                    Select: {
-                                        multipleItemHeight: 40,
+                        <Form form={form}>
+                            <ConfigProvider
+                                theme={{
+                                    components: {
+                                        Select: {
+                                            multipleItemHeight: 40,
+                                        },
                                     },
-                                },
-                            }}
-                        >
-                            <Select
-                                mode="multiple"
-                                allowClear
-                                className="text-20px font-medium w-full sm:h-[45px] md:h-[56px] border-1 border-[#111111] mb-5"
-                                placeholder="Please select"
-                                optionFilterProp="name"
-                                fieldNames={{ label: 'name', value: 'id' }}
-                                options={variantByIds?.all_attribute}
-                                defaultValue={idVariant}
-                            />
-                        </ConfigProvider>
+                                }}
+                            >
+                                <Form.Item name="attribute">
+                                    <Select
+                                        mode="multiple"
+                                        allowClear
+                                        className="text-20px font-medium w-full sm:h-[45px] md:h-[56px] border-1 border-[#111111] mb-5"
+                                        placeholder="Please select"
+                                        optionFilterProp="name"
+                                        fieldNames={{ label: 'name', value: 'id' }}
+                                        options={variantByIds?.all_attribute}
+                                    />
+                                </Form.Item>
+                            </ConfigProvider>
+                        </Form>
                         <div>
                             {variantByIds?.ownAttributes?.map((variant: any) => (
                                 <div className="p-5 bg-gray-200 rounded-lg mb-10 relative" key={variant.id}>
@@ -119,8 +120,12 @@ const UpdateVariant = () => {
                                                 placeholder="Please select"
                                                 optionFilterProp="name"
                                                 fieldNames={{ label: 'value', value: 'id' }}
-                                                options={variant.values}
-                                                value={variant.values}
+                                                options={
+                                                    variantByIds?.all_attribute?.find(
+                                                        (attribute: any) => attribute.id === variant.id,
+                                                    ).values
+                                                }
+                                                defaultValue={variant.values.map((value: any) => value.id)}
                                             />
                                         </ConfigProvider>
                                     </div>
