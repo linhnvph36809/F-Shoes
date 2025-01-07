@@ -7,14 +7,14 @@ import { showMessageClient } from '../utils/messages';
 import { useQueryClient } from 'react-query';
 import { useContextGlobal } from '../contexts';
 import { handleChangeMessage } from '../utils';
-import {  message,notification  } from 'antd';
-const API_ATTRIBUTE_ADD = '/api/add/attribute/values/product/';
+import {  message  } from 'antd';
 const API_ATTRIBUTE = '/api/attribute/';
 
 export const QUERY_KEY = 'query-key-attribute';
 
 const useAttribute = () => {
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
     const { slug } = useParams();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -183,9 +183,14 @@ const useAttribute = () => {
 
     const deleteAttribute = async (id: string | number) => {
         try {
-            setLoading(true);
+            setLoadingDelete(true);
             await tokenManagerInstance('delete', API_ATTRIBUTE + id);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+            showMessageClient(
+                handleChangeMessage(locale,'Delete Attribute Successfully!','Xóa thuộc tính thành công!'),
+                '',
+                'success'
+            );
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -212,7 +217,7 @@ const useAttribute = () => {
                     'error',
                 );
             }
-            setLoading(false);
+            setLoadingDelete(false);
         }
     };
 
@@ -221,6 +226,11 @@ const useAttribute = () => {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_ATTRIBUTE}${idAttribute}/value/${idValue}`);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+            showMessageClient(
+                handleChangeMessage(locale,'Delete Attribute Successfully!','Xóa thuộc tính thành công!'),
+                '',
+                'success'
+            );
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -254,6 +264,7 @@ const useAttribute = () => {
 
     return {
         loading,
+        loadingDelete,
         postAttribute,
         postAttributeName,
         getValueAttributeById,

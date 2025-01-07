@@ -1,4 +1,4 @@
-import { render } from 'react-dom';
+
 import { formatTime } from '../../../../utils';
 import { Tag } from 'antd';
 import { FormattedMessage } from 'react-intl';
