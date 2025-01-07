@@ -84,15 +84,12 @@ const useSale = () => {
                 showMessageClient('Error',e?.response?.data?.errors?.end_date,'error');
                 return;
             }
-            if ((error as any).response.data.message) {
+            if (e.response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
+            }
+            if (e?.response?.data?.errors?.name) {
                 showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
+                    e?.response?.data?.errors?.name[0] ,
                     '',
                     'error',
                 );
@@ -121,7 +118,7 @@ const useSale = () => {
             const {data} = await tokenManagerInstance('put', `${API_SALE}/${id}`,dataSale);
             queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
             navigate('/admin/listsale');
-            showMessageClient(handleChangeMessage(locale,'Sale created successfully','Bán hàng đã được tạo thành công'),'','success');
+            showMessageClient(data?.message,'','success');
         }catch (error){
             const e = error as any;
             if(e?.response?.data?.errors?.start_date){

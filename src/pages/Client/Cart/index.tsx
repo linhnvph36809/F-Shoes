@@ -21,9 +21,7 @@ const Cart = () => {
         staleTime: 0,
         retry: false,
     });
-
     const { user } = useContextGlobal();
-
     const handleDeleteCart = (idCart: string | number) => {
         setCartId((preIds: number[]) => {
             const newData = preIds.filter((id) => id !== +idCart);
