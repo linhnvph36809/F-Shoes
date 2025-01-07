@@ -7,7 +7,7 @@ import { showMessageClient } from '../utils/messages';
 import { useQueryClient } from 'react-query';
 import { useContextGlobal } from '../contexts';
 import { handleChangeMessage } from '../utils';
-
+import {  message,notification  } from 'antd';
 const API_ATTRIBUTE_ADD = '/api/add/attribute/values/product/';
 const API_ATTRIBUTE = '/api/attribute/';
 
@@ -139,9 +139,16 @@ const useAttribute = () => {
     const postAttributeValue = async (id: string | number, values: any) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('post', `/api/attribute/${id}/value`, values);
+            const {data} = await tokenManagerInstance('post', `/api/attribute/${id}/value`, values);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-
+           
+            if(data?.errors && data?.errors.length > 0){
+                for(let i = 0; i < data.errors.length;i++){
+                    message.error(data.errors[i]);
+                }
+               
+            }
+            
             navigate(PATH_ADMIN.ADD_ATTRIBUTE);
         } catch (error) {
             if ((error as any).response.data.message) {
