@@ -24,7 +24,6 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
     const [imageFile, setImageFile] = useState(null);
 
     const handleSubmit = async (values: any) => {
-
         const formData = new FormData();
         formData.append('name', `${values.given_name} ${values.family_name}`);
         formData.append('email', values.email);
@@ -109,7 +108,10 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                     rules={validatePassword}
                 ></InputPrimary>
 
-                <InputPrimary name="birth_date" label={intl.formatMessage({ id: 'user.date' })} type="date"
+                <InputPrimary
+                    name="birth_date"
+                    label={intl.formatMessage({ id: 'user.date' })}
+                    type="date"
                     rules={[
                         () => ({
                             validator(_: any, value: any) {
@@ -127,7 +129,8 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
                                 return Promise.resolve();
                             },
                         }),
-                    ]}></InputPrimary>
+                    ]}
+                ></InputPrimary>
 
                 <SelectPrimary
                     name="group_id"
@@ -161,7 +164,9 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
 
             <Form.Item className="font-medium" name="theme">
                 <Upload name="image" listType="picture" accept="image/*" beforeUpload={handleImageUpload}>
-                    <Button icon={<UploadOutlined />}><FormattedMessage id="user.User_Upload_image" /></Button>
+                    <Button icon={<UploadOutlined />}>
+                        <FormattedMessage id="user.User_Upload_image" />
+                    </Button>
                 </Upload>
             </Form.Item>
             <div className="text-end mt-10">

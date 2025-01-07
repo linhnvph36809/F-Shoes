@@ -59,7 +59,7 @@ const AddAttribute = () => {
                     {isFetching ? (
                         <SkeletonComponent />
                     ) : (
-                        <TableAdmin columns={[...columnsAttribute, Edit]} rowKey="id" datas={data?.data[0].data} />
+                        <TableAdmin columns={[...columnsAttribute, Edit]} rowKey="id" datas={data?.data?.data} />
                     )}
                 </div>
             </section>

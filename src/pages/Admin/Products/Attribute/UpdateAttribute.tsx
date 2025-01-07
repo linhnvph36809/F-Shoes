@@ -17,49 +17,48 @@ import LoadingPage from '../../../../components/Loading/LoadingPage';
 const UpdateAttribute = () => {
     const intl = useIntl();
     const [form] = Form.useForm();
-     const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const { id } = useParams();
     const { loading, postAttributeValue, deleteAttributeValue } = useAttribute();
     const [attributeValues, setAttributeValues] = useState<any>([]);
-    const { data,isFetching,refetch } = useQueryConfig(`attribute-detail-${id}`, `/api/attribute/${id}?include=values`, {
-        cacheTime: 0,
-        staleTime: 0,
-        retry: false,
-    });
+    const { data, isFetching, refetch } = useQueryConfig(
+        `attribute-detail-${id}`,
+        `/api/attribute/${id}?include=values`,
+        {
+            cacheTime: 0,
+            staleTime: 0,
+            retry: false,
+        },
+    );
 
     const initialValues = data?.data.attribute.values || [];
 
     const onFinish = (value: any) => {
         const { newAttribute } = value;
 
-        const newAttributeValues = newAttribute
-            ? newAttribute?.map((newAttribute: any) => ({
-                  id: '',
-                  value: newAttribute,
-              }))
-            : [];
-
+        const newAttributeValues = newAttribute || [];
         if (id) {
             postAttributeValue(id, {
-                values: [...attributeValues, ...newAttributeValues],
+                values: [...newAttributeValues],
             });
         }
     };
 
     const handleDeleteAttribute = (idValue: any) => {
-        showMessageActive( handleChangeMessage(
-                                locale,
-                                'Are you sure want to delete?',
-                                'Bạn có chắc muốn xóa giá trị này?',
-                            ), '', 'warning', () => {
-            setAttributeValues((preAttributeValues: any) =>
-                preAttributeValues.filter((item: any) => item.id != idValue),
-            );
-            if (id) {
-                deleteAttributeValue(idValue, id);
-                refetch();
-            }
-        });
+        showMessageActive(
+            handleChangeMessage(locale, 'Are you sure want to delete?', 'Bạn có chắc muốn xóa giá trị này?'),
+            '',
+            'warning',
+            () => {
+                setAttributeValues((preAttributeValues: any) =>
+                    preAttributeValues.filter((item: any) => item.id != idValue),
+                );
+                if (id) {
+                    deleteAttributeValue(idValue, id);
+                    refetch();
+                }
+            },
+        );
     };
 
     const handleChangeAttribute = (index: any, value: string) => {
@@ -72,8 +71,8 @@ const UpdateAttribute = () => {
     useEffect(() => {
         setAttributeValues(initialValues);
     }, [id, data, initialValues]);
-    if(isFetching){
-        return <LoadingPage/>
+    if (isFetching) {
+        return <LoadingPage />;
     }
     return (
         <>
@@ -90,7 +89,9 @@ const UpdateAttribute = () => {
                                 name={`attribute_value-${index}`}
                                 initialValue={item.value}
                                 className="relative font-medium"
-                                rules={[{ required: true, message: <FormattedMessage id="attribute.succcess.value" />  }]}
+                                rules={[
+                                    { required: true, message: <FormattedMessage id="attribute.succcess.value" /> },
+                                ]}
                             >
                                 <Input
                                     placeholder={intl.formatMessage({ id: 'attribute_value' })}
@@ -98,6 +99,7 @@ const UpdateAttribute = () => {
                                     className={`h-[56px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                                     defaultValue={item.value}
                                     onChange={(e: any) => handleChangeAttribute(index, e.target.value)}
+                                    disabled
                                 />
                                 <span
                                     className="absolute -top-5 -right-5 z-[10] hover:cursor-pointer"
@@ -117,7 +119,12 @@ const UpdateAttribute = () => {
                                                 {...restField}
                                                 name={name}
                                                 fieldKey={fieldKey}
-                                                rules={[{ required: true, message: <FormattedMessage id="attribute.succcess" /> }]}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: <FormattedMessage id="attribute.succcess" />,
+                                                    },
+                                                ]}
                                             >
                                                 <Input
                                                     placeholder={intl.formatMessage({ id: 'attribute_value' })}
@@ -132,7 +139,7 @@ const UpdateAttribute = () => {
                                     ))}
                                     <Form.Item>
                                         <Button type="dashed" onClick={() => add()} block>
-                                        <FormattedMessage id="attribute_add_value" />
+                                            <FormattedMessage id="attribute_add_value" />
                                         </Button>
                                     </Form.Item>
                                 </>

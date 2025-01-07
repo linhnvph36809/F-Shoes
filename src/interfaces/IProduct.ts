@@ -1,6 +1,6 @@
 import { ICategory } from './ICategory';
 import { IImage } from './IImage';
-import {IVariation} from "./IVariation.ts";
+import { IVariation } from './IVariation.ts';
 
 export interface IProduct {
     id: string | number;
@@ -17,5 +17,6 @@ export interface IProduct {
     images: IImage[];
     categories?: ICategory[];
     variations: IVariation[];
-    qty_sale:number;
+    qty_sale: number;
+    is_variant: number;
 }
