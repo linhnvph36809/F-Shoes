@@ -20,15 +20,14 @@ type Date = {
 };
 
 const AdminDashboard = () => {
-       const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const [dates, setDates] = useState<Date>({
         date_start: '',
         date_end: '',
     });
-    
-    console.log(viVN);
-    
-    
+
+
+
     const { data, isFetching } = useQueryConfig(
         `statistics/overall/from=${dates.date_start}&to=$${dates.date_end}`,
         `/api/v1/statistics/overall?from=${dates.date_start}&to=$${dates.date_end}`,
@@ -54,8 +53,7 @@ const AdminDashboard = () => {
         `/api/v1/statistics/product/bestselling?from=${dates.date_start}&to=${dates.date_end}`,
     );
     const productBestSellingData = productBestSellingCaching?.data?.data || [];
-    console.log(productBestSellingCaching,'abc');
-    
+
     const revenueOfYearData = revenueOfYearCaching?.data?.data || [];
     const revenueOfYearData2 = revenueOfYearCaching2?.data?.data || [];
 
@@ -85,17 +83,17 @@ const AdminDashboard = () => {
     };
     const UptoFrom = (
         <span>
-            {handleChangeMessage(locale,'from','từ')} {dates.date_start ? formatTime(dayjs(dates.date_start).startOf('day').format("YYYY-MM-DD HH:mm:ss")) : handleChangeMessage(locale,'7 days ago','7 ngày trước')} {handleChangeMessage(locale,'to','đến')}{' '}
-            {dates.date_end ? formatTime(dayjs(dates.date_end).endOf('day').format("YYYY-MM-DD HH:mm:ss")) : handleChangeMessage(locale,'present','hiện tại')}
+            {handleChangeMessage(locale, 'from', 'từ')} {dates.date_start ? formatTime(dayjs(dates.date_start).startOf('day').format("YYYY-MM-DD HH:mm:ss")) : handleChangeMessage(locale, '7 days ago', '7 ngày trước')} {handleChangeMessage(locale, 'to', 'đến')}{' '}
+            {dates.date_end ? formatTime(dayjs(dates.date_end).endOf('day').format("YYYY-MM-DD HH:mm:ss")) : handleChangeMessage(locale, 'present', 'hiện tại')}
         </span>
     );
-   
-    
+
+
     return (
         <Content>
-            <div className="flex justify-between items-center"> 
+            <div className="flex justify-between items-center">
                 <Heading>
-                    <FormattedMessage id="Statistics" /> {dates.date_start && dates.date_end ? `${handleChangeMessage(locale,'From','Từ ngày')} ${dates.date_start} ${handleChangeMessage(locale,'To','Đến ngày')} ${dates.date_end}` : handleChangeMessage(locale,'7 days ago','7 ngày trước') }
+                    <FormattedMessage id="Statistics" /> {dates.date_start && dates.date_end ? `${handleChangeMessage(locale, 'From', 'Từ ngày')} ${dates.date_start} ${handleChangeMessage(locale, 'To', 'Đến ngày')} ${dates.date_end}` : handleChangeMessage(locale, '7 days ago', '7 ngày trước')}
                 </Heading>
                 <div className="flex gap-x-5 mb-10">
                     <RangePicker
@@ -347,23 +345,23 @@ const AdminDashboard = () => {
             </div>
             <div>
                 <h3 className="text-[18px] font-bold m-4 border-b-[1px]">
-                    <FormattedMessage id="admin.Annual_Revenue_Statistics_Chart" /> {yearOfRevenueChart == yearOfRevenueChart2 ? yearOfRevenueChart : `${yearOfRevenueChart} ${handleChangeMessage(locale,'And','Và')} ${yearOfRevenueChart2} `}
+                    <FormattedMessage id="admin.Annual_Revenue_Statistics_Chart" /> {yearOfRevenueChart == yearOfRevenueChart2 ? yearOfRevenueChart : `${yearOfRevenueChart} ${handleChangeMessage(locale, 'And', 'Và')} ${yearOfRevenueChart2} `}
                 </h3>
                 <div className="flex justify-end my-4">
                     <DatePicker
-                        placeholder={handleChangeMessage(locale,'Select a year','Xem dữ liệu một năm bất kì')}
+                        placeholder={handleChangeMessage(locale, 'Select a year', 'Xem dữ liệu một năm bất kì')}
                         picker="year"
                         className="w-[20%] focus:border-none focus:outline-none"
                         format="YYYY"
                         onChange={onChangeYearOfRevenueStatisticsChart}
                     />
                     <DatePicker
-                        placeholder={handleChangeMessage(locale,'Select a year','Xem dữ liệu một năm bất kì')}
+                        placeholder={handleChangeMessage(locale, 'Select a year', 'Xem dữ liệu một năm bất kì')}
                         picker="year"
                         className="w-[20%] focus:border-none focus:outline-none"
                         format="YYYY"
                         onChange={onChangeYearOfRevenueStatisticsChart2}
-                        
+
                     />
                 </div>
                 <ColumnChart

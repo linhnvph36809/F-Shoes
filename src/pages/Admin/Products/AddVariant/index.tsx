@@ -34,6 +34,8 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
         );
     }, []);
 
+
+
     const handleChangeItem = useCallback(
         (values: number[], id: number) => {
             const attribute = attributeByIds?.data?.data?.find((attribute: any) => attribute.id === id);

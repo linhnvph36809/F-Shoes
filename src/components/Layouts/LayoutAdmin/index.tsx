@@ -41,6 +41,8 @@ const LayoutAdmin: React.FC = () => {
     const groupId = handleGetLocalStorage(INFO_AUTH.groupId);
     const { logoutAdmin } = useAuth();
 
+
+
     useEffect(() => {
         const starCountRef = ref(db, `groups/${groupId}`);
         const unsubscribe = onValue(starCountRef, (snapshot) => {
@@ -54,7 +56,7 @@ const LayoutAdmin: React.FC = () => {
         });
 
         return () => unsubscribe();
-    }, [groupId]);
+    }, [groupId, user]);
 
     const itemsPermission = useMemo(() => {
         return items?.filter((item: any) => {
@@ -70,7 +72,6 @@ const LayoutAdmin: React.FC = () => {
         });
     }, [permissions, groupId]);
 
-    const [messageWaitingConfirm, setMessageWaitingConfirm] = useState(false);
 
     return (
         <ContextAdmin.Provider value={{ permissions }}>
