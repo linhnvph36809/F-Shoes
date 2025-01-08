@@ -40,7 +40,7 @@ const FormOrder = () => {
     const { loading: loadingVoucher, voucher, postVoucher, setVoucher } = useVoucher();
     const [infoShip, setInfoShip] = useState<boolean>(false);
     const [paymentMethod, setPaymentMethod] = useState<string>('cash_on_delivery');
-    const { loading: loadingCheckOut, postOrder } = useOnlinePayment();
+    const { loading: loadingCheckOut, postOrderAdmin } = useOnlinePayment();
 
     const handleSetProducts = (product: any) => {
         const index = products.findIndex((productIndex: any) => {
@@ -166,11 +166,9 @@ const FormOrder = () => {
             receiver_email: values?.receiver_email || '',
             receiver_full_name: values?.receiver_full_name || '',
 
-            address: `${values?.address || null} - ${
-                wards.find((ward: any) => ward.WardCode == wardCode)?.WardName || null
-            } - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName || null} - ${
-                province || null
-            }`,
+            address: `${values?.address || null} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName || null
+                } - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName || null} - ${province || null
+                }`,
             city: province || null,
             country: 'Viet Nam',
             voucher_id: voucher?.id ? voucher.id : null,
@@ -181,7 +179,7 @@ const FormOrder = () => {
             cart_ids: [],
         };
 
-        postOrder(newValues);
+        postOrderAdmin(newValues);
     };
 
     return (
@@ -441,10 +439,10 @@ const FormOrder = () => {
                                                 voucher.type === 'fixed'
                                                     ? voucher.discount
                                                     : ((handleTotalPrice >= FREE_SHIP
-                                                          ? handleTotalPrice
-                                                          : handleTotalPrice + (fee?.total || 0)) *
-                                                          +voucher.discount) /
-                                                          100,
+                                                        ? handleTotalPrice
+                                                        : handleTotalPrice + (fee?.total || 0)) *
+                                                        +voucher.discount) /
+                                                    100,
                                             )}
                                             đ
                                         </p>
@@ -471,11 +469,10 @@ const FormOrder = () => {
                                 <div className="flex justify-center gap-x-5 my-10">
                                     <button
                                         onClick={() => setPaymentMethod(paymentMehtods.cash_on_delivery)}
-                                        className={`px-5 py-3 rounded-lg ${
-                                            paymentMethod === paymentMehtods.cash_on_delivery
-                                                ? 'bg-primary'
-                                                : 'bg-gray opacity-80'
-                                        }  text-white flex items-center gap-x-5 font-medium
+                                        className={`px-5 py-3 rounded-lg ${paymentMethod === paymentMehtods.cash_on_delivery
+                                            ? 'bg-primary'
+                                            : 'bg-gray opacity-80'
+                                            }  text-white flex items-center gap-x-5 font-medium
                                     transition-global`}
                                     >
                                         Tiền mặt
@@ -483,11 +480,10 @@ const FormOrder = () => {
                                     </button>
                                     <button
                                         onClick={() => setPaymentMethod(paymentMehtods.banking)}
-                                        className={`px-5 py-3 rounded-lg ${
-                                            paymentMethod === paymentMehtods.banking
-                                                ? 'bg-primary'
-                                                : 'bg-gray opacity-80'
-                                        } text-white flex items-center gap-x-5 font-medium
+                                        className={`px-5 py-3 rounded-lg ${paymentMethod === paymentMehtods.banking
+                                            ? 'bg-primary'
+                                            : 'bg-gray opacity-80'
+                                            } text-white flex items-center gap-x-5 font-medium
                                     transition-global`}
                                     >
                                         QR
