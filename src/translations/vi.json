@@ -305,10 +305,10 @@
     "group.permission": "Giấy phép",
 
     "user.List_User": "Danh sách người dùng",
-    "user.User_Total_Users": "Tổng số người dùng",
+    "user.User_Total_Users": "Tổng số lượng người dùng",
     "user.User_Inactive_Users": "Người dùng không hoạt động",
     "user.User_Active_Users": "Người dùng đang hoạt động",
-    "user.User_Users_Ordering_Number": "Số đặt hàng của người dùng",
+    "user.User_Users_Ordering_Number": "Tài khoản có đơn đặt hàng",
     "user.User_Users_Input_section": "Tìm kiếm ID người dùng, tên hoặc email.",
     "user.table.user": "Người dùng",
     "user.table.status": "Trạng thái",

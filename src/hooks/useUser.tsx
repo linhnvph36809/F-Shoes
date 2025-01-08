@@ -12,6 +12,8 @@ const API_USER = '/api/user';
 export const QUERY_KEY = 'users';
 const useUser = () => {
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
+    const [loadingRestore, setLoadingRestore] = useState<boolean>(false);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const { locale } = useContextGlobal();
@@ -65,11 +67,11 @@ const useUser = () => {
     // Function to delete a user by ID
     const deleteUser = async (id: string | number) => {
         try {
-            setLoading(true);
+            setLoadingDelete(true);
             await tokenManagerInstance('delete', `${API_USER}/${id}`);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(
-                handleChangeMessage(locale, 'Delete User Success ', 'Xóa người dùng thành công '),
+                handleChangeMessage(locale, 'Account was banned! ', 'Tài khoản đã bị hạn chế! '),
                 '',
                 'success',
             );
@@ -100,10 +102,49 @@ const useUser = () => {
                 );
             }
         } finally {
-            setLoading(false);
+            setLoadingDelete(false);
         }
     };
-
+    const restoreUser = async (id: string | number) => {
+        try {
+            setLoadingRestore(true);
+            await tokenManagerInstance('post', `/api/restore/user/${id}`);
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+            showMessageAdmin(
+                handleChangeMessage(locale, 'Restore successfully!', 'Khôi phục thành công! '),
+                '',
+                'success',
+            );
+        } catch (error) {
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
+        } finally {
+            setLoadingRestore(false);
+        }
+    };
     const editUser = async (id: any, userData: IUser) => {
         try {
             setLoading(true);
@@ -150,6 +191,9 @@ const useUser = () => {
 
     return {
         loading,
+        loadingDelete,
+        loadingRestore,
+        restoreUser,
         addUser,
         deleteUser,
         editUser, // Return the editUser function to make it accessible in components

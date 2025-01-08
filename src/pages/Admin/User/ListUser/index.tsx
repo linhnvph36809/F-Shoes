@@ -1,10 +1,10 @@
 import { UserOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col, Input, Row, Skeleton, Tag, Typography } from 'antd';
-import { Search } from 'lucide-react';
+import { Avatar, Button, Card, Col, Input, Row, Skeleton, Tag, Typography } from 'antd';
+import { Ban, Power, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import useUser, { QUERY_KEY } from '../../../../hooks/useUser';
-import { IUser } from '../../../../interfaces/IUser';
+import { formatGroupName, formatStatus, IUser } from '../../../../interfaces/IUser';
 import Heading from '../../components/Heading';
 import TableAdmin from '../../components/Table';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
@@ -15,31 +15,75 @@ import { showMessageActive } from '../../../../utils/messages';
 import { useContextGlobal } from '../../../../contexts';
 import { formatTime, handleChangeMessage } from '../../../../utils';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import PaginationComponent from '../../../../components/Pagination';
 
 const { Text } = Typography;
 
 const ListUser = () => {
     const intl = useIntl();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const urlQuery = new URLSearchParams(location.search);
+    const page = urlQuery.get('page') || 1;
+    const user = urlQuery.get('user') || 'empty';
+    const searchKey = urlQuery.get('search') || '';
     const { data: dataCountHasOrder } = useQueryConfig([QUERY_KEY, 'count/has/order'], `api/count/user/has/orders`);
-    const { deleteUser } = useUser();
+    const dataStatistics = dataCountHasOrder?.data?.count;
+    const [searchText, setSearchText] = useState('');
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setSearchText(value);
+    };
+    const { deleteUser, loadingDelete,restoreUser,loadingRestore } = useUser();
+    const [userBannedId, setUserBannedId] = useState<number|string>(0);
+    const [userRestoreId, setUserRestoreId] = useState<number|string>(0);
+    useEffect(() => {
+        if (userBannedId !== 0) {
+            deleteUser(userBannedId);
+        }
+        if(userRestoreId !== 0) {
+            restoreUser(userRestoreId);
+        }
+    }, [userBannedId, userRestoreId]);
+    useEffect(() => {
+        if (!loadingDelete && userBannedId !== 0) {
+            setUserBannedId(0);
+        }
+        if (!loadingRestore && userRestoreId !== 0) {
+            setUserRestoreId(0);
+        }
+    }, [loadingDelete,loadingRestore]);
     const [users, setUsers] = useState<IUser[]>([]);
     const { locale } = useContextGlobal();
-    const { data: dataUser, isFetching } = useQueryConfig(
-        [QUERY_KEY, 'list/user'],
-        'api/user?include=profile,group&times=user',
+    const { data: dataUser, isLoading } = useQueryConfig(
+        [QUERY_KEY, `list/user?page=${page}&user=${user}&search=${searchKey}`],
+        `api/user?include=profile,group&times=user&paginate=true&per_page=10&page=${page}&user=${user}&search=${searchKey}`,
     );
+    const totalItems = dataUser?.data?.users?.paginator?.total_item || 0;
+    const pageSize = dataUser?.data?.users?.paginator?.per_page || 10;
 
-    const handleDeleteUser = (id: number | string) => {
+    const handleDeleteUser = (id: number|string) => {
         showMessageActive(
-            handleChangeMessage(locale, 'Are you sure you want to delete?', 'Bạn có chắc chắn muốn xóa không?'),
+            handleChangeMessage(
+                locale,
+                'Are you sure want to ban this user?',
+                'Bạn có chắc muốn hạn chế tài khoản này không?',
+            ),
             '',
             'warning',
             () => {
-                deleteUser(id);
+                setUserBannedId(id);
             },
         );
     };
-
+    const handleRestoreUser = (id: number | string) => {
+        setUserRestoreId(id);
+    };
+    const handlePageChange = (page: number) => {
+        urlQuery.set('page', `${page}`);
+        navigate(`?${urlQuery.toString()}`, { replace: true });
+    };
     useEffect(() => {
         if (dataUser?.data.users.data) {
             setUsers(dataUser?.data.users.data);
@@ -48,23 +92,11 @@ const ListUser = () => {
         }
     }, [dataUser]);
 
-    const userHasOrderCount = dataCountHasOrder?.data?.count || 0;
-    const filterUser = (e: any) => {
-        const dataOrigin = JSON.parse(JSON.stringify([...dataUser?.data.users.data]));
-        if (e.target.value !== '') {
-            const filtered = dataOrigin.filter((item: IUser) => {
-                return (
-                    item.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-                    item.email.toLowerCase().includes(e.target.value.toLowerCase()) ||
-                    item.id.toString().includes(e.target.value.toLowerCase())
-                );
-            });
-            setUsers([...filtered]);
-        } else {
-            setUsers([...dataUser?.data.users.data]);
-        }
+    const submitSearch = () => {
+        urlQuery.set('search', searchText);
+        navigate(`?${urlQuery.toString()}`, { replace: true });
     };
-    // Define table columns
+
     const columns = [
         {
             title: 'ID',
@@ -105,7 +137,7 @@ const ListUser = () => {
                 let color = status === 'active' ? 'green' : 'gray';
                 return (
                     <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color={color}>
-                        {status}
+                        {formatStatus(status, locale)}
                     </Tag>
                 );
             },
@@ -117,7 +149,7 @@ const ListUser = () => {
             render: (group: any) => {
                 return (
                     <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center">
-                        {group?.group_name}
+                        {formatGroupName(group?.id, group?.group_name, locale)}
                     </Tag>
                 );
             },
@@ -133,12 +165,43 @@ const ListUser = () => {
         {
             title: <FormattedMessage id="user.table.actions" />,
             key: 'actions',
-            render: (_: any, values: IUser) => (
-                <div className="flex-row-center gap-x-5">
-                    <ButtonUpdate to={`/admin/update-user/${values.nickname}`}></ButtonUpdate>
-                    <ButtonDelete onClick={() => handleDeleteUser(values.id)} />
-                </div>
-            ),
+            render: (_: any, values: IUser) => {
+               
+                
+                if(values?.group?.id === 1){
+                    return '';
+                }
+                let btnRestore =  (
+                    <Button onClick={() => handleRestoreUser(values.id)} className="w-[50px] h-[40px] font-medium">
+                       <Power />
+                    </Button>
+                );
+                let btnBan = (
+                    <Button onClick={() => handleDeleteUser(values.id)} className="w-[50px] h-[40px] font-medium">
+                        <Ban />
+                    </Button>
+                );
+                if(loadingDelete && values?.id === userBannedId){
+                    btnBan = <ButtonDelete loading={true} />
+                }else if (loadingDelete && values?.id !== userBannedId){
+                    <Button  className="w-[50px] h-[40px] font-medium">
+                        <Power />
+                    </Button>
+                }
+                if(loadingRestore && values?.id === userRestoreId){
+                    btnBan = <ButtonDelete loading={true} />
+                }else if (loadingRestore && values?.id !== userRestoreId){
+                    <Button  className="w-[50px] h-[40px] font-medium">
+                        <Power />
+                    </Button>
+                }
+                return (
+                    <div className="flex-row-center gap-x-5">
+                        <ButtonUpdate to={`/admin/update-user/${values.nickname}`}></ButtonUpdate>
+                        {values.status === 'banned' ? btnRestore : btnBan}
+                    </div>
+                );
+            },
         },
     ];
 
@@ -182,45 +245,53 @@ const ListUser = () => {
             </Heading>
             <Row gutter={[16, 16]} className="mb-12">
                 <Col span={6}>
-                    <StatCard
-                        title={intl.formatMessage({ id: 'user.User_Total_Users' })}
-                        value={users?.length}
-                        description={intl.formatMessage({ id: 'user.User_Total_Users' })}
-                        color="#d4d4ff"
-                        icon={<UserOutlined style={{ fontSize: '20px', color: '#6c63ff' }} />}
-                    />
+                    <Link to="/admin/list-user" className=" hover:bg-slate-300 rounded block p-1 cursor-pointer">
+                        <StatCard
+                            title={intl.formatMessage({ id: 'user.User_Total_Users' })}
+                            value={dataStatistics?.all || 0}
+                            description={intl.formatMessage({ id: 'user.User_Total_Users' })}
+                            color="#d4d4ff"
+                            icon={<UserOutlined style={{ fontSize: '20px', color: '#6c63ff' }} />}
+                        />
+                    </Link>
                 </Col>
                 <Col span={6}>
-                    <StatCard
-                        title={<FormattedMessage id="Inactive_Users" />}
-                        value={users?.filter((u: IUser) => u.status !== 'active').length}
-                        description={intl.formatMessage({ id: 'user.User_Inactive_Users' })}
-                        color="#ffd6d6"
-                        icon={<UserOutlined style={{ fontSize: '20px', color: '#ff6666' }} />}
-                    />
+                    <Link to="?user=banned" className="hover:bg-slate-300 rounded block p-1 cursor-pointer">
+                        <StatCard
+                            title={<FormattedMessage id="Inactive_Users" />}
+                            value={dataStatistics?.banned || 0}
+                            description={intl.formatMessage({ id: 'user.User_Inactive_Users' })}
+                            color="#ffd6d6"
+                            icon={<UserOutlined style={{ fontSize: '20px', color: '#ff6666' }} />}
+                        />
+                    </Link>
                 </Col>
                 <Col span={6}>
-                    <StatCard
-                        title={intl.formatMessage({ id: 'user.User_Active_Users' })}
-                        value={users?.filter((u: IUser) => u.status === 'active').length}
-                        description={intl.formatMessage({ id: 'user.User_Active_Users' })}
-                        color="#d6f5e6"
-                        icon={<UserOutlined style={{ fontSize: '20px', color: '#66cc99' }} />}
-                    />
+                    <Link to="?user=active" className="hover:bg-slate-300 rounded p-1 block cursor-pointer">
+                        <StatCard
+                            title={intl.formatMessage({ id: 'user.User_Active_Users' })}
+                            value={dataStatistics?.active || 0}
+                            description={intl.formatMessage({ id: 'user.User_Active_Users' })}
+                            color="#d6f5e6"
+                            icon={<UserOutlined style={{ fontSize: '20px', color: '#66cc99' }} />}
+                        />
+                    </Link>
                 </Col>
                 <Col span={6}>
-                    <StatCard
-                        title={intl.formatMessage({ id: 'user.User_Users_Ordering_Number' })}
-                        value={userHasOrderCount}
-                        description={intl.formatMessage({ id: 'user.User_Users_Ordering_Number' })}
-                        color="#ffecd6"
-                        icon={<UserOutlined style={{ fontSize: '20px', color: '#ffa500' }} />}
-                    />
+                    <Link to="?user=user-with-orders" className="hover:bg-slate-300 rounded p-1 block cursor-pointer">
+                        <StatCard
+                            title={intl.formatMessage({ id: 'user.User_Users_Ordering_Number' })}
+                            value={dataStatistics?.with_orders || 0}
+                            description={intl.formatMessage({ id: 'user.User_Users_Ordering_Number' })}
+                            color="#ffecd6"
+                            icon={<UserOutlined style={{ fontSize: '20px', color: '#ffa500' }} />}
+                        />
+                    </Link>
                 </Col>
             </Row>
 
             <>
-                {isFetching ? (
+                {isLoading ? (
                     <Skeleton />
                 ) : (
                     <section>
@@ -229,13 +300,23 @@ const ListUser = () => {
                             <div className="relative">
                                 <Input
                                     className={`w-[350px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
-                                    onChange={filterUser}
+                                    onChange={handleSearch}
                                     placeholder={intl.formatMessage({ id: 'user.User_Users_Input_section' })}
                                 />
-                                <Search className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
+                                <Search
+                                    onClick={submitSearch}
+                                    className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global"
+                                />
                             </div>
                         </div>
-                        <TableAdmin columns={columns} dataSource={users} pagination={{ pageSize: 8 }} />
+                        <TableAdmin columns={columns} dataSource={users} pagination={false} />
+                        <PaginationComponent
+                            className="mt-4"
+                            page={page}
+                            pageSize={pageSize}
+                            totalItems={totalItems}
+                            handlePageChange={handlePageChange}
+                        />
                     </section>
                 )}
             </>

@@ -56,8 +56,8 @@ const FormUser: React.FC<FormUserProps> = ({ onFinish, initialValues, loading })
         form.setFieldsValue({
             email: initialValues?.email,
             birth_date: dayjs(initialValues?.profile?.birth_date).format('YYYY-MM-DD'),
-            given_name: initialValues?.name,
-            family_name: initialValues?.name,
+            given_name: initialValues?.profile?.given_name,
+            family_name: initialValues?.profile?.family_name,
             group_id: initialValues?.group_id,
             is_admin: initialValues?.is_admin ? true : false,
             active: initialValues?.status === 'active' ? true : false,
