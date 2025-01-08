@@ -8,7 +8,7 @@ export interface IUser {
     name: string;
     email: string;
     email_verified_at: string;
-    google_id: string;
+    google_id?: string|any;
     status: string;
     profile: {
         given_name:string,

@@ -1,6 +1,6 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Input, Row, Skeleton, Tag, Typography } from 'antd';
-import { Ban, Search } from 'lucide-react';
+import { Ban, Power, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import useUser, { QUERY_KEY } from '../../../../hooks/useUser';
@@ -35,12 +35,25 @@ const ListUser = () => {
         const value = e.target.value;
         setSearchText(value);
     };
-    const [userBannedId,setUserBannedId] = useState<number>(0);
-    const [userRestoreId, setUserRestoreId] = useState<number>(0);
+    const { deleteUser, loadingDelete,restoreUser,loadingRestore } = useUser();
+    const [userBannedId, setUserBannedId] = useState<number|string>(0);
+    const [userRestoreId, setUserRestoreId] = useState<number|string>(0);
     useEffect(() => {
-        
-    },[]);
-    const { deleteUser,loadingDelete } = useUser();
+        if (userBannedId !== 0) {
+            deleteUser(userBannedId);
+        }
+        if(userRestoreId !== 0) {
+            restoreUser(userRestoreId);
+        }
+    }, [userBannedId, userRestoreId]);
+    useEffect(() => {
+        if (!loadingDelete && userBannedId !== 0) {
+            setUserBannedId(0);
+        }
+        if (!loadingRestore && userRestoreId !== 0) {
+            setUserRestoreId(0);
+        }
+    }, [loadingDelete,loadingRestore]);
     const [users, setUsers] = useState<IUser[]>([]);
     const { locale } = useContextGlobal();
     const { data: dataUser, isLoading } = useQueryConfig(
@@ -50,8 +63,7 @@ const ListUser = () => {
     const totalItems = dataUser?.data?.users?.paginator?.total_item || 0;
     const pageSize = dataUser?.data?.users?.paginator?.per_page || 10;
 
-
-    const handleDeleteUser = (id: number | string) => {
+    const handleDeleteUser = (id: number|string) => {
         showMessageActive(
             handleChangeMessage(
                 locale,
@@ -61,9 +73,12 @@ const ListUser = () => {
             '',
             'warning',
             () => {
-                deleteUser(id);
+                setUserBannedId(id);
             },
         );
+    };
+    const handleRestoreUser = (id: number | string) => {
+        setUserRestoreId(id);
     };
     const handlePageChange = (page: number) => {
         urlQuery.set('page', `${page}`);
@@ -81,7 +96,7 @@ const ListUser = () => {
         urlQuery.set('search', searchText);
         navigate(`?${urlQuery.toString()}`, { replace: true });
     };
-    
+
     const columns = [
         {
             title: 'ID',
@@ -151,13 +166,39 @@ const ListUser = () => {
             title: <FormattedMessage id="user.table.actions" />,
             key: 'actions',
             render: (_: any, values: IUser) => {
-
+               
+                
+                if(values?.group?.id === 1){
+                    return '';
+                }
+                let btnRestore =  (
+                    <Button onClick={() => handleRestoreUser(values.id)} className="w-[50px] h-[40px] font-medium">
+                       <Power />
+                    </Button>
+                );
+                let btnBan = (
+                    <Button onClick={() => handleDeleteUser(values.id)} className="w-[50px] h-[40px] font-medium">
+                        <Ban />
+                    </Button>
+                );
+                if(loadingDelete && values?.id === userBannedId){
+                    btnBan = <ButtonDelete loading={true} />
+                }else if (loadingDelete && values?.id !== userBannedId){
+                    <Button  className="w-[50px] h-[40px] font-medium">
+                        <Power />
+                    </Button>
+                }
+                if(loadingRestore && values?.id === userRestoreId){
+                    btnBan = <ButtonDelete loading={true} />
+                }else if (loadingRestore && values?.id !== userRestoreId){
+                    <Button  className="w-[50px] h-[40px] font-medium">
+                        <Power />
+                    </Button>
+                }
                 return (
                     <div className="flex-row-center gap-x-5">
                         <ButtonUpdate to={`/admin/update-user/${values.nickname}`}></ButtonUpdate>
-                        <Button onClick={() => handleDeleteUser(values.id)} className="w-[50px] h-[40px] font-medium">
-                            <Ban />
-                        </Button>
+                        {values.status === 'banned' ? btnRestore : btnBan}
                     </div>
                 );
             },
@@ -262,7 +303,10 @@ const ListUser = () => {
                                     onChange={handleSearch}
                                     placeholder={intl.formatMessage({ id: 'user.User_Users_Input_section' })}
                                 />
-                                <Search onClick={submitSearch} className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
+                                <Search
+                                    onClick={submitSearch}
+                                    className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global"
+                                />
                             </div>
                         </div>
                         <TableAdmin columns={columns} dataSource={users} pagination={false} />
