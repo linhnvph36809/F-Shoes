@@ -1,5 +1,5 @@
 import { ConfigProvider, Form, Select, Table } from 'antd';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import Heading from '../../components/Heading';
 
@@ -14,6 +14,7 @@ import { PATH_ADMIN } from '../../../../constants/path';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import { FormattedMessage } from 'react-intl';
 import { useForm } from 'antd/es/form/Form';
+import { IAttribute } from '../../../../interfaces/IAttribute';
 
 const UpdateVariant = () => {
     const [form] = useForm();
@@ -29,13 +30,32 @@ const UpdateVariant = () => {
         `/api/product/${id}}/variation`,
     );
     const [variantDeleteId, setVariantDeleteId] = useState<number>(0);
+    const { deleteVariant, loading: loadingDeleteVariant } = useVariant();
+    const [listVariations, setListVariations] = useState<any>([]);
+    const [variantId, setVariantId] = useState<number[]>([]);
+    const [variantsChanges, setVariantsChanges] = useState<IAttribute[]>([]);
+    const [variants, setVariants] = useState<IAttribute[]>([]);
+
+    const variantByIds = data?.data.data || [];
+
+    const handleDeleteVariant = (id: number) => {
+        setVariantDeleteId(id);
+        refetch();
+    };
+
+    const handleChange = useCallback((listId: number[]) => {
+        setVariantId([...listId]);
+        setVariantsChanges((preVariantChanges) =>
+            preVariantChanges.filter((preVariantChange) => listId.includes(+preVariantChange.id)),
+        );
+    }, []);
+
     useEffect(() => {
         if (variantDeleteId !== 0) {
             deleteVariant(variantDeleteId);
         }
     }, [variantDeleteId]);
 
-    const { deleteVariant, loading: loadingDeleteVariant } = useVariant();
     useEffect(() => {
         if (!loadingDeleteVariant) {
             setVariantDeleteId(0);
@@ -47,25 +67,24 @@ const UpdateVariant = () => {
         }
     }, [loadingDeleteVariant]);
 
-    const [listVariations, setListVariations] = useState<any>([]);
-
     useEffect(() => {
-        if (data?.data?.data?.variations) {
-            setListVariations([...data?.data?.data?.variations]);
+        if (variantByIds?.variations) {
+            setListVariations([...variantByIds.variations]);
         }
-    }, [data]);
-
-    const variantByIds = data?.data.data || [];
-
-    const handleDeleteVariant = (id: number) => {
-        setVariantDeleteId(id);
-        refetch();
-    };
+    }, [variantByIds]);
 
     useEffect(() => {
         const idVariant = variantByIds?.ownAttributes?.map((attribute: any) => attribute.id);
+        setVariants(variantByIds.ownAttributes);
         form.setFieldValue('attribute', idVariant);
     }, [variantByIds]);
+
+    useEffect(() => {
+        const newAttributes = variantByIds?.all_attribute?.filter((attribute: any) =>
+            variantId.includes(+attribute.id),
+        );
+        setVariants(newAttributes);
+    }, [variantId]);
 
     return (
         <>
@@ -95,12 +114,13 @@ const UpdateVariant = () => {
                                         optionFilterProp="name"
                                         fieldNames={{ label: 'name', value: 'id' }}
                                         options={variantByIds?.all_attribute}
+                                        onChange={handleChange}
                                     />
                                 </Form.Item>
                             </ConfigProvider>
                         </Form>
                         <div>
-                            {variantByIds?.ownAttributes?.map((variant: any) => (
+                            {variants?.map((variant: any) => (
                                 <div className="p-5 bg-gray-200 rounded-lg mb-10 relative" key={variant.id}>
                                     <h3 className="color-primary text-16px font-medium mb-5">{variant.name}</h3>
                                     <div>
@@ -125,7 +145,13 @@ const UpdateVariant = () => {
                                                         (attribute: any) => attribute.id === variant.id,
                                                     ).values
                                                 }
-                                                defaultValue={variant.values.map((value: any) => value.id)}
+                                                defaultValue={
+                                                    variantByIds.ownAttributes.some(
+                                                        (attribute: any) => attribute.id === variant.id,
+                                                    )
+                                                        ? variant.values.map((value: any) => value.id)
+                                                        : []
+                                                }
                                             />
                                         </ConfigProvider>
                                     </div>

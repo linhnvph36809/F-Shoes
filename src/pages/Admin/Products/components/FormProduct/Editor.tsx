@@ -8,7 +8,7 @@ const EditorComponent = ({ initialValues, setDescription, height = 300 }: { init
     return (
         <Editor
             initialValue={initialValues}
-            apiKey="cnnvqtttkicqoys3lbj51dvhwzqpavr3v3jdohfz4dngpa1q"
+            apiKey="mscecwe13szeki8o1834is0gxm5w42zuezy59kfv4urvgr78"
             init={{
                 height: height,
                 menubar: 'file edit view insert format tools table help',
