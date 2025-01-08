@@ -1,3 +1,4 @@
+import { handleChangeMessage } from '../utils/index.ts';
 import { IProduct } from './IProduct.ts';
 
 export interface IUser {
@@ -19,3 +20,27 @@ export interface IUser {
     created_at: any;
 }
 
+export const formatStatus = (status: string, locale: string) => {
+        switch (status.toLocaleLowerCase()) {
+            case 'active':
+                return handleChangeMessage(locale, 'Active', 'Hoạt Động');
+
+            case 'banned':
+                return handleChangeMessage(locale, 'Banned', 'Hạn Chế');
+
+            default:
+                return handleChangeMessage(locale, 'Error', 'Lỗi');
+        }
+};
+export const formatGroupName = (group_id: number|string,groupName:string,locale:string) => {
+    switch(group_id){
+        case 1: 
+        return handleChangeMessage(locale, 'Administrator', 'Quản Trị Viên');
+        case 2: 
+        return handleChangeMessage(locale, 'Assistant Administrator', 'Trợ Lí Quản Trị');
+        case 3: 
+        return handleChangeMessage(locale, 'Customer', 'Khách Hàng');
+        default: 
+        return groupName;
+    }
+}

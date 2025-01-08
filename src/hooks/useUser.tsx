@@ -12,6 +12,7 @@ const API_USER = '/api/user';
 export const QUERY_KEY = 'users';
 const useUser = () => {
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const { locale } = useContextGlobal();
@@ -65,7 +66,7 @@ const useUser = () => {
     // Function to delete a user by ID
     const deleteUser = async (id: string | number) => {
         try {
-            setLoading(true);
+            setLoadingDelete(true);
             await tokenManagerInstance('delete', `${API_USER}/${id}`);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(
@@ -100,7 +101,7 @@ const useUser = () => {
                 );
             }
         } finally {
-            setLoading(false);
+            setLoadingDelete(false);
         }
     };
 
@@ -150,6 +151,7 @@ const useUser = () => {
 
     return {
         loading,
+        loadingDelete,
         addUser,
         deleteUser,
         editUser, // Return the editUser function to make it accessible in components

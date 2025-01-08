@@ -315,7 +315,7 @@
     "user.User_Total_Users": "Total Users",
     "user.User_Inactive_Users": "Inactive Users",
     "user.User_Active_Users": "Active Users",
-    "user.User_Users_Ordering_Number": "Users Ordering Number",
+    "user.User_Users_Ordering_Number": "Users with orders",
     "user.User_Users_Input_section": "Search an id user or name or email.",
     "user.table.user": "User",
     "user.table.status": "Status",

@@ -112,7 +112,7 @@ const LayoutAdmin: React.FC = () => {
                                 className="hover:cursor-pointer"
                                 overlay={
                                     <Menu className="color-primary font-medium">
-                                        <Menu.Item onClick={() => changeLanguage(LANGUAGE_VI)}>Việt Nam</Menu.Item>
+                                        <Menu.Item onClick={() => changeLanguage(LANGUAGE_VI)}>Tiếng Việt</Menu.Item>
                                         <Menu.Item onClick={() => changeLanguage(LANGUAGE_EN)}>English</Menu.Item>
                                     </Menu>
                                 }
@@ -120,7 +120,7 @@ const LayoutAdmin: React.FC = () => {
                             >
                                 <p className="text-[14px] color-primary font-medium hover:opacity-70 flex items-center gap-x-3">
                                     <Globe className="w-8" />
-                                    {locale === LANGUAGE_VI ? 'Viet Nam' : 'English'}
+                                    {locale === LANGUAGE_VI ? 'Tiếng Việt' : 'English'}
                                 </p>
                             </Dropdown>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
