@@ -35,6 +35,11 @@ const ListUser = () => {
         const value = e.target.value;
         setSearchText(value);
     };
+    const [userBannedId,setUserBannedId] = useState<number>(0);
+    const [userRestoreId, setUserRestoreId] = useState<number>(0);
+    useEffect(() => {
+        
+    },[]);
     const { deleteUser,loadingDelete } = useUser();
     const [users, setUsers] = useState<IUser[]>([]);
     const { locale } = useContextGlobal();
@@ -44,6 +49,7 @@ const ListUser = () => {
     );
     const totalItems = dataUser?.data?.users?.paginator?.total_item || 0;
     const pageSize = dataUser?.data?.users?.paginator?.per_page || 10;
+
 
     const handleDeleteUser = (id: number | string) => {
         showMessageActive(
