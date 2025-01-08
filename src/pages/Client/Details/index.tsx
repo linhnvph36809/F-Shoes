@@ -37,7 +37,6 @@ const Detail = () => {
 
     const { data, isFetching } = useQueryConfig([QUERY_KEY, `product-detail-${id}`], `/api/product/detail/${id}`);
 
-    console.log(data);
 
     const products = data?.data;
     const { user } = useContextGlobal();
