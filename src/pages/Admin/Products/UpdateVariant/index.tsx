@@ -15,6 +15,9 @@ import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import { FormattedMessage } from 'react-intl';
 import { useForm } from 'antd/es/form/Form';
 import { IAttribute } from '../../../../interfaces/IAttribute';
+import { combine } from '../AddVariant/datas';
+import ModalFormVariant from '../AddVariant/ModalFormVariant';
+import { showMessageClient } from '../../../../utils/messages';
 
 const UpdateVariant = () => {
     const [form] = useForm();
@@ -35,8 +38,26 @@ const UpdateVariant = () => {
     const [variantId, setVariantId] = useState<number[]>([]);
     const [variantsChanges, setVariantsChanges] = useState<IAttribute[]>([]);
     const [variants, setVariants] = useState<IAttribute[]>([]);
+    const [listAttribute, setListAttribute] = useState<any>([]);
+    const [datas, setDatas] = useState<any>([]);
+    const [images, setImages] = useState<any>([]);
+    const [errors, setError] = useState<any>([]);
+    const { loading: loadingPostVariant, putVariant } = useVariant();
 
     const variantByIds = data?.data.data || [];
+
+
+
+    const onFinish = () => {
+        setError(datas);
+        const isSubmit = datas.some((data: any) => data === null);
+
+        if (!isSubmit) {
+            putVariant({
+                variations: datas,
+            });
+        }
+    };
 
     const handleDeleteVariant = (id: number) => {
         setVariantDeleteId(id);
@@ -49,6 +70,71 @@ const UpdateVariant = () => {
             preVariantChanges.filter((preVariantChange) => listId.includes(+preVariantChange.id)),
         );
     }, []);
+
+    const handleChangeItem = useCallback(
+        (values: number[], id: number) => {
+            const attribute = variantByIds?.all_attribute?.find((attribute: any) => attribute.id === id);
+            const newValues = attribute?.values.filter((value: any) => values.includes(+value.id));
+            const newAttribute = { ...attribute, values: newValues } as IAttribute;
+
+            if (variantsChanges.length == 0) {
+                setVariantsChanges([newAttribute]);
+            } else {
+                let isPush = true;
+                const newVariantsChanges = variantsChanges.map((variantsChange) => {
+                    if (variantsChange.id == id) {
+                        isPush = false;
+                        return {
+                            ...variantsChange,
+                            values: newValues,
+                        };
+                    }
+                    return variantsChange;
+                });
+
+                if (isPush) {
+                    newVariantsChanges.push(newAttribute);
+                }
+                setVariantsChanges(newVariantsChanges as []);
+            }
+        },
+        [variantByIds, variantsChanges],
+    );
+
+    useEffect(() => {
+        const formatVariantsChanges = variantsChanges.reduce((acc: any, variantsChange: any) => {
+            if (variantsChange.values.length > 0) {
+                acc.push(variantsChange.values);
+            }
+            return acc;
+        }, []);
+        const variantCombine = combine(formatVariantsChanges);
+
+        const sumOwnAttributes = variantByIds?.ownAttributes?.reduce(
+            (acc: number, cur: any) => acc + cur.values.length,
+            0,
+        );
+
+        const sumVariantsChanges = variantsChanges?.reduce((acc: number, cur: any) => acc + cur.values.length, 0);
+
+        if (sumOwnAttributes === sumVariantsChanges) {
+            setDatas(
+                variantByIds?.variations?.map((variation: any) => ({
+                    id,
+                    stock_qty: variation.stock_qty,
+                    price: +variation.price,
+                    sku: variation.sku,
+                    images: images.map((image: any) => image.id),
+                    values: variation.values.map((value: any) => value.id),
+                })),
+            );
+        } else {
+            const initArray = Array(variantCombine.length).fill(null);
+            setDatas([...initArray]);
+        }
+
+        setListAttribute(variantCombine);
+    }, [variantsChanges, variantByIds]);
 
     useEffect(() => {
         if (variantDeleteId !== 0) {
@@ -70,6 +156,7 @@ const UpdateVariant = () => {
     useEffect(() => {
         if (variantByIds?.variations) {
             setListVariations([...variantByIds.variations]);
+            setVariantsChanges(variantByIds?.ownAttributes);
         }
     }, [variantByIds]);
 
@@ -152,6 +239,7 @@ const UpdateVariant = () => {
                                                         ? variant.values.map((value: any) => value.id)
                                                         : []
                                                 }
+                                                onChange={(value: any) => handleChangeItem(value, +variant.id)}
                                             />
                                         </ConfigProvider>
                                     </div>
@@ -173,100 +261,218 @@ const UpdateVariant = () => {
                                     },
                                 }}
                             >
-                                <Table
-                                    pagination={false}
-                                    className="font-medium"
-                                    expandable={{
-                                        expandedRowRender: (record: any) => (
-                                            <div>
-                                                <div className="flex items-center gap-x-5 pb-5 border-b">
-                                                    <p className="text-[14px] color-primary">
-                                                        <FormattedMessage id="Variant Name" /> :{' '}
-                                                    </p>
-                                                    <p>{record.classify}</p>
-                                                </div>
-                                                <div className="flex items-center gap-x-5 py-5 border-b">
-                                                    <p className="text-[14px] color-primary">
-                                                        <FormattedMessage id="admin.stock_qty" /> :{' '}
-                                                    </p>
-                                                    <p>{record.stock_qty}</p>
-                                                </div>
-                                                <div className="flex items-center gap-x-5 py-5 border-b">
-                                                    <p className="text-[14px] color-primary">
-                                                        <FormattedMessage id="admin.qty_sold" /> :{' '}
-                                                    </p>
-                                                    <p>{record.qty_sold}</p>
-                                                </div>
-                                                <div className="flex items-center gap-x-5 py-5 border-b">
-                                                    <p className="text-[14px] color-primary">
-                                                        <FormattedMessage id="admin.price" /> :{' '}
-                                                    </p>
-                                                    <p>{formatPrice(record.price)}đ</p>
-                                                </div>
-                                                <div className="flex items-center gap-x-5 py-5 border-b">
-                                                    <p className="text-[14px] color-primary">SKU : </p>
-                                                    <p>{record.sku}</p>
-                                                </div>
-                                                <div className="flex items-center gap-x-5 py-5 border-b">
-                                                    <p className="text-[14px] color-primary">
-                                                        <FormattedMessage id="admin.image" /> :{' '}
-                                                    </p>
-                                                    <div className="grid grid-cols-6 gap-5">
-                                                        {record.images.map((image: any) => (
-                                                            <img
-                                                                src={image.url}
-                                                                alt=""
-                                                                className="w-[80px] object-cover h-[80px] border"
-                                                            />
-                                                        ))}
+                                {listAttribute.length ===
+                                    variantByIds?.ownAttributes?.reduce(
+                                        (acc: number, cur: any) => acc + cur.values.length,
+                                        0,
+                                    ) ? (
+                                    <>
+                                        <Table
+                                            pagination={false}
+                                            className="font-medium"
+                                            expandable={{
+                                                expandedRowRender: (record: any) => (
+                                                    <div>
+                                                        <div className="flex items-center gap-x-5 pb-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="Variant Name" /> :{' '}
+                                                            </p>
+                                                            <p>{record.classify}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="admin.stock_qty" /> :{' '}
+                                                            </p>
+                                                            <p>{record.stock_qty}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="admin.qty_sold" /> :{' '}
+                                                            </p>
+                                                            <p>{record.qty_sold}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="admin.price" /> :{' '}
+                                                            </p>
+                                                            <p>{formatPrice(record.price)}đ</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">SKU : </p>
+                                                            <p>{record.sku}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="admin.image" /> :{' '}
+                                                            </p>
+                                                            <div className="grid grid-cols-6 gap-5">
+                                                                {record.images.map((image: any) => (
+                                                                    <img
+                                                                        key={image.id}
+                                                                        src={image.url}
+                                                                        alt=""
+                                                                        className="w-[80px] object-cover h-[80px] border"
+                                                                    />
+                                                                ))}
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        ),
-                                        rowExpandable: (record) => record.id !== '',
-                                    }}
-                                    rowKey={(record) => `table2-${record.id}`}
-                                    columns={[
-                                        {
-                                            title: <FormattedMessage id="admin.id" />,
-                                            dataIndex: 'id',
-                                            key: '1',
-                                        },
-                                        {
-                                            title: <FormattedMessage id="Variant Name" />,
-                                            dataIndex: 'classify',
-                                            key: '2',
-                                        },
-                                        {
-                                            title: <FormattedMessage id="category.table.action" />,
-                                            key: '3',
-                                            render: (_, { id, stock_qty, price, sku, images, values }: any) => {
-                                                let buttonDelete = (
-                                                    <ButtonDelete onClick={() => handleDeleteVariant(id)} />
-                                                );
-                                                if (loadingDeleteVariant && id === variantDeleteId) {
-                                                    buttonDelete = <ButtonSubmit loading={true} />;
-                                                }
-                                                return (
-                                                    <div className="flex items-center gap-x-4">
-                                                        <FormUpdateVariant
-                                                            initialValues={{
-                                                                id,
-                                                                stock_qty: stock_qty,
-                                                                price: +price,
-                                                                sku: sku,
-                                                                images: images.map((image: any) => image.id),
-                                                                values: values.map((value: any) => value.id),
-                                                            }}
-                                                        />
-                                                        {buttonDelete}
-                                                    </div>
-                                                );
-                                            },
-                                        },
-                                    ]}
-                                    dataSource={listVariations}
-                                />
+                                                ),
+                                                rowExpandable: (record) => record.id !== '',
+                                            }}
+                                            rowKey={(record) => `table2-${record.id}`}
+                                            columns={[
+                                                {
+                                                    title: <FormattedMessage id="Variant Name" />,
+                                                    dataIndex: 'classify',
+                                                    key: '2',
+                                                },
+                                                {
+                                                    title: <FormattedMessage id="category.table.action" />,
+                                                    key: '3',
+                                                    render: (
+                                                        _,
+                                                        { id, stock_qty, price, sku, images, values }: any,
+                                                        index: number,
+                                                    ) => {
+                                                        let buttonDelete = (
+                                                            <ButtonDelete onClick={() => handleDeleteVariant(id)} />
+                                                        );
+                                                        if (loadingDeleteVariant && id === variantDeleteId) {
+                                                            buttonDelete = <ButtonSubmit loading={true} />;
+                                                        }
+                                                        return (
+                                                            <div className="flex items-center gap-x-4">
+                                                                <FormUpdateVariant
+                                                                    initialValues={{
+                                                                        id,
+                                                                        stock_qty: stock_qty,
+                                                                        price: +price,
+                                                                        sku: sku,
+                                                                        images: images.map((image: any) => image.id),
+                                                                        values: values.map((value: any) => value.id),
+                                                                    }}
+                                                                    index={index}
+                                                                    ids={id}
+                                                                    setDatas={setDatas}
+                                                                    setError={setError}
+                                                                />
+                                                                {buttonDelete}
+                                                            </div>
+                                                        );
+                                                    },
+                                                },
+                                            ]}
+                                            dataSource={listVariations}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <Table
+                                            pagination={false}
+                                            className="font-medium"
+                                            expandable={{
+                                                expandedRowRender: (record: any) => {
+                                                    const values = datas[record.index];
+                                                    return (
+                                                        <>
+                                                            {values ? (
+                                                                <div>
+                                                                    <div className="flex items-center gap-x-5 pb-5 border-b">
+                                                                        <p className="text-[14px] color-primary">
+                                                                            <FormattedMessage id="Variant Name" /> :{' '}
+                                                                        </p>
+                                                                        <p>{record.variant_name}</p>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                        <p className="text-[14px] color-primary">
+                                                                            <FormattedMessage id="admin.price" /> :{' '}
+                                                                        </p>
+                                                                        <p>{formatPrice(values.price)}đ</p>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                        <p className="text-[14px] color-primary">
+                                                                            SKU :{' '}
+                                                                        </p>
+                                                                        <p>{values.sku}</p>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                        <p className="text-[14px] color-primary">
+                                                                            <FormattedMessage id="admin.image" /> :{' '}
+                                                                        </p>
+                                                                        <div className="grid grid-cols-6 gap-5">
+                                                                            {images[record.index].map((image: any) => (
+                                                                                <img
+                                                                                    src={image.url}
+                                                                                    alt=""
+                                                                                    className="w-[80px] object-cover h-[80px] border"
+                                                                                />
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="text-center color-gray text-[14px]">
+                                                                    <FormattedMessage id="Empty" />
+                                                                </div>
+                                                            )}
+                                                        </>
+                                                    );
+                                                },
+
+                                                rowExpandable: (record) => record.id !== '',
+                                            }}
+                                            rowKey={(record) => `table2-${record.id}`}
+                                            columns={[
+                                                {
+                                                    title: <FormattedMessage id="Variant Name" />,
+                                                    dataIndex: 'variant_name',
+                                                    key: '2',
+                                                },
+                                                {
+                                                    title: <FormattedMessage id="category.table.action" />,
+                                                    key: '3',
+                                                    render: (_, { id }: any, index: number) => {
+                                                        return (
+                                                            <div className="flex items-center gap-x-4">
+                                                                <ModalFormVariant
+                                                                    index={index}
+                                                                    ids={id}
+                                                                    setDatas={setDatas}
+                                                                    setError={setError}
+                                                                    setImages={setImages}
+                                                                />
+                                                                {/* <ButtonDelete onClick={() => deleteVariations(index)} /> */}
+                                                                {errors[index] === null ? (
+                                                                    <div className="text-[12px] text-red-500">
+                                                                        <FormattedMessage id="Please enter a valid variant" />
+                                                                    </div>
+                                                                ) : (
+                                                                    ''
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    },
+                                                },
+                                            ]}
+                                            dataSource={listAttribute.map((attribute: any, index: number) => ({
+                                                id: attribute.ids,
+                                                variant_name: attribute.values.join('-'),
+                                                index,
+                                            }))}
+                                        />
+                                    </>
+                                )}
+                                <div className="text-end mt-10">
+                                    <ButtonSubmit
+                                        loading={loadingPostVariant}
+                                        onClick={
+                                            listAttribute.length
+                                                ? () => onFinish()
+                                                : () => showMessageClient('Please choose variant', '', 'warning')
+                                        }
+                                    />
+                                </div>
                             </ConfigProvider>
                         </div>
                     </div>

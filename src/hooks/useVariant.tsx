@@ -66,15 +66,16 @@ const useVariant = () => {
         }
     };
 
-    const putVariant = async (value: any, idVariant: string | number) => {
+    const putVariant = async (value: any) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('put', `/api/product/${id}}/variation/${idVariant}`, value);
+            await tokenManagerInstance('put', `/api/product/${id}}/update/variation`, value);
             showMessageAdmin(
                 handleChangeMessage(locale, 'Update Variant Sussccess', 'Cập nhật biến thể thành công'),
                 '',
                 'success',
             );
+            navigate('/admin/list-product');
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
         } catch (error) {
