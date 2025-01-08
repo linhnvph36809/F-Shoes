@@ -1,4 +1,5 @@
 import { handleChangeMessage } from '../utils/index.ts';
+import { IGroup } from './IGroup.ts';
 import { IProduct } from './IProduct.ts';
 
 export interface IUser {
@@ -18,6 +19,7 @@ export interface IUser {
     };
     favoriteProducts: IProduct[];
     created_at: any;
+    group: IGroup;
 }
 
 export const formatStatus = (status: string, locale: string) => {
