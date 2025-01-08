@@ -69,7 +69,7 @@ const useVariant = () => {
     const putVariant = async (value: any) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('put', `/api/product/${id}}/update/variation`, value);
+            await tokenManagerInstance('put', `/api/product/${id}/update/variation`, value);
             showMessageAdmin(
                 handleChangeMessage(locale, 'Update Variant Sussccess', 'Cập nhật biến thể thành công'),
                 '',
