@@ -3,13 +3,13 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { IImage } from '../../../interfaces/IImage';
 import Heading from '../components/Heading';
-import FormProduct from './components/FormProduct';
 import useProduct, { API_PRODUCT } from '../../../hooks/useProduct';
 import SkeletonComponent from '../components/Skeleton';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import ButtonBack from '../components/ButtonBack';
 import { PATH_ADMIN } from '../../../constants/path';
 import { FormattedMessage } from 'react-intl';
+import FormUpdateProduct from './components/FormProduct/FormUpdateProduct';
 
 const KEY = 'product-detail-admin';
 
@@ -74,7 +74,7 @@ const UpdateProduct = () => {
                     <Heading>
                         <FormattedMessage id="Update Product" />
                     </Heading>
-                    <FormProduct
+                    <FormUpdateProduct
                         setImages={setImages}
                         images={images}
                         onFinish={onFinish}

@@ -34,7 +34,9 @@ const useVariant = () => {
                 'success',
             );
             navigate(PATH_LIST_PRODUCT);
-            queryClient.invalidateQueries({ queryKey: [QUERY_KEY, QUERY_KEY_PRODUCT] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
+
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
