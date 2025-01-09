@@ -1,4 +1,6 @@
 import Swal from 'sweetalert2';
+import { handleChangeMessage, handleGetLocalStorage } from '.';
+import { LANGUAGE_VI } from '../constants';
 export const showMessageAdmin = (title: string, text: string, type: 'success' | 'error' | 'warning', time?: number) => {
     Swal.fire({
         title: title,
@@ -44,8 +46,8 @@ export const showMessageActive = (
         icon: type,
         confirmButtonColor: '#111111',
         showCancelButton: true,
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
+        confirmButtonText: handleChangeMessage(handleGetLocalStorage('language') || LANGUAGE_VI, 'OK', 'Đồng ý'),
+        cancelButtonText: handleChangeMessage(handleGetLocalStorage('language') || LANGUAGE_VI, 'Cancel', 'Hủy'),
     }).then((result) => {
         if (result.isConfirmed) {
             handleActive();

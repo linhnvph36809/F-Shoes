@@ -31,6 +31,7 @@ import { showMessageActive, showMessageClient } from '../../../utils/messages';
 import { FREE_SHIP } from '../../../constants';
 import { useForm } from 'antd/es/form/Form';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { CircleX } from 'lucide-react';
 
 const { Title, Text } = Typography;
 
@@ -68,9 +69,8 @@ const Order = () => {
         setDistrictId(districtId);
         form.setFieldsValue({
             ward: null,
-            shipping_method: null
+            shipping_method: null,
         });
-
     };
 
     const handleWardChange = (code: string) => {
@@ -83,7 +83,7 @@ const Order = () => {
             postVoucher(code);
             setCode('');
         } else {
-            showMessageClient('Please enter code', '', 'warning');
+            showMessageClient(handleChangeMessage(locale, 'Please enter code', 'Vui lòng nhập code'), '', 'warning');
         }
     };
 
@@ -111,6 +111,18 @@ const Order = () => {
                     locale,
                     `The order must be larger than ${formatPrice(voucher.min_total_amount)}đ`,
                     `Đơn hàng phải lớn hơn ${formatPrice(voucher.min_total_amount)}đ`,
+                ),
+                '',
+                'warning',
+            );
+            setVoucher([]);
+            return sum;
+        } else if (voucher?.max_total_amount < sum) {
+            showMessageClient(
+                handleChangeMessage(
+                    locale,
+                    `The order must be smaller than ${formatPrice(voucher.min_total_amount)}đ`,
+                    `Đơn hàng phải nhỏ hơn ${formatPrice(voucher.max_total_amount)}đ`,
                 ),
                 '',
                 'warning',
@@ -217,11 +229,9 @@ const Order = () => {
             'order',
             {
                 voucher_cost:
-                    voucher.type == 'fixed'
-                        ? voucher.discount
-                        : ((handleTotalPrice >= FREE_SHIP ? handleTotalPrice : handleTotalPrice + (fee?.total || 0)) *
-                            +voucher.discount) /
-                        100,
+                    voucher?.type ? voucher.type == 'fixed'
+                        ? `${formatPrice(voucher.discount)}đ`
+                        : `${voucher.discount}%` : null,
                 ...newValues,
             },
             new Date(Date.now() + 20 * 60 * 1000),
@@ -592,18 +602,15 @@ const Order = () => {
                                             }}
                                         >
                                             <Text className="color-primary font-medium">Voucher</Text>
-                                            <Text className="color-primary font-medium">
+                                            <Text className="color-primary font-medium flex items-center gap-x-1">
                                                 -
-                                                {formatPrice(
-                                                    voucher.type === 'fixed'
-                                                        ? voucher.discount
-                                                        : ((handleTotalPrice >= FREE_SHIP
-                                                            ? handleTotalPrice
-                                                            : handleTotalPrice + (fee?.total || 0)) *
-                                                            +voucher.discount) /
-                                                        100,
-                                                )}
-                                                đ
+                                                {voucher.type === 'fixed'
+                                                    ? formatPrice(voucher.discount)
+                                                    : `${voucher.discount}%`}
+                                                <CircleX
+                                                    onClick={() => setVoucher([])}
+                                                    className="w-6 hover:cursor-pointer hover:opacity-60 transition-global"
+                                                />
                                             </Text>
                                         </div>
                                     ) : (
