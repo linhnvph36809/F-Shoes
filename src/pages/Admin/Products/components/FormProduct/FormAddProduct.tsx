@@ -16,7 +16,7 @@ import AddVariant from '../../AddVariant';
 import { handleChangeMessage } from '../../../../../utils';
 import { useContextGlobal } from '../../../../../contexts';
 
-const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: any) => {
+const FormAddProduct = ({ onFinish, images, setImages, initialValues, loading }: any) => {
     const [form] = Form.useForm();
     const intl = useIntl();
     const [description, setDescription] = useState<string>('');
@@ -254,4 +254,4 @@ const FormProduct = ({ onFinish, images, setImages, initialValues, loading }: an
     );
 };
 
-export default FormProduct;
+export default FormAddProduct;
