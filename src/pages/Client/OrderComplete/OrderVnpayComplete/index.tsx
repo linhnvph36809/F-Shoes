@@ -151,7 +151,7 @@ const OrderVnpayComplete = () => {
                                         {<FormattedMessage id="Shipping_Cost" />}
                                     </span>
                                     <span className="font-semibold text-xl text-gray-800">
-                                        {formatPrice(+order?.shipping_cost)}đ
+                                        -{order.voucher_cost}
                                     </span>
                                 </div>
                                 {order?.note ? (

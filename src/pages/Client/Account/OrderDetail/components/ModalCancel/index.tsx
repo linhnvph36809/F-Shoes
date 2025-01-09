@@ -42,7 +42,7 @@ const ModalCancel = ({
                 cancelButtonProps={{ type: 'default' }}
                 title={
                     <h3 className="text-[28px]">
-                        <FormattedMessage id="Reason" />
+                        <FormattedMessage id="reason_cancelled" />
                     </h3>
                 }
                 open={isModalOpen}
@@ -69,7 +69,6 @@ const ModalCancel = ({
             >
                 <Form layout="vertical" form={form} onFinish={onFinish}>
                     <Form.Item
-                        label={<FormattedMessage id="Enter_Reason" />}
                         className="font-medium"
                         name="reason_cancelled"
                         rules={[

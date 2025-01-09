@@ -1,5 +1,5 @@
 import { Modal, Tag } from 'antd';
-import { formatPrice, formatTime, handleChangeMessage } from '../../../../utils';
+import { formatPrice, formatTime } from '../../../../utils';
 import useOrder from '../../../../hooks/useOrder';
 import { FormattedMessage } from 'react-intl';
 import { paymentMethodString, paymentStatusString, shippingMessage, statusString } from '../../../../interfaces/IOrder';
@@ -19,7 +19,6 @@ import {
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import ModalReason from './components/ModalReason';
 import ModalDeniedReturn from './components/ModalDeniedReturn';
-import { useContextGlobal } from '../../../../contexts';
 
 const statusColors: Record<string, string> = {
     '0': '#EF4444',
@@ -36,7 +35,6 @@ const statusColors: Record<string, string> = {
 
 const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCancel: () => void }) => {
     const { loading, putOrder } = useOrder();
-    const { locale } = useContextGlobal();
 
     const handleChangeStatus = async (status: number) => {
         if (orderDetail?.orderDetail?.id) {
@@ -48,6 +46,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
     };
 
     const color = statusColors[orderDetail?.orderDetail?.status] || 'default';
+    console.log(orderDetail);
 
     return (
         <>
@@ -189,16 +188,16 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     <p className="flex items-center color-gray gap-x-3 text-[14px]">
                                         <TicketPercent className="w-7" /> <FormattedMessage id="voucher" /> :
                                     </p>
-                                    {orderDetail?.orderDetail?.voucher &&
-                                        orderDetail?.orderDetail?.voucher?.type == 'fixed' ? (
-                                        <p className="font-medium color-gray">
-                                            -{formatPrice(orderDetail?.orderDetail?.voucher?.discount)}đ
-                                        </p>
-                                    ) : (
-                                        <p className="font-medium color-gray">
-                                            {orderDetail?.orderDetail?.voucher?.discount}%
-                                        </p>
-                                    )}
+                                    {
+                                        orderDetail?.orderDetail?.voucher_id?.type == 'fixed' ? (
+                                            <p className="font-medium color-gray">
+                                                -{formatPrice(orderDetail?.orderDetail?.voucher_id?.discount)}đ
+                                            </p>
+                                        ) : (
+                                            <p className="font-medium color-gray">
+                                                -{orderDetail?.orderDetail?.voucher_id?.discount}%
+                                            </p>
+                                        )}
                                 </div>
                             ) : (
                                 ''
@@ -235,12 +234,15 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     {paymentMethodString(orderDetail?.orderDetail?.payment_method)}
                                 </p>
                             </div>
-                            <div className="flex justify-between items-center py-2">
-                                <p className="flex items-center color-gray gap-x-3 text-[14px]">
-                                    <NotebookPen className="w-7" /> <FormattedMessage id="note" /> :{' '}
-                                </p>
-                                <p className="color-gray text-[14px] font-medium">{orderDetail?.orderDetail?.note}</p>
-                            </div>
+                            {
+                                orderDetail?.orderDetail?.note ?
+                                    <div className="flex justify-between items-center py-2">
+                                        <p className="flex items-center color-gray gap-x-3 text-[14px]">
+                                            <NotebookPen className="w-7" /> <FormattedMessage id="note" /> :{' '}
+                                        </p>
+                                        <p className="color-gray text-[14px] font-medium">{orderDetail?.orderDetail?.note}</p>
+                                    </div> : ""
+                            }
                             {orderDetail?.orderDetail?.reason_cancelled ? (
                                 <div className="flex justify-between items-center py-2">
                                     <p className="flex items-center color-gray gap-x-3 text-[14px]">
