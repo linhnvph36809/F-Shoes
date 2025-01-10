@@ -206,7 +206,7 @@ const Order = () => {
             total_amount: totalAmount,
             payment_method: value.payment_method,
             payment_status: 'not_yet_paid',
-            shipping_method: 'Standard shipping',
+            shipping_method: 'standard_shipping',
             phone: value.phone,
             shipping_cost: handleTotalPrice >= FREE_SHIP ? '0' : fee?.total,
             tax_amount: null,
@@ -228,10 +228,11 @@ const Order = () => {
         handleSetCookie(
             'order',
             {
-                voucher_cost:
-                    voucher?.type ? voucher.type == 'fixed'
+                voucher_cost: voucher?.type
+                    ? voucher.type == 'fixed'
                         ? `${formatPrice(voucher.discount)}đ`
-                        : `${voucher.discount}%` : null,
+                        : `${voucher.discount}%`
+                    : null,
                 ...newValues,
             },
             new Date(Date.now() + 20 * 60 * 1000),

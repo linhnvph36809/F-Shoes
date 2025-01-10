@@ -143,7 +143,7 @@ const OrderVnpayComplete = () => {
                                         {<FormattedMessage id="shipping_method" />}
                                     </span>
                                     <span className="font-semibold text-xl text-gray-800">
-                                        {shippingMessage()}
+                                        {shippingMessage(order?.shipping_method)}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
