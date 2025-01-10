@@ -613,8 +613,8 @@
     "variantProducts": "Sản phẩm biến thể",
     "category_display": "Trưng bày",
     "agree": "Đồng ý",
-    "sale_qty_sold" : "Số lượng đã bán",
-    "type_of_product" : "Biến thể",
+    "sale_qty_sold": "Số lượng đã bán",
+    "type_of_product": "Biến thể",
     "Benefits": "Những lợi ích",
     "View_Product_Details": "Xem chi tiết sản phẩm",
     "detailDescription1": "Phần trên bằng da dễ lau chùi và dễ tạo kiểu.",
@@ -632,5 +632,6 @@
     "Inactive_Users": "Người dùng không hoạt động",
     "Please_select_a_user_group": "Vui lòng chọn nhóm người dùng",
     "Please_enter_your_family_name": "Vui lòng nhập họ",
-    "validateDateUser": "Thời gian phải nhỏ hơn thời gian hiện tại"
+    "validateDateUser": "Thời gian phải nhỏ hơn thời gian hiện tại",
+    "invalid_phone_message": "Số điện thoại không đúng định dạng"
 }

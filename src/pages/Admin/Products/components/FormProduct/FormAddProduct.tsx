@@ -77,7 +77,7 @@ const FormAddProduct = ({ onFinish, images, setImages, initialValues, loading }:
     }, [initialValues]);
 
     return (
-        <Form onFinish={handleFinish} form={form} initialValues={initialValues}>
+        <Form onFinish={handleFinish} form={form} initialValues={{ is_variant: false }} >
             <div className="grid grid-cols-2 gap-8">
                 <InputPrimary
                     label={<FormattedMessage id="product.name" />}
@@ -193,7 +193,7 @@ const FormAddProduct = ({ onFinish, images, setImages, initialValues, loading }:
                     labelCol={{ span: 24 }}
                     rules={[{ required: true, message: <FormattedMessage id="messageTypeProduct" /> }]}
                 >
-                    <Radio.Group onChange={(e) => setIsVariant(e.target.value)} defaultValue={false}>
+                    <Radio.Group onChange={(e) => setIsVariant(e.target.value)}>
                         <Radio value={false}>
                             <FormattedMessage id="singleProduct" />
                         </Radio>
