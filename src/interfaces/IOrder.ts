@@ -105,6 +105,8 @@ export const paymentMethodString = (method: string) => {
             return handleChangeMessage(language, 'Banking Transfer', 'Chuyển khoản ngân hàng ');
         case 'visa':
             return 'VISA';
+        case 'pay_at_the_counter':
+            return handleChangeMessage(language, 'Pay at the ounter', 'Thanh toán tại quầy');
         default:
             return '...';
     }
@@ -125,9 +127,13 @@ export const paymentStatusString = (status: any) => {
     }
 };
 
-export const shippingMessage = () => {
+export const shippingMessage = (shipping: string) => {
     const language = handleGetLocalStorage('language') || LANGUAGE_VI;
-    return handleChangeMessage(language, 'Standard Shipping', 'Giao hàng tiêu chuẩn');
+    if (shipping === 'standard_shipping')
+        return handleChangeMessage(language, 'Standard Shipping', 'Giao hàng tiêu chuẩn');
+    else {
+        return handleChangeMessage(language, 'Receive goods at the counter', 'Nhận hàng tại quầy');
+    }
 };
 
 export const statusArr = [

@@ -213,8 +213,9 @@ const Order = () => {
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
 
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-                } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
+                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+            } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: voucher?.id ? voucher.id : null,
@@ -228,10 +229,11 @@ const Order = () => {
         handleSetCookie(
             'order',
             {
-                voucher_cost:
-                    voucher?.type ? voucher.type == 'fixed'
+                voucher_cost: voucher?.type
+                    ? voucher.type == 'fixed'
                         ? `${formatPrice(voucher.discount)}đ`
-                        : `${voucher.discount}%` : null,
+                        : `${voucher.discount}%`
+                    : null,
                 ...newValues,
             },
             new Date(Date.now() + 20 * 60 * 1000),
@@ -702,7 +704,7 @@ const Order = () => {
                                                                 cart?.product
                                                                     ? cart?.product.price
                                                                     : cart?.product_variation?.sale_price ||
-                                                                    cart?.product_variation?.price,
+                                                                          cart?.product_variation?.price,
                                                             )}{' '}
                                                             ₫
                                                         </Text>

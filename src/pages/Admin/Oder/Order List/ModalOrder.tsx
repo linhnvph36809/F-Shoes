@@ -46,7 +46,6 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
     };
 
     const color = statusColors[orderDetail?.orderDetail?.status] || 'default';
-    console.log(orderDetail);
 
     return (
         <>
@@ -188,16 +187,15 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     <p className="flex items-center color-gray gap-x-3 text-[14px]">
                                         <TicketPercent className="w-7" /> <FormattedMessage id="voucher" /> :
                                     </p>
-                                    {
-                                        orderDetail?.orderDetail?.voucher_id?.type == 'fixed' ? (
-                                            <p className="font-medium color-gray">
-                                                -{formatPrice(orderDetail?.orderDetail?.voucher_id?.discount)}đ
-                                            </p>
-                                        ) : (
-                                            <p className="font-medium color-gray">
-                                                -{orderDetail?.orderDetail?.voucher_id?.discount}%
-                                            </p>
-                                        )}
+                                    {orderDetail?.orderDetail?.voucher_id?.type == 'fixed' ? (
+                                        <p className="font-medium color-gray">
+                                            -{formatPrice(orderDetail?.orderDetail?.voucher_id?.discount)}đ
+                                        </p>
+                                    ) : (
+                                        <p className="font-medium color-gray">
+                                            -{orderDetail?.orderDetail?.voucher_id?.discount}%
+                                        </p>
+                                    )}
                                 </div>
                             ) : (
                                 ''
@@ -206,9 +204,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                 <p className="flex items-center color-gray gap-x-3 text-[14px]">
                                     <Truck className="w-7" /> <FormattedMessage id="shipping_method" /> :{' '}
                                 </p>
-                                <p className="color-gray text-[14px] font-medium">
-                                    {shippingMessage()}
-                                </p>
+                                <p className="color-gray text-[14px] font-medium">{shippingMessage(orderDetail?.orderDetail?.shipping_method)}</p>
                             </div>
                             <div className="flex justify-between items-center py-2">
                                 <p className="flex items-center color-gray gap-x-3 text-[14px]">
@@ -234,15 +230,18 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     {paymentMethodString(orderDetail?.orderDetail?.payment_method)}
                                 </p>
                             </div>
-                            {
-                                orderDetail?.orderDetail?.note ?
-                                    <div className="flex justify-between items-center py-2">
-                                        <p className="flex items-center color-gray gap-x-3 text-[14px]">
-                                            <NotebookPen className="w-7" /> <FormattedMessage id="note" /> :{' '}
-                                        </p>
-                                        <p className="color-gray text-[14px] font-medium">{orderDetail?.orderDetail?.note}</p>
-                                    </div> : ""
-                            }
+                            {orderDetail?.orderDetail?.note ? (
+                                <div className="flex justify-between items-center py-2">
+                                    <p className="flex items-center color-gray gap-x-3 text-[14px]">
+                                        <NotebookPen className="w-7" /> <FormattedMessage id="note" /> :{' '}
+                                    </p>
+                                    <p className="color-gray text-[14px] font-medium">
+                                        {orderDetail?.orderDetail?.note}
+                                    </p>
+                                </div>
+                            ) : (
+                                ''
+                            )}
                             {orderDetail?.orderDetail?.reason_cancelled ? (
                                 <div className="flex justify-between items-center py-2">
                                     <p className="flex items-center color-gray gap-x-3 text-[14px]">

@@ -152,6 +152,7 @@ const useOnlinePayment = () => {
 
     const putOrder = async (paymentStatus: any, id: string | number) => {
         try {
+            setLoading(true);
             await tokenManagerInstance('put', `api/order/update/payment-status/${id}`, paymentStatus);
         } catch (error) {
             if ((error as any).response.data.message) {
@@ -179,12 +180,17 @@ const useOnlinePayment = () => {
                     'error',
                 );
             }
+        } finally {
+            setLoading(false);
         }
     };
 
     const postOrderAdmin = async (paymentStatus: any) => {
         try {
+            setLoading(true);
             await tokenManagerInstance('post', `api/admin/create/order`, paymentStatus);
+            showMessageClient(handleChangeMessage(locale, 'Order successfully', 'Đặt hàng thành công'), '', 'success');
+
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -211,6 +217,9 @@ const useOnlinePayment = () => {
                     'error',
                 );
             }
+            throw error;
+        } finally {
+            setLoading(false);
         }
     };
 

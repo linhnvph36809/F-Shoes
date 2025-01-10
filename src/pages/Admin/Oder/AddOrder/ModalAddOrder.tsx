@@ -112,9 +112,9 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                                 <>
                                     <Radio.Group
                                         onChange={(e) => handleGetQuantity(e.target.value)}
-                                        options={initialValues?.variations?.map((variation: any) => ({
+                                        options={initialValues?.variations?.map((variation: any, index: number) => ({
                                             label: (
-                                                <div>
+                                                <div key={index}>
                                                     <img
                                                         className="w-[60px] h-[60px] object-cover"
                                                         src={variation.image_url}
@@ -130,32 +130,36 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                                     />
                                 </>
                             </Form.Item>
-                            <InputPrimary
-                                label={'Số lượng sản phẩm'}
-                                placeholder={'Nhập số lượng sản phẩm'}
-                                name="quantity"
-                                type="number"
-                                rules={[
-                                    { required: true, message: <FormattedMessage id="product.priceRequired" /> },
-                                    {
-                                        validator: (_: any, value: any) => {
-                                            if (value <= 0) {
-                                                return Promise.reject(
-                                                    new Error('Số lượng phải lớn hơn 0 và không được là số âm.'),
-                                                );
-                                            }
-                                            if (value > quantity) {
-                                                return Promise.reject(
-                                                    new Error(`Số lượng không được lớn hơn ${quantity}`),
-                                                );
-                                            }
-                                            return Promise.resolve();
-                                        },
-                                    },
-                                ]}
-                            />
+                            {
+                                quantity !== 0 ?
+                                    <InputPrimary
+                                        label={'Số lượng sản phẩm'}
+                                        placeholder={'Nhập số lượng sản phẩm'}
+                                        name="quantity"
+                                        type="number"
+                                        rules={[
+                                            { required: true, message: <FormattedMessage id="product.priceRequired" /> },
+                                            {
+                                                validator: (_: any, value: any) => {
+                                                    if (value <= 0) {
+                                                        return Promise.reject(
+                                                            new Error('Số lượng phải lớn hơn 0 và không được là số âm.'),
+                                                        );
+                                                    }
+                                                    if (value > quantity) {
+                                                        return Promise.reject(
+                                                            new Error(`Số lượng không được lớn hơn ${quantity}`),
+                                                        );
+                                                    }
+                                                    return Promise.resolve();
+                                                },
+                                            },
+                                        ]}
+                                    /> : ""
+                            }
                         </>
                     ) : (
+
                         <InputPrimary
                             label={'Số lượng sản phẩm'}
                             placeholder={'Nhập số lượng sản phẩm'}
@@ -180,6 +184,7 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                                 },
                             ]}
                         />
+
                     )}
                 </Form>
                 {quantity == 0 ? <p className="text-red-500 text-end font-medium">Hết hàng</p> : ''}
