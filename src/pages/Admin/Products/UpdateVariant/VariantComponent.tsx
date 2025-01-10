@@ -53,15 +53,24 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
     };
 
     const deleteVariations = (i: any) => {
-        showMessageActive(handleChangeMessage(handleGetLocalStorage('language') || 'vi', 'Are you sure you want to delete?', 'Bạn có chắc chắn muốn xóa không?'), '', 'warning', () => {
-            const listOriginAttribute = JSON.parse(JSON.stringify([...listAttribute]));
-            listOriginAttribute.splice(i, 1);
-            setListAttribute([...listOriginAttribute]);
-            const listOriginData = JSON.parse(JSON.stringify([...datas]));
-            listOriginData.splice(i, 1);
+        showMessageActive(
+            handleChangeMessage(
+                handleGetLocalStorage('language') || 'vi',
+                'Are you sure you want to delete?',
+                'Bạn có chắc chắn muốn xóa không?',
+            ),
+            '',
+            'warning',
+            () => {
+                const listOriginAttribute = JSON.parse(JSON.stringify([...listAttribute]));
+                listOriginAttribute.splice(i, 1);
+                setListAttribute([...listOriginAttribute]);
+                const listOriginData = JSON.parse(JSON.stringify([...datas]));
+                listOriginData.splice(i, 1);
 
-            setDatas([...listOriginData]);
-        });
+                setDatas([...listOriginData]);
+            },
+        );
     };
 
     const handleChange = useCallback((listId: number[]) => {
@@ -270,53 +279,56 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                                 pagination={false}
                                                 className="font-medium"
                                                 expandable={{
-                                                    expandedRowRender: (record: any) => (
-                                                        <div>
-                                                            <div className="flex items-center gap-x-5 pb-5 border-b">
-                                                                <p className="text-[14px] color-primary">
-                                                                    <FormattedMessage id="Variant Name" /> :{' '}
-                                                                </p>
-                                                                <p>{record.classify}</p>
-                                                            </div>
-                                                            <div className="flex items-center gap-x-5 py-5 border-b">
-                                                                <p className="text-[14px] color-primary">
-                                                                    <FormattedMessage id="admin.stock_qty" /> :{' '}
-                                                                </p>
-                                                                <p>{record.stock_qty}</p>
-                                                            </div>
-                                                            <div className="flex items-center gap-x-5 py-5 border-b">
-                                                                <p className="text-[14px] color-primary">
-                                                                    <FormattedMessage id="admin.qty_sold" /> :{' '}
-                                                                </p>
-                                                                <p>{record.qty_sold}</p>
-                                                            </div>
-                                                            <div className="flex items-center gap-x-5 py-5 border-b">
-                                                                <p className="text-[14px] color-primary">
-                                                                    <FormattedMessage id="admin.price" /> :{' '}
-                                                                </p>
-                                                                <p>{formatPrice(record.price)}đ</p>
-                                                            </div>
-                                                            <div className="flex items-center gap-x-5 py-5 border-b">
-                                                                <p className="text-[14px] color-primary">SKU : </p>
-                                                                <p>{record.sku}</p>
-                                                            </div>
-                                                            <div className="flex items-center gap-x-5 py-5 border-b">
-                                                                <p className="text-[14px] color-primary">
-                                                                    <FormattedMessage id="admin.image" /> :{' '}
-                                                                </p>
-                                                                <div className="grid grid-cols-6 gap-5">
-                                                                    {record.images.map((image: any) => (
-                                                                        <img
-                                                                            key={image.id}
-                                                                            src={image.url}
-                                                                            alt=""
-                                                                            className="w-[80px] object-cover h-[80px] border"
-                                                                        />
-                                                                    ))}
+                                                    expandedRowRender: (_: any, index: number) => {
+                                                        const values = datas[index];
+                                                        return (
+                                                            <div>
+                                                                <div className="flex items-center gap-x-5 pb-5 border-b">
+                                                                    <p className="text-[14px] color-primary">
+                                                                        <FormattedMessage id="Variant Name" /> :{' '}
+                                                                    </p>
+                                                                    <p>{values.classify}</p>
+                                                                </div>
+                                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                    <p className="text-[14px] color-primary">
+                                                                        <FormattedMessage id="admin.stock_qty" /> :{' '}
+                                                                    </p>
+                                                                    <p>{values.stock_qty}</p>
+                                                                </div>
+                                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                    <p className="text-[14px] color-primary">
+                                                                        <FormattedMessage id="admin.qty_sold" /> :{' '}
+                                                                    </p>
+                                                                    <p>{values.qty_sold}</p>
+                                                                </div>
+                                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                    <p className="text-[14px] color-primary">
+                                                                        <FormattedMessage id="admin.price" /> :{' '}
+                                                                    </p>
+                                                                    <p>{formatPrice(values.price)}đ</p>
+                                                                </div>
+                                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                    <p className="text-[14px] color-primary">SKU : </p>
+                                                                    <p>{values.sku}</p>
+                                                                </div>
+                                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                    <p className="text-[14px] color-primary">
+                                                                        <FormattedMessage id="admin.image" /> :{' '}
+                                                                    </p>
+                                                                    <div className="grid grid-cols-6 gap-5">
+                                                                        {values.images.map((image: any) => (
+                                                                            <img
+                                                                                key={image.id}
+                                                                                src={image.url}
+                                                                                alt=""
+                                                                                className="w-[80px] object-cover h-[80px] border"
+                                                                            />
+                                                                        ))}
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    ),
+                                                        );
+                                                    },
                                                     rowExpandable: (record) => record.id !== '',
                                                 }}
                                                 rowKey={(record) => `table2-${record.id}`}
@@ -392,6 +404,13 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                                                                 <FormattedMessage id="admin.price" /> :{' '}
                                                                             </p>
                                                                             <p>{formatPrice(values.price)}đ</p>
+                                                                        </div>
+                                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                            <p className="text-[14px] color-primary">
+                                                                                <FormattedMessage id="admin.stock_qty" />{' '}
+                                                                                :{' '}
+                                                                            </p>
+                                                                            <p>{values.stock_qty}</p>
                                                                         </div>
                                                                         <div className="flex items-center gap-x-5 py-5 border-b">
                                                                             <p className="text-[14px] color-primary">

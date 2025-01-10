@@ -636,5 +636,6 @@
     "Inactive_Users": "Inactive Users",
     "Please_select_a_user_group": "Please select a user group",
     "Please_enter_your_family_name": "Please enter your family name",
-    "validateDateUser": "The time must be less than the current time"
+    "validateDateUser": "The time must be less than the current time",
+    "invalid_phone_message": "The phone number is not in the correct format"
 }

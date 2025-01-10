@@ -213,8 +213,9 @@ const Order = () => {
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
 
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-                } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
+                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+            } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: voucher?.id ? voucher.id : null,
@@ -428,6 +429,17 @@ const Order = () => {
                                             {
                                                 required: true,
                                                 message: <FormattedMessage id="phone_message" />,
+                                            },
+                                            {
+                                                validator: (_, value) => {
+                                                    const phoneRegex = /^(?:\+84|0)(3|5|7|8|9)\d{8}$/;
+                                                    if (!value || phoneRegex.test(value)) {
+                                                        return Promise.resolve();
+                                                    }
+                                                    return Promise.reject(
+                                                        new Error(intl.formatMessage({ id: 'invalid_phone_message' })),
+                                                    );
+                                                },
                                             },
                                         ]}
                                     >
@@ -703,7 +715,7 @@ const Order = () => {
                                                                 cart?.product
                                                                     ? cart?.product.price
                                                                     : cart?.product_variation?.sale_price ||
-                                                                    cart?.product_variation?.price,
+                                                                          cart?.product_variation?.price,
                                                             )}{' '}
                                                             ₫
                                                         </Text>
