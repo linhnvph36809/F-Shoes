@@ -206,16 +206,15 @@ const Order = () => {
             total_amount: totalAmount,
             payment_method: value.payment_method,
             payment_status: 'not_yet_paid',
-            shipping_method: 'Standard shipping',
+            shipping_method: 'standard_shipping',
             phone: value.phone,
             shipping_cost: handleTotalPrice >= FREE_SHIP ? '0' : fee?.total,
             tax_amount: null,
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
 
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
-                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-            } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+                } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: voucher?.id ? voucher.id : null,
@@ -704,7 +703,7 @@ const Order = () => {
                                                                 cart?.product
                                                                     ? cart?.product.price
                                                                     : cart?.product_variation?.sale_price ||
-                                                                          cart?.product_variation?.price,
+                                                                    cart?.product_variation?.price,
                                                             )}{' '}
                                                             ₫
                                                         </Text>
