@@ -501,6 +501,7 @@ const UpdateSale = () => {
                             vertical
                             gap="middle"
                             className="mt-4"
+                           
                         >
                             <Radio.Group
                                 size="small"
@@ -508,6 +509,7 @@ const UpdateSale = () => {
                                 defaultValue="percent"
                                 optionType="button"
                                 buttonStyle="solid"
+                                value={dataSale.type}
                             />
                         </Flex>
                     </div>
