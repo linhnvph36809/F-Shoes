@@ -1,5 +1,5 @@
 import { Skeleton, Tag } from 'antd';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { ArrowLeftToLine } from 'lucide-react';
 
@@ -30,7 +30,7 @@ const OrderDetail = () => {
     const { loading: loadingPutOrder, putOrder } = useOrder();
     const location = useLocation();
     const prevUrl = location.state?.prevUrl;
-    const navigator = useNavigate();
+    
     const [loadingPaymentOn, setLoadingPaymentOn] = useState<string>('');
 
     const { cookies } = useCookiesConfig(`order${id}`);
@@ -55,18 +55,12 @@ const OrderDetail = () => {
 
     const handleBuyAgain = (id: string | number) => {
         showMessageActive(
-            handleChangeMessage(locale, 'Buy Again', 'Mua lại'),
-            handleChangeMessage(
-                locale,
-                'This will add the order items to your cart.Are you sure?',
-                'Thao tác này sẽ thêm tất cả các sản phẩm trong đơn hàng vào giỏ hàng của bạn.Bạn có chắc không?',
-            ),
-            'warning',
-            () => {
-                reOrder(id);
-                navigator('/cart');
-            },
-        );
+            handleChangeMessage(locale,'Buy Again','Mua lại'), 
+            handleChangeMessage(locale,'This will add the order items to your cart.Are you sure?','Thao tác này sẽ thêm tất cả các sản phẩm trong đơn hàng vào giỏ hàng của bạn.Bạn có chắc không?')
+            , 'warning', () => {
+            reOrder(id);
+            
+        });
     };
 
     const handlePaymentAgain = (payment: 'vnpay' | 'momo' | 'cash_on_delivery') => {

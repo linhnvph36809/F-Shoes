@@ -37,7 +37,7 @@ const HomePage = () => {
     const productsDisplay1 = data1?.data?.category?.products || [];
     const productsDisplay2 = data2?.data?.category?.products || [];
     const productsDisplay3 = data3?.data?.category?.products || [];
-    console.log(productsDisplay1);
+   
 
     return (
         <>

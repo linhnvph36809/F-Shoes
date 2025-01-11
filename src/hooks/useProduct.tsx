@@ -8,6 +8,7 @@ import { showMessageAdmin, showMessageClient } from '../utils/messages';
 import { useQueryClient } from 'react-query';
 import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
+import {  notification } from 'antd';
 export const QUERY_KEY = 'products';
 export const API_PRODUCT = '/api/product';
 
@@ -74,17 +75,31 @@ const useProduct = () => {
             navigate(PATH_LIST_PRODUCT);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(
-                handleChangeMessage(locale, 'Add Product Sussccess', 'Thêm sản phẩm thành công'),
+                handleChangeMessage(locale, 'Add Product Success', 'Thêm sản phẩm thành công'),
                 '',
                 'success',
             );
         } catch (error) {
-            showMessageAdmin(
-                (error as any)?.response?.data?.message ||
-                    handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                '',
-                'error',
-            );
+            const e = error as any;
+            if(e?.response?.data?.errors){
+                
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m:any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0]
+                    });
+                })
+            }else {
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                    '',
+                    'error',
+                );
+            }
+            
+            
         } finally {
             setLoading(false);
         }
@@ -102,12 +117,25 @@ const useProduct = () => {
                 'success',
             );
         } catch (error) {
-            showMessageAdmin(
-                (error as any)?.response?.data?.message ||
-                    handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                '',
-                'error',
-            );
+            const e = error as any;
+            if(e?.response?.data?.errors){
+                
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m:any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0]
+                    });
+                })
+            }else {
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                    '',
+                    'error',
+                );
+            }
+            
         } finally {
             setLoading(false);
         }

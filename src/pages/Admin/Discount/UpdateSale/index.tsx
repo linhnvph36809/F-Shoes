@@ -5,7 +5,7 @@ import './style.scss';
 import { IProduct } from '../../../../interfaces/IProduct.ts';
 import { IVariation } from '../../../../interfaces/IVariation.ts';
 import useQueryConfig from '../../../../hooks/useQueryConfig.tsx';
-import { showMessageActive, showMessageAdmin, showMessageClient } from '../../../../utils/messages.ts';
+import { showMessageActive, showMessageClient } from '../../../../utils/messages.ts';
 import useSale, { QUERY_KEY } from '../../../../hooks/useSale.tsx';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall.tsx';
 import { BadgeCentIcon, CircleX, Filter } from 'lucide-react';
@@ -18,10 +18,10 @@ import { handleChangeMessage } from '../../../../utils/index.ts';
 import { useContextGlobal } from '../../../../contexts/index.tsx';
 
 const UpdateSale = () => {
-    const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const intl = useIntl();
     const { id } = useParams();
-    const { data: dataCachingSale,isFetching:loadingSale } = useQueryConfig(
+    const { data: dataCachingSale, isFetching: loadingSale } = useQueryConfig(
         [QUERY_KEY, `sale/data/update/${id}`],
         `api/sale/${id}?include=products,variations`,
     );
@@ -73,25 +73,51 @@ const UpdateSale = () => {
     };
     const onDeleteSimpleProduct = (record?: IProduct) => {
         if (saleStartDate < timeNow) {
-            showMessageClient(handleChangeMessage(locale,'This sale is ongoing, you cannot change the product anymore.','Chương trình giảm giá này đang diễn ra, bạn không thể thay đổi sản phẩm nữa.'), '', 'warning');
+            showMessageClient(
+                handleChangeMessage(
+                    locale,
+                    'This sale is ongoing, you cannot change the product anymore.',
+                    'Chương trình giảm giá này đang diễn ra, bạn không thể thay đổi sản phẩm nữa.',
+                ),
+                '',
+                'warning',
+            );
             return;
         }
-        showMessageActive(handleChangeMessage(locale, 'Are you sure you want to delete','Bạn có chắc chắn muốn xóa không?'),'', 'warning', () => {
-            const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
+        showMessageActive(
+            handleChangeMessage(locale, 'Are you sure you want to delete', 'Bạn có chắc chắn muốn xóa không?'),
+            '',
+            'warning',
+            () => {
+                const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
 
-            const filtered = dataSourceProduct.filter((product) => {
-                return !arrSelect.find((p) => p?.id === product.id);
-            });
-            setDataSourceProduct([...filtered]);
-        });
+                const filtered = dataSourceProduct.filter((product) => {
+                    return !arrSelect.find((p) => p?.id === product.id);
+                });
+                setDataSourceProduct([...filtered]);
+            },
+        );
     };
     const onFilterSimpleProduct = (record?: IProduct) => {
         if (saleStartDate < timeNow) {
-            showMessageClient(handleChangeMessage(locale,'This sale is ongoing, you cannot change the product anymore.','Chương trình giảm giá này đang diễn ra, bạn không thể thay đổi sản phẩm nữa.'), '', 'warning');
+            showMessageClient(
+                handleChangeMessage(
+                    locale,
+                    'This sale is ongoing, you cannot change the product anymore.',
+                    'Chương trình giảm giá này đang diễn ra, bạn không thể thay đổi sản phẩm nữa.',
+                ),
+                '',
+                'warning',
+            );
             return;
         }
-        showMessageActive(handleChangeMessage(locale,
-            'Are you sure you only want to keep these products and delete the others?','Bạn có chắc chắn chỉ muốn giữ lại những sản phẩm này và xóa bỏ những sản phẩm khác không?'),'',
+        showMessageActive(
+            handleChangeMessage(
+                locale,
+                'Are you sure you only want to keep these products and delete the others?',
+                'Bạn có chắc chắn chỉ muốn giữ lại những sản phẩm này và xóa bỏ những sản phẩm khác không?',
+            ),
+            '',
             'warning',
             () => {
                 const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
@@ -104,28 +130,54 @@ const UpdateSale = () => {
     };
     const onDeleteVariation = (record?: IVariation) => {
         if (saleStartDate < timeNow) {
-            showMessageClient(handleChangeMessage(locale,'This sale is ongoing, you cannot change the product anymore.','Chương trình giảm giá này đang diễn ra, bạn không thể thay đổi sản phẩm nữa.'), '', 'warning');
+            showMessageClient(
+                handleChangeMessage(
+                    locale,
+                    'This sale is ongoing, you cannot change the product anymore.',
+                    'Chương trình giảm giá này đang diễn ra, bạn không thể thay đổi sản phẩm nữa.',
+                ),
+                '',
+                'warning',
+            );
             return;
         }
-        showMessageActive(handleChangeMessage(locale, 'Are you sure you want to delete','Bạn có chắc chắn muốn xóa không?'),'', 'warning', () => {
-            const arrSelect = [
-                ...arrSelectVariationsOfOneSelectedProduct,
-                ...arrSelectedVariationsOfMultipleSelectedProduct,
-                record,
-            ];
-            const filtered = dataSourceVariation.filter((variant) => {
-                return !arrSelect.find((v) => v?.id === variant.id);
-            });
-            setDataSourceVariation([...filtered]);
-        });
+        showMessageActive(
+            handleChangeMessage(locale, 'Are you sure you want to delete', 'Bạn có chắc chắn muốn xóa không?'),
+            '',
+            'warning',
+            () => {
+                const arrSelect = [
+                    ...arrSelectVariationsOfOneSelectedProduct,
+                    ...arrSelectedVariationsOfMultipleSelectedProduct,
+                    record,
+                ];
+                const filtered = dataSourceVariation.filter((variant) => {
+                    return !arrSelect.find((v) => v?.id === variant.id);
+                });
+                setDataSourceVariation([...filtered]);
+            },
+        );
     };
     const onFilterVariation = (record?: IVariation) => {
         if (saleStartDate < timeNow) {
-            showMessageClient(handleChangeMessage(locale,'This sale is ongoing, you cannot change the product anymore.','Chương trình giảm giá này đang diễn ra, bạn không thể thay đổi sản phẩm nữa.'), '', 'warning');
+            showMessageClient(
+                handleChangeMessage(
+                    locale,
+                    'This sale is ongoing, you cannot change the product anymore.',
+                    'Chương trình giảm giá này đang diễn ra, bạn không thể thay đổi sản phẩm nữa.',
+                ),
+                '',
+                'warning',
+            );
             return;
         }
-        showMessageActive(handleChangeMessage(locale,
-            'Are you sure you only want to keep these products and delete the others?','Bạn có chắc chắn chỉ muốn giữ lại những sản phẩm này và xóa bỏ những sản phẩm khác không?'),'',
+        showMessageActive(
+            handleChangeMessage(
+                locale,
+                'Are you sure you only want to keep these products and delete the others?',
+                'Bạn có chắc chắn chỉ muốn giữ lại những sản phẩm này và xóa bỏ những sản phẩm khác không?',
+            ),
+            '',
             'warning',
             () => {
                 const arrSelect = [
@@ -320,13 +372,12 @@ const UpdateSale = () => {
         empty: false,
     });
     const onChangeName = (e: any) => {
-        if(e.target.value === ''){
+        if (e.target.value === '') {
             setDataSale({ ...dataSale, name: e.target.value });
             setError({ ...error, name: 'Name is required' });
-        }else{
+        } else {
             setDataSale({ ...dataSale, name: e.target.value });
         }
-     
     };
     const onChangeValuePercent = (e: any) => {
         if (e.target.value === '') {
@@ -369,13 +420,12 @@ const UpdateSale = () => {
     const { updateSale, loadingUpdateSale } = useSale();
     const onSubmit = async () => {
         let hasError = false;
-        if(!dataSale.name){
+        if (!dataSale.name) {
             hasError = true;
-            setError({ ...error, value:intl.formatMessage({ id: 'Name is required' }) });
-        }
-        else if (!dataSale.value) {
+            setError({ ...error, value: intl.formatMessage({ id: 'Name is required' }) });
+        } else if (!dataSale.value) {
             hasError = true;
-            setError({ ...error, value:intl.formatMessage({ id: 'Value is required' }) });
+            setError({ ...error, value: intl.formatMessage({ id: 'Value is required' }) });
         } else if (error.value) {
             setError({ ...error });
         } else if (dataSale.start_date === '') {
@@ -413,10 +463,10 @@ const UpdateSale = () => {
 
     const optionsType = [
         { label: 'Percent', value: 'percent' },
-        { label: 'Fixed', value: 'fixed'},
+        { label: 'Fixed', value: 'fixed' },
     ];
-    if(loadingSale){
-        return <LoadingPage/>
+    if (loadingSale) {
+        return <LoadingPage />;
     }
     return (
         <div className="bg-slate-50 rounded-lg p-8">
@@ -432,12 +482,13 @@ const UpdateSale = () => {
                             <FormattedMessage id="admin.name" />
                         </span>
                         <Input
-                         disabled={saleStartDate < timeNow}
+                            className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            disabled={saleStartDate < timeNow}
                             value={dataSale.name}
                             onChange={onChangeName}
                             placeholder={intl.formatMessage({ id: 'Enter_the_sale_name' })}
                         />
-                        {error.name ? <span className='text-red-600'>{error.name}</span> : ''}
+                        {error.name ? <span className="text-red-600">{error.name}</span> : ''}
                     </div>
                     <div className="form-row my-4">
                         <span className="text-xl mb-4">
@@ -450,6 +501,7 @@ const UpdateSale = () => {
                             vertical
                             gap="middle"
                             className="mt-4"
+                           
                         >
                             <Radio.Group
                                 size="small"
@@ -457,15 +509,18 @@ const UpdateSale = () => {
                                 defaultValue="percent"
                                 optionType="button"
                                 buttonStyle="solid"
+                                value={dataSale.type}
                             />
                         </Flex>
                     </div>
+                    
                     <div className="form-row my-4">
                         <span className="text-xl my-4">
                             <FormattedMessage id="admin.value" />
                         </span>
                         {dataSale.type === 'fixed' ? (
                             <Input
+                                className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 disabled={saleStartDate < timeNow}
                                 value={dataSale.value}
                                 min={0}
@@ -475,6 +530,7 @@ const UpdateSale = () => {
                             />
                         ) : (
                             <Input
+                                className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 value={dataSale.value}
                                 disabled={saleStartDate < timeNow}
                                 type="number"
@@ -488,39 +544,41 @@ const UpdateSale = () => {
 
                         {error.value ? <span className="text-red-600">{error.value}</span> : ''}
                     </div>
-                    <div className="form-row my-4">
-                        <span className="text-xl my-4">
-                            {' '}
-                            <FormattedMessage id="admin.startDate" />
-                        </span>
-                        <div>
-                            <DatePicker
-                                disabled={timeNow > saleStartDate}
-                                value={dataSale.start_date ? dayjs(dataSale.start_date) : ''}
-                                onChange={onChangeStartDate}
-                                className="w-full"
-                                showTime
-                                format="YYYY/MM/DD HH:mm:ss"
-                            />
+                    <div className="w-full flex gap-2">
+                        <div className="form-row my-4 w-full">
+                            <span className="text-xl my-4">
+                                {' '}
+                                <FormattedMessage id="admin.startDate" />
+                            </span>
+                            <div>
+                                <DatePicker
+                                    disabled={timeNow > saleStartDate}
+                                    value={dataSale.start_date ? dayjs(dataSale.start_date) : ''}
+                                    onChange={onChangeStartDate}
+                                    className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    showTime
+                                    format="YYYY/MM/DD HH:mm:ss"
+                                />
+                            </div>
+                            {error.start_date ? <span className="text-red-600">{error.start_date}</span> : ''}
                         </div>
-                        {error.start_date ? <span className="text-red-600">{error.start_date}</span> : ''}
-                    </div>
-                    <div className="form-row my-4">
-                        <span className="text-xl my-4">
-                            {' '}
-                            <FormattedMessage id="admin.endDate" />
-                        </span>
-                        <div>
-                            <DatePicker
-                                disabled={saleEndDate < timeNow}
-                                value={dataSale.end_date ? dayjs(dataSale.end_date) : ''}
-                                onChange={onChangeEndDate}
-                                className="w-full"
-                                showTime
-                                format="YYYY/MM/DD HH:mm:ss"
-                            />
+                        <div className="form-row my-4 w-full">
+                            <span className="text-xl my-4">
+                                {' '}
+                                <FormattedMessage id="admin.endDate" />
+                            </span>
+                            <div>
+                                <DatePicker
+                                    disabled={saleEndDate < timeNow}
+                                    value={dataSale.end_date ? dayjs(dataSale.end_date) : ''}
+                                    onChange={onChangeEndDate}
+                                    className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    showTime
+                                    format="YYYY/MM/DD HH:mm:ss"
+                                />
+                            </div>
+                            {error.end_date ? <span className="text-red-600">{error.end_date}</span> : ''}
                         </div>
-                        {error.end_date ? <span className="text-red-600">{error.end_date}</span> : ''}
                     </div>
                     <div>
                         <span className="text-xl my-4 block">
@@ -543,6 +601,7 @@ const UpdateSale = () => {
                         </Heading>
                         <div>
                             <Input
+                                className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 onChange={onSearchProduct}
                                 placeholder={intl.formatMessage({ id: 'Search a product name or id' })}
                             />
@@ -576,6 +635,7 @@ const UpdateSale = () => {
                     </Heading>
                     <div>
                         <Input
+                            className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             onChange={onSearchVariation}
                             placeholder={intl.formatMessage({ id: 'Search a product name or id' })}
                         />

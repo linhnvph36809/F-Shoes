@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { IOrder } from '../../interfaces/IOrder.ts';
 import { tokenManagerInstance } from '../../api';
-import { showMessageAdmin, showMessageClient } from '../../utils/messages.ts';
+import {  showMessageClient } from '../../utils/messages.ts';
 import { useQueryClient } from 'react-query';
 import { useContextGlobal } from '../../contexts/index.tsx';
 import { handleChangeMessage } from '../../utils/index.ts';
+import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const API_ORDER = 'api/orders';
 export const QUERY_KEY = 'orders';
@@ -15,7 +17,7 @@ const UseOrder = () => {
     const [cancelLoading, setCancelLoading] = useState(false);
     const [loading, setLoading] = useState(false);
     const [orderDetail, setOrderDetail] = useState<IOrder>();
-
+    const navigator = useNavigate();
     const myOrders = async () => {
         try {
             setLoading(true);
@@ -81,11 +83,20 @@ const UseOrder = () => {
     const reOrder = async (id: number | string) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('post', `api/reorder/order/${id}`);
-            showMessageClient(handleChangeMessage(locale,' The items was added to your cart!',' Các mặt hàng đã được thêm vào giỏ của bạn!'),'', 'success');
+            const {data} = await tokenManagerInstance('post', `api/reorder/order/${id}`);
+           
+            if(data?.errors && data?.errors.length > 0){
+                for(let i = 0; i < data?.errors.length; i++) {
+                    message.error(data?.errors[i]);
+                }
+                
+            }else{
+                
+                showMessageClient(handleChangeMessage(locale,' The items was added to your cart!',' Các mặt hàng đã được thêm vào giỏ của bạn!'),'', 'success');
+            }
+            navigator('/cart');
             queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
         } catch (error) {
-            console.log(error);
             showMessageClient((error as any)?.response?.data?.message || handleChangeMessage(locale,'Something went wrong!','Đã xảy ra lỗi!') , '', 'error');
         } finally {
             setLoading(false);

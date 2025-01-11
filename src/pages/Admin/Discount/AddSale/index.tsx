@@ -14,7 +14,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { useContextGlobal } from '../../../../contexts/index.tsx';
 
 const AddSale = () => {
-    const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const intl = useIntl();
     const { data: productList } = useQueryConfig(
         `sale-list_products-add_sale_page`,
@@ -120,28 +120,38 @@ const AddSale = () => {
         setArrSelectedVariationsOfMultipleSelectedProduct([...variations]);
     };
     const onDeleteSimpleProduct = (record?: IProduct) => {
-        showMessageActive(intl.formatMessage({ id: 'discount.delete' }), intl.formatMessage({ id: 'discount.delete.success' }), 'warning', () => {
-            const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
+        showMessageActive(
+            intl.formatMessage({ id: 'discount.delete' }),
+            intl.formatMessage({ id: 'discount.delete.success' }),
+            'warning',
+            () => {
+                const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
 
-            const filtered = dataSourceProduct.filter((product) => {
-                return !arrSelect.find((p) => p?.id === product.id);
-            });
-            setDataSourceProduct([...filtered]);
-        });
+                const filtered = dataSourceProduct.filter((product) => {
+                    return !arrSelect.find((p) => p?.id === product.id);
+                });
+                setDataSourceProduct([...filtered]);
+            },
+        );
     };
     const onDeleteVariation = (record?: IVariation) => {
-        showMessageActive(intl.formatMessage({ id: 'discount.delete' }), intl.formatMessage({ id: 'discount.delete.success' }), 'warning', () => {
-            const arrSelect = [
-                ...arrSelectVariationsOfOneSelectedProduct,
-                ...arrSelectedVariationsOfMultipleSelectedProduct,
-                record,
-            ];
+        showMessageActive(
+            intl.formatMessage({ id: 'discount.delete' }),
+            intl.formatMessage({ id: 'discount.delete.success' }),
+            'warning',
+            () => {
+                const arrSelect = [
+                    ...arrSelectVariationsOfOneSelectedProduct,
+                    ...arrSelectedVariationsOfMultipleSelectedProduct,
+                    record,
+                ];
 
-            const filtered = dataSourceVariation.filter((variant) => {
-                return !arrSelect.find((v) => v?.id === variant.id);
-            });
-            setDataSourceVariation([...filtered]);
-        });
+                const filtered = dataSourceVariation.filter((variant) => {
+                    return !arrSelect.find((v) => v?.id === variant.id);
+                });
+                setDataSourceVariation([...filtered]);
+            },
+        );
     };
     const onOkSelectProduct = () => {
         setDataSourceVariation(selectedVariations);
@@ -159,8 +169,7 @@ const AddSale = () => {
     const onFilterSimpleProduct = (record?: IProduct) => {
         showMessageActive(
             intl.formatMessage({ id: 'discount.delete' }),
-            intl.formatMessage({ id: 'discount.success.delete' })
-            ,
+            intl.formatMessage({ id: 'discount.success.delete' }),
             'warning',
             () => {
                 const arrSelect = [...arrSelectOneSelectedProduct, ...arrSelectMultipleSelectedProducts, record];
@@ -357,9 +366,12 @@ const AddSale = () => {
             title: <FormattedMessage id="type_of_product" />,
             dataIndex: 'is_variant',
             key: 'is_variant',
-            render: (is_variant: boolean,record:IProduct) =>
-                is_variant || record.variations.length > 0  ? <span>{handleChangeMessage(locale,'Yes','Có')}</span> : <span>{handleChangeMessage(locale,'No','Không')}</span>
-            ,
+            render: (is_variant: boolean, record: IProduct) =>
+                is_variant || record.variations.length > 0 ? (
+                    <span>{handleChangeMessage(locale, 'Yes', 'Có')}</span>
+                ) : (
+                    <span>{handleChangeMessage(locale, 'No', 'Không')}</span>
+                ),
         },
     ];
 
@@ -405,7 +417,7 @@ const AddSale = () => {
 
     const onChangeValuePercent = (e: any) => {
         if (e.target.value === '') {
-            setError({ ...error, value: intl.formatMessage({ id: 'Value is required' })});
+            setError({ ...error, value: intl.formatMessage({ id: 'Value is required' }) });
         } else if (parseInt(e.target.value) > 100) {
             setError({ ...error, value: 'Value must be less than or equal to 100' });
         } else {
@@ -435,12 +447,12 @@ const AddSale = () => {
         let hasError = false;
         if (!dataSale.value) {
             hasError = true;
-            setError({ ...error, value:intl.formatMessage({ id: 'Value is required' }) });
+            setError({ ...error, value: intl.formatMessage({ id: 'Value is required' }) });
         } else if (error.value) {
             setError({ ...error });
         } else if (dataSale.start_date === '') {
             hasError = true;
-            setError({ ...error, start_date: intl.formatMessage({ id: 'Start date is required' })});
+            setError({ ...error, start_date: intl.formatMessage({ id: 'Start date is required' }) });
         } else if (dataSale.end_date === '') {
             hasError = true;
             setError({ ...error, end_date: intl.formatMessage({ id: 'End date is required' }) });
@@ -462,9 +474,13 @@ const AddSale = () => {
 
         if (!hasError) {
             if (dataSale.applyAll) {
-                showMessageActive(handleChangeMessage(locale,
-                    'Are you sure you want to apply the sale to all products and variations ?',
-                    'Bạn có chắc chắn muốn áp dụng chương trình giảm giá cho tất cả sản phẩm và biến thể không?'),'',
+                showMessageActive(
+                    handleChangeMessage(
+                        locale,
+                        'Are you sure you want to apply the sale to all products and variations ?',
+                        'Bạn có chắc chắn muốn áp dụng chương trình giảm giá cho tất cả sản phẩm và biến thể không?',
+                    ),
+                    '',
                     'warning',
                     () => {
                         createSale(dataSale);
@@ -477,8 +493,8 @@ const AddSale = () => {
     };
 
     const optionsType = [
-        { label: handleChangeMessage(locale,'Percent','Phần trăm'), value: 'percent' },
-        { label: handleChangeMessage(locale,'Fixed','Cố định'), value: 'fixed' },
+        { label: handleChangeMessage(locale, 'Percent', 'Phần trăm'), value: 'percent' },
+        { label: handleChangeMessage(locale, 'Fixed', 'Cố định'), value: 'fixed' },
     ];
 
     return (
@@ -495,6 +511,7 @@ const AddSale = () => {
                             <FormattedMessage id="admin.name" />
                         </span>
                         <Input
+                            className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             onChange={onChangeName}
                             placeholder={intl.formatMessage({ id: 'Enter_the_sale_name' })}
                         />
@@ -525,6 +542,7 @@ const AddSale = () => {
                         </span>
                         {dataSale.type === 'fixed' ? (
                             <Input
+                                className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 type="number"
                                 min={1}
                                 onChange={onChangeValueFixed}
@@ -532,6 +550,7 @@ const AddSale = () => {
                             />
                         ) : (
                             <Input
+                                className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 value={dataSale.value}
                                 type="number"
                                 max={100}
@@ -544,33 +563,35 @@ const AddSale = () => {
 
                         {error.value ? <span className="text-red-600">{error.value}</span> : ''}
                     </div>
-                    <div className="form-row my-4">
-                        <span className="text-xl my-4">
-                            <FormattedMessage id="admin.startDate" />
-                        </span>
-                        <div>
-                            <DatePicker
-                                onChange={onChangeStartDate}
-                                className="w-full"
-                                showTime
-                                format="YYYY/MM/DD HH:mm:ss"
-                            />
+                    <div className='flex w-full gap-2 '>
+                        <div className="form-row my-4 w-full">
+                            <span className="text-xl my-4">
+                                <FormattedMessage id="admin.startDate" />
+                            </span>
+                            <div>
+                                <DatePicker
+                                    onChange={onChangeStartDate}
+                                    className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    showTime
+                                    format="YYYY/MM/DD HH:mm:ss"
+                                />
+                            </div>
+                            {error.start_date ? <span className="text-red-600">{error.start_date}</span> : ''}
                         </div>
-                        {error.start_date ? <span className="text-red-600">{error.start_date}</span> : ''}
-                    </div>
-                    <div className="form-row my-4">
-                        <span className="text-xl my-4">
-                            <FormattedMessage id="admin.endDate" />
-                        </span>
-                        <div>
-                            <DatePicker
-                                onChange={onChangeEndDate}
-                                className="w-full"
-                                showTime
-                                format="YYYY/MM/DD HH:mm:ss"
-                            />
+                        <div className="form-row my-4 w-full">
+                            <span className="text-xl my-4">
+                                <FormattedMessage id="admin.endDate" />
+                            </span>
+                            <div>
+                                <DatePicker
+                                    onChange={onChangeEndDate}
+                                    className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    showTime
+                                    format="YYYY/MM/DD HH:mm:ss"
+                                />
+                            </div>
+                            {error.end_date ? <span className="text-red-600">{error.end_date}</span> : ''}
                         </div>
-                        {error.end_date ? <span className="text-red-600">{error.end_date}</span> : ''}
                     </div>
                     <div>
                         <span className="text-xl my-4 block">
@@ -609,11 +630,15 @@ const AddSale = () => {
                         open={openAddProductTable}
                         onOk={onOkSelectProduct}
                         onCancel={() => setOpenAddProductTable(false)}
-                        className='min-w-[1000px]'
+                        className="min-w-[1000px]"
                     >
-                        <div className='w-full p-2'>
+                        <div className="w-full p-2">
                             <div className="my-4">
-                                <Input onChange={onSearchKeyListProduct} placeholder="Search a name or an id" />
+                                <Input
+                                    className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    onChange={onSearchKeyListProduct}
+                                    placeholder="Search a name or an id"
+                                />
                             </div>
                             <Table
                                 rowKey={(record) => `table1-${record.id}`}
@@ -642,6 +667,7 @@ const AddSale = () => {
                             </Heading>
                             <div>
                                 <Input
+                                    className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     onChange={onSearchProduct}
                                     placeholder={intl.formatMessage({ id: 'Search a product name or id' })}
                                 />
@@ -665,6 +691,7 @@ const AddSale = () => {
                                 <FormattedMessage id="Variation Product" />
                             </Heading>
                             <Input
+                                className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 onChange={onSearchVariation}
                                 placeholder={intl.formatMessage({ id: 'Search a product name or id' })}
                             />
