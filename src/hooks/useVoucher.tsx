@@ -19,9 +19,8 @@ const useVoucher = () => {
         try {
             setLoading(true);
             const { data } = await tokenManagerInstance('get', 'api/vouchers/code/' + `${voucher}`);
-            showMessageClient(handleChangeMessage(locale, 'Voucher Valid', 'Phiếu quà tặng hợp lệ'), '', 'success');
+            showMessageClient(handleChangeMessage(locale, 'Voucher Valid', 'Mã giảm giá hợp lệ'), '', 'success');
             setVoucher(data);
-            console.log(data);
 
         } catch (error) {
             if ((error as any).response.data.message) {

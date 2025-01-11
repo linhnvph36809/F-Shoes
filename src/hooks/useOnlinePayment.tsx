@@ -152,6 +152,7 @@ const useOnlinePayment = () => {
 
     const putOrder = async (paymentStatus: any, id: string | number) => {
         try {
+            setLoading(true);
             await tokenManagerInstance('put', `api/order/update/payment-status/${id}`, paymentStatus);
         } catch (error) {
             if ((error as any).response.data.message) {
@@ -179,8 +180,49 @@ const useOnlinePayment = () => {
                     'error',
                 );
             }
+        } finally {
+            setLoading(false);
         }
     };
+
+    const postOrderAdmin = async (paymentStatus: any) => {
+        try {
+            setLoading(true);
+            await tokenManagerInstance('post', `api/admin/create/order`, paymentStatus);
+            showMessageClient(handleChangeMessage(locale, 'Order successfully', 'Đặt hàng thành công'), '', 'success');
+
+        } catch (error) {
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
+            throw error;
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     return {
         loading,
@@ -188,6 +230,7 @@ const useOnlinePayment = () => {
         postMomo,
         postOrder,
         putOrder,
+        postOrderAdmin
     };
 };
 

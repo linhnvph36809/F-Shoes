@@ -1,9 +1,10 @@
+import { LANGUAGE_VI } from '../constants/index.ts';
 import { handleChangeMessage, handleGetLocalStorage } from '../utils/index.ts';
 import { IOrderDetail } from './IOrderDetail.ts';
 import { IUser } from './IUser.ts';
 
 export const statusString = (id: number) => {
-    const language = handleGetLocalStorage('language') || 'vi';
+    const language = handleGetLocalStorage('language') || LANGUAGE_VI;
     if (id === 0)
         return {
             className: 'text-red-500',
@@ -88,7 +89,7 @@ export const statusToNumber = (status: string) => {
     }
 };
 export const paymentMethodString = (method: string) => {
-    const language = handleGetLocalStorage('language') || 'vi';
+    const language = handleGetLocalStorage('language') || LANGUAGE_VI;
 
     if (typeof method !== 'string') {
         return '...';
@@ -101,16 +102,18 @@ export const paymentMethodString = (method: string) => {
         case 'vnpay':
             return 'VNPAY';
         case 'banking':
-           return handleChangeMessage(language, 'Banking Transfer', 'Chuyển khoản ngân hàng ');
+            return handleChangeMessage(language, 'Banking Transfer', 'Chuyển khoản ngân hàng ');
         case 'visa':
             return 'VISA';
+        case 'pay_at_the_counter':
+            return handleChangeMessage(language, 'Pay at the ounter', 'Thanh toán tại quầy');
         default:
             return '...';
     }
 };
 
 export const paymentStatusString = (status: any) => {
-    const language = handleGetLocalStorage('language') || ('vi' as string);
+    const language = handleGetLocalStorage('language') || LANGUAGE_VI;
     if (typeof status !== 'string') {
         return '...';
     }
@@ -124,9 +127,13 @@ export const paymentStatusString = (status: any) => {
     }
 };
 
-export const shippingMessage = () => {
-    const language = handleGetLocalStorage('language') || ('vi' as string);
-    return handleChangeMessage(language, 'Standard Shipping', 'Giao hàng tiêu chuẩn');
+export const shippingMessage = (shipping: string) => {
+    const language = handleGetLocalStorage('language') || LANGUAGE_VI;
+    if (shipping === 'standard_shipping')
+        return handleChangeMessage(language, 'Standard Shipping', 'Giao hàng tiêu chuẩn');
+    else {
+        return handleChangeMessage(language, 'Receive goods at the counter', 'Nhận hàng tại quầy');
+    }
 };
 
 export const statusArr = [

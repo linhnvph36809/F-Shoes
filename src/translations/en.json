@@ -617,8 +617,8 @@
     "singleProduct": "Single product",
     "variantProducts": "Variant products",
     "category_display": "Display",
-    "sale_qty_sold" : "Quantity Sold",
-    "type_of_product" : "Having variations",
+    "sale_qty_sold": "Quantity Sold",
+    "type_of_product": "Having variations",
     "Benefits": "Benefits",
     "View_Product_Details": "View Product Details",
     "detailDescription1": "Leather upper is easy to clean and easy to style.",
@@ -636,5 +636,6 @@
     "Inactive_Users": "Inactive Users",
     "Please_select_a_user_group": "Please select a user group",
     "Please_enter_your_family_name": "Please enter your family name",
-    "validateDateUser": "The time must be less than the current time"
+    "validateDateUser": "The time must be less than the current time",
+    "invalid_phone_message": "The phone number is not in the correct format"
 }

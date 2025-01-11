@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import TableAdmin from '../../components/Table';
 import { columns } from './datas';
 import ModalChooseProduct from './ModalChooseProduct';
@@ -15,10 +15,10 @@ import useVoucher from '../../../../hooks/useVoucher';
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import { showMessageClient } from '../../../../utils/messages';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
-import { FREE_SHIP } from '../../../../constants';
-import { formatPrice, handleChangeMessage } from '../../../../utils';
+import { FREE_SHIP, LANGUAGE, LANGUAGE_VI } from '../../../../constants';
+import { formatPrice, handleChangeMessage, handleGetLocalStorage } from '../../../../utils';
 import { useContextGlobal } from '../../../../contexts';
-import { CircleDollarSign, QrCode } from 'lucide-react';
+import { CircleDollarSign, CircleX, QrCode } from 'lucide-react';
 import useOnlinePayment from '../../../../hooks/useOnlinePayment';
 
 const paymentMehtods = {
@@ -36,11 +36,11 @@ const FormOrder = () => {
     const [districtId, setDistrictId] = useState<number | null>(null);
     const [wardCode, setWardCode] = useState<string | null>(null);
     const [code, setCode] = useState<string>('');
-    const [user, setUser] = useState<any>();
+    const [user, setUser] = useState<any>(null);
     const { loading: loadingVoucher, voucher, postVoucher, setVoucher } = useVoucher();
     const [infoShip, setInfoShip] = useState<boolean>(false);
     const [paymentMethod, setPaymentMethod] = useState<string>('cash_on_delivery');
-    const { loading: loadingCheckOut, postOrder } = useOnlinePayment();
+    const { loading: loadingCheckOut, postOrderAdmin } = useOnlinePayment();
 
     const handleSetProducts = (product: any) => {
         const index = products.findIndex((productIndex: any) => {
@@ -69,15 +69,25 @@ const FormOrder = () => {
     const handleCityChange = (cityId: number) => {
         getAllDistrict(cityId);
         setProvince(provinces.find((province: any) => province.ProvinceID == cityId).ProvinceName);
+        form.setFieldsValue({
+            shipping_method: null,
+            ward: null,
+            district: null,
+        });
     };
 
     const handleDistrictChange = (districtId: number) => {
         getAllWard(districtId);
         setDistrictId(districtId);
+        form.setFieldsValue({
+            ward: null,
+            shipping_method: null,
+        });
     };
 
     const handleWardChange = (code: string) => {
         setWardCode(code);
+        form.setFieldValue('shipping_method', null);
     };
 
     const handleShippingChange = (_: string | number) => {
@@ -138,6 +148,18 @@ const FormOrder = () => {
             );
             setVoucher([]);
             return sum;
+        } else if (voucher?.max_total_amount < sum) {
+            showMessageClient(
+                handleChangeMessage(
+                    locale,
+                    `The order must be smaller than ${formatPrice(voucher.min_total_amount)}đ`,
+                    `Đơn hàng phải nhỏ hơn ${formatPrice(voucher.max_total_amount)}đ`,
+                ),
+                '',
+                'warning',
+            );
+            setVoucher([]);
+            return sum;
         } else if (voucher.discount && voucher?.type && voucher?.type === 'fixed') {
             if (sum - +voucher.discount > 0) {
                 return sum - +voucher.discount;
@@ -153,36 +175,51 @@ const FormOrder = () => {
         }
     }, [handleTotalPrice, fee, voucher, products]);
 
-    const onFinish = (values: any) => {
+    const onFinish = async (values: any) => {
         const newValues = {
             user_id: user?.id || 0,
             total_amount: totalAmount,
-            payment_method: paymentMethod || null,
-            payment_status: paymentMethod === paymentMehtods.cash_on_delivery ? 'not_yet_paid' : 'paid',
-            shipping_method: paymentMethod === paymentMehtods.cash_on_delivery ? 'Standard shipping' : null,
+            payment_method: infoShip ? paymentMethod : 'pay_at_the_counter',
+            payment_status: infoShip ? 'not_yet_paid' : 'paid',
+            shipping_method: infoShip ? 'standard_shipping' : null,
             phone: values?.phone || null,
-            shipping_cost: handleTotalPrice >= FREE_SHIP ? '0' : fee?.total,
+            shipping_cost: infoShip ? (handleTotalPrice >= FREE_SHIP ? '0' : fee?.total) : '0',
             tax_amount: null,
-            receiver_email: values?.receiver_email || '',
-            receiver_full_name: values?.receiver_full_name || '',
-
-            address: `${values?.address || null} - ${
-                wards.find((ward: any) => ward.WardCode == wardCode)?.WardName || null
-            } - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName || null} - ${
-                province || null
-            }`,
-            city: province || null,
+            receiver_email: infoShip ? values?.receiver_email : user ? user.email : null,
+            receiver_full_name: infoShip
+                ? values?.receiver_full_name
+                : user
+                    ? user.name
+                    : handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Retail customers', ' Khách lẻ'),
+            address: infoShip
+                ? `${values?.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+                } - ${province}`
+                : handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'At the counter', 'Tại quầy'),
+            city: infoShip
+                ? province
+                : handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'At the counter', 'Tại quầy'),
             country: 'Viet Nam',
             voucher_id: voucher?.id ? voucher.id : null,
-            status: 2,
+            status: infoShip ? 3 : 5,
             note: values?.note || null,
             order_details: products,
-            amount_collected: paymentMethod !== paymentMehtods.cash_on_delivery ? totalAmount : 0,
-            cart_ids: [],
+            amount_collected: infoShip ? 0 : totalAmount,
         };
 
-        postOrder(newValues);
+        try {
+            await postOrderAdmin(newValues);
+            setProducts([]);
+        } catch (error) {
+            console.log(error);
+        }
     };
+
+    useEffect(() => {
+        form.setFieldsValue({
+            receiver_full_name: user?.name || '',
+            receiver_email: user?.email || '',
+        });
+    }, [form, user, infoShip]);
 
     return (
         <div className="p-10">
@@ -326,6 +363,17 @@ const FormOrder = () => {
                                                     placeholder={intl.formatMessage({ id: 'address_placeholder' })}
                                                 />
                                             </Form.Item>
+                                            <Form.Item
+                                                labelCol={{ span: 24 }}
+                                                label={<FormattedMessage id="note" />}
+                                                className="font-medium"
+                                                name="note"
+                                            >
+                                                <TextArea
+                                                    rows={6}
+                                                    placeholder={intl.formatMessage({ id: 'note_placeholder' })}
+                                                />
+                                            </Form.Item>
 
                                             <Form.Item
                                                 label={<FormattedMessage id="shipping_method" />}
@@ -363,7 +411,7 @@ const FormOrder = () => {
                                     <ModalUser setUser={setUser} />
                                 </div>
                                 {user ? (
-                                    <div className="flex items-center gap-x-5 mt-8">
+                                    <div className="relative flex items-center gap-x-5 mt-8">
                                         <img src={user?.avatar_url} alt="" className="w-[60px] h-[60px] object-cover" />
                                         <div>
                                             <p className="color-primary text-[16px]">
@@ -376,6 +424,10 @@ const FormOrder = () => {
                                                 <span className="font-medium">Nhóm</span> : {user?.group?.group_name}
                                             </p>
                                         </div>
+                                        <CircleX
+                                            onClick={() => setUser(null)}
+                                            className="absolute w-6 right-0 top-0 hover:cursor-pointer hover:opacity-60 transition-global"
+                                        />
                                     </div>
                                 ) : (
                                     ''
@@ -435,18 +487,15 @@ const FormOrder = () => {
                                 {voucher.discount ? (
                                     <div className="flex items-center justify-between py-5 border-b">
                                         <h3 className="font-medium color-primary text-[16px]">Voucher :</h3>
-                                        <p className="font-medium color-primary text-[16px]">
+                                        <p className="font-medium color-primary text-[16px] flex items-center gap-x-1">
                                             -
-                                            {formatPrice(
-                                                voucher.type === 'fixed'
-                                                    ? voucher.discount
-                                                    : ((handleTotalPrice >= FREE_SHIP
-                                                          ? handleTotalPrice
-                                                          : handleTotalPrice + (fee?.total || 0)) *
-                                                          +voucher.discount) /
-                                                          100,
-                                            )}
-                                            đ
+                                            {voucher.type === 'fixed'
+                                                ? formatPrice(voucher.discount)
+                                                : `${voucher.discount}%`}
+                                            <CircleX
+                                                onClick={() => setVoucher([])}
+                                                className="w-6 hover:cursor-pointer hover:opacity-60 transition-global"
+                                            />
                                         </p>
                                     </div>
                                 ) : (
@@ -471,11 +520,10 @@ const FormOrder = () => {
                                 <div className="flex justify-center gap-x-5 my-10">
                                     <button
                                         onClick={() => setPaymentMethod(paymentMehtods.cash_on_delivery)}
-                                        className={`px-5 py-3 rounded-lg ${
-                                            paymentMethod === paymentMehtods.cash_on_delivery
+                                        className={`px-5 py-3 rounded-lg ${paymentMethod === paymentMehtods.cash_on_delivery
                                                 ? 'bg-primary'
                                                 : 'bg-gray opacity-80'
-                                        }  text-white flex items-center gap-x-5 font-medium
+                                            }  text-white flex items-center gap-x-5 font-medium
                                     transition-global`}
                                     >
                                         Tiền mặt
@@ -483,11 +531,10 @@ const FormOrder = () => {
                                     </button>
                                     <button
                                         onClick={() => setPaymentMethod(paymentMehtods.banking)}
-                                        className={`px-5 py-3 rounded-lg ${
-                                            paymentMethod === paymentMehtods.banking
+                                        className={`px-5 py-3 rounded-lg ${paymentMethod === paymentMehtods.banking
                                                 ? 'bg-primary'
                                                 : 'bg-gray opacity-80'
-                                        } text-white flex items-center gap-x-5 font-medium
+                                            } text-white flex items-center gap-x-5 font-medium
                                     transition-global`}
                                     >
                                         QR
@@ -505,13 +552,17 @@ const FormOrder = () => {
                                     )}
                                 </div>
                             </div>
-                            <ButtonSubmit
-                                loading={loadingCheckOut}
-                                width="w-full"
-                                onClick={() => {
-                                    form.submit();
-                                }}
-                            />
+                            {paymentMethod === paymentMehtods.banking ? (
+                                ''
+                            ) : (
+                                <ButtonSubmit
+                                    loading={loadingCheckOut}
+                                    width="w-full"
+                                    onClick={() => {
+                                        form.submit();
+                                    }}
+                                />
+                            )}
                         </div>
                     </div>
                 ) : (

@@ -31,6 +31,7 @@ import { showMessageActive, showMessageClient } from '../../../utils/messages';
 import { FREE_SHIP } from '../../../constants';
 import { useForm } from 'antd/es/form/Form';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { CircleX } from 'lucide-react';
 
 const { Title, Text } = Typography;
 
@@ -68,9 +69,8 @@ const Order = () => {
         setDistrictId(districtId);
         form.setFieldsValue({
             ward: null,
-            shipping_method: null
+            shipping_method: null,
         });
-
     };
 
     const handleWardChange = (code: string) => {
@@ -83,7 +83,7 @@ const Order = () => {
             postVoucher(code);
             setCode('');
         } else {
-            showMessageClient('Please enter code', '', 'warning');
+            showMessageClient(handleChangeMessage(locale, 'Please enter code', 'Vui lòng nhập code'), '', 'warning');
         }
     };
 
@@ -111,6 +111,18 @@ const Order = () => {
                     locale,
                     `The order must be larger than ${formatPrice(voucher.min_total_amount)}đ`,
                     `Đơn hàng phải lớn hơn ${formatPrice(voucher.min_total_amount)}đ`,
+                ),
+                '',
+                'warning',
+            );
+            setVoucher([]);
+            return sum;
+        } else if (voucher?.max_total_amount < sum) {
+            showMessageClient(
+                handleChangeMessage(
+                    locale,
+                    `The order must be smaller than ${formatPrice(voucher.min_total_amount)}đ`,
+                    `Đơn hàng phải nhỏ hơn ${formatPrice(voucher.max_total_amount)}đ`,
                 ),
                 '',
                 'warning',
@@ -194,15 +206,16 @@ const Order = () => {
             total_amount: totalAmount,
             payment_method: value.payment_method,
             payment_status: 'not_yet_paid',
-            shipping_method: 'Standard shipping',
+            shipping_method: 'standard_shipping',
             phone: value.phone,
             shipping_cost: handleTotalPrice >= FREE_SHIP ? '0' : fee?.total,
             tax_amount: null,
             receiver_email: value.receiver_email,
             receiver_full_name: value.receiver_full_name,
 
-            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-                } - ${province}`,
+            address: `${value.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
+                districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+            } - ${province}`,
             city: province,
             country: 'Viet Nam',
             voucher_id: voucher?.id ? voucher.id : null,
@@ -216,12 +229,11 @@ const Order = () => {
         handleSetCookie(
             'order',
             {
-                voucher_cost:
-                    voucher.type == 'fixed'
-                        ? voucher.discount
-                        : ((handleTotalPrice >= FREE_SHIP ? handleTotalPrice : handleTotalPrice + (fee?.total || 0)) *
-                            +voucher.discount) /
-                        100,
+                voucher_cost: voucher?.type
+                    ? voucher.type == 'fixed'
+                        ? `${formatPrice(voucher.discount)}đ`
+                        : `${voucher.discount}%`
+                    : null,
                 ...newValues,
             },
             new Date(Date.now() + 20 * 60 * 1000),
@@ -418,6 +430,17 @@ const Order = () => {
                                                 required: true,
                                                 message: <FormattedMessage id="phone_message" />,
                                             },
+                                            {
+                                                validator: (_, value) => {
+                                                    const phoneRegex = /^(?:\+84|0)(3|5|7|8|9)\d{8}$/;
+                                                    if (!value || phoneRegex.test(value)) {
+                                                        return Promise.resolve();
+                                                    }
+                                                    return Promise.reject(
+                                                        new Error(intl.formatMessage({ id: 'invalid_phone_message' })),
+                                                    );
+                                                },
+                                            },
                                         ]}
                                     >
                                         <InputPrimary
@@ -592,18 +615,15 @@ const Order = () => {
                                             }}
                                         >
                                             <Text className="color-primary font-medium">Voucher</Text>
-                                            <Text className="color-primary font-medium">
+                                            <Text className="color-primary font-medium flex items-center gap-x-1">
                                                 -
-                                                {formatPrice(
-                                                    voucher.type === 'fixed'
-                                                        ? voucher.discount
-                                                        : ((handleTotalPrice >= FREE_SHIP
-                                                            ? handleTotalPrice
-                                                            : handleTotalPrice + (fee?.total || 0)) *
-                                                            +voucher.discount) /
-                                                        100,
-                                                )}
-                                                đ
+                                                {voucher.type === 'fixed'
+                                                    ? formatPrice(voucher.discount)
+                                                    : `${voucher.discount}%`}
+                                                <CircleX
+                                                    onClick={() => setVoucher([])}
+                                                    className="w-6 hover:cursor-pointer hover:opacity-60 transition-global"
+                                                />
                                             </Text>
                                         </div>
                                     ) : (
@@ -695,7 +715,7 @@ const Order = () => {
                                                                 cart?.product
                                                                     ? cart?.product.price
                                                                     : cart?.product_variation?.sale_price ||
-                                                                    cart?.product_variation?.price,
+                                                                          cart?.product_variation?.price,
                                                             )}{' '}
                                                             ₫
                                                         </Text>

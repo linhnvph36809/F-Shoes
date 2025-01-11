@@ -35,7 +35,6 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
     }, []);
 
 
-
     const handleChangeItem = useCallback(
         (values: number[], id: number) => {
             const attribute = attributeByIds?.data?.data?.find((attribute: any) => attribute.id === id);
@@ -113,6 +112,7 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
             setDatas([...listOriginData]);
         });
     };
+
     return (
         <>
             <section>
@@ -207,6 +207,12 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
                                                             <p>{formatPrice(values.price)}đ</p>
                                                         </div>
                                                         <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="admin.stock_qty" /> :{' '}
+                                                            </p>
+                                                            <p>{values.stock_qty}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
                                                             <p className="text-[14px] color-primary">SKU : </p>
                                                             <p>{values.sku}</p>
                                                         </div>
@@ -275,6 +281,7 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
                                     index,
                                 }))}
                             />
+
                         </ConfigProvider>
                     </div>
                 </div>

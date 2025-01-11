@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 
 import { IImage } from '../../../../interfaces/IImage';
 import Heading from '../../components/Heading';
-import FormProduct from '../components/FormProduct';
+import FormAddProduct from '../components/FormProduct/FormAddProduct';
 import useProduct from '../../../../hooks/useProduct';
 import ButtonBack from '../../components/ButtonBack';
 import { PATH_ADMIN } from '../../../../constants/path';
@@ -33,7 +33,7 @@ const AddProduct = () => {
                 <Heading>
                     <FormattedMessage id="admin.addProduct" />
                 </Heading>
-                <FormProduct setImages={setImages} loading={loading} images={images} onFinish={onFinish} />
+                <FormAddProduct setImages={setImages} loading={loading} images={images} onFinish={onFinish} />
             </section>
         </>
     );

@@ -8,7 +8,6 @@ import { IUser } from '../../../../interfaces/IUser';
 import { formatTime } from '../../../../utils';
 import { CopyPlus, Search } from 'lucide-react';
 import TableAdmin from '../../components/Table';
-import ButtonDelete from '../../components/Button/ButtonDelete';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 
 const { Text } = Typography;

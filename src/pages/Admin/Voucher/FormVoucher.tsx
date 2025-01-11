@@ -184,6 +184,7 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                         margin="mb-0"
                     />
                 </Form.Item>
+
                 <Form.Item
                     label={intl.formatMessage({ id: 'voucher.table.min_total_amount' })}
                     name="min_total_amount"
@@ -207,6 +208,31 @@ const FormVoucher = ({ title, initialValues, onFinish, loading }: FormVoucherPro
                         margin="mb-0"
                     />
                 </Form.Item>
+
+                <Form.Item
+                    label={intl.formatMessage({ id: 'voucher.table.min_total_amount' })}
+                    name="max_total_amount"
+                    rules={[
+                        { required: true, message: <FormattedMessage id="voucher.required.min_total_amount" /> },
+                        {
+                            validator: (_: any, value: number) => {
+                                if (value > 0) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject('Vui lòng nhập lớn hơn 0!');
+                            },
+                        },
+                    ]}
+                >
+                    <InputPrimary
+                        type="number"
+                        placeholder={intl.formatMessage({ id: 'voucher.table.min_total_amount' })}
+                        width="100%"
+                        height="h-[56px]"
+                        margin="mb-0"
+                    />
+                </Form.Item>
+
             </div>
             <Form.Item className="mt-20">
                 <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">

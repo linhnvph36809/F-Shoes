@@ -51,7 +51,7 @@ const OrderVnpayComplete = () => {
             putOrder(orderId, {
                 status: 2,
                 payment_status: 'paid',
-                payment_method: "vnpay"
+                payment_method: 'vnpay',
             });
             removeCookieOrderId('orderId');
         }
@@ -79,36 +79,36 @@ const OrderVnpayComplete = () => {
                         <Card className="mb-8 border rounded-lg" bordered={false}>
                             {order?.order_details
                                 ? order.order_details.map((order: any) => (
-                                    <div className="flex justify-between items-start mb-6 border-b pb-4">
-                                        <img
-                                            src={order?.product_image}
-                                            alt="Nike Air Force One"
-                                            className="w-[100px] h-[120px] object-cover rounded-md"
-                                        />
-                                        <div className="flex-1 ml-6 text-left">
-                                            <p className="font-medium color-primary text-[15px]">
-                                                {order?.product_name}
-                                            </p>
+                                      <div className="flex justify-between items-start mb-6 border-b pb-4">
+                                          <img
+                                              src={order?.product_image}
+                                              alt="Nike Air Force One"
+                                              className="w-[100px] h-[120px] object-cover rounded-md"
+                                          />
+                                          <div className="flex-1 ml-6 text-left">
+                                              <p className="font-medium color-primary text-[15px]">
+                                                  {order?.product_name}
+                                              </p>
 
-                                            <p className="color-gray text-[12px] font-medium my-2">
-                                                {Object.entries(JSON.parse(order?.detail_item) || {}).map(
-                                                    ([key, value]: any) => (
-                                                        <li key={key}>
-                                                            <strong>{key}:</strong> {value}
-                                                        </li>
-                                                    ),
-                                                )}
-                                            </p>
-                                            <p className="color-primary text-[13px]">
-                                                {<FormattedMessage id="body.Detail.Quantity" />}: {order?.quantity}
-                                            </p>
-                                        </div>
-                                        <p className="font-semibold text-gray-800 text-2xl">
-                                            {' '}
-                                            {formatPrice(order?.total_amount)} đ
-                                        </p>
-                                    </div>
-                                ))
+                                              <p className="color-gray text-[12px] font-medium my-2">
+                                                  {Object.entries(JSON.parse(order?.detail_item) || {}).map(
+                                                      ([key, value]: any) => (
+                                                          <li key={key}>
+                                                              <strong>{key}:</strong> {value}
+                                                          </li>
+                                                      ),
+                                                  )}
+                                              </p>
+                                              <p className="color-primary text-[13px]">
+                                                  {<FormattedMessage id="body.Detail.Quantity" />}: {order?.quantity}
+                                              </p>
+                                          </div>
+                                          <p className="font-semibold text-gray-800 text-2xl">
+                                              {' '}
+                                              {formatPrice(order?.total_amount)} đ
+                                          </p>
+                                      </div>
+                                  ))
                                 : ''}
 
                             <div className="mt-20">
@@ -143,16 +143,14 @@ const OrderVnpayComplete = () => {
                                         {<FormattedMessage id="shipping_method" />}
                                     </span>
                                     <span className="font-semibold text-xl text-gray-800">
-                                        {shippingMessage()}
+                                        {shippingMessage(order?.shipping_method)}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
                                     <span className="text-[14px] font-medium color-primary">
                                         {<FormattedMessage id="Shipping_Cost" />}
                                     </span>
-                                    <span className="font-semibold text-xl text-gray-800">
-                                        {formatPrice(+order?.shipping_cost)}đ
-                                    </span>
+                                    <span className="font-semibold text-xl text-gray-800">-{order.voucher_cost}</span>
                                 </div>
                                 {order?.note ? (
                                     <div className="flex justify-between items-center mt-6 border-t pt-4">

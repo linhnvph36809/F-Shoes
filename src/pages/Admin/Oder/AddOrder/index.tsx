@@ -3,6 +3,7 @@ import { ConfigProvider, Tabs } from 'antd';
 import ButtonAdd from '../../components/Button/ButtonAdd';
 import Heading from '../../components/Heading';
 import FormOrder from './FormOrder';
+import "./style.scss"
 
 type TargetKey = React.MouseEvent | React.KeyboardEvent | string;
 
