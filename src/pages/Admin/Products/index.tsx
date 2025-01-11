@@ -16,7 +16,9 @@ import ButtonAdd from '../components/Button/ButtonAdd';
 import InputSearch from '../components/Forms/InputSearch';
 import { FormattedMessage, useIntl } from 'react-intl';
 import PermissionElement from '../../../components/Permissions/PermissionElement';
-import { ACTIONS, PERMISSION } from '../../../constants';
+import { ACTIONS, LANGUAGE, LANGUAGE_VI, PERMISSION } from '../../../constants';
+import { formatPrice, handleChangeMessage, handleGetLocalStorage } from '../../../utils';
+import { ICategory } from '../../../interfaces/ICategory';
 
 const ListProduct = () => {
     const intl = useIntl();
@@ -32,7 +34,7 @@ const ListProduct = () => {
     const { data: products, isFetching } = useQueryConfig(
         [QUERY_KEY, `all-product-admin-${page}-${search}`],
         API_PRODUCT +
-        `?paginate=true&per_page=10&page=${page}&search=${search}&include=categories,sale_price,variations`,
+            `?paginate=true&per_page=10&page=${page}&search=${search}&include=categories,sale_price,variations,images`,
     );
 
     const handlePageChange = (page: number) => {
@@ -99,6 +101,175 @@ const ListProduct = () => {
                                 columns={[...columnsAttribute, columnDelete]}
                                 datas={products?.data.data}
                                 pagination={false}
+                                expandable={{
+                                    expandedRowRender: (record: any) => {
+                                        return (
+                                            <>
+                                                <div>
+                                                    <div className="flex items-center gap-x-5 pb-5 border-b">
+                                                        <p className="text-[14px] color-primary">
+                                                            <FormattedMessage id="product.name" /> :{' '}
+                                                        </p>
+                                                        <p>{record?.name}</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-x-5 py-5 border-b">
+                                                        <p className="text-[14px] color-primary">
+                                                            <FormattedMessage id="admin.price" /> :{' '}
+                                                        </p>
+                                                        <p>
+                                                            {formatPrice(record?.sale_price || record?.price)}đ{' '}
+                                                            {record?.sale_price ? (
+                                                                <span className="color-gray line-through text-[12px]">
+                                                                    {formatPrice(record?.price)}đ
+                                                                </span>
+                                                            ) : (
+                                                                ''
+                                                            )}
+                                                        </p>
+                                                    </div>
+                                                    <div className="flex items-center gap-x-5 py-5 border-b">
+                                                        <p className="text-[14px] color-primary">
+                                                            <FormattedMessage id="user.table.status" /> :{' '}
+                                                        </p>
+                                                        <p>
+                                                            {record?.status
+                                                                ? handleChangeMessage(
+                                                                      handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
+                                                                      'Selling',
+                                                                      'Đang bán',
+                                                                  )
+                                                                : handleChangeMessage(
+                                                                      handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
+                                                                      'Stop selling',
+                                                                      'Ngừng bán',
+                                                                  )}
+                                                        </p>
+                                                    </div>
+                                                    {record?.short_description ? (
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="product.shortDescription" /> :
+                                                            </p>
+                                                            <p
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: record?.short_description,
+                                                                }}
+                                                            >
+                                                                {}
+                                                            </p>
+                                                        </div>
+                                                    ) : (
+                                                        ''
+                                                    )}
+                                                    {record?.description ? (
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="product.description" /> :
+                                                            </p>
+                                                            <p
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: record?.description,
+                                                                }}
+                                                            >
+                                                                {}
+                                                            </p>
+                                                        </div>
+                                                    ) : (
+                                                        ''
+                                                    )}
+                                                    <div className="flex items-center gap-x-5 py-5 border-b">
+                                                        <p className="text-[14px] color-primary">
+                                                            <FormattedMessage id="sale_qty_sold" /> :
+                                                        </p>
+                                                        <p>{record?.qty_sold}</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-x-5 py-5 border-b">
+                                                        <p className="text-[14px] color-primary">
+                                                            <FormattedMessage id="admin.stock_qty" /> :
+                                                        </p>
+                                                        <p>{record.stock_qty}</p>
+                                                    </div>
+                                                    {record?.categories?.length ? (
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="admin.category" /> :
+                                                            </p>
+                                                            <div className="flex gap-x-3">
+                                                                {record.categories.map((categorie: ICategory) => (
+                                                                    <div className="px-5 py-2 bg-white rounded-xl">
+                                                                        {categorie.name}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        ''
+                                                    )}
+                                                    {record?.images?.length ? (
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="admin.image" /> :
+                                                            </p>
+                                                            <div className="flex gap-x-3">
+                                                                {record.images.map((image: any) => (
+                                                                    <div>
+                                                                        <img
+                                                                            src={image.url}
+                                                                            alt=""
+                                                                            className="w-[80px] h-[80px] object-cover"
+                                                                        />
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        ''
+                                                    )}
+                                                    {record?.variations.length ? (
+                                                        <div className="py-5 border-b">
+                                                            <p className="text-[14px] color-primary mb-3">
+                                                                <FormattedMessage id="Variants" /> :{' '}
+                                                            </p>
+                                                            <div className="grid grid-cols-6 gap-10">
+                                                                {record?.variations?.map((variation: any) => (
+                                                                    <div className="flex gap-x-5 items-start">
+                                                                        <img
+                                                                            src={variation?.image_url}
+                                                                            alt=""
+                                                                            className="w-[80px] h-[80px] object-corver"
+                                                                        />
+                                                                        <div>
+                                                                            <p className="text-[13px] color-primary">
+                                                                                <FormattedMessage id="Variant Name" /> :{' '}
+                                                                                {variation?.classify}
+                                                                            </p>
+                                                                            <p className="text-[13px] color-primary">
+                                                                                <FormattedMessage id="admin.price" /> :{' '}
+                                                                                {formatPrice(variation?.price)}đ
+                                                                            </p>
+                                                                            <p className="text-[13px] color-primary">
+                                                                                <FormattedMessage id="admin.stock_qty" />{' '}
+                                                                                : {variation?.stock_qty}
+                                                                            </p>
+                                                                            <p className="text-[13px] color-primary">
+                                                                                <FormattedMessage id="sale_qty_sold" />{' '}
+                                                                                : {variation?.qty_sold}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        ''
+                                                    )}
+                                                </div>
+                                            </>
+                                        );
+                                    },
+
+                                    rowExpandable: (record: any) => record.id !== '',
+                                }}
                             />
                         )}
                     </div>

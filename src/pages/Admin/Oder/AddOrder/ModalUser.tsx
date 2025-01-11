@@ -45,8 +45,6 @@ const ModalUser = ({ setUser }: any) => {
         }
     };
 
-
-
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -129,14 +127,16 @@ const ModalUser = ({ setUser }: any) => {
             dataIndex: 'email_verified_at',
             key: 'email_verified_at',
             render: (_: number, user: any) => (
-                <ButtonEdit onClick={() => {
-                    handleOk();
-                    setUser(user);
-                }} >
+                <ButtonEdit
+                    onClick={() => {
+                        handleOk();
+                        setUser(user);
+                    }}
+                >
                     <CopyPlus />
                 </ButtonEdit>
             ),
-        }
+        },
     ];
 
     return (
@@ -145,11 +145,15 @@ const ModalUser = ({ setUser }: any) => {
                 onClick={showModal}
                 className="px-5 py-3 bg-primary text-white rounded-lg hover:opacity-70 transition-global"
             >
-                Chọn khánh hàng
+                <FormattedMessage id="Select_customer" />
             </button>
             <Modal
                 width={1500}
-                title={<h3 className="text-[32px] font-medium">Choose User</h3>}
+                title={
+                    <h3 className="text-[32px] font-medium">
+                        <FormattedMessage id="Choose_User" />
+                    </h3>
+                }
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}

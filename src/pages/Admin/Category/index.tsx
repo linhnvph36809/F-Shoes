@@ -18,7 +18,7 @@ import ButtonUpdate from '../components/Button/ButtonUpdate';
 import { FormattedMessage, useIntl } from 'react-intl';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import { ConfigProvider, Pagination } from 'antd';
-import LoadingPage from '../../../components/Loading/LoadingPage';
+import SkeletonComponent from '../components/Skeleton';
 
 const ListCategory = () => {
     const intl = useIntl();
@@ -28,58 +28,58 @@ const ListCategory = () => {
     const page = params.get('page') || 1;
     const searchKey = params.get('search') || '';
     const { deleteCategory, mainCategories, postCategory, getAllCategory, putCategory } = useCategory();
-    const {data:dataCachingCategory,isFetching} = useQueryConfig(
-        [QUERY_KEY,`category/list/category/${page}`],
+    const { data: dataCachingCategory, isLoading } = useQueryConfig(
+        [QUERY_KEY, `category/list/category/${page}`],
         API_CATEGORY + `?include=parents&times=category&paginate=true&per_page=10&page=${page}`,
     );
-    
-    
+
+
     const totalItems = dataCachingCategory?.data?.categories?.paginator.total_item || 0;
     const pageSize = dataCachingCategory?.data?.categories?.paginator.per_page || 10;
-  
-    
-    const [data,setData] = useState<ICategory[]>([]);
+
+
+    const [data, setData] = useState<ICategory[]>([]);
     useEffect(() => {
-       
-        if(dataCachingCategory?.data?.categories?.data){
+
+        if (dataCachingCategory?.data?.categories?.data) {
             const originData = JSON.parse(JSON.stringify([...dataCachingCategory?.data?.categories?.data]));
-            
-            
-            if(searchKey !== ''){
+
+
+            if (searchKey !== '') {
                 const filtered = originData.filter((item: ICategory) => {
                     return item.name.toLowerCase().includes(searchKey.toLowerCase()) || item.id.toString().includes(searchKey.toLowerCase());
                 });
                 setData([...filtered]);
-            }else {
+            } else {
                 setData([...originData]);
             }
-            
+
         }
-    },[dataCachingCategory,searchKey]);
-    
+    }, [dataCachingCategory, searchKey]);
+
     const handlePageChange = (page: number) => {
         params.set('page', `${page}`);
         navigate(`?${params.toString()}`, { replace: true });
     };
-    
-    
-   
-    const handleSearch = (e:any) => {
+
+
+
+    const handleSearch = (e: any) => {
         params.set('search', e.target.value);
-            navigate(`?${params.toString()}`, { replace: true });
+        navigate(`?${params.toString()}`, { replace: true });
     }
-    
+
     const [cateUpdate, setCateUpdate] = useState<any>();
     const [isModalVisible, setIsModalVisible] = useState(false);
-   
-    
+
+
 
     const handleUpdate = (value: ICategory) => {
         setIsModalVisible(true);
         setCateUpdate(value);
     };
 
-    
+
 
     // DELETE CATEGORY
     const handleDeleteCategory = (id?: string | number) => {
@@ -111,10 +111,10 @@ const ListCategory = () => {
                 <div className="flex-row-center gap-x-5">
                     {
                         values.is_main != 1 ? <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
-                        <ButtonUpdate onClick={() => handleUpdate(values)}></ButtonUpdate>
-                    </PermissionElement> : ''
+                            <ButtonUpdate onClick={() => handleUpdate(values)}></ButtonUpdate>
+                        </PermissionElement> : ''
                     }
-                    
+
                     <PermissionElement
                         keyName={PERMISSION.PERMISSION_CATEGORY}
                         action={ACTIONS_CATEGORY.ACTIONS_ADD_PRODUCT}
@@ -128,20 +128,18 @@ const ListCategory = () => {
                     {/* <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}> */}
                     {
                         values.is_main != 1 ? !values?.display ? <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}>
-                        <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
-                            <Trash2 />
-                        </ButtonEdit>
-                    </PermissionElement> : '' : ''
+                            <ButtonEdit onClick={() => handleDeleteCategory(values?.id)}>
+                                <Trash2 />
+                            </ButtonEdit>
+                        </PermissionElement> : '' : ''
                     }
-                    
+
                     {/* </PermissionElement> */}
                 </div>
             );
         },
     };
-    if(isFetching){
-        return <LoadingPage/>
-    }
+
     return (
         <>
             <section>
@@ -188,34 +186,37 @@ const ListCategory = () => {
                                 type="text"
                                 placeholder={intl.formatMessage({ id: 'category.search' })}
                                 onChange={handleSearch}
-                               
+
                                 className={`w-full h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                             />
                             <Search className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
                         </div>
                     </div>
                 </div>
-
-                {/* Bảng dữ liệu */}
-                <div className="w-full">
-                    <TableAdmin columns={[...columns, columnDelete]} pagination={false}  dataSource={[...data]} />
-                </div>
-                <ConfigProvider
-                theme={{
-                    token: {
-                        colorPrimary: '#11111',
-                    },
-                }}
-            >
-                {' '}
-                <Pagination
-                    align="end"
-                    current={page || (1 as any)}
-                    total={totalItems}
-                    pageSize={pageSize}
-                    onChange={handlePageChange}
-                />
-            </ConfigProvider>
+                {
+                    isLoading ? <SkeletonComponent className='mt-10' /> :
+                        <div>
+                            <div className="w-full">
+                                <TableAdmin columns={[...columns, columnDelete]} pagination={false} dataSource={[...data]} />
+                            </div>
+                            <ConfigProvider
+                                theme={{
+                                    token: {
+                                        colorPrimary: '#11111',
+                                    },
+                                }}
+                            >
+                                {' '}
+                                <Pagination
+                                    align="end"
+                                    current={page || (1 as any)}
+                                    total={totalItems}
+                                    pageSize={pageSize}
+                                    onChange={handlePageChange}
+                                />
+                            </ConfigProvider>
+                        </div>
+                }
             </section>
             {/* )} */}
         </>

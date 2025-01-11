@@ -143,7 +143,7 @@ const useCategory = () => {
             getAllCategory();
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             showMessageAdmin(
-                handleChangeMessage(locale, 'Create Topic successfully', 'Tạo chủ đề thành công'),
+                handleChangeMessage(locale, 'Create Category successfully', 'Tạo danh mục thành công'),
                 '',
                 'success',
             );
@@ -186,7 +186,7 @@ const useCategory = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             navigate(PATH_LIST_CATEGORY);
             showMessageAdmin(
-                handleChangeMessage(locale, 'Update Topic successfully', 'Cập nhật chủ đề thành công'),
+                handleChangeMessage(locale, 'Update Category successfully', 'Cập nhật danh mục thành công'),
                 '',
                 'success',
             );

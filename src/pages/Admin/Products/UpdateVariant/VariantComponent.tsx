@@ -1,5 +1,5 @@
 import { ConfigProvider, Form, Select, Table } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
@@ -16,6 +16,7 @@ import { combine } from '../AddVariant/datas';
 import ModalFormVariant from '../AddVariant/ModalFormVariant';
 import SkeletonComponent from '../../components/Skeleton';
 import { showMessageActive } from '../../../../utils/messages';
+import SelectPrimary from '../../components/Forms/SelectPrimary';
 
 const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, setListAttribute }: any) => {
     const intl = useIntl();
@@ -44,6 +45,7 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
     const [variantsChanges, setVariantsChanges] = useState<IAttribute[]>([]);
     const [variants, setVariants] = useState<IAttribute[]>([]);
     const [images, setImages] = useState<any>([]);
+    const [valueAttributes, setValueAttributes] = useState<any>([]);
 
     const variantByIds = data?.data.data || [];
 
@@ -64,21 +66,46 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
             () => {
                 const listOriginAttribute = JSON.parse(JSON.stringify([...listAttribute]));
                 listOriginAttribute.splice(i, 1);
-                setListAttribute([...listOriginAttribute]);
+                const idVariants = listOriginAttribute.flatMap((item: any) => item.ids);
+                const idAttributes = variantsChanges.flatMap((item: any) => item.values.map((value: any) => value.id));
+                const newIdAttributes = idAttributes.filter((item: any) => idVariants.includes(item));
+                const result = variantsChanges.map((item) => ({
+                    ...item,
+                    values: item.values.filter((value) => newIdAttributes.includes(value.id)),
+                }));
+                const isEmpty = result.every((item: any) => item.values.length === 0);
+                if (isEmpty) {
+                    setVariants([]);
+                    setVariantId([]);
+                    setListAttribute([]);
+                    setVariantsChanges([]);
+                } else {
+                    setVariantsChanges([...result]);
+                    setListAttribute([...listOriginAttribute]);
+                }
+                setValueAttributes(result);
                 const listOriginData = JSON.parse(JSON.stringify([...datas]));
                 listOriginData.splice(i, 1);
-
                 setDatas([...listOriginData]);
             },
         );
     };
 
-    const handleChange = useCallback((listId: number[]) => {
+    const handleChange = (listId: number[]) => {
         setVariantId([...listId]);
         setVariantsChanges((preVariantChanges) =>
             preVariantChanges.filter((preVariantChange) => listId.includes(+preVariantChange.id)),
         );
-    }, []);
+    };
+
+    useEffect(() => {
+        valueAttributes.forEach((attribute: any, index: number) =>
+            form.setFieldValue(
+                `attribute${index}`,
+                attribute.values.map((value: any) => value.id),
+            ),
+        );
+    }, [valueAttributes]);
 
     const handleChangeItem = (values: number[], id: number) => {
         const attribute = variantByIds?.all_attribute?.find((attribute: any) => attribute.id === id);
@@ -186,8 +213,8 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                     <SkeletonComponent />
                 ) : (
                     <div className="grid grid-cols-2 gap-x-10">
-                        <div>
-                            <Form form={form}>
+                        <Form form={form}>
+                            <div>
                                 <ConfigProvider
                                     theme={{
                                         components: {
@@ -205,7 +232,7 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                                 height: '50px',
                                             }}
                                             className="text-[16px] font-medium w-full sm:h-[45px] md:h-[56px] border-1 border-[#111111] mb-5"
-                                            placeholder={intl.formatMessage({ id: 'Please select variant' })}
+                                            placeholder={intl.formatMessage({ id: 'Please_select_attributes' })}
                                             optionFilterProp="name"
                                             fieldNames={{ label: 'name', value: 'id' }}
                                             options={variantByIds?.all_attribute}
@@ -213,48 +240,50 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                         />
                                     </Form.Item>
                                 </ConfigProvider>
-                            </Form>
-                            <div>
-                                {variants?.map((variant: any) => (
-                                    <div className="p-5 bg-gray-200 rounded-lg mb-10 relative" key={variant.id}>
-                                        <h3 className="color-primary text-16px font-medium mb-5">{variant.name}</h3>
-                                        <div>
-                                            <ConfigProvider
-                                                theme={{
-                                                    components: {
-                                                        Select: {
-                                                            multipleItemHeight: 30,
+                                <div>
+                                    {variants?.map((variant: any, index: number) => (
+                                        <div className="p-5 bg-gray-200 rounded-lg mb-10 relative" key={variant.id}>
+                                            <h3 className="color-primary text-16px font-medium mb-5">{variant.name}</h3>
+                                            <div>
+                                                <ConfigProvider
+                                                    theme={{
+                                                        components: {
+                                                            Select: {
+                                                                multipleItemHeight: 30,
+                                                            },
                                                         },
-                                                    },
-                                                }}
-                                            >
-                                                <Select
-                                                    mode="multiple"
-                                                    allowClear
-                                                    className="text-20px font-medium w-full sm:h-[35px] md:h-[40px] border-1 border-[#111111] mb-5"
-                                                    placeholder="Please select"
-                                                    optionFilterProp="name"
-                                                    fieldNames={{ label: 'value', value: 'id' }}
-                                                    options={
-                                                        variantByIds?.all_attribute?.find(
-                                                            (attribute: any) => attribute.id === variant.id,
-                                                        ).values
-                                                    }
-                                                    defaultValue={
-                                                        variantByIds.ownAttributes.some(
-                                                            (attribute: any) => attribute.id === variant.id,
-                                                        )
-                                                            ? variant.values.map((value: any) => value.id)
-                                                            : []
-                                                    }
-                                                    onChange={(value: any) => handleChangeItem(value, +variant.id)}
-                                                />
-                                            </ConfigProvider>
+                                                    }}
+                                                >
+                                                    <SelectPrimary
+                                                        mode="multiple"
+                                                        name={`attribute${index}`}
+                                                        allowClear
+                                                        className="select-sort-order font-medium w-full sm:h-[35px] md:h-[40px] border-1 border-[#111111] mb-5"
+                                                        placeholder={intl.formatMessage({ id: 'Please select variant' })}
+                                                        optionFilterProp="name"
+                                                        fieldNames={{ label: 'value', value: 'id' }}
+                                                        options={
+                                                            variantByIds?.all_attribute?.find(
+                                                                (attribute: any) => attribute.id === variant.id,
+                                                            ).values
+                                                        }
+                                                        defaultValue={
+                                                            variantByIds.ownAttributes.some(
+                                                                (attribute: any) => attribute.id === variant.id,
+                                                            )
+                                                                ? variant.values.map((value: any) => value.id)
+                                                                : []
+                                                        }
+                                                        onChange={(value: any) => handleChangeItem(value, +variant.id)}
+                                                    />
+                                                </ConfigProvider>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        </Form>
+
                         <div>
                             <div>
                                 <ConfigProvider
