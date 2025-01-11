@@ -17,8 +17,10 @@ const tokenManager = new TokenManager({
         handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
         handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
         handleRemoveLocalStorage(INFO_AUTH.userName);
-        window.location.href = '/'
-
+        handleRemoveLocalStorage(INFO_AUTH.groupId);
+        handleRemoveLocalStorage(INFO_AUTH.userId);
+        handleRemoveLocalStorage(INFO_AUTH.isAdmin);
+        window.location.href = '/';
     },
 
     executeRefreshToken: async () => {
