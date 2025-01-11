@@ -6,14 +6,18 @@ import { showMessageAdmin, showMessageClient } from '../utils/messages';
 import { PATH_ADMIN } from '../constants/path';
 import { useContextGlobal } from '../contexts';
 import { handleChangeMessage } from '../utils';
+import { useQueryClient } from 'react-query';
 
 export const API_VOUCHER = 'api/vouchers';
+export const QUERY_VOUCHER = 'query-voucher';
 
 const useVoucher = () => {
     const { locale } = useContextGlobal();
     const [voucher, setVoucher] = useState<any>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
 
     const postVoucher = async (voucher: any) => {
         try {
@@ -21,6 +25,7 @@ const useVoucher = () => {
             const { data } = await tokenManagerInstance('get', 'api/vouchers/code/' + `${voucher}`);
             showMessageClient(handleChangeMessage(locale, 'Voucher Valid', 'Mã giảm giá hợp lệ'), '', 'success');
             setVoucher(data);
+            queryClient.invalidateQueries({ queryKey: [QUERY_VOUCHER] });
 
         } catch (error) {
             if ((error as any).response.data.message) {
@@ -65,6 +70,8 @@ const useVoucher = () => {
             setLoading(true);
             tokenManagerInstance('delete', `api/vouchers/forceDelete/${id}`);
             showMessageAdmin(handleChangeMessage(locale, 'Delete Voucher successfully', 'Xóa voucher thành công'), '', 'success');
+            queryClient.invalidateQueries({ queryKey: [QUERY_VOUCHER] });
+
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -102,6 +109,8 @@ const useVoucher = () => {
             await tokenManagerInstance('post', API_VOUCHER, voucher);
             showMessageAdmin(handleChangeMessage(locale, 'Add Voucher successfully', 'Thêm mã giảm giá thành công'), '', 'success');
             navigate(PATH_ADMIN.VOUCHER);
+            queryClient.invalidateQueries({ queryKey: [QUERY_VOUCHER] });
+
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -139,6 +148,8 @@ const useVoucher = () => {
             await tokenManagerInstance('patch', `${API_VOUCHER}/${id}`, voucher);
             navigate('/admin/voucher');
             showMessageAdmin(handleChangeMessage(locale, 'Update Voucher successfully', 'Cập nhật voucher thành công'), '', 'success');
+            queryClient.invalidateQueries({ queryKey: [QUERY_VOUCHER] });
+
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -174,6 +185,8 @@ const useVoucher = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('delete', `${API_VOUCHER}/${id}`);
+            queryClient.invalidateQueries({ queryKey: [QUERY_VOUCHER] });
+
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
@@ -209,6 +222,8 @@ const useVoucher = () => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `${API_VOUCHER}/restore/` + id);
+            queryClient.invalidateQueries({ queryKey: [QUERY_VOUCHER] });
+
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');

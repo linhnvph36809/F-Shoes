@@ -389,6 +389,7 @@
     "voucher.table.discount": "Discount",
     "voucher.table.quantity": "Quantity",
     "voucher.table.min_total_amount": "Min Total Amount",
+    "voucher.table.max_total_amount": "Max Total Amount",
     "voucher.table.date_start": "Date Start",
     "voucher.table.date_end": "Date End",
     "voucher.table.action": "Actions",
@@ -402,6 +403,7 @@
     "voucher.required.date_end": "Please enter date end",
     "voucher.required.quantity": "Please enter quantity",
     "voucher.required.min_total_amount": "Please enter min total amount",
+    "voucher.required.max_total_amount": "Please enter max total amount",
     "voucher.table.fixed": "Fixed",
     "voucher.percentage": "Percentage",
 
@@ -637,5 +639,12 @@
     "Please_select_a_user_group": "Please select a user group",
     "Please_enter_your_family_name": "Please enter your family name",
     "validateDateUser": "The time must be less than the current time",
-    "invalid_phone_message": "The phone number is not in the correct format"
+    "invalid_phone_message": "The phone number is not in the correct format",
+    "placeholderCode": "Please enter code",
+    "End_date_must": "End date must be greater than or equal to start date!",
+    "select_date_start": "Select date start",
+    "select_date_end": "Select date end",
+    "Discount_must_not_exceed_100": "Discount must not exceed 100%",
+    "Please_enter_a_value_greater_than_0": "Please enter a value greater than 0",
+    "voucher.max_total_amount.must_be_greater_than_min": "The maximum price must be greater than or equal to the minimum price."
 }

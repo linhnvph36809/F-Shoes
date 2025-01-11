@@ -386,6 +386,7 @@
     "voucher.table.discount": "Giảm giá",
     "voucher.table.quantity": "Số lượng",
     "voucher.table.min_total_amount": "Số tiền tối thiểu",
+    "voucher.table.max_total_amount": "Số tiền tối đa",
     "voucher.table.date_start": "Ngày bắt đầu",
     "voucher.table.date_end": "Ngày kết thúc",
     "voucher.table.action": "Hành động",
@@ -399,6 +400,7 @@
     "voucher.required.date_end": "Vui lòng nhập ngày kết thúc",
     "voucher.required.quantity": "Vui lòng nhập số lượng",
     "voucher.required.min_total_amount": "Vui lòng nhập số tiền tối thiểu",
+    "voucher.required.max_total_amount": "Vui lòng nhập số tiền tối đa",
     "voucher.table.fixed": "Cố định",
     "voucher.percentage": "Phần trăm",
 
@@ -633,5 +635,12 @@
     "Please_select_a_user_group": "Vui lòng chọn nhóm người dùng",
     "Please_enter_your_family_name": "Vui lòng nhập họ",
     "validateDateUser": "Thời gian phải nhỏ hơn thời gian hiện tại",
-    "invalid_phone_message": "Số điện thoại không đúng định dạng"
+    "invalid_phone_message": "Số điện thoại không đúng định dạng",
+    "placeholderCode": "Nhập mã giảm giá",
+    "End_date_must": "Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu!",
+    "select_date_start": "Chọn ngày bắt đầu",
+    "select_date_end": "Chọn ngày kết thúc",
+    "Discount_must_not_exceed_100": "Mức giảm giá không được vượt quá 100%",
+    "Please_enter_a_value_greater_than_0": "Vui lòng nhập lớn hơn 0",
+    "voucher.max_total_amount.must_be_greater_than_min": "Giá tối đa phải lớn hơn hoặc bằng giá tối thiểu"
 }
