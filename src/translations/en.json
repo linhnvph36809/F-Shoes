@@ -646,5 +646,21 @@
     "select_date_end": "Select date end",
     "Discount_must_not_exceed_100": "Discount must not exceed 100%",
     "Please_enter_a_value_greater_than_0": "Please enter a value greater than 0",
-    "voucher.max_total_amount.must_be_greater_than_min": "The maximum price must be greater than or equal to the minimum price."
+    "voucher.max_total_amount.must_be_greater_than_min": "The maximum price must be greater than or equal to the minimum price.",
+    "Fshoes_Counter": "Fshoes Counter",
+    "Add_Invoice": "Add Invoice",
+    "Payment_Information": "Payment Information",
+    "Invalid_phone_number": "Invalid phone number",
+    "Retail_customer": "Retail customer",
+    "Delivery": "Delivery",
+    "Total_merchandise_amount": "Total merchandise amount",
+    "Cash": "Cash",
+    "Choose_Product": "Choose Product",
+    "Out_of_stock": "Out of stock",
+    "Product_quantity": "Product quantity",
+    "Enter_product_quantity": "Enter product quantity",
+    "The_quantity_must_be_greater_than_0": "The quantity must be greater than 0 and cannot be a negative number.",
+    "The_quantity_cannot_be_greater_than": "The quantity cannot be greater than",
+    "Select_customer": "Select customer",
+    "Choose_User": "Choose User"
 }

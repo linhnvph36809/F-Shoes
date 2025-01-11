@@ -642,5 +642,21 @@
     "select_date_end": "Chọn ngày kết thúc",
     "Discount_must_not_exceed_100": "Mức giảm giá không được vượt quá 100%",
     "Please_enter_a_value_greater_than_0": "Vui lòng nhập lớn hơn 0",
-    "voucher.max_total_amount.must_be_greater_than_min": "Giá tối đa phải lớn hơn hoặc bằng giá tối thiểu"
+    "voucher.max_total_amount.must_be_greater_than_min": "Giá tối đa phải lớn hơn hoặc bằng giá tối thiểu",
+    "Fshoes_Counter": "Quầy Fshoes",
+    "Add_Invoice": "Thêm hóa đơn",
+    "Payment_Information": "Thông tin thanh toán",
+    "Invalid_phone_number": "Số điện thoại không hợp lệ",
+    "Retail_customer": "Khách lẻ",
+    "Delivery": "Giao hàng",
+    "Total_merchandise_amount": "Tổng tiền hàng",
+    "Cash": "Tiền mặt",
+    "Choose_Product": "Chọn sản phẩm",
+    "Out_of_stock": "Hết hàng",
+    "Product_quantity": "Số lượng sản phẩm",
+    "Enter_product_quantity": "Nhập số lượng sản phẩm",
+    "The_quantity_must_be_greater_than_0": "Số lượng phải lớn hơn 0 và không được là số âm",
+    "The_quantity_cannot_be_greater_than": "Số lượng không được lớn hơn",
+    "Select_customer": "Chọn khánh hàng",
+    "Choose_User": "Chọn khách hàng"
 }

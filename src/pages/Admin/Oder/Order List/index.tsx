@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, ConfigProvider, Input, Select, Skeleton } from 'antd';
+import { ConfigProvider, Input, Select, Skeleton } from 'antd';
 import Heading from '../../components/Heading';
 import { columns } from './datas';
 import { API_ORDER, QUERY_KEY } from '../../../../hooks/useOrder';
@@ -35,7 +35,9 @@ const OrderList = () => {
 
     const { data: orders, isLoading } = useQueryConfig(
         [QUERY_KEY, `order-admin-${page}-search=${searchKey}-status=${status}`],
-        `${API_ORDER}?page=${page}&search=${searchKey}${status && status !== '' ? '&status=' + statusToNumber(status) : ''}`,
+        `${API_ORDER}?page=${page}&search=${searchKey}${
+            status && status !== '' ? '&status=' + statusToNumber(status) : ''
+        }`,
     );
 
     const totalItems = orders?.data?.paginator.total_item || 0;
@@ -78,7 +80,7 @@ const OrderList = () => {
     const onUndoFilter = () => {
         const currentPath = location.pathname;
         navigate(`${currentPath}`, { replace: true });
-    }
+    };
     useEffect(() => {
         const originData = orders?.data?.data ? JSON.parse(JSON.stringify([...orders.data.data])) : [];
         if (searchStatus !== '' && searchStatus !== 'all') {
@@ -123,15 +125,17 @@ const OrderList = () => {
 
                 <div className="flex justify-end items-center gap-x-5">
                     <div className="flex items-center justify-center ">
-                        <button onClick={onUndoFilter} className='border hover:bg-slate-200 rounded-lg flex items-center justify-center w-[40px] h-[40px]'>
+                        <button
+                            onClick={onUndoFilter}
+                            className="border hover:bg-slate-200 rounded-lg flex items-center justify-center w-[40px] h-[40px]"
+                        >
                             <RotateCcw />
                         </button>
                     </div>
                     <div className="relative">
-
                         <Input
                             placeholder={intl.formatMessage({ id: 'order.Search_Order' })}
-                            className={`w-[250px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                            className={`w-[300px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                             value={searchText}
                             onChange={handleSearch}
                         />
@@ -152,7 +156,7 @@ const OrderList = () => {
                             }}
                         >
                             <Select
-                                className="font-medium"
+                                className="font-medium select-sort-order"
                                 style={{ width: 250, height: '52px' }}
                                 placeholder={intl.formatMessage({ id: 'order.Please_select' })}
                                 onChange={handleSort}

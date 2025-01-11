@@ -3,13 +3,20 @@ import { ConfigProvider, Tabs } from 'antd';
 import ButtonAdd from '../../components/Button/ButtonAdd';
 import Heading from '../../components/Heading';
 import FormOrder from './FormOrder';
-import "./style.scss"
+import './style.scss';
+import { FormattedMessage } from 'react-intl';
+import { handleChangeMessage, handleGetLocalStorage } from '../../../../utils';
+import { LANGUAGE, LANGUAGE_VI } from '../../../../constants';
 
 type TargetKey = React.MouseEvent | React.KeyboardEvent | string;
 
 const defaultPanes = new Array(1).fill(null).map((_, index) => {
     const id = String(index + 1);
-    return { label: `Hóa đơn ${id}`, children: <FormOrder />, key: id };
+    return {
+        label: `${handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Invoice', 'Hóa đơn')} ${id}`,
+        children: <FormOrder />,
+        key: id,
+    };
 });
 
 const AddOrder: React.FC = () => {
@@ -48,9 +55,11 @@ const AddOrder: React.FC = () => {
 
     return (
         <div>
-            <Heading>Quầy Fshoes</Heading>
+            <Heading>
+                <FormattedMessage id="Fshoes_Counter" />
+            </Heading>
             <div style={{ marginBottom: 16 }}>
-                <ButtonAdd onClick={add} title="Thêm hóa đơn"></ButtonAdd>
+                <ButtonAdd onClick={add} title={<FormattedMessage id="Add_Invoice" />}></ButtonAdd>
             </div>
             <ConfigProvider
                 theme={{

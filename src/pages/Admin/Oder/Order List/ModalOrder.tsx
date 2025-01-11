@@ -45,7 +45,8 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
         }
     };
 
-    const color = statusColors[orderDetail?.orderDetail?.status] || 'default';
+    const color = statusColors[orderDetail?.orderDetail?.status + 1] || 'default';
+    const colorStatus = statusColors[orderDetail?.orderDetail?.status] || 'default';
 
     return (
         <>
@@ -176,7 +177,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                 <p className="color-gray text-[14px] flex justify-end">
                                     <Tag
                                         className="px-5 rounded-[30px] w-[90%] flex items-center justify-center m-0"
-                                        color={color}
+                                        color={colorStatus}
                                     >
                                         {statusString(orderDetail?.orderDetail?.status).text}
                                     </Tag>
@@ -204,7 +205,9 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                 <p className="flex items-center color-gray gap-x-3 text-[14px]">
                                     <Truck className="w-7" /> <FormattedMessage id="shipping_method" /> :{' '}
                                 </p>
-                                <p className="color-gray text-[14px] font-medium">{shippingMessage(orderDetail?.orderDetail?.shipping_method)}</p>
+                                <p className="color-gray text-[14px] font-medium">
+                                    {shippingMessage(orderDetail?.orderDetail?.shipping_method)}
+                                </p>
                             </div>
                             <div className="flex justify-between items-center py-2">
                                 <p className="flex items-center color-gray gap-x-3 text-[14px]">

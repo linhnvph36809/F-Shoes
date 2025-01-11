@@ -153,22 +153,20 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                                 <div className="absolute mb-3 flex gap-x-2 z-10 right-5 top-5">
                                     <Button
                                         disabled={isUpdate && isValid}
-                                        className={`${
-                                            typeVoucher == initTypeVoucher.fixed
+                                        className={`${typeVoucher == initTypeVoucher.fixed
                                                 ? 'bg-[#111111] text-white'
                                                 : 'bg-white'
-                                        }`}
+                                            }`}
                                         onClick={() => handleChangeType(initTypeVoucher.fixed)}
                                     >
                                         <FormattedMessage id="voucher.table.fixed" />
                                     </Button>
                                     <Button
                                         disabled={isUpdate && isValid}
-                                        className={`${
-                                            typeVoucher == initTypeVoucher.percentage
+                                        className={`${typeVoucher == initTypeVoucher.percentage
                                                 ? 'bg-[#111111] text-white'
                                                 : 'bg-white'
-                                        }`}
+                                            }`}
                                         onClick={() => handleChangeType(initTypeVoucher.percentage)}
                                     >
                                         <FormattedMessage id="voucher.percentage" />

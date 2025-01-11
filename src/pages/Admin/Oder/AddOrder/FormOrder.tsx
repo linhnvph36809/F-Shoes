@@ -189,11 +189,12 @@ const FormOrder = () => {
             receiver_full_name: infoShip
                 ? values?.receiver_full_name
                 : user
-                    ? user.name
-                    : handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Retail customers', ' Khách lẻ'),
+                ? user.name
+                : handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Retail customers', ' Khách lẻ'),
             address: infoShip
-                ? `${values?.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-                } - ${province}`
+                ? `${values?.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
+                      districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+                  } - ${province}`
                 : handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'At the counter', 'Tại quầy'),
             city: infoShip
                 ? province
@@ -225,7 +226,9 @@ const FormOrder = () => {
         <div className="p-10">
             <div>
                 <div className="flex justify-between items-center">
-                    <h3 className="text-[32px] font-bold">Giỏ hàng </h3>
+                    <h3 className="text-[32px] font-bold">
+                        <FormattedMessage id="box.Cart.Bag" />{' '}
+                    </h3>
                     <ModalChooseProduct handleSetProducts={handleSetProducts} />
                 </div>
                 <div className="mb-20">
@@ -250,7 +253,9 @@ const FormOrder = () => {
                 {products?.length ? (
                     <div className="flex gap-x-5 items-start">
                         <div className="w-9/12">
-                            <h3 className="text-[20px] font-medium">Thông tin thanh toán</h3>
+                            <h3 className="text-[20px] font-medium">
+                                <FormattedMessage id="Payment_Information" />
+                            </h3>
 
                             <div>
                                 <Form form={form} onFinish={onFinish}>
@@ -295,7 +300,7 @@ const FormOrder = () => {
                                                     },
                                                     {
                                                         min: 10,
-                                                        message: 'Số điện thoại không hợp lệ',
+                                                        message: <FormattedMessage id="Invalid_phone_number" />,
                                                     },
                                                 ]}
                                                 placeholder={intl.formatMessage({ id: 'phone' })}
@@ -406,7 +411,14 @@ const FormOrder = () => {
                             <div className="px-5 border-l">
                                 <div className="flex items-center justify-between">
                                     <h3 className="font-medium color-primary text-[16px]">
-                                        Khách hàng : {user ? '' : <span className="text-[18px]">Khách lẻ</span>}
+                                        <FormattedMessage id="admin.customer" /> :{' '}
+                                        {user ? (
+                                            ''
+                                        ) : (
+                                            <span className="text-[18px]">
+                                                <FormattedMessage id="Retail_customer" />
+                                            </span>
+                                        )}
                                     </h3>
                                     <ModalUser setUser={setUser} />
                                 </div>
@@ -415,13 +427,19 @@ const FormOrder = () => {
                                         <img src={user?.avatar_url} alt="" className="w-[60px] h-[60px] object-cover" />
                                         <div>
                                             <p className="color-primary text-[16px]">
-                                                <span className="font-medium">Tên người dùng</span> : {user?.name}
+                                                <span className="font-medium">
+                                                    <FormattedMessage id="admin.user" />
+                                                </span>{' '}
+                                                : {user?.name}
                                             </p>
                                             <p className="color-primary text-[16px]">
                                                 <span className="font-medium">Email</span> : {user?.email}
                                             </p>
                                             <p className="color-primary text-[16px]">
-                                                <span className="font-medium">Nhóm</span> : {user?.group?.group_name}
+                                                <span className="font-medium">
+                                                    <FormattedMessage id="admin.groups" />
+                                                </span>{' '}
+                                                : {user?.group?.group_name}
                                             </p>
                                         </div>
                                         <CircleX
@@ -433,7 +451,9 @@ const FormOrder = () => {
                                     ''
                                 )}
                                 <div className="flex items-center justify-between mt-8">
-                                    <h3 className="font-medium color-primary text-[16px]">Giao hàng :</h3>
+                                    <h3 className="font-medium color-primary text-[16px]">
+                                        <FormattedMessage id="Delivery" /> :
+                                    </h3>
                                     <Switch
                                         className="w- text-16px font-medium"
                                         onChange={(value: boolean) => {
@@ -479,14 +499,18 @@ const FormOrder = () => {
                                     </div>
                                 </div>
                                 <div className="flex items-center justify-between py-5 border-b">
-                                    <h3 className="font-medium color-primary text-[16px]">Tổng tiền hàng :</h3>
+                                    <h3 className="font-medium color-primary text-[16px]">
+                                        <FormattedMessage id="Total_merchandise_amount" /> :
+                                    </h3>
                                     <p className="font-medium color-primary text-[16px]">
                                         {formatPrice(handleTotalPrice)}đ
                                     </p>
                                 </div>
                                 {voucher.discount ? (
                                     <div className="flex items-center justify-between py-5 border-b">
-                                        <h3 className="font-medium color-primary text-[16px]">Voucher :</h3>
+                                        <h3 className="font-medium color-primary text-[16px]">
+                                            <FormattedMessage id="voucher" /> :
+                                        </h3>
                                         <p className="font-medium color-primary text-[16px] flex items-center gap-x-1">
                                             -
                                             {voucher.type === 'fixed'
@@ -503,7 +527,9 @@ const FormOrder = () => {
                                 )}
                                 {fee?.total ? (
                                     <div className="flex items-center justify-between py-5 border-b">
-                                        <h3 className="font-medium color-primary text-[16px]">Phí ship :</h3>
+                                        <h3 className="font-medium color-primary text-[16px]">
+                                            <FormattedMessage id="Shipping_Cost" /> :
+                                        </h3>
                                         <p className="font-medium color-primary text-[16px]">
                                             {totalAmount >= FREE_SHIP ? 'Free ship' : `${formatPrice(fee.total)}đ`}
                                         </p>
@@ -512,7 +538,9 @@ const FormOrder = () => {
                                     ''
                                 )}
                                 <div className="flex items-center justify-between py-5 border-b mb-10">
-                                    <h3 className="font-medium color-primary text-[16px]">Tổng cộng :</h3>
+                                    <h3 className="font-medium color-primary text-[16px]">
+                                        <FormattedMessage id="box.Cart.Total" /> :
+                                    </h3>
                                     <p className="font-medium text-red-500 text-[28px]">{formatPrice(totalAmount)}đ</p>
                                 </div>
                             </div>
@@ -520,21 +548,23 @@ const FormOrder = () => {
                                 <div className="flex justify-center gap-x-5 my-10">
                                     <button
                                         onClick={() => setPaymentMethod(paymentMehtods.cash_on_delivery)}
-                                        className={`px-5 py-3 rounded-lg ${paymentMethod === paymentMehtods.cash_on_delivery
+                                        className={`px-5 py-3 rounded-lg ${
+                                            paymentMethod === paymentMehtods.cash_on_delivery
                                                 ? 'bg-primary'
                                                 : 'bg-gray opacity-80'
-                                            }  text-white flex items-center gap-x-5 font-medium
+                                        }  text-white flex items-center gap-x-5 font-medium
                                     transition-global`}
                                     >
-                                        Tiền mặt
+                                        <FormattedMessage id="Cash" />
                                         <CircleDollarSign />
                                     </button>
                                     <button
                                         onClick={() => setPaymentMethod(paymentMehtods.banking)}
-                                        className={`px-5 py-3 rounded-lg ${paymentMethod === paymentMehtods.banking
+                                        className={`px-5 py-3 rounded-lg ${
+                                            paymentMethod === paymentMehtods.banking
                                                 ? 'bg-primary'
                                                 : 'bg-gray opacity-80'
-                                            } text-white flex items-center gap-x-5 font-medium
+                                        } text-white flex items-center gap-x-5 font-medium
                                     transition-global`}
                                     >
                                         QR

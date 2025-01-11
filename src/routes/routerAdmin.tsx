@@ -12,7 +12,6 @@ import PrivateRouteAdmin from '../components/PrivateRoute/PrivateRouteAdmin';
 
 import Authorization from '../pages/Admin/Groups/Authorization';
 import ListTopic from '../pages/Admin/Topics';
-import UpdateTopic from '../pages/Admin/Topics/UpdateTopic';
 import ListPost from '../pages/Admin/Posts';
 import Addorder from '../pages/Admin/Oder/AddOrder';
 import OrderList from '../pages/Admin/Oder/Order List';
@@ -32,9 +31,7 @@ import AddPost from '../pages/Admin/Posts/AddPost';
 import UpdatePost from '../pages/Admin/Posts/UpdatePost';
 import MediaLibrary from '../pages/Admin/Image/list-image';
 import ListVouCher from '../pages/Admin/Voucher';
-import UpdateVoucher from '../pages/Admin/Voucher/UpdateVoucher';
 import UpdateAttribute from '../pages/Admin/Products/Attribute/UpdateAttribute';
-import CreateOrder from '../pages/Admin/Oder/Create';
 
 import { ACTIONS, PERMISSION } from '../constants';
 import PermissionPage from '../components/Permissions/PermissionPage';
@@ -140,14 +137,6 @@ const routerAdmin = [
                 ),
             },
             {
-                path: 'create-order',
-                element: (
-                    <PermissionPage keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_ADD}>
-                        <CreateOrder />
-                    </PermissionPage>
-                ),
-            },
-            {
                 path: 'orderupdate/:id',
                 element: (
                     <PermissionPage keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
@@ -188,14 +177,6 @@ const routerAdmin = [
                 element: (
                     <PermissionPage keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_VIEW}>
                         <ListTopic />
-                    </PermissionPage>
-                ),
-            },
-            {
-                path: 'topic/:id',
-                element: (
-                    <PermissionPage keyName={PERMISSION.PERMISSION_TOPIC} action={ACTIONS.ACTIONS_EDIT}>
-                        <UpdateTopic />
                     </PermissionPage>
                 ),
             },
@@ -244,14 +225,6 @@ const routerAdmin = [
                 element: (
                     <PermissionPage keyName={PERMISSION.PERMISSION_VOUCHER} action={ACTIONS.ACTIONS_ADD}>
                         <AddVoucher />
-                    </PermissionPage>
-                ),
-            },
-            {
-                path: 'voucher/:id',
-                element: (
-                    <PermissionPage keyName={PERMISSION.PERMISSION_VOUCHER} action={ACTIONS.ACTIONS_EDIT}>
-                        <UpdateVoucher />
                     </PermissionPage>
                 ),
             },

@@ -3,13 +3,14 @@ import { Form, Modal, Radio } from 'antd';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import { CopyPlus, X } from 'lucide-react';
 import InputPrimary from '../../components/Forms/InputPrimary';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { formatPrice } from '../../../../utils';
 
 const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
     const [quantity, setQuantity] = useState<any>();
+    const intl = useIntl();
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -23,7 +24,6 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
 
     const handleClose = () => {
         setIsModalOpen(false);
-
     };
 
     const handleCancel = () => {
@@ -39,6 +39,8 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
     const onFinish = async (values: any) => {
         if (initialValues.variations.length) {
             const variation = initialValues?.variations?.find((variations: any) => variations.id === values.variantId);
+            console.log(variation);
+
             handleSetProducts({
                 product_id: null,
                 product_variation_id: variation?.id,
@@ -130,39 +132,47 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                                     />
                                 </>
                             </Form.Item>
-                            {
-                                quantity !== 0 ?
-                                    <InputPrimary
-                                        label={'Số lượng sản phẩm'}
-                                        placeholder={'Nhập số lượng sản phẩm'}
-                                        name="quantity"
-                                        type="number"
-                                        rules={[
-                                            { required: true, message: <FormattedMessage id="product.priceRequired" /> },
-                                            {
-                                                validator: (_: any, value: any) => {
-                                                    if (value <= 0) {
-                                                        return Promise.reject(
-                                                            new Error('Số lượng phải lớn hơn 0 và không được là số âm.'),
-                                                        );
-                                                    }
-                                                    if (value > quantity) {
-                                                        return Promise.reject(
-                                                            new Error(`Số lượng không được lớn hơn ${quantity}`),
-                                                        );
-                                                    }
-                                                    return Promise.resolve();
-                                                },
+                            {quantity !== 0 ? (
+                                <InputPrimary
+                                    label={<FormattedMessage id="Product_quantity" />}
+                                    placeholder={intl.formatMessage({ id: 'Enter_product_quantity' })}
+                                    name="quantity"
+                                    type="number"
+                                    rules={[
+                                        { required: true, message: <FormattedMessage id="product.priceRequired" /> },
+                                        {
+                                            validator: (_: any, value: any) => {
+                                                if (value <= 0) {
+                                                    return Promise.reject(
+                                                        new Error(
+                                                            intl.formatMessage({
+                                                                id: 'The_quantity_must_be_greater_than_0',
+                                                            }),
+                                                        ),
+                                                    );
+                                                }
+                                                if (value > quantity) {
+                                                    return Promise.reject(
+                                                        new Error(
+                                                            `${intl.formatMessage({
+                                                                id: 'The_quantity_cannot_be_greater_than',
+                                                            })} ${quantity}`,
+                                                        ),
+                                                    );
+                                                }
+                                                return Promise.resolve();
                                             },
-                                        ]}
-                                    /> : ""
-                            }
+                                        },
+                                    ]}
+                                />
+                            ) : (
+                                ''
+                            )}
                         </>
                     ) : (
-
                         <InputPrimary
-                            label={'Số lượng sản phẩm'}
-                            placeholder={'Nhập số lượng sản phẩm'}
+                            label={<FormattedMessage id="Product_quantity" />}
+                            placeholder={intl.formatMessage({ id: 'Enter_product_quantity' })}
                             name="quantity"
                             type="number"
                             rules={[
@@ -171,12 +181,18 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                                     validator: (_: any, value: any) => {
                                         if (value <= 0) {
                                             return Promise.reject(
-                                                new Error('Số lượng phải lớn hơn 0 và không được là số âm.'),
+                                                new Error(
+                                                    intl.formatMessage({ id: 'The_quantity_must_be_greater_than_0' }),
+                                                ),
                                             );
                                         }
                                         if (value > initialValues.stock_qty) {
                                             return Promise.reject(
-                                                new Error(`Số lượng không được lớn hơn ${initialValues.stock_qty}`),
+                                                new Error(
+                                                    `${intl.formatMessage({
+                                                        id: 'The_quantity_cannot_be_greater_than',
+                                                    })} ${initialValues.stock_qty}`,
+                                                ),
                                             );
                                         }
                                         return Promise.resolve();
@@ -184,10 +200,15 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                                 },
                             ]}
                         />
-
                     )}
                 </Form>
-                {quantity == 0 ? <p className="text-red-500 text-end font-medium">Hết hàng</p> : ''}
+                {quantity == 0 ? (
+                    <p className="text-red-500 text-end font-medium">
+                        <FormattedMessage id="Out_of_stock" />
+                    </p>
+                ) : (
+                    ''
+                )}
             </Modal>
         </>
     );

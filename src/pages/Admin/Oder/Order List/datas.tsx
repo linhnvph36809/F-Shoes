@@ -95,7 +95,7 @@ export const columns = [
         title: <FormattedMessage id="admin.date" />,
         dataIndex: 'created_at',
         key: '2',
-        render: (_: any, { created_at }: any) => <p>{formatTime(created_at)}</p>,
+        render: (_: any, { created_at }: any) => <p className="font-medium">{formatTime(created_at)}</p>,
     },
     {
         title: <FormattedMessage id="admin.actions" />,

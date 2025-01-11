@@ -17,7 +17,6 @@ const SelectPrimary = ({ width = '100%', name, label, rules, options, placeholde
         >
             <Form.Item name={name} className="font-medium" label={label} labelCol={{ span: 24 }} rules={rules}>
                 <Select
-                    
                     className="focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     placeholder={placeholder}
                     options={options}
