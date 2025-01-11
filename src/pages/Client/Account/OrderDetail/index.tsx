@@ -233,7 +233,7 @@ const OrderDetail = () => {
                                                     <FormattedMessage id="shipping_method" /> :
                                                 </p>
                                             </p>
-                                            <p className="font-medium">{shippingMessage()}</p>
+                                            <p className="font-medium">{shippingMessage(order?.shipping_method)}</p>
                                         </div>
 
                                         <div className="flex justify-between pb-5 items-center mb-5 border-b text-[16px] color-gray">
