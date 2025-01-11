@@ -2,7 +2,7 @@ import TokenManager from 'brainless-token-manager';
 import axios from 'axios';
 
 import { handleGetLocalStorage, handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
-import { TOKENS } from '../constants';
+import { INFO_AUTH, TOKENS } from '../constants';
 
 const tokenManager = new TokenManager({
     getAccessToken: async () => {
@@ -16,6 +16,9 @@ const tokenManager = new TokenManager({
     onInvalidRefreshToken: () => {
         handleRemoveLocalStorage(TOKENS.ACCESS_TOKEN);
         handleRemoveLocalStorage(TOKENS.REFRESH_TOKEN);
+        handleRemoveLocalStorage(INFO_AUTH.userName);
+        window.location.href = '/'
+
     },
 
     executeRefreshToken: async () => {
@@ -78,11 +81,6 @@ export const tokenManagerInstance = async (
         }
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-            if (error.status === 401) {
-                if (!handleGetLocalStorage(TOKENS.ACCESS_TOKEN) || !handleGetLocalStorage(TOKENS.REFRESH_TOKEN)) {
-                    window.location.href = '/';
-                }
-            }
             throw {
                 message: error.message,
                 response: error.response,
