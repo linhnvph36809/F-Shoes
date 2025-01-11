@@ -20,7 +20,9 @@ const PrivateRoute = ({ children }: { children: ReactNode }) => {
                         <FormattedMessage id="page.noAccessTile" />
                     </div>
                     <Link to="/authentication" className="flex justify-center">
-                        <ButtonPrimary>Login</ButtonPrimary>
+                        <ButtonPrimary width="w-[100px]" height="h-[40px]">
+                            <FormattedMessage id="Login" />
+                        </ButtonPrimary>
                     </Link>
                 </div>
             )}

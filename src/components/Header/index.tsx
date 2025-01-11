@@ -102,7 +102,9 @@ const Header = () => {
                                     className="hover:cursor-pointer"
                                     overlay={
                                         <Menu className="color-primary font-medium">
-                                            <Menu.Item onClick={() => changeLanguage(LANGUAGE_VI)}>Tiếng Việt</Menu.Item>
+                                            <Menu.Item onClick={() => changeLanguage(LANGUAGE_VI)}>
+                                                Tiếng Việt
+                                            </Menu.Item>
                                             <Menu.Item onClick={() => changeLanguage(LANGUAGE_EN)}>English</Menu.Item>
                                         </Menu>
                                     }
