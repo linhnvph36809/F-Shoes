@@ -23,7 +23,7 @@ const FormPost = ({
     onFinish: any;
     loading: boolean;
 }) => {
-    const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const [form] = Form.useForm();
     const { data } = useQueryConfig('topic-form', 'api/topics');
     const [imageFile, setImageFile] = useState(null);
@@ -45,10 +45,10 @@ const FormPost = ({
     };
 
     const handleImageUpload = (file: any) => {
-        
+
         const isImage = file.type.startsWith('image/');
         if (!isImage) {
-            showMessageAdmin(handleChangeMessage(locale,'You can only upload image files!',''), '', 'warning');
+            showMessageAdmin(handleChangeMessage(locale, 'You can only upload image files!', ''), '', 'warning');
         } else {
             setImageFile(file);
         }
@@ -118,6 +118,7 @@ const FormPost = ({
                 label={intl.formatMessage({ id: 'post.form.content' })}
                 className="font-medium"
                 name="content"
+                labelCol={{ span: 24 }}
                 rules={[{ required: true, message: <FormattedMessage id="post.message.content" /> }]}
             >
                 <EditorComponent

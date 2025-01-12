@@ -39,8 +39,6 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
     const onFinish = async (values: any) => {
         if (initialValues.variations.length) {
             const variation = initialValues?.variations?.find((variations: any) => variations.id === values.variantId);
-            console.log(variation);
-
             handleSetProducts({
                 product_id: null,
                 product_variation_id: variation?.id,

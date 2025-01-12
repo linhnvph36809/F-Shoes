@@ -44,7 +44,7 @@ const FormTopic = ({ title, initialValues, onFinish }: { title: string; initialV
                     }}
                 >
                     <Form.Item
-                        label={intl.formatMessage({ id: 'topic.form.parent_Name' })} 
+                        label={intl.formatMessage({ id: 'topic.form.parent_Name' })}
                         name="parent_topic_id"
                         className='font-medium'
                         rules={[{ required: true, message: <FormattedMessage id="topic.form.parent_name" /> }]}
@@ -66,7 +66,7 @@ const FormTopic = ({ title, initialValues, onFinish }: { title: string; initialV
                     rules={[{ required: true, message: <FormattedMessage id="topic.form.message.name" /> }]}
                     placeholder=""
                 ></InputPrimary>
-                
+
 
                 <InputPrimary
                     label={intl.formatMessage({ id: 'topic.form.slug' })}
@@ -75,9 +75,9 @@ const FormTopic = ({ title, initialValues, onFinish }: { title: string; initialV
                     rules={[{ required: true, message: <FormattedMessage id="topic.form.message.slug" /> }]}
                 ></InputPrimary>
 
-<ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
-        <FormattedMessage id="group.Group_button" />
-    </ButtonPrimary>
+                <ButtonPrimary width="w-[120px]" height="h-[56px]" htmlType="submit">
+                    <FormattedMessage id="group.Group_button" />
+                </ButtonPrimary>
             </div>
         </Form>
     );

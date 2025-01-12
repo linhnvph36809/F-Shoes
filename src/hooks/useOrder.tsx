@@ -9,6 +9,8 @@ import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
 export const API_ORDER = '/api/orders';
 export const QUERY_KEY = 'orders';
+export const QUERY_KEY_STATISTICS = 'statistics-orders';
+
 const useOrder = () => {
     const { locale } = useContextGlobal();
     const queryClient = useQueryClient();
@@ -26,7 +28,7 @@ const useOrder = () => {
             );
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
-
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_STATISTICS] });
             navigate('/admin/orderlist');
         } catch (error) {
             showMessageAdmin(
@@ -47,6 +49,7 @@ const useOrder = () => {
             await tokenManagerInstance('patch', API_ORDER + `/${id}`, order);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_STATISTICS] });
         } catch (error) {
             if ((error as any).response.data.message) {
                 showMessageClient((error as any)?.response?.data?.message, '', 'error');
