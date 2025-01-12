@@ -23,13 +23,13 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
     }, [product]);
     const onChange = (value: any) => {
         if (!value || +value > product.quantity ) {
-           
+            setCartQty(cartQty);
         }else {
             setCartQty(value);
         }
     };
     const onChangeQuantity = (qty: any) => {
-        if (!qty || +qty === product.quantity || +qty > product.quantity ) {
+        if (!qty || +qty === product.quantity) {
             setCartQty(product?.quantity);
         } 
          else {

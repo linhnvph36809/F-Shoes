@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Table, Button, Input, Radio, Tag } from 'antd';
+import { Table, Button, Radio, Tag } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Heading from '../../components/Heading';
@@ -7,84 +7,56 @@ import Heading from '../../components/Heading';
 import { ISale } from '../../../../interfaces/ISale.ts';
 import { formatTime, handleChangeMessage } from '../../../../utils';
 
-
-
-import {  QUERY_KEY } from '../../../../hooks/useSale.tsx';
+import { QUERY_KEY } from '../../../../hooks/useSale.tsx';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useContextGlobal } from '../../../../contexts/index.tsx';
 import useQueryConfig from '../../../../hooks/useQueryConfig.tsx';
+import InputSearch from '../../components/Forms/InputSearch.tsx';
+import PaginationComponent from '../../../../components/Pagination/index.tsx';
+import LoadingPage from '../../../../components/Loading/LoadingPage.tsx';
+import { CircleX } from 'lucide-react';
 
 const ListSale = () => {
-    const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const intl = useIntl();
     const navigate = useNavigate();
     const urlQuery = new URLSearchParams(useLocation().search);
-    const {data:dataCachingSale} = useQueryConfig(
-        [QUERY_KEY,'list/sales'],
-        'api/sale'
+    const keySearch = urlQuery.get('search') || '';
+    const keyStatus = urlQuery.get('status') || 'all';
+    const page = urlQuery.get('page') || 1;
+    const { data: dataCachingSale,isLoading } = useQueryConfig(
+        [QUERY_KEY, `list/sales?page=${page}&search=${keySearch}&status=${keyStatus}`],
+        `api/sale?paginate=true&per_page=10&page=${page}&search=${keySearch}&status=${keyStatus}`,
     );
+    const [data, setData] = useState<ISale[]>([]);
+
+    useEffect(() => {
+        if (dataCachingSale?.data?.data?.data) {
+            setData(dataCachingSale?.data?.data?.data);
+        }
+    }, [dataCachingSale]);
+    // Search
+
+    const totalItems = dataCachingSale?.data?.data?.paginator?.total_item || 0;
+    const pageSize = dataCachingSale?.data?.data?.paginator?.per_page || 10;
   
     
-    const [data, setData] = useState<ISale[]>([]);
-   
-    const keySearch = urlQuery.get('search');
-    const keyStatus = urlQuery.get('status') || 'all';
-    const [dataSearch, setDataSearch] = useState<ISale[]>([]);
-    useEffect(() => {
-        if(dataCachingSale?.data?.data?.data){
-            setData(dataCachingSale?.data?.data?.data);
-            
-        }
-    },[dataCachingSale]);
-   
-    useEffect(() => {
-        const statusData = data.filter((item: ISale) => {
-            const start_date = new Date(item.start_date);
-            const end_date = new Date(item.end_date);
-            const now = new Date();
-            if (!keyStatus || keyStatus === 'all') {
-                return true;
-            } else if (keyStatus === 'upcoming') {
-                return start_date > now;
-            } else if (keyStatus === 'active') {
-                return start_date < now && end_date > now;
-            } else if (keyStatus === 'expired') {
-                if (start_date < now && end_date < now) {
-                    return true;
-                }
-                return false;
-            } else {
-                return true;
-            }
-        });
-        if (keySearch && keySearch.length > 0) {
-            setDataSearch(
-                statusData.filter((item: ISale) => {
-                    if (item.name) {
-                        return (
-                            item.name.toLowerCase().includes(keySearch.toLowerCase()) ||
-                            item.id.toString().includes(keySearch.toLowerCase())
-                        );
-                    }
-                    return item.id.toString().includes(keySearch.toLowerCase());
-                }),
-            );
-        } else {
-            setDataSearch([...statusData]);
-        }
-    }, [keySearch, keyStatus, data]);
-    
-
-    // Search
-    const searchSale = (e: any) => {
-        urlQuery.set('search', e.target.value);
+    const handleSearch = (searchValue: string) => {
+        urlQuery.set('search', searchValue);
+        urlQuery.delete('page');
+        navigate(`?${urlQuery.toString()}`, { replace: true });
+    };
+    const handlePageChange = (page: number) => {
+        urlQuery.set('page', `${page}`);
         navigate(`?${urlQuery.toString()}`, { replace: true });
     };
     const handleStatusChange = (e: any) => {
+        
         urlQuery.set('status', e.target.value);
+        urlQuery.delete('page');
         navigate(`?${urlQuery.toString()}`, { replace: true });
     };
-    const dataSource = [...dataSearch];
+
     const columns = [
         {
             title: <FormattedMessage id="admin.id" />,
@@ -105,22 +77,16 @@ const ListSale = () => {
             title: <FormattedMessage id="admin.type" />,
             dataIndex: 'type',
             key: 'type',
-            render: (type: string) => (
-                
-                type === 'percent' ? 
-                
-                <Tag
-                    className="p-3 rounded-[30px] w-[90%] flex items-center justify-center"
-                    color="blue"
-                >
-                    {handleChangeMessage(locale,'Percent','Phần trăm')}
-                </Tag> :  <Tag
-                    className="p-3 rounded-[30px] w-[90%] flex items-center justify-center"
-                    color="red"
-                >
-                    {handleChangeMessage(locale,'Fixed','Cố định')}
-                </Tag>
-            ),
+            render: (type: string) =>
+                type === 'percent' ? (
+                    <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color="blue">
+                        {handleChangeMessage(locale, 'Percent', 'Phần trăm')}
+                    </Tag>
+                ) : (
+                    <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color="red">
+                        {handleChangeMessage(locale, 'Fixed', 'Cố định')}
+                    </Tag>
+                ),
         },
         {
             title: <FormattedMessage id="admin.value" />,
@@ -178,7 +144,7 @@ const ListSale = () => {
                         <FormattedMessage id="sale.active" />
                     </Tag>
                 ) : (
-                    <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center"  color="red">
+                    <Tag className="p-3 rounded-[30px] w-[90%] flex items-center justify-center" color="red">
                         <FormattedMessage id="sale.inactive" />
                     </Tag>
                 );
@@ -188,10 +154,8 @@ const ListSale = () => {
             title: <FormattedMessage id="category.table.action" />,
             key: 'actions',
             render: (_: any, record: ISale) => {
-                
                 return (
                     <div className="flex gap-2 items-center justify-center">
-                       
                         <Button
                             onClick={() => navigate(`/admin/sale/update/${record.id}`)}
                             style={{ color: 'black' }}
@@ -202,7 +166,9 @@ const ListSale = () => {
             },
         },
     ];
-
+    if(isLoading){
+        return <LoadingPage/>
+    }
     return (
         <div>
             <Heading>
@@ -211,11 +177,12 @@ const ListSale = () => {
             <div
                 style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
-                <Input
-                    onChange={searchSale}
-                    placeholder={intl.formatMessage({ id: 'Search_for' })}
+                <InputSearch
                     style={{ width: 300 }}
+                    placeholder={intl.formatMessage({ id: 'Search_for' })}
+                    onSearch={handleSearch}
                 />
+                <Link to="/admin/listsale" className='border rounded-md hover:bg-slate-200'><CircleX /></Link>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <span style={{ marginRight: 10 }}>
                         <FormattedMessage id="status" />:
@@ -244,7 +211,15 @@ const ListSale = () => {
                     </Button>
                 </div>
             </div>
-            <Table dataSource={dataSource} columns={columns} pagination={{ pageSize: 5 }} />
+            <Table dataSource={data} columns={columns} pagination={false} />
+            <div className="mt-8">
+                <PaginationComponent
+                    page={page || (1 as any)}
+                    totalItems={totalItems}
+                    pageSize={pageSize}
+                    handlePageChange={handlePageChange}
+                />
+            </div>
         </div>
     );
 };
