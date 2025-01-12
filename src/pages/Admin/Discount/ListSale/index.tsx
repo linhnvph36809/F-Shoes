@@ -35,7 +35,7 @@ const ListSale = () => {
             setData(dataCachingSale?.data?.data?.data);
         }
     }, [dataCachingSale]);
-    // Search
+    
 
     const totalItems = dataCachingSale?.data?.data?.paginator?.total_item || 0;
     const pageSize = dataCachingSale?.data?.data?.paginator?.per_page || 10;
