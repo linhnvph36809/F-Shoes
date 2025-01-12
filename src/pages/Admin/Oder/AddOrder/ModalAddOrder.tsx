@@ -39,6 +39,11 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
     const onFinish = async (values: any) => {
         if (initialValues.variations.length) {
             const variation = initialValues?.variations?.find((variations: any) => variations.id === values.variantId);
+            const detail_item = variation.values.reduce((acc: any, item: any) => {
+                const key = item.attribute.name;
+                acc[key] = item.value;
+                return acc;
+            }, {});
             handleSetProducts({
                 product_id: null,
                 product_variation_id: variation?.id,
@@ -48,6 +53,7 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                 quantity: +values.quantity,
                 price: +variation?.sale_price || +variation?.price,
                 total_amount: (+variation?.sale_price || +variation?.price) * +values.quantity,
+                detail_item: JSON.stringify(detail_item)
             });
         } else {
             handleSetProducts({

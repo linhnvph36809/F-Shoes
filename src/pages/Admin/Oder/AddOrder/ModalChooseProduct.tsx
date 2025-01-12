@@ -9,7 +9,7 @@ import TableAdmin from '../../components/Table';
 import PaginationComponent from '../../../../components/Pagination';
 import { columnsAttribute } from '../../Products/datas';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
-import { API_PRODUCT, QUERY_KEY } from '../../../../hooks/useProduct';
+import { QUERY_KEY } from '../../../../hooks/useProduct';
 import InputSearch from '../../components/Forms/InputSearch';
 import { IProduct } from '../../../../interfaces/IProduct';
 import { formatPrice, handleChangeMessage, handleGetLocalStorage } from '../../../../utils';
@@ -27,7 +27,7 @@ const ModalChooseProduct = ({ handleSetProducts }: any) => {
     const page = params.get('page') || 1;
     const { data: products, isFetching } = useQueryConfig(
         [QUERY_KEY, `all-product-admin-${page}-${search}`],
-        API_PRODUCT +
+        'api/products-with-all-queries' +
         `?paginate=true&per_page=5&page=${page}&search=${search}&include=categories,sale_price,variations`,
     );
 
