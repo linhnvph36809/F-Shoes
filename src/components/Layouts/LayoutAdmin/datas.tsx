@@ -213,16 +213,7 @@ export const items: MenuProps['items'] = [
                     </Link>
                 ),
                 icon: <Grid2X2 className="w-[16px]" />,
-            },
-            {
-                key: '10-2',
-                label: (
-                    <Link to="add-posts" className="text-[14px]">
-                        <FormattedMessage id="admin.addPost" />
-                    </Link>
-                ),
-                icon: <Plus className="w-[16px]" />,
-            },
+            }
         ],
     },
     {
