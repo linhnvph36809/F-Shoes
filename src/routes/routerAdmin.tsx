@@ -27,7 +27,6 @@ import Statistic from '../pages/Admin/Statistic/StatisticList';
 import AddUser from '../pages/Admin/User/AddUser';
 import ListUser from '../pages/Admin/User/ListUser';
 import UpdateUser from '../pages/Admin/User/UpdateUser';
-import AddPost from '../pages/Admin/Posts/AddPost';
 import UpdatePost from '../pages/Admin/Posts/UpdatePost';
 import MediaLibrary from '../pages/Admin/Image/list-image';
 import ListVouCher from '../pages/Admin/Voucher';
@@ -185,14 +184,6 @@ const routerAdmin = [
                 element: (
                     <PermissionPage keyName={PERMISSION.PERMISSION_POST} action={ACTIONS.ACTIONS_VIEW}>
                         <ListPost />
-                    </PermissionPage>
-                ),
-            },
-            {
-                path: 'add-posts',
-                element: (
-                    <PermissionPage keyName={PERMISSION.PERMISSION_POST} action={ACTIONS.ACTIONS_ADD}>
-                        <AddPost />
                     </PermissionPage>
                 ),
             },

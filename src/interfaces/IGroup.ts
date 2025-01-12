@@ -4,3 +4,5 @@ export interface IGroup {
     permissions?: string;
     deleted_at: string | null;
 }
+
+
