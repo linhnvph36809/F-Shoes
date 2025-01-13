@@ -129,19 +129,21 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
                 listOriginAttribute.splice(i, 1);
                 const idVariants = listOriginAttribute.flatMap((item: any) => item.ids);
                 const idAttributes = variantsChanges.flatMap((item: any) => item.values.map((value: any) => value.id));
+
                 const newIdAttributes = idAttributes.filter((item: any) => idVariants.includes(item));
                 const result = variantsChanges.map((item) => ({
                     ...item,
                     values: item.values.filter((value) => newIdAttributes.includes(value.id)),
                 }));
+
                 const isEmpty = result.every((item: any) => item.values.length === 0);
                 if (isEmpty) {
                     setVariants([]);
                     setVariantId([]);
                     setListAttribute([]);
                     setVariantsChanges([]);
+                
                 } else {
-                    setVariantsChanges([...result]);
                     setListAttribute([...listOriginAttribute]);
                 }
                 setValueAttributes(result);

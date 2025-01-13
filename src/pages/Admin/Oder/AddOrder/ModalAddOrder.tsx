@@ -53,7 +53,7 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                 quantity: +values.quantity,
                 price: +variation?.sale_price || +variation?.price,
                 total_amount: (+variation?.sale_price || +variation?.price) * +values.quantity,
-                detail_item: JSON.stringify(detail_item)
+                detail_item: JSON.stringify(detail_item),
             });
         } else {
             handleSetProducts({
@@ -78,7 +78,7 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
             <Modal
                 title={
                     <h3 className="text-[25px] font-medidum">
-                        <FormattedMessage id="Update Value Variant" />
+                        <FormattedMessage id="Choose_Variant" />
                     </h3>
                 }
                 open={isModalOpen}
@@ -113,7 +113,7 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                                 label={<FormattedMessage id="variant" />}
                                 className="font-medium"
                                 labelCol={{ span: 24 }}
-                                rules={[{ required: true, message: <FormattedMessage id="product.priceRequired" /> }]}
+                                rules={[{ required: true, message: <FormattedMessage id="Please select variant" /> }]}
                             >
                                 <>
                                     <Radio.Group
@@ -143,7 +143,10 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                                     name="quantity"
                                     type="number"
                                     rules={[
-                                        { required: true, message: <FormattedMessage id="product.priceRequired" /> },
+                                        {
+                                            required: true,
+                                            message: <FormattedMessage id="voucher.required.quantity" />,
+                                        },
                                         {
                                             validator: (_: any, value: any) => {
                                                 if (value <= 0) {
