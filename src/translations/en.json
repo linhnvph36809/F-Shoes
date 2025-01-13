@@ -670,5 +670,7 @@
     "phoneProfile": "Phone",
     "show": "Shows",
     "hide": "Hide",
-    "no-product-in-category": "Not found any product."
+    "no-product-in-category": "Not found any product.",
+    "add_attriBute_word" : "Add Attribute",
+    "attribute_is_filter": "As a filter"
 }

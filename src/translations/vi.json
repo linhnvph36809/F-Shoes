@@ -666,6 +666,8 @@
     "Choose_Variant": "Chọn biến thể",
     "show": "Hiển thị",
     "hide": "Ẩn",
-    "no-product-in-category": "Không tìm thấy sản phẩm."
+    "no-product-in-category": "Không tìm thấy sản phẩm.",
+    "add_attriBute_word" : "Thêm thuộc tính",
+    "attribute_is_filter" : "Bộ lọc"
     
 }
