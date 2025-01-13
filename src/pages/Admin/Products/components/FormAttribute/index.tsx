@@ -5,6 +5,9 @@ import ButtonPrimary from '../../../../../components/Button';
 import InputPrimary from '../../../components/Forms/InputPrimary';
 import LoadingSmall from '../../../../../components/Loading/LoadingSmall';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { handleChangeMessage, handleGetLocalStorage } from '../../../../../utils';
+import { LANGUAGE, LANGUAGE_VI } from '../../../../../constants';
+import { showMessageClient } from '../../../../../utils/messages';
 
 const FormAttribute = ({
     handlePostAttributes,
@@ -20,6 +23,15 @@ const FormAttribute = ({
     const handleAddSubmit = (name: string, remove: any) => {
         form.validateFields([['inputs', name]])
             .then((values) => {
+                const isValidate = values.inputs.some(
+                    (item: any) =>
+                        (Array.isArray(item.values) && item.values.some((value: any) => value === '' || value === undefined)) ||
+                        item.attribute === '',
+                );
+                if (isValidate) {
+                    showMessageClient(handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Please enter complete attribute information', 'Vui lòng nhập đầy đủ thông tin thuộc tính'), '', 'warning')
+                    return;
+                }
                 handlePostAttributes({
                     attribute: values.inputs[name].attribute,
                     values: values.inputs[name].values,
@@ -35,7 +47,7 @@ const FormAttribute = ({
 
     return (
         <Form form={form} name="form-attribute" autoComplete="off">
-            <Form.List name="inputs" initialValue={[]}>
+            <Form.List name="inputs">
                 {(fields, { add, remove }) => (
                     <>
                         {fields.map(({ key, name, fieldKey, ...restField }: any) => (
