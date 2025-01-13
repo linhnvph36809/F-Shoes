@@ -665,5 +665,7 @@
     "Select_customer": "Select customer",
     "Choose_User": "Choose User",
     "Choose_a_topic": "Choose a topic",
-    "all_order": "All Order"
+    "all_order": "All Order",
+    "show": "Shows",
+    "hide": "Hide"
 }

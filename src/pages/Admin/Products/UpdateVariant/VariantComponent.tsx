@@ -333,9 +333,9 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                                                 </div>
                                                                 <div className="flex items-center gap-x-5 py-5 border-b">
                                                                     <p className="text-[14px] color-primary">
-                                                                        <FormattedMessage id="admin.qty_sold" /> :{' '}
+                                                                        <FormattedMessage id="status" /> :{' '}
                                                                     </p>
-                                                                    <p>{values.status ? 'Hiển thị' : 'Ẩn'}</p>
+                                                                    <p>{values.status ? <FormattedMessage id="show" /> : <FormattedMessage id="hide" />}</p>
                                                                 </div>
                                                                 <div className="flex items-center gap-x-5 py-5 border-b">
                                                                     <p className="text-[14px] color-primary">
