@@ -24,7 +24,7 @@ const OrderMomoComplete = () => {
 
     const { handleSetCookie } = useCookiesConfig(`order${orderId}`);
 
-    const { putOrder } = useOrder();
+    const { putPaymentOrder:putOrder } = useOrder();
 
     const searchParams = new URLSearchParams(location.search);
     const paramsObj = {

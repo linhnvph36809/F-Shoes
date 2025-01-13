@@ -79,8 +79,45 @@ const useOrder = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }
 
+    const putPaymentOrder = async (id: string | number, order: any) => {
+        try {
+            setLoading(true);
+            await tokenManagerInstance('put',  `/api/order/update/payment-status/${id}`, order);
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEY_STATISTICS] });
+        } catch (error) {
+            if ((error as any).response.data.message) {
+                showMessageClient((error as any)?.response?.data?.message, '', 'error');
+            } else if ((error as any)?.response?.data?.errors) {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something is missing.Please check again!',
+                        'Một số trường đã bị sót.Hãy kiểm tra lại',
+                    ),
+                    '',
+                    'error',
+                );
+            } else if ((error as any)?.response?.data?.error) {
+                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            } else {
+                showMessageClient(
+                    handleChangeMessage(
+                        locale,
+                        'Something went wrong!',
+                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
+                    ),
+                    '',
+                    'error',
+                );
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
     const deleteOrder = async (id: string | number) => {
         try {
             setLoading(true);
@@ -127,6 +164,7 @@ const useOrder = () => {
         loading,
         postOrder,
         putOrder,
+        putPaymentOrder,
         deleteOrder,
     };
 };

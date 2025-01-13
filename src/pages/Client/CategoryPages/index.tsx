@@ -11,6 +11,8 @@ import FilterBox from './components/Fiter';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import { FormattedMessage } from 'react-intl';
 import { Helmet } from 'react-helmet';
+import { handleChangeMessage } from '../../../utils/index.ts';
+import { useContextGlobal } from '../../../contexts/index.tsx';
 
 
 const sortKeysArray = [
@@ -33,6 +35,7 @@ const sortKeysArray = [
 ];
 
 const CategoryPage = () => {
+    const locale = useContextGlobal();
     const newQuery = new URLSearchParams(location.search);
     const [filtersVisible, setFiltersVisible] = useState(true);
     const navigator = useNavigate();
@@ -99,7 +102,7 @@ const CategoryPage = () => {
     return (
         <div className="container mx-auto py-6">
             <Helmet>
-                <title>{category ? category?.name : 'Category'}</title>
+                <title>{category ? category?.name : handleChangeMessage(locale,'Category','Danh mục')}</title>
             </Helmet>
             <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center space-x-4">

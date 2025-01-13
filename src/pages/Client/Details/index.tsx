@@ -129,7 +129,8 @@ const Detail = () => {
                 </>
             );
     }
-console.log(variant);
+   
+    
 
     return (
         <>
