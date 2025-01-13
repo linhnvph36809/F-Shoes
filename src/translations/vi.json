@@ -206,7 +206,8 @@
     "validTimeMessage": "Vui lòng nhập thời gian hợp lệ",
     "Country/Region": "Quốc gia/Khu vực",
     "Province": "Tỉnh",
-
+    "District": "Huyện",
+    "Commune": "Xã",
     "currentPassword": "Mật khẩu hiện tại",
     "currentPasswordPlaceholder": "Mật khẩu hiện tại",
     "newPassword": "Mật khẩu mới",
@@ -660,5 +661,6 @@
     "Select_customer": "Chọn khánh hàng",
     "Choose_User": "Chọn khách hàng",
     "Choose_a_topic": "Chọn chủ để",
-    "all_order": "Tất cả đơn hàng"
+    "all_order": "Tất cả đơn hàng",
+    "phoneProfile": "Số điện thoại"
 }

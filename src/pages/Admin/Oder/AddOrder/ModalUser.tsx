@@ -6,9 +6,11 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { QUERY_KEY } from '../../../../hooks/useUser';
 import { IUser } from '../../../../interfaces/IUser';
 import { formatTime } from '../../../../utils';
-import { CopyPlus, Search } from 'lucide-react';
+import { CopyPlus, Search, SearchXIcon } from 'lucide-react';
 import TableAdmin from '../../components/Table';
 import ButtonEdit from '../../components/Button/ButtonEdit';
+import PaginationComponent from '../../../../components/Pagination';
+import { useNavigate } from 'react-router-dom';
 
 const { Text } = Typography;
 
@@ -16,10 +18,36 @@ const ModalUser = ({ setUser }: any) => {
     const intl = useIntl();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [users, setUsers] = useState<IUser[]>([]);
+    
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const page = params.get('pageUser') || 1;
+    const searchKey = params.get('searchUser') || '';
+    const [search, setSearch] = useState('');
+    const navigate = useNavigate();
     const { data: dataUser, isFetching } = useQueryConfig(
-        [QUERY_KEY, 'list/user'],
-        'api/user?include=profile,group&times=user',
+        [QUERY_KEY, `list/user?page=${page}&search=${searchKey}`],
+        `api/user?paginate=true&per_page=5&page=${page}&search=${searchKey}&include=profile,group&times=user`,
     );
+    const totalItems = dataUser?.data?.users.paginator?.total_item || 0;
+    const pageSize = dataUser?.data?.users.paginator?.per_page || 5;
+    const handlePageChange = (page: number) => {
+        params.set('pageUser', `${page}`);
+        navigate(`?${params.toString()}`, { replace: true });
+    };
+
+    const handleSearch = () => {
+        params.delete('pageUser');
+        params.set('searchUser', search);
+        navigate(`?${params.toString()}`, { replace: true });
+    };
+    const handleRemoveSearch = () => {
+        setSearch('');
+        params.delete('searchUser');
+        params.delete('pageUser');
+        navigate(`?${params.toString()}`, { replace: true });
+    };
+    
 
     useEffect(() => {
         if (dataUser?.data.users.data) {
@@ -167,14 +195,24 @@ const ModalUser = ({ setUser }: any) => {
                             <div className="my-6 flex justify-end">
                                 <div className="relative">
                                     <Input
-                                        className={`w-[350px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
-                                        onChange={filterUser}
+                                        className={`w-[380px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                                        onChange={(e) => setSearch(e?.target?.value)}
                                         placeholder={intl.formatMessage({ id: 'user.User_Users_Input_section' })}
+                                        value={search}
                                     />
-                                    <Search className="absolute top-1/2 right-5 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
+                                    <SearchXIcon onClick={handleRemoveSearch} className="absolute top-1/2 right-4 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
+                                    <Search onClick={handleSearch} className="absolute top-1/2 right-16 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
                                 </div>
                             </div>
-                            <TableAdmin columns={columns} dataSource={users} pagination={{ pageSize: 8 }} />
+                            <TableAdmin columns={columns} dataSource={users} pagination={false} />
+                            <div className="mt-8">
+                                <PaginationComponent
+                                    page={page || (1 as any)}
+                                    totalItems={totalItems}
+                                    pageSize={pageSize}
+                                    handlePageChange={handlePageChange}
+                                />
+                            </div>
                         </section>
                     )}
                 </>

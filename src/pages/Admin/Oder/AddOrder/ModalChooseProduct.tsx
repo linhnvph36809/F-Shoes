@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Modal } from 'antd';
-import { PackagePlus } from 'lucide-react';
+import { Input, Modal } from 'antd';
+import { PackagePlus, Search, SearchXIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -10,7 +10,7 @@ import PaginationComponent from '../../../../components/Pagination';
 import { columnsAttribute } from '../../Products/datas';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { QUERY_KEY } from '../../../../hooks/useProduct';
-import InputSearch from '../../components/Forms/InputSearch';
+
 import { IProduct } from '../../../../interfaces/IProduct';
 import { formatPrice, handleChangeMessage, handleGetLocalStorage } from '../../../../utils';
 import ModalAddOrder from './ModalAddOrder';
@@ -21,30 +21,37 @@ const ModalChooseProduct = ({ handleSetProducts }: any) => {
     const intl = useIntl();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [search, setSearch] = useState('');
+   
     const navigate = useNavigate();
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
     const page = params.get('page') || 1;
+    const searchKey = params.get('search') || '';
     const { data: products, isFetching } = useQueryConfig(
-        [QUERY_KEY, `all-product-admin-${page}-${search}`],
+        [QUERY_KEY, `all-product-admin-${page}-${searchKey}`],
         'api/products-with-all-queries' +
-        `?paginate=true&per_page=5&page=${page}&search=${search}&include=categories,sale_price,variations`,
+            `?paginate=true&per_page=5&page=${page}&search=${searchKey}&include=categories,sale_price,variations`,
     );
 
     const totalItems = products?.data?.paginator?.total_item || 0;
-    const pageSize = products?.data?.paginator?.per_page || 8;
+    const pageSize = products?.data?.paginator?.per_page || 5;
 
     const handlePageChange = (page: number) => {
         params.set('page', `${page}`);
         navigate(`?${params.toString()}`, { replace: true });
     };
 
-    const handleSearch = (searchValue: string) => {
-        setSearch(searchValue);
-        params.set('search', searchValue);
+    const handleSearch = () => {
+        params.delete('page');
+        params.set('search', search);
         navigate(`?${params.toString()}`, { replace: true });
     };
-
+    const handleRemoveSearch = () => {
+        setSearch('');
+        params.delete('search');
+        params.delete('page');
+        navigate(`?${params.toString()}`, { replace: true });
+    };
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -78,10 +85,20 @@ const ModalChooseProduct = ({ handleSetProducts }: any) => {
                 onCancel={handleCancel}
                 footer={null}
             >
-                <div className="flex justify-end">
-                    <InputSearch
+                <div className="flex relative justify-end">
+                    <Input
+                        value={search}
+                        className={`w-[380px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                        onChange={(e) => setSearch(e?.target?.value)}
                         placeholder={intl.formatMessage({ id: 'Search Product Name' })}
-                        onSearch={handleSearch}
+                    />
+                    <SearchXIcon
+                        onClick={handleRemoveSearch}
+                        className="absolute top-1/2 right-4 -translate-y-1/2 w-8 text-gray-700 hover:cursor-pointer hover:opacity-50 transition-global"
+                    />
+                    <Search
+                        onClick={handleSearch}
+                        className="absolute top-1/2 right-16 -translate-y-1/2 w-8 text-gray-700 hover:cursor-pointer hover:opacity-50 transition-global"
                     />
                 </div>
                 <div>
@@ -124,15 +141,15 @@ const ModalChooseProduct = ({ handleSetProducts }: any) => {
                                                     <p>
                                                         {record?.status
                                                             ? handleChangeMessage(
-                                                                handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
-                                                                'Selling',
-                                                                'Đang bán',
-                                                            )
+                                                                  handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
+                                                                  'Selling',
+                                                                  'Đang bán',
+                                                              )
                                                             : handleChangeMessage(
-                                                                handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
-                                                                'Stop selling',
-                                                                'Ngừng bán',
-                                                            )}
+                                                                  handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
+                                                                  'Stop selling',
+                                                                  'Ngừng bán',
+                                                              )}
                                                     </p>
                                                 </div>
                                                 {record?.short_description ? (
@@ -145,7 +162,7 @@ const ModalChooseProduct = ({ handleSetProducts }: any) => {
                                                                 __html: record?.short_description,
                                                             }}
                                                         >
-                                                            { }
+                                                            {}
                                                         </p>
                                                     </div>
                                                 ) : (
@@ -161,7 +178,7 @@ const ModalChooseProduct = ({ handleSetProducts }: any) => {
                                                                 __html: record?.description,
                                                             }}
                                                         >
-                                                            { }
+                                                            {}
                                                         </p>
                                                     </div>
                                                 ) : (

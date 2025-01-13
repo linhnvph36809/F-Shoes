@@ -23,7 +23,7 @@ const Reviews = ({ productId }: { productId?: string | number }) => {
         const index = slug.lastIndexOf('.');
         id = slug.substring(index + 1);
     }
-    const { loading, deleteReview, postReview, postLikeReview } = useReview();
+    const { loading, ownerDeleteReview : deleteReview, postReview, postLikeReview } = useReview();
     const { data, refetch } = useQueryConfig(
         [QUERY_KEY, `get-review/${id}`],
         `/api/product/${id}/reviews?times=review`,

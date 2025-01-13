@@ -208,7 +208,8 @@
 
     "Country/Region": "Country/Region",
     "Province": "Province",
-
+    "District": "District",
+    "Commune": "Commune",
     "currentPassword": "Current Password",
     "currentPasswordPlaceholder": "Current password",
     "newPassword": "New Password",
@@ -664,5 +665,6 @@
     "Select_customer": "Select customer",
     "Choose_User": "Choose User",
     "Choose_a_topic": "Choose a topic",
-    "all_order": "All Order"
+    "all_order": "All Order",
+    "phoneProfile": "Phone"
 }
