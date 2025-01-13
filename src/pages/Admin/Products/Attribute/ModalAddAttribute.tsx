@@ -33,7 +33,7 @@ const ModalAddAttribute: React.FC = () => {
         <>
             <ButtonAdd onClick={showModal} title={<FormattedMessage id="attribute.add_button" />} />
             <Modal
-                title={<h3 className="text-[23px] font-medium">Add AttriBute</h3>}
+                title={<h3 className="text-[23px] font-medium"><FormattedMessage id="add_attriBute_word" /></h3>}
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
@@ -53,7 +53,7 @@ const ModalAddAttribute: React.FC = () => {
                             rules={[{ required: true, message: <FormattedMessage id="attribute.name_required" /> }]}
                             placeholder={intl.formatMessage({ id: 'attribute.name_placeholder' })}
                         ></InputPrimary>
-                        <Form.Item label="Is Filter" className="font-medium" name="is_filter">
+                        <Form.Item label={<FormattedMessage id="attribute_is_filter" />} className="font-medium" name="is_filter">
                             <Switch className="w- text-16px font-medium" />
                         </Form.Item>
                     </div>

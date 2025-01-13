@@ -10,7 +10,7 @@ const { Panel } = Collapse;
 const FilterBox = () => {
     const navigator = useNavigate();
     const [fixedAttributes, setFixedAttributes] = useState<IAttribute[]>([]);
-    const { data: dataCachingAttributes, isFetching: loading } = useQueryConfig(
+    const { data: dataCachingAttributes, isLoading: loading } = useQueryConfig(
         'category-filters-list__attributes',
         'api/attributes/isFilter',
     );

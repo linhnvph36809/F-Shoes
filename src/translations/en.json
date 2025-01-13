@@ -669,5 +669,8 @@
     "all_order": "All Order",
     "phoneProfile": "Phone",
     "show": "Shows",
-    "hide": "Hide"
+    "hide": "Hide",
+    "no-product-in-category": "Not found any product.",
+    "add_attriBute_word" : "Add Attribute",
+    "attribute_is_filter": "As a filter"
 }

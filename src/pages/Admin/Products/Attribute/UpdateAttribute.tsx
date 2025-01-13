@@ -97,16 +97,18 @@ const UpdateAttribute = () => {
                                     placeholder={intl.formatMessage({ id: 'attribute_value' })}
                                     width="100%"
                                     className={`h-[56px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
-                                    defaultValue={item.value}
+                                    defaultValue={item?.value}
                                     onChange={(e: any) => handleChangeAttribute(index, e.target.value)}
                                     disabled
                                 />
-                                <span
+                                {
+                                    item?.can_delete ?                                 <span
                                     className="absolute -top-5 -right-5 z-[10] hover:cursor-pointer"
                                     onClick={() => handleDeleteAttribute(item.id)}
                                 >
                                     <CircleX />
-                                </span>
+                                </span> : ''
+                                }
                             </Form.Item>
                         ))}
 

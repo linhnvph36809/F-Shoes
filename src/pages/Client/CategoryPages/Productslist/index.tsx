@@ -3,6 +3,7 @@ import SkeletonComponent from '../../../Admin/components/Skeleton';
 import BoxProducts from '../components/BoxProduct';
 import { IProduct } from '../../../../interfaces/IProduct';
 import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 interface ProductListProps {
     products: IProduct[] | [];
@@ -25,7 +26,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading, sortOption
             {loading ? (
                 <SkeletonComponent />
             ) : (
-                sortedProducts.map((product) => (
+                sortedProducts.length > 0 ? sortedProducts.map((product) => (
                     <Col span={8} key={product.id}>
                         <Link to={`/detail/${product.slug}`}>
                             <BoxProducts
@@ -37,7 +38,11 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading, sortOption
                             />
                         </Link>
                     </Col>
-                ))
+                )) 
+                : 
+                <div className='w-full h-full flex items-center justify-center font-mono'>
+                    <FormattedMessage id="no-product-in-category" />
+                </div>
             )}
         </Row>
     );
