@@ -665,5 +665,7 @@
     "phoneProfile": "Số điện thoại",
     "Choose_Variant": "Chọn biến thể",
     "show": "Hiển thị",
-    "hide": "Ẩn"
+    "hide": "Ẩn",
+    "no-product-in-category": "Không tìm thấy sản phẩm."
+    
 }
