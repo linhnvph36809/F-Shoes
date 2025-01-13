@@ -16,6 +16,7 @@ import { INFO_AUTH, LANGUAGE_EN, LANGUAGE_VI } from '../../../constants';
 import { FormattedMessage } from 'react-intl';
 import { showMessageAdmin } from '../../../utils/messages';
 import { handleGetLocalStorage } from '../../../utils';
+import { formatGroupName } from '../../../interfaces/IUser';
 
 const { Content, Sider } = Layout;
 
@@ -40,8 +41,6 @@ const LayoutAdmin: React.FC = () => {
     const { locale, changeLanguage, user } = useContextGlobal();
     const groupId = handleGetLocalStorage(INFO_AUTH.groupId);
     const { logoutAdmin } = useAuth();
-
-
 
     useEffect(() => {
         const starCountRef = ref(db, `groups/${groupId}`);
@@ -71,7 +70,6 @@ const LayoutAdmin: React.FC = () => {
             }
         });
     }, [permissions, groupId]);
-
 
     return (
         <ContextAdmin.Provider value={{ permissions }}>
@@ -129,7 +127,9 @@ const LayoutAdmin: React.FC = () => {
                                     <p className="text-[15px] font-medium">
                                         {handleGetLocalStorage(INFO_AUTH.userName)}
                                     </p>
-                                    <p className="text-[12px] color-gray">{user?.group?.group_name}</p>
+                                    <p className="text-[12px] color-gray">
+                                        {formatGroupName(user?.group?.id, user?.group?.group_name, locale)}
+                                    </p>
                                 </div>
                             </div>
                             <div

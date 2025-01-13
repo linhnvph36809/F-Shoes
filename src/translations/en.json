@@ -662,5 +662,7 @@
     "The_quantity_must_be_greater_than_0": "The quantity must be greater than 0 and cannot be a negative number.",
     "The_quantity_cannot_be_greater_than": "The quantity cannot be greater than",
     "Select_customer": "Select customer",
-    "Choose_User": "Choose User"
+    "Choose_User": "Choose User",
+    "Choose_a_topic": "Choose a topic",
+    "all_order": "All Order"
 }

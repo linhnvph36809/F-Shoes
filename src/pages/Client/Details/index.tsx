@@ -11,7 +11,7 @@ import SlidesScroll from '../../../components/SlidesScroll';
 import Heading from '../HomePages/components/Heading';
 import Price from './Price.tsx';
 import { IImage } from '../../../interfaces/IImage.ts';
-import { formatPrice } from '../../../utils';
+import { formatPrice, handleChangeMessage, handleGetLocalStorage } from '../../../utils';
 import useCart from '../../../hooks/useCart.tsx';
 import { useContextGlobal } from '../../../contexts/index.tsx';
 import LoadingSmall from '../../../components/Loading/LoadingSmall.tsx';
@@ -24,6 +24,7 @@ import { FormattedMessage } from 'react-intl';
 import NotFound from '../../../components/NotFound/index.tsx';
 import { showMessageClient } from '../../../utils/messages.ts';
 import { QUERY_KEY } from '../../../hooks/useProduct.tsx';
+import { INFO_AUTH, LANGUAGE, LANGUAGE_VI, TOKENS } from '../../../constants/index.ts';
 
 const Detail = () => {
     const { slug } = useParams();
@@ -84,7 +85,8 @@ const Detail = () => {
     };
 
     const handleNotLogin = () => {
-        showMessageClient('Log in before adding products to your favorites list', '', 'warning');
+
+        showMessageClient(handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Login before adding products to cart', "Đăng nhập trước khi thêm sản phẩm vào giỏ hàng"), '', 'warning');
         navigate('/authentication');
     };
 
@@ -206,7 +208,9 @@ const Detail = () => {
                                     {<FormattedMessage id="body.Detail.Quantity" />} : {productD?.stock_qty}
                                 </p>
                             )}
-                            {user ? (
+                            {handleGetLocalStorage(INFO_AUTH.userName)
+                                && handleGetLocalStorage(TOKENS.ACCESS_TOKEN)
+                                && handleGetLocalStorage(TOKENS.REFRESH_TOKEN) ? (
                                 ''
                             ) : (
                                 <Link to="/authentication" className="text-16px font-medium mt-10 block underline">
@@ -216,21 +220,25 @@ const Detail = () => {
                             <div className="my-20">
                                 <button
                                     onClick={
-                                        user
+                                        handleGetLocalStorage(INFO_AUTH.userName)
+                                            && handleGetLocalStorage(TOKENS.ACCESS_TOKEN)
+                                            && handleGetLocalStorage(TOKENS.REFRESH_TOKEN)
                                             ? (productD?.variations?.length == 0 && productD?.stock_qty) ||
                                                 (variant && variant?.stock_qty)
                                                 ? handleAddCart
                                                 : () => { }
                                             : () => {
                                                 showMessageClient(
-                                                    'Login before adding products to cart',
+                                                    handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Login before adding products to cart', "Đăng nhập trước khi thêm sản phẩm vào giỏ hàng"),
                                                     '',
                                                     'warning',
                                                 );
                                                 navigate('/authentication');
                                             }
                                     }
-                                    className={`${user
+                                    className={`${handleGetLocalStorage(INFO_AUTH.userName)
+                                        && handleGetLocalStorage(TOKENS.ACCESS_TOKEN)
+                                        && handleGetLocalStorage(TOKENS.REFRESH_TOKEN)
                                         ? (productD?.variations?.length == 0 && productD?.stock_qty) ||
                                             (variant && variant?.stock_qty)
                                             ? 'bg-primary'
@@ -244,7 +252,9 @@ const Detail = () => {
 
                                 <button
                                     onClick={() => {
-                                        user ? handleAddFavourite(productD.id) : handleNotLogin();
+                                        handleGetLocalStorage(INFO_AUTH.userName)
+                                            && handleGetLocalStorage(TOKENS.ACCESS_TOKEN)
+                                            && handleGetLocalStorage(TOKENS.REFRESH_TOKEN) ? handleAddFavourite(productD.id) : handleNotLogin();
                                     }}
                                     className="h-[58px] color-primary border
                                     hover:border-[#111111] rounded-[30px] w-full

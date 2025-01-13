@@ -658,5 +658,7 @@
     "The_quantity_must_be_greater_than_0": "Số lượng phải lớn hơn 0 và không được là số âm",
     "The_quantity_cannot_be_greater_than": "Số lượng không được lớn hơn",
     "Select_customer": "Chọn khánh hàng",
-    "Choose_User": "Chọn khách hàng"
+    "Choose_User": "Chọn khách hàng",
+    "Choose_a_topic": "Chọn chủ để",
+    "all_order": "Tất cả đơn hàng"
 }

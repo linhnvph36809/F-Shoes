@@ -9,13 +9,13 @@ export interface IUser {
     name: string;
     email: string;
     email_verified_at: string;
-    google_id?: string|any;
+    google_id?: string | any;
     status: string;
     profile: {
-        given_name:string,
-        family_name:string,
-        detail_address:string,
-        birth_date:any
+        given_name: string;
+        family_name: string;
+        detail_address: string;
+        birth_date: any;
     };
     favoriteProducts: IProduct[];
     created_at: any;
@@ -23,26 +23,26 @@ export interface IUser {
 }
 
 export const formatStatus = (status: string, locale: string) => {
-        switch (status.toLocaleLowerCase()) {
-            case 'active':
-                return handleChangeMessage(locale, 'Active', 'Hoạt Động');
+    switch (status.toLocaleLowerCase()) {
+        case 'active':
+            return handleChangeMessage(locale, 'Active', 'Hoạt Động');
 
-            case 'banned':
-                return handleChangeMessage(locale, 'Banned', 'Hạn Chế');
+        case 'banned':
+            return handleChangeMessage(locale, 'Banned', 'Hạn Chế');
 
-            default:
-                return handleChangeMessage(locale, 'Error', 'Lỗi');
-        }
-};
-export const formatGroupName = (group_id: number|string,groupName:string,locale:string) => {
-    switch(group_id){
-        case 1: 
-        return handleChangeMessage(locale, 'Administrator', 'Quản Trị Viên');
-        case 2: 
-        return handleChangeMessage(locale, 'Assistant Administrator', 'Trợ Lí Quản Trị');
-        case 3: 
-        return handleChangeMessage(locale, 'Customer', 'Khách Hàng');
-        default: 
-        return groupName;
+        default:
+            return handleChangeMessage(locale, 'Error', 'Lỗi');
     }
-}
+};
+export const formatGroupName = (group_id: number | string, groupName: string, locale: string) => {
+    switch (group_id) {
+        case 1:
+            return handleChangeMessage(locale, 'Administrator', 'Quản Trị Viên');
+        case 2:
+            return handleChangeMessage(locale, 'Assistant Administrator', 'Trợ Lí Quản Trị');
+        case 3:
+            return handleChangeMessage(locale, 'Customer', 'Khách Hàng');
+        default:
+            return groupName;
+    }
+};

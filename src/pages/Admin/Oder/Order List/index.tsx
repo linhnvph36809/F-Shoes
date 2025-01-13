@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { ConfigProvider, Input, Select, Skeleton } from 'antd';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { PanelsLeftBottom, Search } from 'lucide-react';
+
 import Heading from '../../components/Heading';
 import { columns } from './datas';
-import { API_ORDER, QUERY_KEY } from '../../../../hooks/useOrder';
+import { API_ORDER, QUERY_KEY, QUERY_KEY_STATISTICS } from '../../../../hooks/useOrder';
 import ModalOrder from './ModalOrder';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import TableAdmin from '../../components/Table';
 import { statusArr, statusToNumber } from '../../../../interfaces/IOrder';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { RotateCcw, Search } from 'lucide-react';
 import ButtonAdd from '../../components/Button/ButtonAdd';
-import { FormattedMessage, useIntl } from 'react-intl';
 import PermissionElement from '../../../../components/Permissions/PermissionElement';
 import { ACTIONS, PERMISSION } from '../../../../constants';
 import PaginationComponent from '../../../../components/Pagination';
@@ -39,6 +40,8 @@ const OrderList = () => {
             status && status !== '' ? '&status=' + statusToNumber(status) : ''
         }`,
     );
+    const { data } = useQueryConfig([QUERY_KEY_STATISTICS, 'statistics-order'], 'api/admin/statistics/order');
+    const [statusActive, setStatusActive] = useState<number>(12);
 
     const totalItems = orders?.data?.paginator.total_item || 0;
     const pageSize = orders?.data?.paginator.per_page || 10;
@@ -74,12 +77,14 @@ const OrderList = () => {
     };
 
     const searchStatus = urlQuery.get('status') || '';
-    const onChangeStatus = (e: any) => {
+    const onChangeStatus = (e: any, status: number) => {
         navigate(`?status=${e}`, { replace: true });
+        setStatusActive(status);
     };
     const onUndoFilter = () => {
         const currentPath = location.pathname;
         navigate(`${currentPath}`, { replace: true });
+        setStatusActive(12);
     };
     useEffect(() => {
         const originData = orders?.data?.data ? JSON.parse(JSON.stringify([...orders.data.data])) : [];
@@ -101,22 +106,100 @@ const OrderList = () => {
         setOrderDetail((preData: any) => ({ ...preData, isModalOpen: false }));
     };
 
+    const statisticsOrder = data?.data;
+
     return (
         <div>
             <Heading>
                 <FormattedMessage id="admin.orderList" />
             </Heading>
-            <div className="grid grid-cols-10 gap-x-5 mb-12">
-                <StatusItem bgColor="bg-red-500" status={0} onChangeStatus={onChangeStatus} />
-                <StatusItem bgColor="bg-gray-500" status={1} onChangeStatus={onChangeStatus} />
-                <StatusItem bgColor="bg-yellow-500" status={2} onChangeStatus={onChangeStatus} />
-                <StatusItem bgColor="bg-orange-500" status={3} onChangeStatus={onChangeStatus} />
-                <StatusItem bgColor="bg-blue-500" status={4} onChangeStatus={onChangeStatus} />
-                <StatusItem bgColor="bg-[#00f227]" status={5} onChangeStatus={onChangeStatus} />
-                <StatusItem bgColor="bg-[#294781]" status={6} onChangeStatus={onChangeStatus} />
-                <StatusItem bgColor="bg-[#d67309]" status={7} onChangeStatus={onChangeStatus} />
-                <StatusItem bgColor="bg-[#741111]" status={8} onChangeStatus={onChangeStatus} />
-                <StatusItem bgColor="bg-[#125070]" status={9} onChangeStatus={onChangeStatus} />
+            <div className="grid grid-cols-11 gap-x-5 mb-12">
+                <div
+                    onClick={onUndoFilter}
+                    className={`flex items-center justify-center bg-primary  ${
+                        statusActive === 12 ? 'border-2 border-gray-500' : 'opacity-40'
+                    } text-center rounded-[12px] gap-x-3 p-3 text-white font-medium text-[16px]
+                    hover:cursor-pointer transition-global hover:opacity-60 relative`}
+                >
+                    <div>
+                        <div className="flex justify-center">
+                            <PanelsLeftBottom className="w-[25px]" />
+                        </div>
+                        <div>
+                            {statisticsOrder?.total_order} <FormattedMessage id="all_order" />
+                        </div>
+                    </div>
+                </div>
+                <StatusItem
+                    bgColor="bg-red-500"
+                    quantity={statisticsOrder?.total_order_cancelled}
+                    status={0}
+                    onChangeStatus={onChangeStatus}
+                    statusActive={statusActive}
+                />
+                <StatusItem
+                    bgColor="bg-gray-500"
+                    quantity={statisticsOrder?.total_order_waiting_payment}
+                    status={1}
+                    onChangeStatus={onChangeStatus}
+                    statusActive={statusActive}
+                />
+                <StatusItem
+                    bgColor="bg-yellow-500"
+                    quantity={statisticsOrder?.total_order_waiting_confirm}
+                    status={2}
+                    onChangeStatus={onChangeStatus}
+                    statusActive={statusActive}
+                />
+                <StatusItem
+                    bgColor="bg-orange-500"
+                    quantity={statisticsOrder?.total_order_confirmed}
+                    status={3}
+                    onChangeStatus={onChangeStatus}
+                    statusActive={statusActive}
+                />
+                <StatusItem
+                    bgColor="bg-blue-500"
+                    quantity={statisticsOrder?.total_order_delivering}
+                    status={4}
+                    onChangeStatus={onChangeStatus}
+                    statusActive={statusActive}
+                />
+                <StatusItem
+                    bgColor="bg-[#00f227]"
+                    quantity={statisticsOrder?.total_order_delivered}
+                    status={5}
+                    onChangeStatus={onChangeStatus}
+                    statusActive={statusActive}
+                />
+                <StatusItem
+                    bgColor="bg-[#294781]"
+                    quantity={statisticsOrder?.total_order_waiting_accept_return}
+                    status={6}
+                    onChangeStatus={onChangeStatus}
+                    statusActive={statusActive}
+                />
+                <StatusItem
+                    bgColor="bg-[#d67309]"
+                    quantity={statisticsOrder?.total_order_return_processing}
+                    status={7}
+                    onChangeStatus={onChangeStatus}
+                    statusActive={statusActive}
+                />
+                <StatusItem
+                    bgColor="bg-[#741111]"
+                    quantity={statisticsOrder?.total_order_denied_return}
+                    status={8}
+                    onChangeStatus={onChangeStatus}
+                    statusActive={statusActive}
+                />
+                <StatusItem
+                    bgColor="bg-[#125070]"
+                    quantity={statisticsOrder?.total_order_returned}
+                    status={9}
+                    onChangeStatus={onChangeStatus}
+                    statusActive={statusActive}
+                />
             </div>
             <div className="flex justify-between">
                 <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_ADD}>
@@ -124,14 +207,6 @@ const OrderList = () => {
                 </PermissionElement>
 
                 <div className="flex justify-end items-center gap-x-5">
-                    <div className="flex items-center justify-center ">
-                        <button
-                            onClick={onUndoFilter}
-                            className="border hover:bg-slate-200 rounded-lg flex items-center justify-center w-[40px] h-[40px]"
-                        >
-                            <RotateCcw />
-                        </button>
-                    </div>
                     <div className="relative">
                         <Input
                             placeholder={intl.formatMessage({ id: 'order.Search_Order' })}
@@ -151,6 +226,7 @@ const OrderList = () => {
                                     Select: {
                                         multipleSelectorBgDisabled: '#fff',
                                         optionFontSize: 16,
+                                        borderRadius: 10,
                                     },
                                 },
                             }}

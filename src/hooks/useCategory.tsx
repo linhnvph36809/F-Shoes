@@ -291,7 +291,7 @@ const useCategory = () => {
         } catch (error: any) {
             showMessageAdmin(
                 error?.response?.data?.message ||
-                    handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
                 '',
                 'error',
             );

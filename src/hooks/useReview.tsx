@@ -8,20 +8,20 @@ import { useQueryClient } from 'react-query';
 
 export const QUERY_KEY = 'review';
 const useReview = () => {
-    const {  locale } = useContextGlobal();
+    const { locale } = useContextGlobal();
     const [loading, setLoading] = useState<boolean>(false);
     const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
     const [loadingRestore, setLoadingRestore] = useState<boolean>(false);
-     const queryClient = useQueryClient();
+    const queryClient = useQueryClient();
     const postReview = async (review: any) => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', '/api/review', review);
-            showMessageClient('Successful product reviews', '', 'success');
+            showMessageClient(handleChangeMessage(locale, 'Successful product reviews', "Đánh giá sản phẩm thành công"), '', 'success');
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
             const e = error as any;
-            showMessageClient('Error', e?.response.data?.message, 'error');
+            showMessageClient(e?.response.data?.message, '', 'error');
         } finally {
             setLoading(false);
         }
@@ -101,9 +101,9 @@ const useReview = () => {
     };
     const postLikeReview = async (id: number) => {
         try {
-          
+
             await tokenManagerInstance('post', `api/review/${id}/like`);
-            
+
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
             if ((error as any).response.data.message) {
