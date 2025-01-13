@@ -81,12 +81,6 @@ const UpdateCategory = () => {
         render: (_: string | number, values: IProduct) => {
             return (
                 <div className="flex-row-center gap-x-3">
-                    <Link to={`/admin/add-variant/${values.slug}`}>
-                        <ButtonEdit>
-                            <CopyPlus />
-                        </ButtonEdit>
-                    </Link>
-
                     <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
                         <Link to={`/admin/update-product/${values.slug}`}>
                             <ButtonEdit>
@@ -94,11 +88,7 @@ const UpdateCategory = () => {
                             </ButtonEdit>
                         </Link>
                     </PermissionElement>
-                    <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_DELETE}>
-                        <ButtonEdit onClick={() => handleDeleteProduct(values.id)}>
-                            <Trash2 />
-                        </ButtonEdit>
-                    </PermissionElement>
+
                 </div>
             );
         },

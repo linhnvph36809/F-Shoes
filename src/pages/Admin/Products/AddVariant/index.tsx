@@ -142,7 +142,7 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
                     setVariantId([]);
                     setListAttribute([]);
                     setVariantsChanges([]);
-                
+
                 } else {
                     setListAttribute([...listOriginAttribute]);
                 }
@@ -255,6 +255,12 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
                                                                 <FormattedMessage id="admin.stock_qty" /> :{' '}
                                                             </p>
                                                             <p>{values.stock_qty}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="status" /> :{' '}
+                                                            </p>
+                                                            <p>{values.status ? <FormattedMessage id="show" /> : <FormattedMessage id="hide" />}</p>
                                                         </div>
                                                         <div className="flex items-center gap-x-5 py-5 border-b">
                                                             <p className="text-[14px] color-primary">SKU : </p>
