@@ -129,6 +129,7 @@ const Detail = () => {
                 </>
             );
     }
+console.log(variant);
 
     return (
         <>
@@ -240,7 +241,7 @@ const Detail = () => {
                                         && handleGetLocalStorage(TOKENS.ACCESS_TOKEN)
                                         && handleGetLocalStorage(TOKENS.REFRESH_TOKEN)
                                         ? (productD?.variations?.length == 0 && productD?.stock_qty) ||
-                                            (variant && variant?.stock_qty)
+                                            (variant && variant?.stock_qty &&  variant?.status)
                                             ? 'bg-primary'
                                             : 'bg-[#f4f4f4] cursor-default'
                                         : 'bg-[#f4f4f4] cursor-default'

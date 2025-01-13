@@ -23,6 +23,7 @@ interface DataUpdateProfile {
     family_name: string;
     birth_date: string;
     detail_address: string;
+    phone: string;
 }
 
 const { Option } = Select;
@@ -33,7 +34,10 @@ const AccountSetting = () => {
     const [loading, setLoading] = useState(false);
     const [updateProfileForm] = Form.useForm();
     const { updateProfile, loadingUpdate } = useProfile();
-    const { data, isFetching, refetch } = useQueryConfig([QUERY_KEY_PROFILE, 'user-setting'], 'api/auth/me?include=profile,times=user');
+    const { data, isLoading:isFetching, refetch } = useQueryConfig(
+        [QUERY_KEY_PROFILE, 'user-setting'],
+        'api/auth/me?include=profile,times=user',
+    );
     const [userD, setUserD] = useState<IUser>();
 
     useEffect(() => {
@@ -51,12 +55,12 @@ const AccountSetting = () => {
             family_name: data?.data.user?.profile?.family_name,
             birth_date: data?.data.user?.profile?.birth_date ? dayjs(data?.data.user?.profile?.birth_date) : null,
             detail_address: data?.data.user?.profile?.detail_address,
+            phone: data?.data.user?.profile?.phone,
         });
         if (initialValues) {
             updateProfileForm.setFieldsValue(initialValues);
         }
     }, [userD, data?.data.user]);
-    console.log(initialValues, 'value');
 
     if (userAddress) {
         updateProfileForm.setFieldValue('detail_address', userAddress);
@@ -72,12 +76,14 @@ const AccountSetting = () => {
             family_name: data.family_name,
             detail_address: data.detail_address,
             birth_date: date,
+            phone: data.phone,
         };
         setInitialValues({
             given_name: data.given_name,
             family_name: data.family_name,
             detail_address: data.detail_address,
             birth_date: data.birth_date,
+            phone: data.phone,
         });
         const updateUser = await updateProfile(updateData);
         if (updateUser?.name) {
@@ -329,16 +335,16 @@ const AccountSetting = () => {
                             >
                                 {countries
                                     ? countries.map((country: geonameCountry, index) => (
-                                        <Option key={index} value={country?.geonameId}>
-                                            <div className="flex items-center">
-                                                {country?.countryName}
-                                                <img
-                                                    src={`https://flagsapi.com/${country?.countryCode}/flat/64.png`}
-                                                    className="mx-4 size-6"
-                                                />
-                                            </div>
-                                        </Option>
-                                    ))
+                                          <Option key={index} value={country?.geonameId}>
+                                              <div className="flex items-center">
+                                                  {country?.countryName}
+                                                  <img
+                                                      src={`https://flagsapi.com/${country?.countryCode}/flat/64.png`}
+                                                      className="mx-4 size-6"
+                                                  />
+                                              </div>
+                                          </Option>
+                                      ))
                                     : ''}
                             </Select>
                         </div>
@@ -362,10 +368,10 @@ const AccountSetting = () => {
                                 >
                                     {provinces
                                         ? provinces.map((province: geonameProvince, index) => (
-                                            <Option key={index} value={province?.geonameId}>
-                                                <div className="flex items-center">{province?.toponymName}</div>
-                                            </Option>
-                                        ))
+                                              <Option key={index} value={province?.geonameId}>
+                                                  <div className="flex items-center">{province?.toponymName}</div>
+                                              </Option>
+                                          ))
                                         : ''}
                                 </Select>
                             </div>
@@ -375,7 +381,7 @@ const AccountSetting = () => {
 
                         {districts && districts.length > 0 ? (
                             <div className="mb-4">
-                                <label className="block text-gray-700 mb-2 text-2xl">District</label>
+                                <label className="block text-gray-700 mb-2 text-2xl"><FormattedMessage id="District" /></label>
                                 <Select
                                     showSearch={true}
                                     className="w-full h-20"
@@ -390,10 +396,10 @@ const AccountSetting = () => {
                                 >
                                     {districts
                                         ? districts.map((district: geonameProvince, index) => (
-                                            <Option key={index} value={district?.geonameId}>
-                                                <div className="flex items-center">{district?.toponymName}</div>
-                                            </Option>
-                                        ))
+                                              <Option key={index} value={district?.geonameId}>
+                                                  <div className="flex items-center">{district?.toponymName}</div>
+                                              </Option>
+                                          ))
                                         : ''}
                                 </Select>
                             </div>
@@ -402,7 +408,7 @@ const AccountSetting = () => {
                         )}
                         {communes && communes.length > 0 ? (
                             <div className="mb-4">
-                                <label className="block text-gray-700 mb-2 text-2xl">Commune</label>
+                                <label className="block text-gray-700 mb-2 text-2xl"><FormattedMessage id="Commune" /></label>
                                 <Select
                                     showSearch={true}
                                     className="w-full h-20"
@@ -417,10 +423,10 @@ const AccountSetting = () => {
                                 >
                                     {communes
                                         ? communes.map((district: geonameProvince, index) => (
-                                            <Option key={index} value={district?.geonameId}>
-                                                <div className="flex items-center">{district?.toponymName}</div>
-                                            </Option>
-                                        ))
+                                              <Option key={index} value={district?.geonameId}>
+                                                  <div className="flex items-center">{district?.toponymName}</div>
+                                              </Option>
+                                          ))
                                         : ''}
                                 </Select>
                             </div>
@@ -507,6 +513,35 @@ const AccountSetting = () => {
                             </Button>
                         </div>
                     </div>
+                    <div className="my-8">
+                        <Form.Item
+                            label={<FormattedMessage id="phoneProfile" />}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: <FormattedMessage id="phone_message" />,
+                                },
+                                {
+                                    validator: (_, value) => {
+                                        const phoneRegex = /^(?:\+84|0)(3|5|7|8|9)\d{8}$/;
+                                        if (!value || phoneRegex.test(value)) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(
+                                            new Error(intl.formatMessage({ id: 'invalid_phone_message' })),
+                                        );
+                                    },
+                                },
+                            ]}
+                            name="phone"
+                        >
+                            <Input
+                                type="text"
+                                placeholder={intl.formatMessage({ id: 'phoneProfile' })}
+                                className="w-full border border-black h-20"
+                            />
+                        </Form.Item>
+                    </div>
 
                     {/* Date of Birth Field */}
                     <div className="my-8">
@@ -520,9 +555,7 @@ const AccountSetting = () => {
                     </div>
 
                     {/* Location Section */}
-                    <h3 className="text-3xl font-semibold mb-2">
-                        <FormattedMessage id="location" />
-                    </h3>
+                    
                     <div className="my-8">
                         <Form.Item label={<FormattedMessage id="address" />} name="detail_address">
                             <Input

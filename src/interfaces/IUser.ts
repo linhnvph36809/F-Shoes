@@ -16,6 +16,7 @@ export interface IUser {
         family_name: string;
         detail_address: string;
         birth_date: any;
+        phone:string;
     };
     favoriteProducts: IProduct[];
     created_at: any;

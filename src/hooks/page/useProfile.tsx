@@ -4,6 +4,7 @@ import { showMessageClient } from '../../utils/messages';
 import { useQueryClient } from 'react-query';
 import { handleChangeMessage } from '../../utils';
 import { useContextGlobal } from '../../contexts';
+import { message } from 'antd';
 export const QUERY_KEY = 'users';
 const useProfile = () => {
     const {  locale } = useContextGlobal();
@@ -20,7 +21,7 @@ const useProfile = () => {
             setLoadingUpdate(true);
             const response = await tokenManagerInstance('put', 'api/update-profile', data);
             queryClient.invalidateQueries({queryKey:[QUERY_KEY]});
-            showMessageClient('Update Profile',response.data.message,'success');
+            message.info(response.data.message);
             
         } catch (error) {
             
