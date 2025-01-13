@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Checkbox, ConfigProvider, Form, Modal, Skeleton } from 'antd';
+import { Checkbox, ConfigProvider, Form, Modal, Skeleton, Switch } from 'antd';
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import { CopyPlus, X } from 'lucide-react';
 import InputPrimary from '../../components/Forms/InputPrimary';
@@ -61,6 +61,7 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) =>
             newValues[index] = {
                 ...value,
                 values: ids,
+                status: value.status,
             };
             return newValues;
         });
@@ -70,6 +71,7 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) =>
             newValues[index] = {
                 ...value,
                 values: ids,
+                status: value.status,
             };
             return newValues;
         });
@@ -166,6 +168,13 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) =>
                         ]}
                     />
                     <InputPrimary label="SKU" placeholder="Enter SKU" name="sku" />
+                    <Form.Item
+                        label={<FormattedMessage id="product.status" />}
+                        className="font-medium flex items-center"
+                        name="status"
+                    >
+                        <Switch className="w- text-16px font-medium" />
+                    </Form.Item>
 
                     <ConfigProvider
                         theme={{

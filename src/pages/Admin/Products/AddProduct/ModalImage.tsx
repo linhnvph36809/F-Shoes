@@ -74,7 +74,8 @@ const ModalImage = ({ images, handleSetImages, indexVariant, setImagesVariants }
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                okText={'Save'}
+                okText={<FormattedMessage id="submit" />}
+                cancelText={<FormattedMessage id="button.cancel" />}
             >
                 <UploadImage imagesObj={images} handleCheckboxChange={handleCheckboxChange} />
             </Modal>

@@ -95,12 +95,16 @@ const useReview = () => {
         } finally {
             setLoadingDelete(false);
         }
-    }
+    };
     const restoreReview = async (id: string | number) => {
         try {
             setLoadingRestore(true);
             await tokenManagerInstance('post', `/api/restore/review/${id}`);
-            showMessageClient(handleChangeMessage(locale,'Review restored successfully','Đánh giá đã được khôi phục'), '', 'success');
+            showMessageClient(
+                handleChangeMessage(locale, 'Review restored successfully', 'Đánh giá đã được khôi phục'),
+                '',
+                'success',
+            );
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
             if ((error as any).response.data.message) {
@@ -134,7 +138,6 @@ const useReview = () => {
     };
     const postLikeReview = async (id: number) => {
         try {
-
             await tokenManagerInstance('post', `api/review/${id}/like`);
 
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
@@ -177,7 +180,7 @@ const useReview = () => {
         restoreReview,
         postReview,
         deleteReview,
-        postLikeReview
+        postLikeReview,
     };
 };
 

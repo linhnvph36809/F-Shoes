@@ -1,7 +1,6 @@
 import { ConfigProvider, Form, Select, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 
 import useQueryConfig from '../../../../hooks/useQueryConfig';
@@ -9,7 +8,6 @@ import FormUpdateVariant from './FormUpdateVariant';
 import { formatPrice, handleChangeMessage, handleGetLocalStorage } from '../../../../utils';
 import ButtonDelete from '../../components/Button/ButtonDelete';
 import useVariant, { QUERY_KEY } from '../../../../hooks/useVariant';
-import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import { useForm } from 'antd/es/form/Form';
 import { IAttribute } from '../../../../interfaces/IAttribute';
 import { combine } from '../AddVariant/datas';
@@ -17,6 +15,7 @@ import ModalFormVariant from '../AddVariant/ModalFormVariant';
 import SkeletonComponent from '../../components/Skeleton';
 import { showMessageActive } from '../../../../utils/messages';
 import SelectPrimary from '../../components/Forms/SelectPrimary';
+import { LANGUAGE, LANGUAGE_VI } from '../../../../constants';
 
 const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, setListAttribute }: any) => {
     const intl = useIntl();
@@ -28,7 +27,6 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
         id = slug.substring(index + 1);
     }
 
-    const queryClient = useQueryClient();
     const { data, isLoading } = useQueryConfig(
         [QUERY_KEY, `update-product-variant-${id}`],
         `/api/product/${id}}/variation`,
@@ -49,15 +47,19 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
 
     const variantByIds = data?.data.data || [];
 
-    const handleDeleteVariant = (id: number) => {
-        setVariantDeleteId(id);
-        queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-    };
+    useEffect(() => {
+        valueAttributes.forEach((attribute: any, index: number) =>
+            form.setFieldValue(
+                `attribute${index}`,
+                attribute.values.map((value: any) => value.id),
+            ),
+        );
+    }, [valueAttributes]);
 
     const deleteVariations = (i: any) => {
         showMessageActive(
             handleChangeMessage(
-                handleGetLocalStorage('language') || 'vi',
+                handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
                 'Are you sure you want to delete?',
                 'Bạn có chắc chắn muốn xóa không?',
             ),
@@ -73,14 +75,15 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                     ...item,
                     values: item.values.filter((value) => newIdAttributes.includes(value.id)),
                 }));
+
                 const isEmpty = result.every((item: any) => item.values.length === 0);
                 if (isEmpty) {
                     setVariants([]);
                     setVariantId([]);
                     setListAttribute([]);
                     setVariantsChanges([]);
+                    form.setFieldValue('attribute', []);
                 } else {
-                    setVariantsChanges([...result]);
                     setListAttribute([...listOriginAttribute]);
                 }
                 setValueAttributes(result);
@@ -97,15 +100,6 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
             preVariantChanges.filter((preVariantChange) => listId.includes(+preVariantChange.id)),
         );
     };
-
-    useEffect(() => {
-        valueAttributes.forEach((attribute: any, index: number) =>
-            form.setFieldValue(
-                `attribute${index}`,
-                attribute.values.map((value: any) => value.id),
-            ),
-        );
-    }, [valueAttributes]);
 
     const handleChangeItem = (values: number[], id: number) => {
         const attribute = variantByIds?.all_attribute?.find((attribute: any) => attribute.id === id);
@@ -159,6 +153,10 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                     sku: variation.sku,
                     images: images.map((image: any) => image.id),
                     values: variation.values.map((value: any) => value.id),
+                    classify: variation.classify,
+                    qty_sold: variation.qty_sold,
+                    listImages: variation.images,
+                    status: variation.status,
                 })),
             );
         } else {
@@ -237,6 +235,7 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                             fieldNames={{ label: 'name', value: 'id' }}
                                             options={variantByIds?.all_attribute}
                                             onChange={handleChange}
+                                            value={variantId}
                                         />
                                     </Form.Item>
                                 </ConfigProvider>
@@ -259,7 +258,9 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                                         name={`attribute${index}`}
                                                         allowClear
                                                         className="select-sort-order font-medium w-full sm:h-[35px] md:h-[40px] border-1 border-[#111111] mb-5"
-                                                        placeholder={intl.formatMessage({ id: 'Please select variant' })}
+                                                        placeholder={intl.formatMessage({
+                                                            id: 'Please select variant',
+                                                        })}
                                                         optionFilterProp="name"
                                                         fieldNames={{ label: 'value', value: 'id' }}
                                                         options={
@@ -316,7 +317,7 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                                                     <p className="text-[14px] color-primary">
                                                                         <FormattedMessage id="Variant Name" /> :{' '}
                                                                     </p>
-                                                                    <p>{values.classify}</p>
+                                                                    <p>{values?.classify}</p>
                                                                 </div>
                                                                 <div className="flex items-center gap-x-5 py-5 border-b">
                                                                     <p className="text-[14px] color-primary">
@@ -329,6 +330,12 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                                                         <FormattedMessage id="admin.qty_sold" /> :{' '}
                                                                     </p>
                                                                     <p>{values.qty_sold}</p>
+                                                                </div>
+                                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                                    <p className="text-[14px] color-primary">
+                                                                        <FormattedMessage id="status" /> :{' '}
+                                                                    </p>
+                                                                    <p>{values.status ? <FormattedMessage id="show" /> : <FormattedMessage id="hide" />}</p>
                                                                 </div>
                                                                 <div className="flex items-center gap-x-5 py-5 border-b">
                                                                     <p className="text-[14px] color-primary">
@@ -345,14 +352,16 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                                                         <FormattedMessage id="admin.image" /> :{' '}
                                                                     </p>
                                                                     <div className="grid grid-cols-6 gap-5">
-                                                                        {values.images.map((image: any) => (
-                                                                            <img
-                                                                                key={image.id}
-                                                                                src={image.url}
-                                                                                alt=""
-                                                                                className="w-[80px] object-cover h-[80px] border"
-                                                                            />
-                                                                        ))}
+                                                                        {values?.listImages?.length
+                                                                            ? values.listImages.map((image: any) => (
+                                                                                <img
+                                                                                    key={image.id}
+                                                                                    src={image.url}
+                                                                                    alt=""
+                                                                                    className="w-[80px] object-cover h-[80px] border"
+                                                                                />
+                                                                            ))
+                                                                            : ''}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -372,15 +381,9 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                                         key: '3',
                                                         render: (
                                                             _,
-                                                            { id, stock_qty, price, sku, images, values }: any,
+                                                            { id, stock_qty, price, sku, images, values, status }: any,
                                                             index: number,
                                                         ) => {
-                                                            let buttonDelete = (
-                                                                <ButtonDelete onClick={() => handleDeleteVariant(id)} />
-                                                            );
-                                                            if (loadingDeleteVariant && id === variantDeleteId) {
-                                                                buttonDelete = <ButtonSubmit loading={true} />;
-                                                            }
                                                             return (
                                                                 <div className="flex items-center gap-x-4">
                                                                     <FormUpdateVariant
@@ -395,13 +398,13 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                                                             values: values.map(
                                                                                 (value: any) => value.id,
                                                                             ),
+                                                                            status: status,
                                                                         }}
                                                                         index={index}
                                                                         ids={values.map((value: any) => value.id)}
                                                                         setDatas={setDatas}
                                                                         setError={setError}
                                                                     />
-                                                                    {buttonDelete}
                                                                 </div>
                                                             );
                                                         },

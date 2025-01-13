@@ -1,7 +1,7 @@
 import { ConfigProvider, Form, Table } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 
-import useAttribute from '../../../../hooks/useAttribute';
+import useAttribute, { QUERY_KEY } from '../../../../hooks/useAttribute';
 import { IAttribute } from '../../../../interfaces/IAttribute';
 
 import FormAttribute from '../components/FormAttribute';
@@ -27,7 +27,7 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
     const [variantsChanges, setVariantsChanges] = useState<IAttribute[]>([]);
     const [variantId, setVariantId] = useState<number[]>([]);
     const { loading: loadingPostAttribute, postAttribute } = useAttribute();
-    const { data: attributeByIds, refetch } = useQueryConfig('attribute', API_ATTRIBUTE_GET);
+    const { data: attributeByIds, refetch } = useQueryConfig([QUERY_KEY, 'attribute'], API_ATTRIBUTE_GET);
     const [images, setImages] = useState<any>([]);
     const [valueAttributes, setValueAttributes] = useState<any>([]);
 
@@ -75,8 +75,10 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
     };
 
     useEffect(() => {
-        const newAttributes = attributeByIds?.data?.data?.filter((attribute: any) => variantId.includes(+attribute.id));
-        setVariants(newAttributes);
+        const result = attributeByIds?.data?.data
+            ?.filter((item: any) => variantId.includes(item.id))
+            .sort((a: any, b: any) => variantId.indexOf(a.id) - variantId.indexOf(b.id));
+        setVariants(result);
     }, [variantId, attributeByIds]);
 
     useEffect(() => {
@@ -127,19 +129,21 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
                 listOriginAttribute.splice(i, 1);
                 const idVariants = listOriginAttribute.flatMap((item: any) => item.ids);
                 const idAttributes = variantsChanges.flatMap((item: any) => item.values.map((value: any) => value.id));
+
                 const newIdAttributes = idAttributes.filter((item: any) => idVariants.includes(item));
                 const result = variantsChanges.map((item) => ({
                     ...item,
                     values: item.values.filter((value) => newIdAttributes.includes(value.id)),
                 }));
+
                 const isEmpty = result.every((item: any) => item.values.length === 0);
                 if (isEmpty) {
                     setVariants([]);
                     setVariantId([]);
                     setListAttribute([]);
                     setVariantsChanges([]);
+
                 } else {
-                    setVariantsChanges([...result]);
                     setListAttribute([...listOriginAttribute]);
                 }
                 setValueAttributes(result);
@@ -251,6 +255,12 @@ const AddVariant = ({ datas, listAttribute, errors, setDatas, setError, setListA
                                                                 <FormattedMessage id="admin.stock_qty" /> :{' '}
                                                             </p>
                                                             <p>{values.stock_qty}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-x-5 py-5 border-b">
+                                                            <p className="text-[14px] color-primary">
+                                                                <FormattedMessage id="status" /> :{' '}
+                                                            </p>
+                                                            <p>{values.status ? <FormattedMessage id="show" /> : <FormattedMessage id="hide" />}</p>
                                                         </div>
                                                         <div className="flex items-center gap-x-5 py-5 border-b">
                                                             <p className="text-[14px] color-primary">SKU : </p>
