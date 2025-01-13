@@ -15,6 +15,7 @@ import ModalFormVariant from '../AddVariant/ModalFormVariant';
 import SkeletonComponent from '../../components/Skeleton';
 import { showMessageActive } from '../../../../utils/messages';
 import SelectPrimary from '../../components/Forms/SelectPrimary';
+import { LANGUAGE, LANGUAGE_VI } from '../../../../constants';
 
 const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, setListAttribute }: any) => {
     const intl = useIntl();
@@ -46,10 +47,19 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
 
     const variantByIds = data?.data.data || [];
 
+    useEffect(() => {
+        valueAttributes.forEach((attribute: any, index: number) =>
+            form.setFieldValue(
+                `attribute${index}`,
+                attribute.values.map((value: any) => value.id),
+            ),
+        );
+    }, [valueAttributes]);
+
     const deleteVariations = (i: any) => {
         showMessageActive(
             handleChangeMessage(
-                handleGetLocalStorage('language') || 'vi',
+                handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
                 'Are you sure you want to delete?',
                 'Bạn có chắc chắn muốn xóa không?',
             ),
@@ -65,14 +75,15 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                     ...item,
                     values: item.values.filter((value) => newIdAttributes.includes(value.id)),
                 }));
+
                 const isEmpty = result.every((item: any) => item.values.length === 0);
                 if (isEmpty) {
                     setVariants([]);
                     setVariantId([]);
                     setListAttribute([]);
                     setVariantsChanges([]);
+                    form.setFieldValue('attribute', []);
                 } else {
-                    setVariantsChanges([...result]);
                     setListAttribute([...listOriginAttribute]);
                 }
                 setValueAttributes(result);
@@ -89,15 +100,6 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
             preVariantChanges.filter((preVariantChange) => listId.includes(+preVariantChange.id)),
         );
     };
-
-    useEffect(() => {
-        valueAttributes.forEach((attribute: any, index: number) =>
-            form.setFieldValue(
-                `attribute${index}`,
-                attribute.values.map((value: any) => value.id),
-            ),
-        );
-    }, [valueAttributes]);
 
     const handleChangeItem = (values: number[], id: number) => {
         const attribute = variantByIds?.all_attribute?.find((attribute: any) => attribute.id === id);
@@ -233,6 +235,7 @@ const VariantComponent = ({ datas, listAttribute, errors, setDatas, setError, se
                                             fieldNames={{ label: 'name', value: 'id' }}
                                             options={variantByIds?.all_attribute}
                                             onChange={handleChange}
+                                            value={variantId}
                                         />
                                     </Form.Item>
                                 </ConfigProvider>
