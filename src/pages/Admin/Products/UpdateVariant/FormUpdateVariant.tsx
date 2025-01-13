@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Checkbox, ConfigProvider, Form, Modal, Skeleton } from 'antd';
+import { Checkbox, ConfigProvider, Form, Modal, Skeleton, Switch } from 'antd';
 
 import ButtonEdit from '../../components/Button/ButtonEdit';
 import { SquarePen, X } from 'lucide-react';
@@ -9,7 +9,7 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { IImage } from '../../../../interfaces/IImage';
 import PaginationComponent from '../../../../components/Pagination';
 
-const FormUpdateVariant = ({ initialValues, setDatas,setError, index, ids }: any) => {
+const FormUpdateVariant = ({ initialValues, setDatas, setError, index, ids }: any) => {
     const intl = useIntl();
     const [currentPage, setCurrentPage] = useState(1);
     const { data, isFetching, refetch } = useQueryConfig('image', `/api/image?paginate=true&page=${currentPage}`);
@@ -17,6 +17,7 @@ const FormUpdateVariant = ({ initialValues, setDatas,setError, index, ids }: any
     const [form] = Form.useForm();
 
     const images = data?.data.data || [];
+
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -40,6 +41,8 @@ const FormUpdateVariant = ({ initialValues, setDatas,setError, index, ids }: any
             newValues[index] = {
                 ...value,
                 values: ids,
+                listImages: images.filter((image: any) => value.images.includes(image.id)),
+                status: value.status,
             };
             return newValues;
         });
@@ -49,6 +52,8 @@ const FormUpdateVariant = ({ initialValues, setDatas,setError, index, ids }: any
             newValues[index] = {
                 ...value,
                 values: ids,
+                listImages: images.filter((image: any) => value.images.includes(image.id)),
+                status: value.status,
             };
             return newValues;
         });
@@ -111,6 +116,7 @@ const FormUpdateVariant = ({ initialValues, setDatas,setError, index, ids }: any
                         type="number"
                         rules={[{ required: true, message: <FormattedMessage id="product.priceRequired" /> }]}
                     />
+
                     <InputPrimary
                         label={<FormattedMessage id="product.stockQuantity" />}
                         placeholder={intl.formatMessage({ id: 'product.enterStockQuantity' })}
@@ -137,6 +143,14 @@ const FormUpdateVariant = ({ initialValues, setDatas,setError, index, ids }: any
                         ]}
                     />
                     <InputPrimary label="SKU" placeholder="Enter SKU" name="sku" />
+
+                    <Form.Item
+                        label={<FormattedMessage id="product.status" />}
+                        className="font-medium flex items-center"
+                        name="status"
+                    >
+                        <Switch className="w- text-16px font-medium" />
+                    </Form.Item>
 
                     <ConfigProvider
                         theme={{
