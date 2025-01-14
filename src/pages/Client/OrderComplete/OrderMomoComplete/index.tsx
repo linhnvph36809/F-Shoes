@@ -8,7 +8,7 @@ import useCookiesConfig from '../../../../hooks/useCookiesConfig';
 import { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import useOrder from '../../../../hooks/useOrder';
-import { paymentMethodString, paymentStatusString, shippingMessage } from '../../../../interfaces/IOrder';
+import { paymentStatusString, shippingMessage } from '../../../../interfaces/IOrder';
 
 const OrderMomoComplete = () => {
     const location = useLocation();
@@ -24,7 +24,7 @@ const OrderMomoComplete = () => {
 
     const { handleSetCookie } = useCookiesConfig(`order${orderId}`);
 
-    const { putPaymentOrder:putOrder } = useOrder();
+    const { putPaymentOrder: putOrder } = useOrder();
 
     const searchParams = new URLSearchParams(location.search);
     const paramsObj = {
@@ -53,8 +53,7 @@ const OrderMomoComplete = () => {
             putOrder(orderId, {
                 status: 2,
                 payment_status: 'paid',
-                payment_method: "momo"
-
+                payment_method: 'momo',
             });
             removeCookieOrderId('orderId');
         }
@@ -126,10 +125,7 @@ const OrderMomoComplete = () => {
                                     <span className="text-[14px] font-medium color-primary">
                                         {<FormattedMessage id="title.Payment" />}
                                     </span>
-                                    <span className="font-semibold text-xl text-gray-800">
-                                        {' '}
-                                        Momo
-                                    </span>
+                                    <span className="font-semibold text-xl text-gray-800"> Momo</span>
                                 </div>
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
                                     <span className="text-[14px] font-medium color-primary">
@@ -146,16 +142,14 @@ const OrderMomoComplete = () => {
                                         {<FormattedMessage id="shipping_method" />}
                                     </span>
                                     <span className="font-semibold text-xl text-gray-800">
-                                    {shippingMessage(order?.shipping_method)}
+                                        {shippingMessage(order?.shipping_method)}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center mt-6 border-t pt-4">
                                     <span className="text-[14px] font-medium color-primary">
                                         {<FormattedMessage id="Shipping_Cost" />}
                                     </span>
-                                    <span className="font-semibold text-xl text-gray-800">
-                                        -{order.voucher_cost}
-                                    </span>
+                                    <span className="font-semibold text-xl text-gray-800">-{order.voucher_cost}</span>
                                 </div>
                                 {order?.note ? (
                                     <div className="flex justify-between items-center mt-6 border-t pt-4">

@@ -667,7 +667,9 @@
     "show": "Hiển thị",
     "hide": "Ẩn",
     "no-product-in-category": "Không tìm thấy sản phẩm.",
-    "add_attriBute_word" : "Thêm thuộc tính",
-    "attribute_is_filter" : "Bộ lọc"
-    
+    "add_attriBute_word": "Thêm thuộc tính",
+    "attribute_is_filter": "Bộ lọc",
+    "Delivery_Shipping": "Giao hàng/Vận chuyển",
+    "End_date_must_be_in_future": "Ngày kết thúc phải lớn hơn thời gian hiện tại"
+
 }
