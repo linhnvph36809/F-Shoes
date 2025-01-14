@@ -37,7 +37,7 @@ const ModalDeniedReturn = ({ orderId, handleCancelDetail }: any) => {
         <>
             <div onClick={showModal}>
                 <button className="px-8 py-3 bg-red-500 text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80">
-                    <FormattedMessage id="Denied_Return" />
+                    <FormattedMessage id="deniedReturn" />
                 </button>
             </div>
             <Modal

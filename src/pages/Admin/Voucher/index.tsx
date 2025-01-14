@@ -1,19 +1,16 @@
-import { Search, Trash2 } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 
-import ButtonEdit from '../components/Button/ButtonEdit';
 import TableAdmin from '../components/Table';
 import useQueryConfig from '../../../hooks/useQueryConfig';
-import useVoucher, { API_VOUCHER, QUERY_VOUCHER } from '../../../hooks/useVoucher';
-import { showMessageActive } from '../../../utils/messages';
+import { API_VOUCHER, QUERY_VOUCHER } from '../../../hooks/useVoucher';
 import Heading from '../components/Heading';
 import { formatPrice } from '../../../utils';
 import { FormattedMessage, useIntl } from 'react-intl';
 import PermissionElement from '../../../components/Permissions/PermissionElement';
 import { ACTIONS, PERMISSION } from '../../../constants';
 import ModalAddVoucher from './ModalAddVoucher';
-import ButtonRestore from '../components/Button/ButtonRestore';
 import SkeletonComponent from '../components/Skeleton';
 
 export const KEY = 'list-voucher';
@@ -21,25 +18,7 @@ export const KEY = 'list-voucher';
 const ListVoucher = () => {
     const intl = useIntl();
     const { data, isLoading } = useQueryConfig([QUERY_VOUCHER, KEY], API_VOUCHER);
-    const { loading, softVocher, restoreVoucher } = useVoucher();
     const [searchTerm, setSearchTerm] = useState('');
-    const [loadingId, setLoadingId] = useState<any>();
-
-    const handleDeleteVoucher = (id?: string | number) => {
-        if (id) {
-            showMessageActive('Are you sure you want to delete the voucher?', '', 'warning', () => {
-                setLoadingId(id);
-                softVocher(id);
-            });
-        }
-    };
-
-    const handleRestoreVoucher = (id?: string | number) => {
-        if (id) {
-            setLoadingId(id);
-            restoreVoucher(id);
-        }
-    };
 
     const columns = [
         {
@@ -112,36 +91,18 @@ const ListVoucher = () => {
                 const isBefore = currentDate.isBefore(parsedDate);
                 return (
                     <div className="flex gap-2">
-                        {voucher.deleted_at ? (
-                            <ButtonRestore
-                                loading={loadingId === voucher.id && loading}
-                                onClick={() => handleRestoreVoucher(voucher.id)}
-                            />
-                        ) : (
-                            <>
-                                {isBefore ? (
-                                    <PermissionElement
-                                        keyName={PERMISSION.PERMISSION_VOUCHER}
-                                        action={ACTIONS.ACTIONS_EDIT}
-                                    >
-                                        <ModalAddVoucher isUpdate={true} initialValues={voucher} />
-                                    </PermissionElement>
-                                ) : (
-                                    ''
-                                )}
+                        <>
+                            {isBefore ? (
                                 <PermissionElement
                                     keyName={PERMISSION.PERMISSION_VOUCHER}
-                                    action={ACTIONS.ACTIONS_DELETE}
+                                    action={ACTIONS.ACTIONS_EDIT}
                                 >
-                                    <ButtonEdit
-                                        loading={loadingId === voucher.id && loading}
-                                        onClick={() => handleDeleteVoucher(voucher.id)}
-                                    >
-                                        {<Trash2 />}
-                                    </ButtonEdit>
+                                    <ModalAddVoucher isUpdate={true} initialValues={voucher} />
                                 </PermissionElement>
-                            </>
-                        )}
+                            ) : (
+                                ''
+                            )}
+                        </>
                     </div>
                 );
             },
@@ -155,7 +116,6 @@ const ListVoucher = () => {
 
     return (
         <>
-
             <div>
                 <Heading>
                     <FormattedMessage id="voucher.List_voucheroucher" />
@@ -177,12 +137,11 @@ const ListVoucher = () => {
                     </div>
                 </div>
                 {isLoading ? (
-                    <SkeletonComponent className='mt-10' />
+                    <SkeletonComponent className="mt-10" />
                 ) : (
                     <TableAdmin scroll={{ x: 'max-content' }} rowKey="id" columns={columns} datas={filteredData} />
                 )}
             </div>
-
         </>
     );
 };

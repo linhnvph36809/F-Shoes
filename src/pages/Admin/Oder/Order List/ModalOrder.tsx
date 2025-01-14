@@ -245,6 +245,20 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                             ) : (
                                 ''
                             )}
+
+                            {orderDetail?.orderDetail?.status == 8 && orderDetail?.orderDetail?.reason_denied_return ? (
+                                <div className="flex justify-between items-center py-2">
+                                    <p className="flex items-center color-gray gap-x-3 text-[14px]">
+                                        <FormattedMessage id="Reason_Denied_Return" /> :{' '}
+                                    </p>
+                                    <p className="color-gray text-[14px] font-medium">
+                                        {orderDetail?.orderDetail?.reason_denied_return}
+                                    </p>
+                                </div>
+                            ) : (
+                                ''
+                            )}
+
                             {orderDetail?.orderDetail?.reason_cancelled ? (
                                 <div className="flex justify-between items-center py-2">
                                     <p className="flex items-center color-gray gap-x-3 text-[14px]">
@@ -269,16 +283,16 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     </div>
                     <div className="flex justify-end items-center gap-x-5 mt-3">
                         {orderDetail?.orderDetail?.status &&
-                            orderDetail?.orderDetail?.status !== 0 &&
-                            orderDetail?.orderDetail?.status < 4 ? (
+                        orderDetail?.orderDetail?.status !== 0 &&
+                        orderDetail?.orderDetail?.status < 3 ? (
                             <ModalReason orderId={orderDetail?.orderDetail?.id} handleCancelDetail={handleCancel} />
                         ) : (
                             ''
                         )}
 
                         {orderDetail?.orderDetail?.status &&
-                            orderDetail?.orderDetail?.status > 1 &&
-                            orderDetail?.orderDetail?.status < 5 ? (
+                        orderDetail?.orderDetail?.status > 1 &&
+                        orderDetail?.orderDetail?.status < 5 ? (
                             <div>
                                 <button
                                     style={{
@@ -319,15 +333,6 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     {loading ? <LoadingSmall /> : <FormattedMessage id="agree" />}
                                 </button>
                             </div>
-                        ) : (
-                            ''
-                        )}
-
-                        {orderDetail?.orderDetail?.status == 8 && orderDetail?.orderDetail?.reason_denied_return ? (
-                            <p className="text-[16px] font-medium text-red-500">
-                                <FormattedMessage id="Reason_Denied_Return" /> :{' '}
-                                {orderDetail?.orderDetail?.reason_denied_return}
-                            </p>
                         ) : (
                             ''
                         )}

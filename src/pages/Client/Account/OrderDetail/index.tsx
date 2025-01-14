@@ -341,6 +341,13 @@ const OrderDetail = () => {
                                         <div className="mt-10 flex justify-end items-center gap-x-5">
                                             {order.status && order.status !== 0 && order.status < 3 ? (
                                                 <>
+                                                    <button
+                                                        onClick={() => handleCanCelOrder(order?.id)}
+                                                        className="w-[140px] h-[50px] bg-red-500
+                                                            rounded-[30px] text-[16px] font-medium transition-global hover:opacity-70 text-white"
+                                                    >
+                                                        <FormattedMessage id="button.cancel" />
+                                                    </button>
                                                     <ModalCancel
                                                         isModalOpen={isModalOpen}
                                                         setIsModalOpen={setIsModalOpen}
@@ -358,26 +365,6 @@ const OrderDetail = () => {
                                             ) : (
                                                 ''
                                             )}
-                                            {order?.status === 1 ? (
-                                                <>
-                                                    <button
-                                                        onClick={() => handleCanCelOrder(order?.id)}
-                                                        className="w-[140px] h-[50px] bg-red-500
-                                                        rounded-[30px] text-[16px] font-medium transition-global hover:opacity-70 text-white"
-                                                    >
-                                                        <FormattedMessage id="button.cancel" />
-                                                    </button>
-                                                    <ModalCancel
-                                                        isModalOpen={isModalOpen}
-                                                        setIsModalOpen={setIsModalOpen}
-                                                        orderId={order.id}
-                                                        refetch={refetch}
-                                                    />
-                                                </>
-                                            ) : (
-                                                ''
-                                            )}
-
                                             {order?.status === 0 ? (
                                                 <ButtonPrimary
                                                     onClick={() => handleBuyAgain(order?.id)}
@@ -394,7 +381,6 @@ const OrderDetail = () => {
                                             ) : (
                                                 ''
                                             )}
-
                                             {order?.status === 1 && currentTime < givenTimePlusOneHour ? (
                                                 <div>
                                                     <div className="flex items-center gap-x-5">
@@ -516,8 +502,8 @@ const OrderDetail = () => {
                                                 {order.status > 4 ? (
                                                     <Link
                                                         to={`/detail/${orderDetail?.product?.slug
-                                                            ? orderDetail?.product?.slug
-                                                            : orderDetail?.variation?.product?.slug
+                                                                ? orderDetail?.product?.slug
+                                                                : orderDetail?.variation?.product?.slug
                                                             }`}
                                                     >
                                                         <button className="h-[36px] px-5 bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">

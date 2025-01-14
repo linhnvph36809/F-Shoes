@@ -149,7 +149,7 @@ const OrderMomoComplete = () => {
                                     <span className="text-[14px] font-medium color-primary">
                                         {<FormattedMessage id="Shipping_Cost" />}
                                     </span>
-                                    <span className="font-semibold text-xl text-gray-800">-{order.voucher_cost}</span>
+                                    <span className="font-semibold text-xl text-gray-800">-{formatPrice(order.shipping_cost)}đ</span>
                                 </div>
                                 {order?.note ? (
                                     <div className="flex justify-between items-center mt-6 border-t pt-4">
