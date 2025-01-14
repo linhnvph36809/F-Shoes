@@ -137,27 +137,27 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     </div>
                     <div className="py-5">
                         <div className="h-[200px] overflow-auto">
-                            {orderDetail?.orderDetail?.order_details.map((orderDetail: any, index: number) => (
+                            {orderDetail?.orderDetail?.order_details.map((order_detail: any, index: number) => (
                                 <div key={index} className="flex justify-between items-center mb-5 pb-5 border-b pr-2">
                                     <div className="flex gap-x-5 items-start">
                                         <img
                                             className="w-[80px] h-[80px] object-cover"
                                             src={
-                                                orderDetail?.product_variation_id
-                                                    ? orderDetail?.variation?.product?.image_url
-                                                    : orderDetail?.product?.image_url
+                                                order_detail?.product_variation_id
+                                                    ? order_detail?.variation?.product?.image_url
+                                                    : order_detail?.product?.image_url
                                             }
                                             alt=""
                                         />
                                         <div>
                                             <h3 className="font-medium text-[16px]">
                                                 {' '}
-                                                {orderDetail?.product_variation_id
-                                                    ? orderDetail?.variation?.product?.name
-                                                    : orderDetail?.product?.name}{' '}
+                                                {order_detail?.product_variation_id
+                                                    ? order_detail?.variation?.product?.name
+                                                    : order_detail?.product?.name}{' '}
                                             </h3>
                                             <p className="color-gray text-[13px] font-medium">
-                                                {Object.entries(JSON.parse(orderDetail?.detail_item) || {}).map(
+                                                {Object.entries(JSON.parse(order_detail?.detail_item) || {}).map(
                                                     ([key, value]: any) => (
                                                         <li key={key}>
                                                             <strong>{key}:</strong> {value}
@@ -168,10 +168,23 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                         </div>
                                     </div>
                                     <div>
-                                        <p className="font-medium text-[14px] text-red-500">
-                                            {formatPrice(orderDetail?.price)}đ
+                                        <p className="font-medium text-[16px] text-red-500">
+                                            {formatPrice(order_detail?.price)}đ
                                         </p>
-                                        <p className="color-gray text-[13px] text-end">x{orderDetail?.quantity}</p>
+                                        <p className="color-gray text-[13px] text-end">x{order_detail?.quantity}</p>
+                                        {orderDetail?.orderDetail?.reason_return ? (
+                                            <p className="text-[14px] text-red-500 text-end">
+                                                {JSON.parse(
+                                                    orderDetail?.orderDetail?.reason_return,
+                                                ).return_detail.includes(order_detail.id) ? (
+                                                    <FormattedMessage id="orderDetail.return" />
+                                                ) : (
+                                                    ''
+                                                )}
+                                            </p>
+                                        ) : (
+                                            ''
+                                        )}
                                     </div>
                                 </div>
                             ))}
@@ -266,6 +279,19 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                 ''
                             )}
 
+                            {orderDetail?.orderDetail?.reason_return ? (
+                                <div className="flex justify-between items-center py-2">
+                                    <p className="flex items-center color-gray gap-x-3 text-[14px]">
+                                        <FormattedMessage id="orderDetail.reasonOrder" /> :{' '}
+                                    </p>
+                                    <p className="color-gray text-[14px] font-medium text-red-500">
+                                        {JSON.parse(orderDetail.orderDetail.reason_return).reason_return}
+                                    </p>
+                                </div>
+                            ) : (
+                                ''
+                            )}
+
                             {orderDetail?.orderDetail?.reason_cancelled ? (
                                 <div className="flex justify-between items-center py-2">
                                     <p className="flex items-center color-gray gap-x-3 text-[14px]">
@@ -321,14 +347,6 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
 
                         {orderDetail?.orderDetail?.status && orderDetail?.orderDetail?.status === 6 ? (
                             <div className="flex items-center gap-x-5">
-                                {/* {orderDetail?.orderDetail?.reason_return ? (
-                                    <p className="text-[16px] font-medium text-red-500">
-                                        <FormattedMessage id="orderDetail.reasonOrder" /> :{' '}
-                                        {orderDetail.orderDetail.reason_return}
-                                    </p>
-                                ) : (
-                                    ''
-                                )} */}
                                 <ModalDeniedReturn
                                     orderId={orderDetail?.orderDetail?.id}
                                     handleCancelDetail={handleCancel}
