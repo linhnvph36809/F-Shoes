@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { tokenManagerInstance } from '../api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PATH_ADMIN } from '../constants/path';
-import { showMessageClient } from '../utils/messages';
+import { showMessageAdmin, showMessageClient } from '../utils/messages';
 import { useQueryClient } from 'react-query';
 import { useContextGlobal } from '../contexts';
 import { handleChangeMessage } from '../utils';
-import {  message  } from 'antd';
+import {  message, notification  } from 'antd';
 const API_ATTRIBUTE = '/api/attribute/';
 
 export const QUERY_KEY = 'query-key-attribute';
@@ -33,27 +33,20 @@ const useAttribute = () => {
             const { data } = await tokenManagerInstance('get', `/api/attribute/${id}/value`);
             return data;
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
-            } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
+            const e = error as any;
+            if(e?.response?.data?.errors){
+                
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m:any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0]
+                    });
+                })
+            }else {
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
                     '',
                     'error',
                 );
@@ -70,27 +63,20 @@ const useAttribute = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             return data;
         } catch (error) {
-            if ((error as any)?.response?.data?.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
-            } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
+            const e = error as any;
+            if(e?.response?.data?.errors){
+                
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m:any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0]
+                    });
+                })
+            }else {
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
                     '',
                     'error',
                 );
@@ -106,27 +92,20 @@ const useAttribute = () => {
             await tokenManagerInstance('post', `/api/attribute`, attributeName);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
-            } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
+            const e = error as any;
+            if(e?.response?.data?.errors){
+                
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m:any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0]
+                    });
+                })
+            }else {
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
                     '',
                     'error',
                 );
@@ -151,27 +130,20 @@ const useAttribute = () => {
             
             navigate(PATH_ADMIN.ADD_ATTRIBUTE);
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
-            } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
+            const e = error as any;
+            if(e?.response?.data?.errors){
+                
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m:any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0]
+                    });
+                })
+            }else {
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
                     '',
                     'error',
                 );
@@ -192,27 +164,20 @@ const useAttribute = () => {
                 'success'
             );
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
-            } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
+            const e = error as any;
+            if(e?.response?.data?.errors){
+                
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m:any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0]
+                    });
+                })
+            }else {
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
                     '',
                     'error',
                 );
@@ -232,27 +197,20 @@ const useAttribute = () => {
                 'success'
             );
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
-            } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
+            const e = error as any;
+            if(e?.response?.data?.errors){
+                
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m:any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0]
+                    });
+                })
+            }else {
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
                     '',
                     'error',
                 );

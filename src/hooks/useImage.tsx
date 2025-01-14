@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { tokenManagerInstance } from '../api';
-import { showMessageClient } from '../utils/messages';
+import { showMessageAdmin, showMessageClient } from '../utils/messages';
 import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
+import { notification } from 'antd';
 
 const API_IMAGE = '/api/image';
 
@@ -14,27 +15,20 @@ const useImage = () => {
             setLoading(true);
             await tokenManagerInstance('delete', API_IMAGE + `/${id}`);
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
-            } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
+            const e = error as any;
+            if(e?.response?.data?.errors){
+                
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m:any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0]
+                    });
+                })
+            }else {
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
                     '',
                     'error',
                 );
