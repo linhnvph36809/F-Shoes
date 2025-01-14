@@ -75,4 +75,7 @@ export const handleChangeMessage: (language: string, enMessage: string, viMessag
         return viMessage;
     }
 };
-//** */
+
+export function isNumber(value: any) {
+    return value !== null && value !== undefined && !isNaN(parseFloat(value)) && isFinite(value);
+}

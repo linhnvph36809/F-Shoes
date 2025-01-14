@@ -2,11 +2,10 @@ import { Button, InputNumber } from 'antd';
 import { DeleteOutlined, HeartOutlined } from '@ant-design/icons';
 import useCart from '../../../../hooks/useCart';
 import useWishlist from '../../../../hooks/useWishlist';
-import { formatPrice } from '../../../../utils';
+import { formatPrice, isNumber } from '../../../../utils';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { FormattedMessage } from 'react-intl';
 import { useEffect, useState } from 'react';
-
 
 const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
     const { putCart } = useCart();
@@ -22,17 +21,16 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
         }
     }, [product]);
     const onChange = (value: any) => {
-        if (!value || +value > product.quantity ) {
+        if (!value || +value > product.quantity) {
             setCartQty(cartQty);
-        }else {
+        } else {
             setCartQty(value);
         }
     };
     const onChangeQuantity = (qty: any) => {
         if (!qty || +qty === product.quantity) {
             setCartQty(product?.quantity);
-        } 
-         else {
+        } else {
             setCartQty(qty);
             putCart(product.id, {
                 quantity: qty,
@@ -129,7 +127,7 @@ const CartItem = ({ product, handleDeleteCart, setCartId, refetch }: any) => {
                     </div>
 
                     {product?.product_variation ? (
-                        product.product_variation.sale_price ? (
+                        isNumber(product.product_variation.sale_price) ? (
                             <div className="text-[16px] font-medium flex items-center gap-x-3">
                                 <p className="color-gray text-[14px] font-normal line-through">
                                     {formatPrice(product.product_variation.price)}đ

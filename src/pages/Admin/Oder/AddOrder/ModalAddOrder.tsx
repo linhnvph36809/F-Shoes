@@ -4,7 +4,7 @@ import ButtonEdit from '../../components/Button/ButtonEdit';
 import { CopyPlus, X } from 'lucide-react';
 import InputPrimary from '../../components/Forms/InputPrimary';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { formatPrice } from '../../../../utils';
+import { formatPrice, isNumber } from '../../../../utils';
 
 const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,8 +51,9 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                 product_image: variation?.image_url,
                 classify: variation?.classify,
                 quantity: +values.quantity,
-                price: +variation?.sale_price || +variation?.price,
-                total_amount: (+variation?.sale_price || +variation?.price) * +values.quantity,
+                price: isNumber(variation?.sale_price) ? +variation?.sale_price : +variation?.price,
+                total_amount:
+                    (isNumber(variation?.sale_price) ? +variation.sale_price : +variation.price) * +values.quantity,
                 detail_item: JSON.stringify(detail_item),
             });
         } else {
@@ -62,8 +63,10 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                 product_name: initialValues?.name,
                 product_image: initialValues?.image_url,
                 quantity: +values.quantity,
-                price: +initialValues?.sale_price || +initialValues?.price,
-                total_amount: (+initialValues?.sale_price || +initialValues?.price) * +values.quantity,
+                price: isNumber(initialValues?.sale_price) ? +initialValues?.sale_price : +initialValues?.price,
+                total_amount:
+                    (isNumber(initialValues?.sale_price) ? +initialValues?.sale_price : +initialValues?.price) *
+                    +values.quantity,
             });
         }
         handleHidden();
@@ -127,7 +130,12 @@ const ModalAddOrder = ({ initialValues, handleSetProducts, handleHidden }: any) 
                                                     />
                                                     <p className="text-center">{variation?.classify}</p>
                                                     <p className="text-center">
-                                                        {formatPrice(variation?.sale_price || variation?.price)}đ
+                                                        {formatPrice(
+                                                            isNumber(variation?.sale_price)
+                                                                ? variation?.sale_price
+                                                                : variation?.price,
+                                                        )}
+                                                        đ
                                                     </p>
                                                 </div>
                                             ),

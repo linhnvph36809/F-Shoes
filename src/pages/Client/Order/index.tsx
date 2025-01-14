@@ -25,7 +25,7 @@ import { useContextGlobal } from '../../../contexts';
 import ButtonPrimary from '../../../components/Button';
 import useVoucher from '../../../hooks/useVoucher';
 import LoadingSmall from '../../../components/Loading/LoadingSmall';
-import { formatPrice, handleChangeMessage } from '../../../utils';
+import { formatPrice, handleChangeMessage, isNumber } from '../../../utils';
 import useOnlinePayment from '../../../hooks/useOnlinePayment';
 import LoadingPage from '../../../components/Loading/LoadingPage';
 import useCookiesConfig from '../../../hooks/useCookiesConfig';
@@ -90,9 +90,17 @@ const Order = () => {
     const handleTotalPrice = useMemo(() => {
         return carts?.reduce((sum: any, curr: any) => {
             if (curr?.product?.price) {
-                return sum + (curr.product.sale_price || curr.product.price) * curr.quantity;
+                if (isNumber(curr.product.sale_price)) {
+                    return (sum + +curr.product.sale_price) * +curr.quantity;
+                } else {
+                    return (sum + +curr.product.price) * +curr.quantity;
+                }
             } else if (curr?.product_variation?.price) {
-                return sum + (curr.product_variation.sale_price || curr.product_variation.price) * curr.quantity;
+                if (isNumber(curr.product_variation.sale_price)) {
+                    return (sum + +curr.product_variation.sale_price) * +curr.quantity;
+                } else {
+                    return (sum + +curr.product_variation.price) * +curr.quantity;
+                }
             }
             return sum;
         }, 0);
@@ -166,8 +174,13 @@ const Order = () => {
                     classify: cart?.product_variation?.classify,
                     product_id: null,
                     quantity: cart.quantity,
-                    price: +cart.product_variation.sale_price || +cart.product_variation.price,
-                    total_amount: +cart.product_variation.sale_price || +cart.product_variation.price * cart.quantity,
+                    price: isNumber(cart.product_variation.sale_price)
+                        ? +cart.product_variation.sale_price
+                        : +cart.product_variation.price,
+                    total_amount:
+                        (isNumber(cart.product_variation.sale_price)
+                            ? +cart.product_variation.sale_price
+                            : +cart.product_variation.price) * cart.quantity,
                     detail_item: JSON.stringify(
                         cart?.product_variation.values?.reduce(
                             (acc: Record<string, string>, item: { attribute: string; values: string }) => {
@@ -186,8 +199,10 @@ const Order = () => {
                     classify: cart?.product?.classify,
                     product_id: cart.product.id,
                     quantity: cart.quantity,
-                    price: +cart.product.sale_price || +cart.product.price,
-                    total_amount: +cart.product.sale_price || +cart.product.price * cart.quantity,
+                    price: isNumber(cart.product.sale_price) ? +cart.product.sale_price : +cart.product.price,
+                    total_amount:
+                        (isNumber(cart.product.sale_price) ? cart.product.sale_price : +cart.product.price) *
+                        cart.quantity,
                     detail_item: null,
                 };
             }
@@ -687,8 +702,9 @@ const Order = () => {
                                                             {formatPrice(
                                                                 cart?.product
                                                                     ? cart?.product.price
-                                                                    : cart?.product_variation?.sale_price ||
-                                                                    cart?.product_variation?.price,
+                                                                    : isNumber(cart?.product_variation?.sale_price)
+                                                                        ? cart?.product_variation?.sale_price
+                                                                        : cart?.product_variation?.price,
                                                             )}{' '}
                                                             ₫
                                                         </Text>

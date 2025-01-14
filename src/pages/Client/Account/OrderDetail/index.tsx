@@ -136,9 +136,9 @@ const OrderDetail = () => {
 
     const status:
         | {
-              className: string;
-              text: string;
-          }
+            className: string;
+            text: string;
+        }
         | undefined = statusString(order?.status);
 
     const givenTime = new Date(order?.created_at || '');
@@ -278,9 +278,8 @@ const OrderDetail = () => {
                                                 <p className="font-medium">
                                                     -{formatPrice(discountVoucher)}đ{' '}
                                                     {order?.voucher_id?.type === 'percentage'
-                                                        ? `(${handleChangeMessage(locale, 'Voucher', 'Mã giảm')} ${
-                                                              order?.voucher_id?.discount
-                                                          }%)`
+                                                        ? `(${handleChangeMessage(locale, 'Voucher', 'Mã giảm')} ${order?.voucher_id?.discount
+                                                        }%)`
                                                         : ''}
                                                 </p>
                                             </div>
@@ -526,11 +525,10 @@ const OrderDetail = () => {
 
                                                 {order.status > 4 ? (
                                                     <Link
-                                                        to={`/detail/${
-                                                            orderDetail?.product?.slug
+                                                        to={`/detail/${orderDetail?.product?.slug
                                                                 ? orderDetail?.product?.slug
                                                                 : orderDetail?.variation?.product?.slug
-                                                        }`}
+                                                            }`}
                                                     >
                                                         <button className="h-[36px] px-5 bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">
                                                             <FormattedMessage id="admin.review" />
