@@ -66,7 +66,7 @@ const ModalFormUser = ({ initialValues, isUpdate }: any) => {
         formData.append('status', values?.active ? 'active' : 'banned');
         formData.append('profile[given_name]', values.given_name);
         formData.append('profile[family_name]', values.family_name);
-        formData.append('profile[birth_date]', values.birth_date);
+        formData.append('profile[birth_date]', dayjs(values.birth_date).format('YYYY-MM-DD'));
         formData.append('profile[phone]', values.phone);
         formData.append('_method', initialValues ? 'put' : 'post');
         if (imageFile) {
@@ -88,15 +88,17 @@ const ModalFormUser = ({ initialValues, isUpdate }: any) => {
             is_admin: false,
             active: false,
             phone: '',
+            password: '',
         });
+        setImageFile(null);
     };
 
     useEffect(() => {
         form.setFieldsValue({
             email: initialValues?.email,
-            birth_date: dayjs(initialValues?.profile?.birth_date).format('YYYY-MM-DD'),
             given_name: initialValues?.profile?.given_name,
             family_name: initialValues?.profile?.family_name,
+            birth_date: initialValues?.profile?.birth_date ? dayjs(initialValues.profile.birth_date) : null,
             group_id: initialValues?.group_id,
             is_admin: initialValues?.is_admin ? true : false,
             active: initialValues?.status === 'active' ? true : false,
@@ -204,10 +206,11 @@ const ModalFormUser = ({ initialValues, isUpdate }: any) => {
                             ></InputPrimary>
                         )}
 
-                        <InputPrimary
-                            name="birth_date"
+                        <Form.Item
+                            labelCol={{ span: 24 }}
+                            className="font-medium"
                             label={intl.formatMessage({ id: 'user.date' })}
-                            type="date"
+                            name="birth_date"
                             rules={[
                                 () => ({
                                     validator(_: any, value: any) {
@@ -228,7 +231,13 @@ const ModalFormUser = ({ initialValues, isUpdate }: any) => {
                                     },
                                 }),
                             ]}
-                        ></InputPrimary>
+                        >
+                            <DatePicker
+                                placeholder={intl.formatMessage({ id: 'select_date_end' })}
+                                format="DD-MM-YYYY"
+                                className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            />
+                        </Form.Item>
 
                         <SelectPrimary
                             name="group_id"

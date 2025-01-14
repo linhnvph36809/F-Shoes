@@ -333,7 +333,64 @@ const ListUser = () => {
                                 />
                             </div>
                         </div>
-                        <TableAdmin columns={columns} dataSource={users} pagination={false} />
+                        <TableAdmin columns={columns} dataSource={users} pagination={false}
+                            expandable={{
+                                expandedRowRender: (record: any) => {
+                                    return (
+                                        <>
+                                            <div>
+                                                <div className="flex items-center gap-x-5 pb-5 border-b">
+                                                    <p className="text-[14px] color-primary">
+                                                        <FormattedMessage id="topic.Topic_Name" /> :{' '}
+                                                    </p>
+                                                    <p>{record?.name}</p>
+                                                </div>
+                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                    <p className="text-[14px] color-primary">
+                                                        Email :
+                                                    </p>
+                                                    <p>{record?.email}</p>
+                                                </div>
+                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                    <p className="text-[14px] color-primary">
+                                                        <FormattedMessage id="phone" /> :
+                                                    </p>
+                                                    <p>{(record?.profile?.phone)}</p>
+                                                </div>
+                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                    <p className="text-[14px] color-primary">
+                                                        <FormattedMessage id="status" /> :
+                                                    </p>
+                                                    <p>{record.status}</p>
+                                                </div>
+                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                    <p className="text-[14px] color-primary">
+                                                        <FormattedMessage id="group.Group_name" /> :
+                                                    </p>
+                                                    <p>{record.group.group_name}</p>
+                                                </div>
+                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                    <p className="text-[14px] color-primary">
+                                                        <FormattedMessage id="user.date" /> :
+                                                    </p>
+                                                    <p>{formatTime(record?.profile?.birth_date)}</p>
+                                                </div>
+                                                <div className="flex items-center gap-x-5 py-5 border-b">
+                                                    <p className="text-[14px] color-primary">
+                                                        <FormattedMessage id="admin.image" /> :
+                                                    </p>
+                                                    <img src={record?.avatar_url} alt="" className='w-[80px] h-[80px] object-cover' />
+                                                </div>
+
+                                            </div>
+                                        </>
+                                    );
+                                },
+
+                                rowExpandable: (record: any) => record.id !== '',
+                            }}
+                            rowKey="id"
+                        />
                         <PaginationComponent
                             className="mt-4"
                             page={page}

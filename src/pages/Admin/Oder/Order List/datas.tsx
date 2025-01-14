@@ -1,12 +1,7 @@
-import { Avatar, Button, Tag, Typography } from 'antd';
-import { Eye, SquarePen } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { ACTIONS, PERMISSION } from '../../../../constants';
+import { Avatar, Tag, Typography } from 'antd';
 import { formatPrice, formatTime, timeToNow } from '../../../../utils';
 import { paymentMethodString, statusString } from '../../../../interfaces/IOrder';
 import { FormattedMessage } from 'react-intl';
-import PermissionElement from '../../../../components/Permissions/PermissionElement';
-import ButtonEdit from '../../components/Button/ButtonEdit';
 const { Text } = Typography;
 
 export const columns = [
@@ -21,7 +16,7 @@ export const columns = [
         dataIndex: 'user',
         render: (_: any, order: any) => (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar src={order?.user?.image?.url || '../public/images/default_avatar.png'} size={40} />
+                <Avatar src={order?.user?.avatar_url || '../public/images/default_avatar.png'} size={40} />
                 <div style={{ marginLeft: '10px' }}>
                     <Text strong>{order?.receiver_full_name}</Text>
                     <br />

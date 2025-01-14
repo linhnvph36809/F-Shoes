@@ -131,10 +131,10 @@ const ModalUser = ({ setUser }: any) => {
         },
         {
             title: <FormattedMessage id="phone" />,
-            dataIndex: 'phone',
-            key: 'phone',
+            dataIndex: 'profile',
+            key: 'profile',
             render: (profile: any) => {
-                return <p>{formatTime(profile?.phone)}</p>;
+                return <p>{profile?.phone}</p>;
             },
         },
         {
