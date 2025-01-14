@@ -38,9 +38,16 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
 
     const handleChangeStatus = async (status: number) => {
         if (orderDetail?.orderDetail?.id) {
-            await putOrder(orderDetail.orderDetail.id, {
+            let value: any = {
                 status,
-            });
+            };
+            if (status === 5) {
+                value = {
+                    ...value,
+                    payment_status: 'paid',
+                };
+            }
+            await putOrder(orderDetail.orderDetail.id, value);
             handleCancel();
         }
     };
@@ -283,16 +290,16 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     </div>
                     <div className="flex justify-end items-center gap-x-5 mt-3">
                         {orderDetail?.orderDetail?.status &&
-                        orderDetail?.orderDetail?.status !== 0 &&
-                        orderDetail?.orderDetail?.status < 3 ? (
+                            orderDetail?.orderDetail?.status !== 0 &&
+                            orderDetail?.orderDetail?.status < 3 ? (
                             <ModalReason orderId={orderDetail?.orderDetail?.id} handleCancelDetail={handleCancel} />
                         ) : (
                             ''
                         )}
 
                         {orderDetail?.orderDetail?.status &&
-                        orderDetail?.orderDetail?.status > 1 &&
-                        orderDetail?.orderDetail?.status < 5 ? (
+                            orderDetail?.orderDetail?.status > 1 &&
+                            orderDetail?.orderDetail?.status < 5 ? (
                             <div>
                                 <button
                                     style={{

@@ -8,7 +8,7 @@ import useOrder from '../../../../../../hooks/useOrder';
 import LoadingSmall from '../../../../../../components/Loading/LoadingSmall';
 import { useContextGlobal } from '../../../../../../contexts';
 import { showMessageActive } from '../../../../../../utils/messages';
-import { handleChangeMessage } from '../../../../../../utils';
+import { handleChangeMessage, isNumber } from '../../../../../../utils';
 import { useParams } from 'react-router-dom';
 
 const ModalReturnOrder = ({ order, refetch }: any) => {
@@ -39,8 +39,10 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
                 classify: cart?.variation?.classify,
                 product_id: null,
                 quantity: cart.quantity,
-                price: +cart.variation.sale_price || +cart.variation.price,
-                total_amount: +cart.variation.sale_price || +cart.variation.price * cart.quantity,
+                price: isNumber(cart.variation.sale_price) ? +cart.variation.sale_price : +cart.variation.price,
+                total_amount: isNumber(cart.variation.sale_price)
+                    ? +cart.variation.sale_price
+                    : +cart.variation.price * cart.quantity,
             };
         } else if (cart?.product) {
             return {
@@ -50,8 +52,10 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
                 classify: cart?.product?.classify,
                 product_id: cart.product.id,
                 quantity: cart.quantity,
-                price: +cart.product.sale_price || +cart.product.price,
-                total_amount: +cart.product.sale_price || +cart.product.price * cart.quantity,
+                price: isNumber(cart.product.sale_price) ? +cart.product.sale_price : +cart.product.price,
+                total_amount: isNumber(cart.product.sale_price)
+                    ? +cart.product.sale_price
+                    : +cart.product.price * cart.quantity,
             };
         }
     });

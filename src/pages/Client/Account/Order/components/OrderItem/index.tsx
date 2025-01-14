@@ -8,9 +8,9 @@ import { FormattedMessage } from 'react-intl';
 const OrderItem = ({ order }: { order: IOrder }) => {
     const status:
         | {
-              className: string;
-              text: string;
-          }
+            className: string;
+            text: string;
+        }
         | undefined = statusString(order.status);
 
     const currentUrl = `${window.location.origin}${location.pathname}${location.search}`;

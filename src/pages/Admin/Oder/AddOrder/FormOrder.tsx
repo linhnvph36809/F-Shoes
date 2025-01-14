@@ -129,6 +129,9 @@ const FormOrder = () => {
         }, 0);
     }, [products]);
 
+    console.log(products);
+
+
     const totalAmount = useMemo(() => {
         let sum = 0;
         if (handleTotalPrice >= FREE_SHIP) {
@@ -189,12 +192,11 @@ const FormOrder = () => {
             receiver_full_name: infoShip
                 ? values?.receiver_full_name
                 : user
-                ? user.name
-                : handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Retail customers', ' Khách lẻ'),
+                    ? user.name
+                    : handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Retail customers', ' Khách lẻ'),
             address: infoShip
-                ? `${values?.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
-                      districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-                  } - ${province}`
+                ? `${values?.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+                } - ${province}`
                 : handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'At the counter', 'Tại quầy'),
             city: infoShip
                 ? province
@@ -548,11 +550,10 @@ const FormOrder = () => {
                                 <div className="flex justify-center gap-x-5 my-10">
                                     <button
                                         onClick={() => setPaymentMethod(paymentMehtods.cash_on_delivery)}
-                                        className={`px-5 py-3 rounded-lg ${
-                                            paymentMethod === paymentMehtods.cash_on_delivery
-                                                ? 'bg-primary'
-                                                : 'bg-gray opacity-80'
-                                        }  text-white flex items-center gap-x-5 font-medium
+                                        className={`px-5 py-3 rounded-lg ${paymentMethod === paymentMehtods.cash_on_delivery
+                                            ? 'bg-primary'
+                                            : 'bg-gray opacity-80'
+                                            }  text-white flex items-center gap-x-5 font-medium
                                     transition-global`}
                                     >
                                         <FormattedMessage id="Cash" />
@@ -561,11 +562,10 @@ const FormOrder = () => {
                                     {totalAmount > 10000 ? (
                                         <button
                                             onClick={() => setPaymentMethod(paymentMehtods.banking)}
-                                            className={`px-5 py-3 rounded-lg ${
-                                                paymentMethod === paymentMehtods.banking
-                                                    ? 'bg-primary'
-                                                    : 'bg-gray opacity-80'
-                                            } text-white flex items-center gap-x-5 font-medium
+                                            className={`px-5 py-3 rounded-lg ${paymentMethod === paymentMehtods.banking
+                                                ? 'bg-primary'
+                                                : 'bg-gray opacity-80'
+                                                } text-white flex items-center gap-x-5 font-medium
                                                                         transition-global`}
                                         >
                                             QR

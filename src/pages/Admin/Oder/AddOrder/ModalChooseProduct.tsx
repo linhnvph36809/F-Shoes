@@ -12,7 +12,7 @@ import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { QUERY_KEY } from '../../../../hooks/useProduct';
 
 import { IProduct } from '../../../../interfaces/IProduct';
-import { formatPrice, handleChangeMessage, handleGetLocalStorage } from '../../../../utils';
+import { formatPrice, handleChangeMessage, handleGetLocalStorage, isNumber } from '../../../../utils';
 import ModalAddOrder from './ModalAddOrder';
 import { LANGUAGE, LANGUAGE_VI } from '../../../../constants';
 import { ICategory } from '../../../../interfaces/ICategory';
@@ -21,7 +21,7 @@ const ModalChooseProduct = ({ handleSetProducts }: any) => {
     const intl = useIntl();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [search, setSearch] = useState('');
-   
+
     const navigate = useNavigate();
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
@@ -30,7 +30,7 @@ const ModalChooseProduct = ({ handleSetProducts }: any) => {
     const { data: products, isFetching } = useQueryConfig(
         [QUERY_KEY, `all-product-admin-${page}-${searchKey}`],
         'api/products-with-all-queries' +
-            `?paginate=true&per_page=5&page=${page}&search=${searchKey}&include=categories,sale_price,variations`,
+        `?paginate=true&per_page=5&page=${page}&search=${searchKey}&include=categories,sale_price,variations`,
     );
 
     const totalItems = products?.data?.paginator?.total_item || 0;
@@ -124,8 +124,13 @@ const ModalChooseProduct = ({ handleSetProducts }: any) => {
                                                         <FormattedMessage id="admin.price" /> :{' '}
                                                     </p>
                                                     <p>
-                                                        {formatPrice(record?.sale_price || record?.price)}đ{' '}
-                                                        {record?.sale_price ? (
+                                                        {formatPrice(
+                                                            isNumber(record?.sale_price)
+                                                                ? record?.sale_price
+                                                                : record?.price,
+                                                        )}
+                                                        đ{' '}
+                                                        {isNumber(record?.sale_price) ? (
                                                             <span className="color-gray line-through text-[12px]">
                                                                 {formatPrice(record?.price)}đ
                                                             </span>
@@ -141,15 +146,15 @@ const ModalChooseProduct = ({ handleSetProducts }: any) => {
                                                     <p>
                                                         {record?.status
                                                             ? handleChangeMessage(
-                                                                  handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
-                                                                  'Selling',
-                                                                  'Đang bán',
-                                                              )
+                                                                handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
+                                                                'Selling',
+                                                                'Đang bán',
+                                                            )
                                                             : handleChangeMessage(
-                                                                  handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
-                                                                  'Stop selling',
-                                                                  'Ngừng bán',
-                                                              )}
+                                                                handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
+                                                                'Stop selling',
+                                                                'Ngừng bán',
+                                                            )}
                                                     </p>
                                                 </div>
                                                 {record?.short_description ? (
@@ -162,7 +167,7 @@ const ModalChooseProduct = ({ handleSetProducts }: any) => {
                                                                 __html: record?.short_description,
                                                             }}
                                                         >
-                                                            {}
+                                                            { }
                                                         </p>
                                                     </div>
                                                 ) : (
@@ -178,7 +183,7 @@ const ModalChooseProduct = ({ handleSetProducts }: any) => {
                                                                 __html: record?.description,
                                                             }}
                                                         >
-                                                            {}
+                                                            { }
                                                         </p>
                                                     </div>
                                                 ) : (
