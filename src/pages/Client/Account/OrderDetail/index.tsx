@@ -1,6 +1,6 @@
 import { Skeleton, Tag } from 'antd';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeftToLine } from 'lucide-react';
 
 import UseOrder from '../../../../hooks/profile/useOrder';
@@ -109,7 +109,13 @@ const OrderDetail = () => {
     };
 
     const subtotal = order?.order_details?.reduce((acc: number, cur: any) => +cur.total_amount + acc, 0) || 0;
-
+    const [discountVoucher,setDiscountVoucher] = useState<number>(0);
+    useEffect(() => {
+        if(order?.voucher_id){
+            
+        }
+    },[order]);
+   
     const status:
         | {
             className: string;
@@ -256,7 +262,7 @@ const OrderDetail = () => {
                                                         -{formatPrice(order.voucher_id?.discount)}đ
                                                     </p>
                                                 ) : (
-                                                    <p className="font-medium">{order.voucher_id?.discount}%</p>
+                                                    <p className="font-medium">-{order.voucher_id?.discount}%</p>
                                                 )}
                                             </div>
                                         ) : (

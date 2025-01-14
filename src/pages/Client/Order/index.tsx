@@ -117,26 +117,18 @@ const Order = () => {
             );
             setVoucher([]);
             return sum;
-        } else if (voucher?.max_total_amount < sum) {
-            showMessageClient(
-                handleChangeMessage(
-                    locale,
-                    `The order must be smaller than ${formatPrice(voucher.min_total_amount)}đ`,
-                    `Đơn hàng phải nhỏ hơn ${formatPrice(voucher.max_total_amount)}đ`,
-                ),
-                '',
-                'warning',
-            );
-            setVoucher([]);
-            return sum;
         } else if (voucher.discount && voucher?.type && voucher?.type === 'fixed') {
             if (sum - +voucher.discount > 0) {
                 return sum - +voucher.discount;
             }
             return 0;
         } else if (voucher?.type && voucher?.type === 'percentage') {
-            if (sum - (sum * +voucher.discount) / 100 > 0) {
-                return sum - (sum * +voucher.discount) / 100;
+            let amount1 = (sum * +voucher.discount) / 100;
+            if (amount1 > voucher?.max_total_amount) {
+                amount1 = voucher?.max_total_amount;
+            }
+            if (sum - amount1 > 0) {
+                return sum - amount1;
             }
             return 0;
         } else {
@@ -572,7 +564,9 @@ const Order = () => {
                                                 marginBottom: '16px',
                                             }}
                                         >
-                                            <Text className="color-primary font-medium"><FormattedMessage id="Delivery_Shipping"/></Text>
+                                            <Text className="color-primary font-medium">
+                                                <FormattedMessage id="Delivery_Shipping" />
+                                            </Text>
                                             <Text className="color-gray font-medium">
                                                 {handleTotalPrice >= FREE_SHIP
                                                     ? 'Free Ship'
