@@ -17,7 +17,7 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
     const { loading, putOrder } = useOrder();
     const { locale } = useContextGlobal();
     const { id } = useParams();
-    const [productReturn, setProductReturn] = useState<any>([]);
+    const [idProductReturn, setIdProductReturn] = useState<any>([]);
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -34,7 +34,7 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
     const return_detail = order?.order_details?.map((cart: any, index: any) => {
         if (cart?.variation) {
             return {
-                index: index,
+                id: cart.id,
                 product_variation_id: cart.product_variation_id,
                 product_image: cart?.variation?.image_url,
                 product_name: cart?.variation?.product?.name,
@@ -48,7 +48,7 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
             };
         } else if (cart?.product) {
             return {
-                index: index,
+                id: cart.id,
                 product_variation_id: null,
                 product_image: cart.product?.image_url,
                 product_name: cart.product.name,
@@ -64,8 +64,7 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
     });
 
     const handleChangeProduct = (values: any) => {
-        const newValue = return_detail.filter((return_detail: any) => values.includes(return_detail.index));
-        setProductReturn([...newValue]);
+        setIdProductReturn(values);
     };
 
     const onFinish = (value: { reason_return: string }) => {
@@ -83,7 +82,7 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
                         status: 6,
                         reason_return: JSON.stringify({
                             reason_return: value.reason_return,
-                            return_detail: productReturn,
+                            return_detail: idProductReturn,
                         }),
                     });
                     setIsModalOpen(false);
@@ -129,25 +128,27 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
                         {loading ? <LoadingSmall /> : <FormattedMessage id="button.submit" />}
                     </button>,
                 ]}
+                width={600}
             >
                 <Form layout="vertical" form={form} onFinish={onFinish}>
                     <Form.Item
                         name="images"
                         label={<FormattedMessage id="choose_product_return" />}
-                        className="font-medium"
+                        className="font-medium mt-5"
                         labelCol={{ span: 24 }}
-                        required={true}
+                        rules={[
+                            { required: true, message: <FormattedMessage id="validate_product_return" /> },
+                        ]}
                     >
                         <>
                             <Checkbox.Group
-
                                 onChange={handleChangeProduct}
-                                options={return_detail.map((order_detail: any, index: number) => ({
+                                options={return_detail.map((order_detail: any) => ({
                                     label: (
                                         <div>
-                                            <div className="w-[100px]">
+                                            <div className="w-[100px] mt-5">
                                                 <img
-                                                    className="w-[60px] h-[60px] object-cover"
+                                                    className="w-full h-[100px] object-cover"
                                                     src={order_detail.product_image}
                                                 />
                                                 <p className="text-[12px]">{order_detail.product_name}</p>
@@ -158,14 +159,14 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
                                             </div>
                                         </div>
                                     ),
-                                    value: index,
+                                    value: order_detail.id,
                                 }))}
                             />
                         </>
                     </Form.Item>
 
                     <Form.Item
-                        label=""
+                        label={<FormattedMessage id="orderDetail.reasonOrder" />}
                         className="font-medium"
                         name="reason_return"
                         rules={[

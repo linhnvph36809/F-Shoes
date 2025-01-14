@@ -677,5 +677,11 @@
     "Delivery_Shipping": "Delivery/Shipping",
     "End_date_must_be_in_future": "End date must be greater than the current time",
     "Discount_must_be_at_least_1": "Discount must be at least 1",
-    "choose_product_return": "Choose Product Return"
+    "choose_product_return": "Choose Product Return",
+    "validate_product_return": "Please choose product return",
+    "please_rate": "Please choose star",
+    "Please_enter_a_title_for_your_review": "Please enter a title for your review",
+    "Enter_title_for_your_review": "Enter a title for your review",
+    "Please_enter_your_review": "Please enter your review",
+    "write_your_review_here":"Write your review here"
 }

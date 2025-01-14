@@ -41,7 +41,11 @@ const ModalDeniedReturn = ({ orderId, handleCancelDetail }: any) => {
                 </button>
             </div>
             <Modal
-                title={<h3 className="text-[28px]"><FormattedMessage id="Reason_Denied_Return" /></h3>}
+                title={
+                    <h3 className="text-[28px]">
+                        <FormattedMessage id="Reason_Denied_Return" />
+                    </h3>
+                }
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
@@ -68,6 +72,7 @@ const ModalDeniedReturn = ({ orderId, handleCancelDetail }: any) => {
             >
                 <Form layout="vertical" form={form} onFinish={onFinish}>
                     <Form.Item
+                        label={<FormattedMessage id="Reason_Denied_Return" />}
                         className="font-medium"
                         name="reason_denied_return"
                         rules={[
