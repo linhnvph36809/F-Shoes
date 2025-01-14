@@ -7,6 +7,7 @@ import { showMessageAdmin, showMessageClient } from '../utils/messages';
 import { useQueryClient } from 'react-query';
 import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
+import { notification } from 'antd';
 export const QUERY_KEY = 'categories';
 export const API_CATEGORY = '/api/category';
 
@@ -28,30 +29,29 @@ const useCategory = () => {
             );
             setCategories(data.categories.data);
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -64,30 +64,29 @@ const useCategory = () => {
             const { data } = await tokenManagerInstance('get', 'api/main/categories?include=children');
             setMainCategoires(data.categories.data);
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -106,30 +105,29 @@ const useCategory = () => {
                 'success',
             );
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -148,30 +146,29 @@ const useCategory = () => {
                 'success',
             );
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -191,30 +188,29 @@ const useCategory = () => {
                 'success',
             );
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -244,30 +240,29 @@ const useCategory = () => {
                 throw new Error('Failed to add products.');
             }
         } catch (error: any) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
             throw error;
         }
@@ -289,12 +284,36 @@ const useCategory = () => {
 
             showMessageAdmin(message, '', response.status === 200 || response.status === 204 ? 'success' : 'warning');
         } catch (error: any) {
-            showMessageAdmin(
-                error?.response?.data?.message ||
-                handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                '',
-                'error',
-            );
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
+            } else {
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
+            }
         }
     };
 

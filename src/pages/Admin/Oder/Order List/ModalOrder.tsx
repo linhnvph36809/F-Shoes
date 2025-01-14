@@ -321,14 +321,14 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
 
                         {orderDetail?.orderDetail?.status && orderDetail?.orderDetail?.status === 6 ? (
                             <div className="flex items-center gap-x-5">
-                                {orderDetail?.orderDetail?.reason_return ? (
+                                {/* {orderDetail?.orderDetail?.reason_return ? (
                                     <p className="text-[16px] font-medium text-red-500">
                                         <FormattedMessage id="orderDetail.reasonOrder" /> :{' '}
                                         {orderDetail.orderDetail.reason_return}
                                     </p>
                                 ) : (
                                     ''
-                                )}
+                                )} */}
                                 <ModalDeniedReturn
                                     orderId={orderDetail?.orderDetail?.id}
                                     handleCancelDetail={handleCancel}

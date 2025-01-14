@@ -6,6 +6,7 @@ import { showMessageAdmin } from '../utils/messages';
 import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
 import { useQueryClient } from 'react-query';
+import { notification } from 'antd';
 
 export const API_GROUP = '/api/groups';
 export const KEY_GROUP = 'key-group';
@@ -24,7 +25,36 @@ const useGroups = () => {
             const { data } = await tokenManagerInstance('get', API_GROUP + `/${id}`);
             return data;
         } catch (error) {
-            showMessageAdmin((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
+            } else {
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
+            }
             navigate('/admin/groups');
         }
     };
@@ -41,30 +71,35 @@ const useGroups = () => {
             );
             queryClient.invalidateQueries({ queryKey: [KEY_GROUP] });
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageAdmin((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageAdmin(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageAdmin((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageAdmin(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoadingDelete(false);
@@ -79,30 +114,35 @@ const useGroups = () => {
             showMessageAdmin(handleChangeMessage(locale, 'Add Group Sussccess', 'Thêm Nhóm Thành Công'), '', 'success');
             queryClient.invalidateQueries({ queryKey: [KEY_GROUP] });
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageAdmin((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageAdmin(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageAdmin((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageAdmin(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -120,30 +160,35 @@ const useGroups = () => {
             );
             queryClient.invalidateQueries({ queryKey: [KEY_GROUP] });
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageAdmin((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageAdmin(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageAdmin((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageAdmin(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -162,30 +207,35 @@ const useGroups = () => {
             );
             queryClient.invalidateQueries({ queryKey: [KEY_GROUP] });
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageAdmin((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageAdmin(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageAdmin((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageAdmin(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoadingDelete(false);
@@ -203,30 +253,35 @@ const useGroups = () => {
             );
             queryClient.invalidateQueries({ queryKey: [KEY_GROUP] });
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageAdmin((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageAdmin(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageAdmin((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageAdmin(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);

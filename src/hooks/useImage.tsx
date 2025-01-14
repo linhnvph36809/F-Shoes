@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { tokenManagerInstance } from '../api';
-import { showMessageAdmin, showMessageClient } from '../utils/messages';
+import { showMessageAdmin } from '../utils/messages';
 import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
 import { notification } from 'antd';
@@ -16,22 +16,34 @@ const useImage = () => {
             await tokenManagerInstance('delete', API_IMAGE + `/${id}`);
         } catch (error) {
             const e = error as any;
-            if(e?.response?.data?.errors){
-                
+            if (e?.response?.data?.errors) {
                 const errs = Object.values(e.response?.data?.errors);
-                errs.map((m:any) => {
+                errs.map((m: any) => {
                     notification.error({
                         message: '',
-                        description: m[0]
+                        description: m[0],
                     });
-                })
-            }else {
-                showMessageAdmin(
-                    (error as any)?.response?.data?.message ||
-                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                    '',
-                    'error',
-                );
+                });
+            } else {
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -45,7 +57,36 @@ const useImage = () => {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
         } catch (error) {
-            console.log(error);
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
+            } else {
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
+            }
         } finally {
             setLoading(false);
         }

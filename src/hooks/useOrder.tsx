@@ -42,12 +42,25 @@ const useOrder = () => {
                     });
                 });
             } else {
-                showMessageAdmin(
-                    (error as any)?.response?.data?.message ||
-                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -72,12 +85,25 @@ const useOrder = () => {
                     });
                 });
             } else {
-                showMessageAdmin(
-                    (error as any)?.response?.data?.message ||
-                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
