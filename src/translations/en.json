@@ -676,6 +676,6 @@
     "attribute_is_filter": "As a filter",
     "Delivery_Shipping": "Delivery/Shipping",
     "End_date_must_be_in_future": "End date must be greater than the current time",
-    "Discount_must_be_at_least_1": "Discount must be at least 1"
-
+    "Discount_must_be_at_least_1": "Discount must be at least 1",
+    "choose_product_return": "Choose Product Return"
 }

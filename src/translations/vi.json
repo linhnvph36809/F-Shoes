@@ -672,5 +672,6 @@
     "attribute_is_filter": "Bộ lọc",
     "Delivery_Shipping": "Giao hàng/Vận chuyển",
     "End_date_must_be_in_future": "Ngày kết thúc phải lớn hơn thời gian hiện tại",
-    "Discount_must_be_at_least_1": "Giảm giá phải ít nhất là 1"
+    "Discount_must_be_at_least_1": "Giảm giá phải ít nhất là 1",
+    "choose_product_return": "Chọn sản phẩm trả hàng"
 }

@@ -35,7 +35,7 @@ const OrderDetail = () => {
 
     const { cookies } = useCookiesConfig(`order${id}`);
 
-    
+
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -477,71 +477,119 @@ const OrderDetail = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-10 mt-20 pt-10 border-t">
-                                    {order?.order_details.map((orderDetail: any) => (
-                                        <div
-                                            key={orderDetail.id}
-                                            className="flex justify-between items-center bg-white p-8 rounded-xl"
-                                        >
-                                            <div className="flex items-start gap-x-5">
-                                                <div>
-                                                    <img
-                                                        src={
-                                                            orderDetail?.product
-                                                                ? orderDetail?.product.image_url
-                                                                : orderDetail?.variation?.image_url
-                                                        }
-                                                        alt=""
-                                                        className="w-[100px]"
-                                                    />
+                                <div className='mt-10'>
+                                    <h3 className='text-[20px] mb-5'>Sản phẩm đã mua: </h3>
+                                    <div className="grid grid-cols-2 gap-10 border-t pt-10">
+                                        {order?.order_details.map((orderDetail: any) => (
+                                            <div
+                                                key={orderDetail.id}
+                                                className="flex justify-between items-center bg-white p-8 rounded-xl"
+                                            >
+                                                <div className="flex items-start gap-x-5">
+                                                    <div>
+                                                        <img
+                                                            src={
+                                                                orderDetail?.product
+                                                                    ? orderDetail?.product.image_url
+                                                                    : orderDetail?.variation?.image_url
+                                                            }
+                                                            alt=""
+                                                            className="w-[100px]"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="font-medium text-[18px]">
+                                                            {orderDetail?.product
+                                                                ? orderDetail?.product.name
+                                                                : orderDetail?.variation?.name}
+                                                        </h3>
+                                                        {orderDetail?.detail_item ? (
+                                                            <p className="color-gray text-[13px] font-medium my-2">
+                                                                {Object.entries(
+                                                                    JSON.parse(orderDetail?.detail_item) || {},
+                                                                ).map(([key, value]: any) => (
+                                                                    <p className="color-gray text-[13px] font-medium">
+                                                                        {key}: {value}
+                                                                    </p>
+                                                                ))}
+                                                            </p>
+                                                        ) : (
+                                                            ''
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h3 className="font-medium text-[18px]">
-                                                        {orderDetail?.product
-                                                            ? orderDetail?.product.name
-                                                            : orderDetail?.variation?.name}
-                                                    </h3>
-                                                    {orderDetail?.detail_item ? (
-                                                        <p className="color-gray text-[13px] font-medium my-2">
-                                                            {Object.entries(
-                                                                JSON.parse(orderDetail?.detail_item) || {},
-                                                            ).map(([key, value]: any) => (
-                                                                <p className="color-gray text-[13px] font-medium">
-                                                                    {key}: {value}
-                                                                </p>
-                                                            ))}
+                                                <div className="flex flex-col justify-between items-end h-full">
+                                                    <p className="font-medium text-[18px] text-red-500">
+                                                        {formatPrice(orderDetail?.total_amount)}đ
+                                                        <p className="font-medium color-gray text-[14px] text-end">
+                                                            x{orderDetail?.quantity}
                                                         </p>
+                                                    </p>
+
+                                                    {order.status > 4 ? (
+                                                        <Link
+                                                            to={`/detail/${orderDetail?.product?.slug
+                                                                ? orderDetail?.product?.slug
+                                                                : orderDetail?.variation?.product?.slug
+                                                                }`}
+                                                        >
+                                                            <button className="h-[36px] px-5 bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">
+                                                                <FormattedMessage id="admin.review" />
+                                                            </button>
+                                                        </Link>
                                                     ) : (
                                                         ''
                                                     )}
                                                 </div>
                                             </div>
-                                            <div className="flex flex-col justify-between items-end h-full">
-                                                <p className="font-medium text-[18px] text-red-500">
-                                                    {formatPrice(orderDetail?.total_amount)}đ
-                                                    <p className="font-medium color-gray text-[14px] text-end">
-                                                        x{orderDetail?.quantity}
-                                                    </p>
-                                                </p>
-
-                                                {order.status > 4 ? (
-                                                    <Link
-                                                        to={`/detail/${orderDetail?.product?.slug
-                                                                ? orderDetail?.product?.slug
-                                                                : orderDetail?.variation?.product?.slug
-                                                            }`}
-                                                    >
-                                                        <button className="h-[36px] px-5 bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">
-                                                            <FormattedMessage id="admin.review" />
-                                                        </button>
-                                                    </Link>
-                                                ) : (
-                                                    ''
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
+                                {
+                                    order?.reason_return ?
+                                        <div className='mt-10'>
+                                            <h3 className='text-[20px] mb-5'>Sản phẩm hoàn trả: </h3>
+                                            <div className="grid grid-cols-2 gap-10 border-t pt-10">
+                                                {JSON.parse(order?.reason_return).return_detail.map((orderDetail: any) => (
+                                                    <div
+                                                        key={orderDetail.id}
+                                                        className="flex justify-between items-center bg-white p-8 rounded-xl"
+                                                    >
+                                                        <div className="flex items-start gap-x-5">
+                                                            <div>
+                                                                <img
+                                                                    src={
+                                                                        orderDetail?.product_image
+
+                                                                    }
+                                                                    alt=""
+                                                                    className="w-[100px]"
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <h3 className="font-medium text-[18px]">
+                                                                    {orderDetail?.product_name}
+                                                                </h3>
+                                                                <h3 className="font-medium text-[12px] color-gray">
+                                                                    {orderDetail?.classify}
+                                                                </h3>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex flex-col justify-between items-end h-full">
+                                                            <p className="font-medium text-[18px] text-red-500">
+                                                                {formatPrice(orderDetail?.total_amount)}đ
+                                                                <p className="font-medium color-gray text-[14px] text-end">
+                                                                    x{orderDetail?.quantity}
+                                                                </p>
+                                                            </p>
+
+
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div> : ""
+                                }
                             </div>
                         </div>
                     </div>
