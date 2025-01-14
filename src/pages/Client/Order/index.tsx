@@ -235,11 +235,12 @@ const Order = () => {
         handleSetCookie(
             'order',
             {
-                voucher_cost: voucher?.type
-                    ? voucher.type == 'fixed'
-                        ? `${formatPrice(voucher.discount)}đ`
-                        : `${voucher.discount}%`
-                    : null,
+                voucher_cost:
+                    voucher.type == 'fixed'
+                        ? voucher.discount
+                        : ((handleTotalPrice >= FREE_SHIP ? handleTotalPrice : handleTotalPrice + (fee?.total || 0)) *
+                            +voucher.discount) /
+                        100,
                 ...newValues,
             },
             new Date(Date.now() + 20 * 60 * 1000),

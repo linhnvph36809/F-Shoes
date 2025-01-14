@@ -24,9 +24,7 @@ import UpdateProduct from '../pages/Admin/Products/UpdateProduct';
 import UpdateVariant from '../pages/Admin/Products/UpdateVariant';
 import ListReview from '../pages/Admin/Review/ListReview/Index';
 import Statistic from '../pages/Admin/Statistic/StatisticList';
-import AddUser from '../pages/Admin/User/AddUser';
 import ListUser from '../pages/Admin/User/ListUser';
-import UpdateUser from '../pages/Admin/User/UpdateUser';
 import MediaLibrary from '../pages/Admin/Image/list-image';
 import ListVouCher from '../pages/Admin/Voucher';
 import UpdateAttribute from '../pages/Admin/Products/Attribute/UpdateAttribute';
@@ -144,14 +142,6 @@ const routerAdmin = [
             {
                 path: 'list-user',
                 element: <ListUser />,
-            },
-            {
-                path: 'add-user',
-                element: <AddUser />,
-            },
-            {
-                path: 'Update-user/:nickname',
-                element: <UpdateUser />,
             },
             {
                 path: 'list-review',

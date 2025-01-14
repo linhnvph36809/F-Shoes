@@ -142,9 +142,12 @@ const useAuth = () => {
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
                 handleSetLocalStorage(INFO_AUTH.userName, data.user.name);
                 handleSetLocalStorage(INFO_AUTH.userId, data.user.id);
-                handleSetLocalStorage(INFO_AUTH.isAdmin, data.user.is_admin);
                 handleSetLocalStorage(INFO_AUTH.groupId, data.user.group_id);
+                if (data?.user?.is_admin) {
+                    handleSetLocalStorage(INFO_AUTH.isAdmin, data?.user?.is_admin);
+                }
             }
+
             setUserGlobal(data.user);
             refetchQuantityCart();
             navigate('/');
@@ -220,10 +223,12 @@ const useAuth = () => {
             if (data?.access_token && data?.refresh_token) {
                 handleSetLocalStorage(TOKENS.ACCESS_TOKEN, data.access_token);
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
-                handleSetLocalStorage(INFO_AUTH.isAdmin, data.user.is_admin);
                 handleSetLocalStorage(INFO_AUTH.userName, data.user.name);
                 handleSetLocalStorage(INFO_AUTH.userId, data.user.id);
                 handleSetLocalStorage(INFO_AUTH.groupId, data.user.group_id);
+                if (data?.user?.is_admin) {
+                    handleSetLocalStorage(INFO_AUTH.isAdmin, data?.user?.is_admin);
+                }
             }
             setUserGlobal(data.user);
             navigate('/admin');
@@ -268,15 +273,17 @@ const useAuth = () => {
                 handleSetLocalStorage(TOKENS.REFRESH_TOKEN, data.refresh_token);
                 handleSetLocalStorage(INFO_AUTH.userName, data.user.name);
                 handleSetLocalStorage(INFO_AUTH.userId, data.user.id);
-                handleSetLocalStorage(INFO_AUTH.isAdmin, data.user.is_admin);
+                if (data?.user?.is_admin) {
+                    handleSetLocalStorage(INFO_AUTH.isAdmin, data?.user?.is_admin);
+                }
                 setUserGlobal(data.user);
                 refetchQuantityCart();
                 navigate('/');
-                showMessageClient(handleChangeMessage(
-                    locale,
-                    'Register successfully!',
-                    'Đăng kí thành công!',
-                ), '', 'success');
+                showMessageClient(
+                    handleChangeMessage(locale, 'Register successfully!', 'Đăng kí thành công!'),
+                    '',
+                    'success',
+                );
             }
             return data;
         } catch (error) {

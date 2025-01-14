@@ -21,7 +21,7 @@ const useUser = () => {
 
     // Function to fetch all users
 
-    const addUser = async (userData: IUser) => {
+    const addUser = async (userData: any) => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `${API_USER}`, userData, {
@@ -122,7 +122,7 @@ const useUser = () => {
             setLoadingRestore(false);
         }
     };
-    const editUser = async (id: any, userData: IUser) => {
+    const editUser = async (id: any, userData: any) => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `${API_USER}/${id}`, userData, {
