@@ -72,6 +72,7 @@ const ListReview = () => {
     }
     const handleSearch = () => {
         params.set('search',searchKey);
+        params.delete('page');
         navigate(`?${params.toString()}`, { replace: true });
     }
     const columns = [
