@@ -19,9 +19,12 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import { ConfigProvider, Pagination } from 'antd';
 import SkeletonComponent from '../components/Skeleton';
+import { handleChangeMessage } from '../../../utils';
+import { useContextGlobal } from '../../../contexts';
 
 const ListCategory = () => {
     const intl = useIntl();
+    const {locale} = useContextGlobal();
     const navigate = useNavigate();
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
@@ -30,7 +33,7 @@ const ListCategory = () => {
     const { deleteCategory, mainCategories, postCategory, getAllCategory, putCategory } = useCategory();
     const { data: dataCachingCategory, isLoading } = useQueryConfig(
         [QUERY_KEY, `category/list/category/${page}`],
-        API_CATEGORY + `?include=parents&times=category&paginate=true&per_page=10&page=${page}`,
+        API_CATEGORY + `?include=parents&times=category&paginate=true&per_page=5&page=${page}`,
     );
 
     const totalItems = dataCachingCategory?.data?.categories?.paginator.total_item || 0;
@@ -76,7 +79,7 @@ const ListCategory = () => {
     // DELETE CATEGORY
     const handleDeleteCategory = (id?: string | number) => {
         if (id) {
-            showMessageActive('Are you sure you want to delete the Category?', '', 'warning', () => {
+            showMessageActive(handleChangeMessage(locale,'Are you sure you want to delete the Category?','Bạn có chắc muốn xóa danh mục này?'), '', 'warning', () => {
                 deleteCategory(id);
                 getAllCategory();
             });
@@ -101,13 +104,9 @@ const ListCategory = () => {
         render: (_: any, values: ICategory) => {
             return (
                 <div className="flex-row-center gap-x-5">
-                    {values.is_main != 1 ? (
-                        <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
+                    <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
                             <ButtonUpdate onClick={() => handleUpdate(values)}></ButtonUpdate>
                         </PermissionElement>
-                    ) : (
-                        ''
-                    )}
 
                     <PermissionElement
                         keyName={PERMISSION.PERMISSION_CATEGORY}

@@ -198,8 +198,8 @@ const Header = () => {
                         <nav>
                             <ul className="sm:hidden md:flex md:items-center gap-x-10">
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to={`/category/${categories[0]?.slug}`}
                                         className="inline-block py-7 relative text-16px color-primary font-medium
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
@@ -209,12 +209,12 @@ const Header = () => {
                                             setHeadCates(categories[0]?.children);
                                         }}
                                     >
-                                        <FormattedMessage id="menu.New & Featured" />
-                                    </a>
+                                       {categories[0]?.name || <FormattedMessage id="menu.New & Featured" />} 
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to={`/category/${categories[1]?.slug}`}
                                         className="inline-block py-7 relative text-16px color-primary font-medium
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
@@ -224,12 +224,13 @@ const Header = () => {
                                             setHeadCates(categories[1]?.children);
                                         }}
                                     >
-                                        <FormattedMessage id="menu.Men" />
-                                    </a>
+                                        {categories[1]?.name ||  <FormattedMessage id="menu.Men" />} 
+                                       
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to={`/category/${categories[2]?.slug}`}
                                         className="inline-block py-7 relative text-16px color-primary font-medium
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
@@ -239,12 +240,13 @@ const Header = () => {
                                             setHeadCates(categories[2]?.children);
                                         }}
                                     >
-                                        <FormattedMessage id="menu.Women" />
-                                    </a>
+                                        {categories[2]?.name || <FormattedMessage id="menu.Women" />} 
+                                       
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to={`/category/${categories[3]?.slug}`}
                                         className="inline-block py-7 relative text-16px color-primary font-medium
                                         after:transition-all after:duration-3000 after:ease-linear after:absolute after:bottom-5 after:w-0 after:h-[2px]
                                         after:left-0 after:right-0 after:bg-[#111111] hover:after:w-full nav__menu"
@@ -254,8 +256,9 @@ const Header = () => {
                                             setHeadCates(categories[3]?.children);
                                         }}
                                     >
-                                        <FormattedMessage id="menu.Kids" />
-                                    </a>
+                                        {categories[3]?.name ||  <FormattedMessage id="menu.Kids" />}
+                                       
+                                    </Link>
                                 </li>
                             </ul>
                         </nav>

@@ -109,18 +109,36 @@ const OrderDetail = () => {
     };
 
     const subtotal = order?.order_details?.reduce((acc: number, cur: any) => +cur.total_amount + acc, 0) || 0;
-    const [discountVoucher,setDiscountVoucher] = useState<number>(0);
+    const [discountVoucher, setDiscountVoucher] = useState<number>(0);
     useEffect(() => {
-        if(order?.voucher_id){
-            
+        if (order?.voucher_id) {
+            if (order?.voucher_id?.type === 'fixed') {
+                if (order?.voucher_id?.discount > subtotal) {
+                    setDiscountVoucher(subtotal || 0);
+                } else {
+                    setDiscountVoucher(order?.voucher_id?.discount || 0);
+                }
+            } else {
+                const max = order.voucher_id?.max_total_amount;
+                if (subtotal === 0) {
+                    setDiscountVoucher(0);
+                } else {
+                    const discount1 = (subtotal * order.voucher_id?.discount) / 100;
+                    if (discount1 > max) {
+                        setDiscountVoucher(max);
+                    } else {
+                        setDiscountVoucher(discount1);
+                    }
+                }
+            }
         }
-    },[order]);
-   
+    }, [order, subtotal]);
+
     const status:
         | {
-            className: string;
-            text: string;
-        }
+              className: string;
+              text: string;
+          }
         | undefined = statusString(order?.status);
 
     const givenTime = new Date(order?.created_at || '');
@@ -257,13 +275,7 @@ const OrderDetail = () => {
                                                     </p>
                                                 </p>
 
-                                                {order?.voucher_id && order?.voucher_id?.type == 'fixed' ? (
-                                                    <p className="font-medium">
-                                                        -{formatPrice(order.voucher_id?.discount)}đ
-                                                    </p>
-                                                ) : (
-                                                    <p className="font-medium">-{order.voucher_id?.discount}%</p>
-                                                )}
+                                                <p className="font-medium">-{formatPrice(discountVoucher)}đ {order?.voucher_id?.type === 'percentage' ? `(${handleChangeMessage(locale,'Voucher','Mã giảm')} ${ order?.voucher_id?.discount}%)`: '' }</p>
                                             </div>
                                         ) : (
                                             ''
@@ -507,10 +519,11 @@ const OrderDetail = () => {
 
                                                 {order.status > 4 ? (
                                                     <Link
-                                                        to={`/detail/${orderDetail?.product?.slug
+                                                        to={`/detail/${
+                                                            orderDetail?.product?.slug
                                                                 ? orderDetail?.product?.slug
                                                                 : orderDetail?.variation?.product?.slug
-                                                            }`}
+                                                        }`}
                                                     >
                                                         <button className="h-[36px] px-5 bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">
                                                             <FormattedMessage id="admin.review" />

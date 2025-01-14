@@ -34,7 +34,7 @@ const ListProduct = () => {
     const { data: products, isFetching } = useQueryConfig(
         [QUERY_KEY, `all-product-admin-${page}-${search}`],
         API_PRODUCT +
-            `?paginate=true&per_page=10&page=${page}&search=${search}&include=categories,sale_price,variations,images`,
+            `?paginate=true&per_page=10&page=${page}&search=${search}&per_page=5&include=categories,sale_price,variations,images`,
     );
 
     const handlePageChange = (page: number) => {

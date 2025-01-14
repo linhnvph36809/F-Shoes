@@ -58,7 +58,7 @@ const ListUser = () => {
     const { locale } = useContextGlobal();
     const { data: dataUser, isLoading } = useQueryConfig(
         [QUERY_KEY, `list/user?page=${page}&user=${user}&search=${searchKey}`],
-        `api/user?include=profile,group&times=user&paginate=true&per_page=10&page=${page}&user=${user}&search=${searchKey}`,
+        `api/user?include=profile,group&times=user&paginate=true&per_page=5&page=${page}&user=${user}&search=${searchKey}`,
     );
     const totalItems = dataUser?.data?.users?.paginator?.total_item || 0;
     const pageSize = dataUser?.data?.users?.paginator?.per_page || 10;

@@ -5,7 +5,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Heading from '../../components/Heading';
 
 import { ISale } from '../../../../interfaces/ISale.ts';
-import { formatTime, handleChangeMessage } from '../../../../utils';
+import { formatPrice, formatTime, handleChangeMessage } from '../../../../utils';
 
 import { QUERY_KEY } from '../../../../hooks/useSale.tsx';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -26,7 +26,7 @@ const ListSale = () => {
     const page = urlQuery.get('page') || 1;
     const { data: dataCachingSale,isLoading } = useQueryConfig(
         [QUERY_KEY, `list/sales?page=${page}&search=${keySearch}&status=${keyStatus}`],
-        `api/sale?paginate=true&per_page=10&page=${page}&search=${keySearch}&status=${keyStatus}`,
+        `api/sale?paginate=true&per_page=5&page=${page}&search=${keySearch}&status=${keyStatus}`,
     );
     const [data, setData] = useState<ISale[]>([]);
 
@@ -92,6 +92,14 @@ const ListSale = () => {
             title: <FormattedMessage id="admin.value" />,
             dataIndex: 'value',
             key: 'value',
+            render: (value:number,record:any) => {
+                if(record?.type === 'percent'){
+                    return value + ' %';
+                }else {
+                    return formatPrice(value) + ' đ';
+                }
+                
+            }
         },
         {
             title: <FormattedMessage id="admin.startDate" />,
