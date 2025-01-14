@@ -41,7 +41,10 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
             date_end: dayjs(values.date_end).format('YYYY-MM-DD HH:mm:ss'),
             status: 1,
             type: typeVoucher,
+            max_total_amount: typeVoucher === initTypeVoucher.fixed ? values.discount : values.max_total_amount,
         };
+        console.log(newValues);
+
         if (isUpdate) {
             await patchVoucher(initialValues.id, newValues);
         } else {
@@ -154,8 +157,8 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                                     <Button
                                         disabled={isUpdate && isValid}
                                         className={`${typeVoucher == initTypeVoucher.fixed
-                                                ? 'bg-[#111111] text-white'
-                                                : 'bg-white'
+                                            ? 'bg-[#111111] text-white'
+                                            : 'bg-white'
                                             }`}
                                         onClick={() => handleChangeType(initTypeVoucher.fixed)}
                                     >
@@ -164,8 +167,8 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                                     <Button
                                         disabled={isUpdate && isValid}
                                         className={`${typeVoucher == initTypeVoucher.percentage
-                                                ? 'bg-[#111111] text-white'
-                                                : 'bg-white'
+                                            ? 'bg-[#111111] text-white'
+                                            : 'bg-white'
                                             }`}
                                         onClick={() => handleChangeType(initTypeVoucher.percentage)}
                                     >
@@ -282,38 +285,33 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                             className="font-medium"
                             placeholder={intl.formatMessage({ id: 'voucher.table.min_total_amount' })}
                         ></InputPrimary>
-
-                        <InputPrimary
-                            disabled={isUpdate && isValid}
-                            label={intl.formatMessage({ id: 'voucher.table.max_total_amount' })}
-                            name="max_total_amount"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: <FormattedMessage id="voucher.required.max_total_amount" />,
-                                },
-                                {
-                                    validator: async (_: any, value: number) => {
-                                        const minTotalAmount = form.getFieldValue('min_total_amount');
-                                        if (value <= 0) {
-                                            return Promise.reject(
-                                                intl.formatMessage({ id: 'Please_enter_a_value_greater_than_0' }),
-                                            );
-                                        }
-                                        if (+value < +minTotalAmount) {
-                                            return Promise.reject(
-                                                intl.formatMessage({
-                                                    id: 'voucher.max_total_amount.must_be_greater_than_min',
-                                                }),
-                                            );
-                                        }
-                                        return Promise.resolve();
+                        {typeVoucher !== initTypeVoucher.fixed ? (
+                            <InputPrimary
+                                disabled={isUpdate && isValid}
+                                label={intl.formatMessage({ id: 'voucher.table.max_total_amount' })}
+                                name="max_total_amount"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: <FormattedMessage id="voucher.required.max_total_amount" />,
                                     },
-                                },
-                            ]}
-                            className="font-medium"
-                            placeholder={intl.formatMessage({ id: 'voucher.table.max_total_amount' })}
-                        />
+                                    {
+                                        validator: async (_: any, value: number) => {
+                                            if (value <= 0) {
+                                                return Promise.reject(
+                                                    intl.formatMessage({ id: 'Please_enter_a_value_greater_than_0' }),
+                                                );
+                                            }
+                                            return Promise.resolve();
+                                        },
+                                    },
+                                ]}
+                                className="font-medium"
+                                placeholder={intl.formatMessage({ id: 'voucher.table.max_total_amount' })}
+                            />
+                        ) : (
+                            ''
+                        )}
                     </div>
                 </Form>
             </Modal>

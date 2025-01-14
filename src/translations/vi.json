@@ -387,7 +387,7 @@
     "voucher.table.discount": "Giảm giá",
     "voucher.table.quantity": "Số lượng",
     "voucher.table.min_total_amount": "Số tiền tối thiểu",
-    "voucher.table.max_total_amount": "Số tiền tối đa",
+    "voucher.table.max_total_amount": "Số tiền giảm tối đa",
     "voucher.table.date_start": "Ngày bắt đầu",
     "voucher.table.date_end": "Ngày kết thúc",
     "voucher.table.action": "Hành động",
@@ -401,7 +401,7 @@
     "voucher.required.date_end": "Vui lòng nhập ngày kết thúc",
     "voucher.required.quantity": "Vui lòng nhập số lượng",
     "voucher.required.min_total_amount": "Vui lòng nhập số tiền tối thiểu",
-    "voucher.required.max_total_amount": "Vui lòng nhập số tiền tối đa",
+    "voucher.required.max_total_amount": "Vui lòng nhập số tiền giảm tối đa",
     "voucher.table.fixed": "Cố định",
     "voucher.percentage": "Phần trăm",
 
@@ -671,5 +671,4 @@
     "attribute_is_filter": "Bộ lọc",
     "Delivery_Shipping": "Giao hàng/Vận chuyển",
     "End_date_must_be_in_future": "Ngày kết thúc phải lớn hơn thời gian hiện tại"
-
 }
