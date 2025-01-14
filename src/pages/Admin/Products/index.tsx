@@ -44,6 +44,7 @@ const ListProduct = () => {
 
     const handleSearch = (searchValue: string) => {
         setSearch(searchValue);
+        params.delete('page');
         params.set('search', searchValue);
         navigate(`?${params.toString()}`, { replace: true });
     };

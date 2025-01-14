@@ -13,7 +13,7 @@ import ButtonUpdate from '../../components/Button/ButtonUpdate';
 import ButtonDelete from '../../components/Button/ButtonDelete';
 import { showMessageActive } from '../../../../utils/messages';
 import { useContextGlobal } from '../../../../contexts';
-import { formatTime, handleChangeMessage } from '../../../../utils';
+import { formatTime, handleChangeMessage, timeToNow } from '../../../../utils';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PaginationComponent from '../../../../components/Pagination';
@@ -83,6 +83,7 @@ const ListUser = () => {
     };
     const handlePageChange = (page: number) => {
         urlQuery.set('page', `${page}`);
+        
         navigate(`?${urlQuery.toString()}`, { replace: true });
     };
     useEffect(() => {
@@ -95,6 +96,7 @@ const ListUser = () => {
 
     const submitSearch = () => {
         urlQuery.set('search', searchText);
+        urlQuery.delete('user');
         navigate(`?${urlQuery.toString()}`, { replace: true });
     };
 
@@ -163,14 +165,28 @@ const ListUser = () => {
                 );
             },
         },
-        {
-            title: <FormattedMessage id="user.table.Email_verified_at" />,
-            dataIndex: 'email_verified_at',
-            key: 'email_verified_at',
-            render: (email_verified_at: string) => {
-                return <p>{formatTime(email_verified_at)}</p>;
+         {
+                title: <FormattedMessage id="admin.date" />,
+                dataIndex: 'created_at',
+                key: '2',
+                render: (_: any, { created_at }: any) => (
+                    <div>
+                        <p className=" text-[10px] font-mono">{timeToNow(created_at)}</p>
+                        <p className="text-[12px] font-mono">{formatTime(created_at)}</p>
+                    </div>
+                ),
             },
-        },
+            {
+                title: <FormattedMessage id="admin.update_date" />,
+                dataIndex: 'updated_at',
+                key: '2',
+                render: (_: any, { updated_at }: any) => (
+                    <div>
+                        <p className=" text-[10px] font-mono">{timeToNow(updated_at)}</p>
+                        <p className="text-[12px] font-mono">{formatTime(updated_at)}</p>
+                    </div>
+                ),
+            },
         {
             title: <FormattedMessage id="user.table.actions" />,
             key: 'actions',
@@ -306,6 +322,7 @@ const ListUser = () => {
                             <ModalFormUser />
                             <div className="relative">
                                 <Input
+                                    value={searchText}
                                     className={`w-[350px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                                     onChange={handleSearch}
                                     placeholder={intl.formatMessage({ id: 'user.User_Users_Input_section' })}

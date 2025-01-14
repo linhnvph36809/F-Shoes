@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import { ISale } from '../../../../interfaces/ISale.ts';
 import LoadingPage from '../../../../components/Loading/LoadingPage.tsx';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { handleChangeMessage } from '../../../../utils/index.ts';
+import { formatTime, handleChangeMessage, timeToNow } from '../../../../utils/index.ts';
 import { useContextGlobal } from '../../../../contexts/index.tsx';
 
 const UpdateSale = () => {
@@ -23,7 +23,7 @@ const UpdateSale = () => {
     const { id } = useParams();
     const { data: dataCachingSale, isFetching: loadingSale } = useQueryConfig(
         [QUERY_KEY, `sale/data/update/${id}`],
-        `api/sale/${id}?include=products,variations`,
+        `api/sale/${id}?include=products,variations&times=sale`,
     );
     const theSale: ISale = dataCachingSale?.data?.discount;
     const timeNow = new Date().getTime();
@@ -192,7 +192,7 @@ const UpdateSale = () => {
             },
         );
     };
-    console.log(dataSourceVariation);
+
     const [searchKeyVariation, setSearchKeyVariation] = useState('');
     const onSearchVariation = (e: any) => {
         setSearchKeyVariation(e.target.value);
@@ -472,9 +472,23 @@ const UpdateSale = () => {
         <div className="bg-slate-50 rounded-lg p-8">
             <div className="">
                 <div>
-                    <Heading>
-                        <FormattedMessage id="Update Sale" />
-                    </Heading>
+                    <div className="flex justify-between">
+                        <Heading>
+                            <FormattedMessage id="Update Sale" />
+                        </Heading>
+                        <div className='flex gap-4'>
+                            <div>
+                                <FormattedMessage id="admin.date" />
+                                <p className=" text-[10px] font-mono">{timeToNow(theSale?.created_at)}</p>
+                                <p className="text-[12px] font-mono">{formatTime(theSale?.created_at)}</p>
+                            </div>
+                            <div>
+                                <FormattedMessage id="admin.update_date" />
+                                <p className=" text-[10px] font-mono">{timeToNow(theSale?.updated_at)}</p>
+                                <p className="text-[12px] font-mono">{formatTime(theSale?.updated_at)}</p>
+                            </div>
+                        </div>
+                    </div>
                     <BadgeCentIcon />
                     <div className="form-row my-4">
                         <span className="text-xl my-4">
@@ -501,7 +515,6 @@ const UpdateSale = () => {
                             vertical
                             gap="middle"
                             className="mt-4"
-                           
                         >
                             <Radio.Group
                                 size="small"
@@ -513,7 +526,7 @@ const UpdateSale = () => {
                             />
                         </Flex>
                     </div>
-                    
+
                     <div className="form-row my-4">
                         <span className="text-xl my-4">
                             <FormattedMessage id="admin.value" />

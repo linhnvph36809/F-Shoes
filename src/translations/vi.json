@@ -424,7 +424,7 @@
     "admin.status": "Trạng thái",
     "admin.total": "Tổng cộng",
     "admin.date": "Ngày tạo",
-    "admin.update_date": "Ngày cập nhật",
+    "admin.update_date": "Cập nhật gần nhất",
     "admin.actions": "Thao tác",
     "Shipping_Cost": "Chi phí vận chuyển",
     "Please_select_status": "Vui lòng chọn trạng thái",
