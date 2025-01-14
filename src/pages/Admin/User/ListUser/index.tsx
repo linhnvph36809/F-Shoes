@@ -82,6 +82,7 @@ const ListUser = () => {
     };
     const handlePageChange = (page: number) => {
         urlQuery.set('page', `${page}`);
+        
         navigate(`?${urlQuery.toString()}`, { replace: true });
     };
     useEffect(() => {
@@ -94,6 +95,7 @@ const ListUser = () => {
 
     const submitSearch = () => {
         urlQuery.set('search', searchText);
+        urlQuery.delete('user');
         navigate(`?${urlQuery.toString()}`, { replace: true });
     };
 
@@ -313,6 +315,7 @@ const ListUser = () => {
                             <ButtonAdd to="/admin/add-user" title={intl.formatMessage({ id: 'user.add_user' })} />
                             <div className="relative">
                                 <Input
+                                    value={searchText}
                                     className={`w-[350px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                                     onChange={handleSearch}
                                     placeholder={intl.formatMessage({ id: 'user.User_Users_Input_section' })}
