@@ -11,7 +11,7 @@ const OrderCashOnDelivery = () => {
     const {
         cookies: { order },
     } = useCookiesConfig('order');
-    
+
     return (
         <>
             {order ? (
@@ -109,17 +109,16 @@ const OrderCashOnDelivery = () => {
                                         {formatPrice(+order?.shipping_cost)}đ
                                     </span>
                                 </div>
-                                {
-                                    order?.note ?
-                                        <div className="flex justify-between items-center mt-6 border-t pt-4">
-                                            <span className="text-[14px] font-medium color-primary">
-                                                {<FormattedMessage id="note" />}
-                                            </span>
-                                            <span className="font-semibold text-xl text-gray-800">
-                                                {order?.note}
-                                            </span>
-                                        </div> : ""
-                                }
+                                {order?.note ? (
+                                    <div className="flex justify-between items-center mt-6 border-t pt-4">
+                                        <span className="text-[14px] font-medium color-primary">
+                                            {<FormattedMessage id="note" />}
+                                        </span>
+                                        <span className="font-semibold text-xl text-gray-800">{order?.note}</span>
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
                                 {order?.voucher_cost ? (
                                     <div className="flex justify-between items-center mt-6 border-t pt-4">
                                         <span className="text-[14px] font-medium color-primary">
