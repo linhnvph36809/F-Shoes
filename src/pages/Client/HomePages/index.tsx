@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { SwiperSlide } from 'swiper/react';
 import { Link } from 'react-router-dom';
@@ -7,13 +8,15 @@ import Heading from './components/Heading';
 import Outstanding from './components/Outstanding';
 import SlidesScroll from '../../../components/SlidesScroll';
 import SkeletonComponent from '../../Admin/components/Skeleton';
-import { formatPrice } from '../../../utils';
+import { formatPrice, handleChangeMessage } from '../../../utils';
 import useQueryConfig from '../../../hooks/useQueryConfig.tsx';
 import { IProduct } from '../../../interfaces/IProduct.ts';
 import { ICategory } from '../../../interfaces/ICategory.ts';
 import { QUERY_KEY as QUERY_KEY_PRODUCT } from '../../../hooks/useProduct.tsx';
+import { useContextGlobal } from '../../../contexts/index.tsx';
 
 const HomePage = () => {
+    const locale = useContextGlobal();
     const { data: data1, isFetching: fetchingDisplay1 } = useQueryConfig(
         [QUERY_KEY_PRODUCT, `list-products-display-1`],
         `api/display/home-page/products?serial=1`,
@@ -37,10 +40,14 @@ const HomePage = () => {
     const productsDisplay1 = data1?.data?.category?.products || [];
     const productsDisplay2 = data2?.data?.category?.products || [];
     const productsDisplay3 = data3?.data?.category?.products || [];
-   
 
     return (
         <>
+            <Helmet>
+                <title>
+                    {handleChangeMessage(locale,'Home','Trang chủ')}
+                </title>
+            </Helmet>
             <section className="container">
                 <div>
                     <img

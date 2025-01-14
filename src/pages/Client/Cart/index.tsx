@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-
+import { Helmet } from 'react-helmet';
 import useCart from '../../../hooks/useCart';
 import { useContextGlobal } from '../../../contexts';
 import CartItem from './components';
@@ -7,10 +7,11 @@ import Summary from './components/BoxSummary';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import LoadingPage from '../../../components/Loading/LoadingPage';
 import { FormattedMessage } from 'react-intl';
+import { handleChangeMessage } from '../../../utils';
 
 const Cart = () => {
     const [cartId, setCartId] = useState<number[]>([]);
-
+    const locale = useContextGlobal();
     const { deleteCart } = useCart();
     const {
         data: carts,
@@ -50,6 +51,9 @@ const Cart = () => {
 
     return (
         <div className="container">
+            <Helmet>
+                <title>{handleChangeMessage(locale, 'Cart', 'Giỏ hàng')}</title>
+            </Helmet>
             <div className="container mx-auto" style={{ width: '1100px' }}>
                 <div className="flex gap-10">
                     <div style={{ width: '733px' }}>

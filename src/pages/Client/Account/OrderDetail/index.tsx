@@ -69,7 +69,7 @@ const OrderDetail = () => {
                 setLoadingPaymentOn(payment);
                 postMomo(
                     {
-                        total: Math.round(cookies[`order${id}`]?.total_amount),
+                        total: Math.round(data?.data?.total_amount),
                         url: `${window.location.origin}/order-momo-complete`,
                     },
                     cookies.order,
@@ -77,10 +77,12 @@ const OrderDetail = () => {
                 );
                 break;
             case 'vnpay':
+                
+                
                 setLoadingPaymentOn(payment);
                 postVNPAY(
                     {
-                        total: Math.round(cookies[`order${id}`]?.total_amount),
+                        total: Math.round(data?.data?.total_amount),
                         url: `${window.location.origin}/order-vnpay-complete`,
                     },
                     cookies.order,

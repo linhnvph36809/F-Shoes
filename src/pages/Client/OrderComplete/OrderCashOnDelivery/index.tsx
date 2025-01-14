@@ -11,8 +11,7 @@ const OrderCashOnDelivery = () => {
     const {
         cookies: { order },
     } = useCookiesConfig('order');
-    console.log(order);
-
+    
     return (
         <>
             {order ? (

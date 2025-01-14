@@ -32,7 +32,7 @@ const AddAttribute = () => {
     const { data, isLoading } = useQueryConfig([QUERY_KEY, `attribute-page=${page}`], `/api/attribute?include=values&times=attribute&paginate=true&per_page=5&page=${page}`);
     const totalItems = data?.data?.paginator.total_item || 0;
     const pageSize = data?.data?.paginator.per_page || 10;
-    console.log(data,'da');
+    
     
     
     const { deleteAttribute,loadingDelete } = useAttribute();
