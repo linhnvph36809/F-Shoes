@@ -187,7 +187,7 @@
     "delivered": "Đã giao hàng",
     "returnProcessing": "Đang xử lý trả hàng",
     "deniedReturn": "Từ chối trả hàng",
-    "returned": "Đã trả hàng",
+    "returned": "Hoàn tiền",
 
     "accountDetails": "Chi tiết tài khoản",
     "givenName": "Tên",
@@ -671,5 +671,6 @@
     "add_attriBute_word": "Thêm thuộc tính",
     "attribute_is_filter": "Bộ lọc",
     "Delivery_Shipping": "Giao hàng/Vận chuyển",
-    "End_date_must_be_in_future": "Ngày kết thúc phải lớn hơn thời gian hiện tại"
+    "End_date_must_be_in_future": "Ngày kết thúc phải lớn hơn thời gian hiện tại",
+    "Discount_must_be_at_least_1": "Giảm giá phải ít nhất là 1"
 }
