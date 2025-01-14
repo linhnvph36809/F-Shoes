@@ -51,6 +51,8 @@ const OrderList = () => {
     };
     const submitSearch = () => {
         urlQuery.set('search', searchText);
+        urlQuery.delete('status');
+        urlQuery.delete('page');
         navigate(`?${urlQuery.toString()}`, { replace: true });
     };
 
