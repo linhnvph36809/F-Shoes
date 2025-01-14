@@ -20,6 +20,7 @@ import OrderList from '../pages/Client/Account/OrderDetail';
 import OrderDetail from '../pages/Client/Account/OrderDetail';
 import LayoutOrderProfile from '../pages/Client/Account/Order/components/Layout';
 import OrderMomoComplete from '../pages/Client/OrderComplete/OrderMomoComplete';
+import Policy from '../pages/Client/Policy';
 
 const routerClient = [
     {
@@ -183,6 +184,17 @@ const routerClient = [
                             <title>Order Complete</title>
                         </Helmet>
                         <OrderCashOnDelivery />
+                    </>
+                ),
+            },
+            {
+                path: '/policy',
+                element: (
+                    <>
+                        <Helmet>
+                            <title>Policy</title>
+                        </Helmet>{' '}
+                        <Policy />
                     </>
                 ),
             },
