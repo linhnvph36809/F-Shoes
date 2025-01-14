@@ -275,7 +275,14 @@ const OrderDetail = () => {
                                                     </p>
                                                 </p>
 
-                                                <p className="font-medium">-{formatPrice(discountVoucher)}đ {order?.voucher_id?.type === 'percentage' ? `(${handleChangeMessage(locale,'Voucher','Mã giảm')} ${ order?.voucher_id?.discount}%)`: '' }</p>
+                                                <p className="font-medium">
+                                                    -{formatPrice(discountVoucher)}đ{' '}
+                                                    {order?.voucher_id?.type === 'percentage'
+                                                        ? `(${handleChangeMessage(locale, 'Voucher', 'Mã giảm')} ${
+                                                              order?.voucher_id?.discount
+                                                          }%)`
+                                                        : ''}
+                                                </p>
                                             </div>
                                         ) : (
                                             ''
@@ -395,7 +402,7 @@ const OrderDetail = () => {
                                                 ''
                                             )}
                                             {order?.status === 5 && currentTime < givenTimePlusThreeDays ? (
-                                                <ModalReturnOrder refetch={refetch} />
+                                                <ModalReturnOrder order={order} refetch={refetch} />
                                             ) : (
                                                 ''
                                             )}
