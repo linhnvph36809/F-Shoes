@@ -669,7 +669,7 @@ const Order = () => {
                                                                                     key={index}
                                                                                     className="color-gray text-[13px] font-medium"
                                                                                 >
-                                                                                    {value.attribute} : {value.values}
+                                                                                    {value?.attribute} : {value?.values}
                                                                                 </p>
                                                                             ),
                                                                         )}

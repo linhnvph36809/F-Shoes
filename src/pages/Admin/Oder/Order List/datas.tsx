@@ -101,6 +101,6 @@ export const columns = [
         title: <FormattedMessage id="admin.update_date" />,
         dataIndex: 'updated_at',
         key: '2',
-        render: (_: any, { created_at }: any) => <p className="font-medium">{formatTime(created_at)}</p>,
+        render: (_: any, { updated_at }: any) => <p className="font-medium">{formatTime(updated_at)}</p>,
     },
 ];
