@@ -2,7 +2,7 @@ import { Avatar, Button, Tag, Typography } from 'antd';
 import { Eye, SquarePen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ACTIONS, PERMISSION } from '../../../../constants';
-import { formatPrice, formatTime } from '../../../../utils';
+import { formatPrice, formatTime, timeToNow } from '../../../../utils';
 import { paymentMethodString, statusString } from '../../../../interfaces/IOrder';
 import { FormattedMessage } from 'react-intl';
 import PermissionElement from '../../../../components/Permissions/PermissionElement';
@@ -95,12 +95,22 @@ export const columns = [
         title: <FormattedMessage id="admin.date" />,
         dataIndex: 'created_at',
         key: '2',
-        render: (_: any, { created_at }: any) => <p className="font-medium">{formatTime(created_at)}</p>,
+        render: (_: any, { created_at }: any) => (
+            <div>
+                <p className=" text-[10px] font-mono">{timeToNow(created_at)}</p>
+                <p className="text-[12px] font-mono">{formatTime(created_at)}</p>
+            </div>
+        ),
     },
     {
         title: <FormattedMessage id="admin.update_date" />,
         dataIndex: 'updated_at',
         key: '2',
-        render: (_: any, { updated_at }: any) => <p className="font-medium">{formatTime(updated_at)}</p>,
+        render: (_: any, { updated_at }: any) => (
+            <div>
+                <p className=" text-[10px] font-mono">{timeToNow(updated_at)}</p>
+                <p className="text-[12px] font-mono">{formatTime(updated_at)}</p>
+            </div>
+        ),
     },
 ];

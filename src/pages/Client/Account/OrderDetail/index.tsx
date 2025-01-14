@@ -35,9 +35,7 @@ const OrderDetail = () => {
 
     const { cookies } = useCookiesConfig(`order${id}`);
 
-    if (error) {
-        return <NotFound />;
-    }
+    
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -145,6 +143,9 @@ const OrderDetail = () => {
     const currentTime = new Date();
     const givenTimePlusOneHour = new Date(givenTime.getTime() + 60 * 60 * 1000);
     const givenTimePlusThreeDays = new Date(givenTime.getTime() + 3 * 24 * 60 * 60 * 1000);
+    if (error) {
+        return <NotFound />;
+    }
     return (
         <>
             {isLoading ? (

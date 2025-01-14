@@ -11,5 +11,6 @@ export interface ISale {
     is_active: boolean;
     products: IProduct[] | [];
     variations: IVariation[] | [];
-
+    created_at: string;
+    updated_at:string;
 }

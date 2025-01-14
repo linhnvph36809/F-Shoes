@@ -428,7 +428,7 @@
     "admin.status": "Status",
     "admin.total": "Total",
     "admin.date": "Created Date",
-    "admin.update_date": "Updated Date",
+    "admin.update_date": "Last updated",
     "admin.actions": "Actions",
     "Shipping_Cost": "Shipping Cost ",
     "Please_select_status": "Please select status",
