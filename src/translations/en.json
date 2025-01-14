@@ -1,5 +1,5 @@
 {
-    "header.findAStore": "Find a Store",
+    "header.findAStore": "Policy",
     "header.help": "Help",
     "header.joinUs": "Join Us",
     "header.signin": "Sign In",
@@ -31,7 +31,7 @@
     "box.Running": "Running",
 
     "footer.Resources": "Resources",
-    "footer.Resources.Find A Store": "Find A Store",
+    "footer.Resources.Find A Store": "Policy",
     "footer.Resources.Become A Member": "Become A Member",
     "footer.Resources.Send Us Feedback": "Send Us Feedback",
     "footer.Resources.Nike Journal": "Nike Journal",
