@@ -83,7 +83,7 @@ const ListUser = () => {
     };
     const handlePageChange = (page: number) => {
         urlQuery.set('page', `${page}`);
-        
+
         navigate(`?${urlQuery.toString()}`, { replace: true });
     };
     useEffect(() => {
@@ -147,10 +147,10 @@ const ListUser = () => {
         },
         {
             title: <FormattedMessage id="phone" />,
-            dataIndex: 'phone',
-            key: 'phone',
+            dataIndex: 'profile',
+            key: 'profile',
             render: (profile: any) => {
-                return <p>{formatTime(profile?.phone)}</p>;
+                return <p>{profile?.phone}</p>;
             },
         },
         {
@@ -165,28 +165,28 @@ const ListUser = () => {
                 );
             },
         },
-         {
-                title: <FormattedMessage id="admin.date" />,
-                dataIndex: 'created_at',
-                key: '2',
-                render: (_: any, { created_at }: any) => (
-                    <div>
-                        <p className=" text-[10px] font-mono">{timeToNow(created_at)}</p>
-                        <p className="text-[12px] font-mono">{formatTime(created_at)}</p>
-                    </div>
-                ),
-            },
-            {
-                title: <FormattedMessage id="admin.update_date" />,
-                dataIndex: 'updated_at',
-                key: '2',
-                render: (_: any, { updated_at }: any) => (
-                    <div>
-                        <p className=" text-[10px] font-mono">{timeToNow(updated_at)}</p>
-                        <p className="text-[12px] font-mono">{formatTime(updated_at)}</p>
-                    </div>
-                ),
-            },
+        {
+            title: <FormattedMessage id="admin.date" />,
+            dataIndex: 'created_at',
+            key: '2',
+            render: (_: any, { created_at }: any) => (
+                <div>
+                    <p className=" text-[10px] font-mono">{timeToNow(created_at)}</p>
+                    <p className="text-[12px] font-mono">{formatTime(created_at)}</p>
+                </div>
+            ),
+        },
+        {
+            title: <FormattedMessage id="admin.update_date" />,
+            dataIndex: 'updated_at',
+            key: '2',
+            render: (_: any, { updated_at }: any) => (
+                <div>
+                    <p className=" text-[10px] font-mono">{timeToNow(updated_at)}</p>
+                    <p className="text-[12px] font-mono">{formatTime(updated_at)}</p>
+                </div>
+            ),
+        },
         {
             title: <FormattedMessage id="user.table.actions" />,
             key: 'actions',

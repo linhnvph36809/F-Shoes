@@ -62,13 +62,16 @@ const ModalFormUser = ({ initialValues, isUpdate }: any) => {
         formData.append('email', values.email);
         values.password && formData.append('password', values.password);
         formData.append('group_id', values.group_id);
-        formData.append('phone', values.phone);
         formData.append('is_admin', values?.is_admin ? true : false);
         formData.append('status', values?.active ? 'active' : 'banned');
         formData.append('profile[given_name]', values.given_name);
         formData.append('profile[family_name]', values.family_name);
         formData.append('profile[birth_date]', values.birth_date);
+        formData.append('profile[phone]', values.phone);
         formData.append('_method', initialValues ? 'put' : 'post');
+        if (imageFile) {
+            formData.append('avatar', imageFile);
+        }
 
         if (isUpdate) {
             await editUser(initialValues.id, formData);
@@ -104,9 +107,9 @@ const ModalFormUser = ({ initialValues, isUpdate }: any) => {
     const validatePassword = initialValues
         ? null
         : [
-            { required: true, message: <FormattedMessage id="group.form_password.success" /> },
-            { min: 8, message: <FormattedMessage id="user.password_8" /> },
-        ];
+              { required: true, message: <FormattedMessage id="group.form_password.success" /> },
+              { min: 8, message: <FormattedMessage id="user.password_8" /> },
+          ];
 
     return (
         <>
