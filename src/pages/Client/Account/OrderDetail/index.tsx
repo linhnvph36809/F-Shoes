@@ -280,7 +280,7 @@ const OrderDetail = () => {
                                                     -{formatPrice(discountVoucher)}đ{' '}
                                                     {order?.voucher_id?.type === 'percentage'
                                                         ? `(${handleChangeMessage(locale, 'Voucher', 'Mã giảm')} ${order?.voucher_id?.discount
-                                                        }%)`
+                                                        }% - ${handleChangeMessage(locale, 'Max', 'Tối đa')} ${formatPrice(order?.voucher_id?.max_total_amount)}đ)`
                                                         : ''}
                                                 </p>
                                             </div>

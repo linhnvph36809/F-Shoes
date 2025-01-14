@@ -30,22 +30,34 @@ const useVoucher = () => {
 
         } catch (error) {
             const e = error as any;
-            if(e?.response?.data?.errors){
-                
+            if (e?.response?.data?.errors) {
                 const errs = Object.values(e.response?.data?.errors);
-                errs.map((m:any) => {
+                errs.map((m: any) => {
                     notification.error({
                         message: '',
-                        description: m[0]
+                        description: m[0],
                     });
-                })
-            }else {
-                showMessageAdmin(
-                    (error as any)?.response?.data?.message ||
-                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                    '',
-                    'error',
-                );
+                });
+            } else {
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -61,22 +73,34 @@ const useVoucher = () => {
 
         } catch (error) {
             const e = error as any;
-            if(e?.response?.data?.errors){
-                
+            if (e?.response?.data?.errors) {
                 const errs = Object.values(e.response?.data?.errors);
-                errs.map((m:any) => {
+                errs.map((m: any) => {
                     notification.error({
                         message: '',
-                        description: m[0]
+                        description: m[0],
                     });
-                })
-            }else {
-                showMessageAdmin(
-                    (error as any)?.response?.data?.message ||
-                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                    '',
-                    'error',
-                );
+                });
+            } else {
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -125,22 +149,34 @@ const useVoucher = () => {
 
         } catch (error) {
             const e = error as any;
-            if(e?.response?.data?.errors){
-                
+            if (e?.response?.data?.errors) {
                 const errs = Object.values(e.response?.data?.errors);
-                errs.map((m:any) => {
+                errs.map((m: any) => {
                     notification.error({
                         message: '',
-                        description: m[0]
+                        description: m[0],
                     });
-                })
-            }else {
-                showMessageAdmin(
-                    (error as any)?.response?.data?.message ||
-                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                    '',
-                    'error',
-                );
+                });
+            } else {
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -155,22 +191,34 @@ const useVoucher = () => {
 
         } catch (error) {
             const e = error as any;
-            if(e?.response?.data?.errors){
-                
+            if (e?.response?.data?.errors) {
                 const errs = Object.values(e.response?.data?.errors);
-                errs.map((m:any) => {
+                errs.map((m: any) => {
                     notification.error({
                         message: '',
-                        description: m[0]
+                        description: m[0],
                     });
-                })
-            }else {
-                showMessageAdmin(
-                    (error as any)?.response?.data?.message ||
-                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                    '',
-                    'error',
-                );
+                });
+            } else {
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
