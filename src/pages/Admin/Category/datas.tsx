@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { formatTime } from '../../../utils';
+import { formatTime, timeToNow } from '../../../utils';
 import { ICategory } from '../../../interfaces/ICategory';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Tag } from 'antd';
@@ -65,7 +65,10 @@ export const columns: any['columns'] = [
         dataIndex: 'created_at',
         key: 'created_at',
         render: (created_at: string) => {
-            return <p>{formatTime(created_at)}</p>;
+            return  <div>
+                            <p className=" text-[10px] font-mono">{timeToNow(created_at)}</p>
+                            <p className="text-[12px] font-mono">{formatTime(created_at)}</p>
+                        </div>;
         },
     },
     {
@@ -73,7 +76,10 @@ export const columns: any['columns'] = [
         dataIndex: 'updated_at',
         key: 'updated_at',
         render: (updated_at: string) => {
-            return <p>{formatTime(updated_at)}</p>;
+            return  <div>
+            <p className=" text-[10px] font-mono">{timeToNow(updated_at)}</p>
+            <p className="text-[12px] font-mono">{formatTime(updated_at)}</p>
+        </div>;
         },
     },
 ];
