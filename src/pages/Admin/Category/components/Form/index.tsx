@@ -94,7 +94,7 @@ const FormCategory = ({
                         className="font-medium"
                         label={<FormattedMessage id="category.parent_label" />}
                         labelCol={{ span: 24 }}
-                        rules={[{ required: true, message: <FormattedMessage id="category.parent_required" /> }]}
+                       
                         mode="multiple"
                         placeholder={intl.formatMessage({ id: 'category.parent_placeholder' })}
                         options={mainCategories}

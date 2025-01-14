@@ -36,7 +36,7 @@ const OrderList = () => {
 
     const { data: orders, isLoading } = useQueryConfig(
         [QUERY_KEY, `order-admin-${page}-search=${searchKey}-status=${status}`],
-        `${API_ORDER}?page=${page}&search=${searchKey}${
+        `${API_ORDER}?page=${page}&per_page=5&search=${searchKey}${
             status && status !== '' ? '&status=' + statusToNumber(status) : ''
         }`,
     );
@@ -86,6 +86,43 @@ const OrderList = () => {
         navigate(`${currentPath}`, { replace: true });
         setStatusActive(12);
     };
+    useEffect(() => {
+        switch (status.toLocaleLowerCase()) {
+            case 'cancelled':
+                setStatusActive(0);
+                break;
+            case 'waiting_payment':
+                setStatusActive(1);
+                break;
+            case 'waiting_confirm':
+                setStatusActive(2);
+                break;
+            case 'confirmed':
+                setStatusActive(3);
+                break;
+            case 'delivering':
+                setStatusActive(4);
+                break;
+            case 'delivered':
+                setStatusActive(5);
+                break;
+            case 'waiting_accept_return':
+                setStatusActive(6);
+                break;
+            case 'return_processing':
+                setStatusActive(7);
+                break;
+            case 'denied_return':
+                setStatusActive(8);
+                break;
+            case 'returned':
+                setStatusActive(9);
+                break;
+            default:
+                setStatusActive(12);
+                break;
+        }
+    }, [status]);
     useEffect(() => {
         const originData = orders?.data?.data ? JSON.parse(JSON.stringify([...orders.data.data])) : [];
         if (searchStatus !== '' && searchStatus !== 'all') {

@@ -112,8 +112,27 @@ const OrderDetail = () => {
     const [discountVoucher, setDiscountVoucher] = useState<number>(0);
     useEffect(() => {
         if (order?.voucher_id) {
+            if (order?.voucher_id?.type === 'fixed') {
+                if (order?.voucher_id?.discount > subtotal) {
+                    setDiscountVoucher(subtotal || 0);
+                } else {
+                    setDiscountVoucher(order?.voucher_id?.discount || 0);
+                }
+            } else {
+                const max = order.voucher_id?.max_total_amount;
+                if (subtotal === 0) {
+                    setDiscountVoucher(0);
+                } else {
+                    const discount1 = (subtotal * order.voucher_id?.discount) / 100;
+                    if (discount1 > max) {
+                        setDiscountVoucher(max);
+                    } else {
+                        setDiscountVoucher(discount1);
+                    }
+                }
+            }
         }
-    }, [order]);
+    }, [order, subtotal]);
 
     const status:
         | {
@@ -256,13 +275,14 @@ const OrderDetail = () => {
                                                     </p>
                                                 </p>
 
-                                                {order?.voucher_id && order?.voucher_id?.type == 'fixed' ? (
-                                                    <p className="font-medium">
-                                                        -{formatPrice(order.voucher_id?.discount)}đ
-                                                    </p>
-                                                ) : (
-                                                    <p className="font-medium">-{order.voucher_id?.discount}%</p>
-                                                )}
+                                                <p className="font-medium">
+                                                    -{formatPrice(discountVoucher)}đ{' '}
+                                                    {order?.voucher_id?.type === 'percentage'
+                                                        ? `(${handleChangeMessage(locale, 'Voucher', 'Mã giảm')} ${
+                                                              order?.voucher_id?.discount
+                                                          }%)`
+                                                        : ''}
+                                                </p>
                                             </div>
                                         ) : (
                                             ''

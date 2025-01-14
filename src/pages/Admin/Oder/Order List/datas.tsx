@@ -98,22 +98,9 @@ export const columns = [
         render: (_: any, { created_at }: any) => <p className="font-medium">{formatTime(created_at)}</p>,
     },
     {
-        title: <FormattedMessage id="admin.actions" />,
-        key: 'actions',
-        dataIndex: 'id',
-        render: (_: any, { id }: any) => (
-            <div className="flex gap-x-5">
-                <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
-                    <Link to={`/admin/orderupdate/${id}`}>
-                        <Button className="w-[50px] h-[40px] font-medium">
-                            <SquarePen />
-                        </Button>
-                    </Link>
-                </PermissionElement>
-                <ButtonEdit>
-                    <Eye />
-                </ButtonEdit>
-            </div>
-        ),
+        title: <FormattedMessage id="admin.update_date" />,
+        dataIndex: 'updated_at',
+        key: '2',
+        render: (_: any, { updated_at }: any) => <p className="font-medium">{formatTime(updated_at)}</p>,
     },
 ];

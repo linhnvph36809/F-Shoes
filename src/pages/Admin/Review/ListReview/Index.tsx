@@ -49,7 +49,7 @@ const ListReview = () => {
     }, [loadingDelete,loadingRestore]);
     const { data: cachingReviewsData, isLoading } = useQueryConfig(
         [QUERY_KEY, `admin/list/all/reviews?page=${page}&search=${search}`],
-        `api/review?include=user,product&paginator=true&per_page=10&page=${page}&with_trash=true&times=review&search=${search}`,
+        `api/review?include=user,product&paginator=true&per_page=5&page=${page}&with_trash=true&times=review&search=${search}`,
     );
 
     const totalItems = cachingReviewsData?.data?.reviews?.paginator?.total_item || 0;

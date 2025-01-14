@@ -1,5 +1,5 @@
 import { FormattedMessage } from 'react-intl';
-import { formatMainCategory, ICategory } from '../../../../../interfaces/ICategory';
+import { ICategory } from '../../../../../interfaces/ICategory';
 import { Link } from 'react-router-dom';
 interface Props {
     categories: ICategory[];
@@ -25,7 +25,7 @@ const FilterByCategory: React.FC<Props> = ({ categories }) => {
                         to={`/category/${category.slug}`}
                         className="block text-[14px] font-medium my-2"
                     >
-                        {formatMainCategory(category.id,category.name)}
+                        {category?.name}
                     </Link>
                 ))}
             </ul>

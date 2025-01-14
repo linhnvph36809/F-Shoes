@@ -226,7 +226,7 @@ const Detail = () => {
                                             && handleGetLocalStorage(TOKENS.ACCESS_TOKEN)
                                             && handleGetLocalStorage(TOKENS.REFRESH_TOKEN)
                                             ? (productD?.variations?.length == 0 && productD?.stock_qty) ||
-                                                (variant && variant?.stock_qty)
+                                                (variant && variant?.stock_qty && variant?.status)
                                                 ? handleAddCart
                                                 : () => { }
                                             : () => {
