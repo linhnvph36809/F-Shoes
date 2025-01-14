@@ -109,18 +109,17 @@ const OrderDetail = () => {
     };
 
     const subtotal = order?.order_details?.reduce((acc: number, cur: any) => +cur.total_amount + acc, 0) || 0;
-    const [discountVoucher,setDiscountVoucher] = useState<number>(0);
+    const [discountVoucher, setDiscountVoucher] = useState<number>(0);
     useEffect(() => {
-        if(order?.voucher_id){
-            
+        if (order?.voucher_id) {
         }
-    },[order]);
-   
+    }, [order]);
+
     const status:
         | {
-            className: string;
-            text: string;
-        }
+              className: string;
+              text: string;
+          }
         | undefined = statusString(order?.status);
 
     const givenTime = new Date(order?.created_at || '');
@@ -383,7 +382,7 @@ const OrderDetail = () => {
                                                 ''
                                             )}
                                             {order?.status === 5 && currentTime < givenTimePlusThreeDays ? (
-                                                <ModalReturnOrder refetch={refetch} />
+                                                <ModalReturnOrder order={order} refetch={refetch} />
                                             ) : (
                                                 ''
                                             )}
@@ -507,10 +506,11 @@ const OrderDetail = () => {
 
                                                 {order.status > 4 ? (
                                                     <Link
-                                                        to={`/detail/${orderDetail?.product?.slug
+                                                        to={`/detail/${
+                                                            orderDetail?.product?.slug
                                                                 ? orderDetail?.product?.slug
                                                                 : orderDetail?.variation?.product?.slug
-                                                            }`}
+                                                        }`}
                                                     >
                                                         <button className="h-[36px] px-5 bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">
                                                             <FormattedMessage id="admin.review" />

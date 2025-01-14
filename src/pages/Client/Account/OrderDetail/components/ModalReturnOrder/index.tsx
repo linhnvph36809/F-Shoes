@@ -11,7 +11,7 @@ import { showMessageActive } from '../../../../../../utils/messages';
 import { handleChangeMessage } from '../../../../../../utils';
 import { useParams } from 'react-router-dom';
 
-const ModalReturnOrder = ({ refetch }: any) => {
+const ModalReturnOrder = ({ order, refetch }: any) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = useForm();
     const { loading, putOrder } = useOrder();
@@ -30,6 +30,32 @@ const ModalReturnOrder = ({ refetch }: any) => {
         setIsModalOpen(false);
     };
 
+    const return_detail = order?.order_details?.map((cart: any) => {
+        if (cart?.variation) {
+            return {
+                product_variation_id: cart.product_variation_id,
+                product_image: cart?.variation?.image_url,
+                product_name: cart?.variation?.product?.name,
+                classify: cart?.variation?.classify,
+                product_id: null,
+                quantity: cart.quantity,
+                price: +cart.variation.sale_price || +cart.variation.price,
+                total_amount: +cart.variation.sale_price || +cart.variation.price * cart.quantity,
+            };
+        } else if (cart?.product) {
+            return {
+                product_variation_id: null,
+                product_image: cart.product?.image_url,
+                product_name: cart.product.name,
+                classify: cart?.product?.classify,
+                product_id: cart.product.id,
+                quantity: cart.quantity,
+                price: +cart.product.sale_price || +cart.product.price,
+                total_amount: +cart.product.sale_price || +cart.product.price * cart.quantity,
+            };
+        }
+    });
+
     const onFinish = (value: { reason_return: string }) => {
         if (id) {
             showMessageActive(
@@ -43,7 +69,10 @@ const ModalReturnOrder = ({ refetch }: any) => {
                 async () => {
                     await putOrder(id, {
                         status: 6,
-                        reason_return: value.reason_return,
+                        reason_return: JSON.stringify({
+                            reason_return: value.reason_return,
+                            return_detail,
+                        }),
                     });
                     setIsModalOpen(false);
                     refetch();
