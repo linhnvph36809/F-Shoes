@@ -6,8 +6,9 @@ import { tokenManagerInstance } from '../api';
 import { INFO_AUTH, TOKENS } from '../constants';
 import { useContextGlobal } from '../contexts';
 import { useContextClient } from '../components/Layouts/LayoutClient';
-import { showMessageClient } from '../utils/messages';
+import { showMessageAdmin, showMessageClient } from '../utils/messages';
 import { handleChangeMessage, handleRemoveLocalStorage, handleSetLocalStorage } from '../utils';
+import { notification } from 'antd';
 const API_CHECK_EMAIL = '/api/check/email';
 
 const removeAllLocal = () => {
@@ -210,7 +211,36 @@ const useAuth = () => {
             setUserGlobal(undefined);
             queryClient.clear();
         } catch (error) {
-            showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
+            } else {
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
+            }
         } finally {
             setLoading(false);
         }
@@ -234,30 +264,35 @@ const useAuth = () => {
             navigate('/admin');
             return data;
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -287,30 +322,31 @@ const useAuth = () => {
             }
             return data;
         } catch (error) {
-            if ((error as any)?.response?.data?.message) {
-                showMessageClient((error as any)?.response?.data?.message || 'Something went wrong!', '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                if ((error as any).response.data.message) {
-                    showMessageClient((error as any)?.response?.data?.message, '', 'error');
-                } else if ((error as any)?.response?.data?.errors) {
-                    showMessageClient(
-                        handleChangeMessage(
-                            locale,
-                            'Something is missing.Please check again!',
-                            'Một số trường đã bị sót.Hãy kiểm tra lại',
-                        ),
-                        '',
-                        'error',
-                    );
-                } else if ((error as any)?.response?.data?.error) {
-                    showMessageClient((error as any)?.response?.data?.error, '', 'error');
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
                 } else {
-                    showMessageClient(
-                        handleChangeMessage(
-                            locale,
-                            'Something went wrong!',
-                            'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                        ),
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
                         '',
                         'error',
                     );

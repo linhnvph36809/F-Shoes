@@ -31,7 +31,7 @@ import UpdateAttribute from '../pages/Admin/Products/Attribute/UpdateAttribute';
 
 import { ACTIONS, PERMISSION } from '../constants';
 import PermissionPage from '../components/Permissions/PermissionPage';
-import ListGroups from '../pages/Admin/Groups/ListGroup';
+// import ListGroups from '../pages/Admin/Groups/ListGroup';
 
 const routerAdmin = [
     {
@@ -147,10 +147,10 @@ const routerAdmin = [
                 path: 'list-review',
                 element: <ListReview />,
             },
-            {
-                path: 'groups',
-                element: <ListGroups />,
-            },
+            // {
+            //     path: 'groups',
+            //     element: <ListGroups />,
+            // },
             {
                 path: 'statistic',
                 element: <Statistic />,
