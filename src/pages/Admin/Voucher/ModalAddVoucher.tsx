@@ -157,8 +157,8 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                                     <Button
                                         disabled={isUpdate && isValid}
                                         className={`${typeVoucher == initTypeVoucher.fixed
-                                            ? 'bg-[#111111] text-white'
-                                            : 'bg-white'
+                                                ? 'bg-[#111111] text-white'
+                                                : 'bg-white'
                                             }`}
                                         onClick={() => handleChangeType(initTypeVoucher.fixed)}
                                     >
@@ -167,8 +167,8 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                                     <Button
                                         disabled={isUpdate && isValid}
                                         className={`${typeVoucher == initTypeVoucher.percentage
-                                            ? 'bg-[#111111] text-white'
-                                            : 'bg-white'
+                                                ? 'bg-[#111111] text-white'
+                                                : 'bg-white'
                                             }`}
                                         onClick={() => handleChangeType(initTypeVoucher.percentage)}
                                     >
@@ -285,7 +285,8 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                             className="font-medium"
                             placeholder={intl.formatMessage({ id: 'voucher.table.min_total_amount' })}
                         ></InputPrimary>
-                        {typeVoucher !== initTypeVoucher.fixed ? (
+
+                        {initialValues?.discount !== initTypeVoucher.fixed || typeVoucher !== initTypeVoucher.fixed ? (
                             <InputPrimary
                                 disabled={isUpdate && isValid}
                                 label={intl.formatMessage({ id: 'voucher.table.max_total_amount' })}
