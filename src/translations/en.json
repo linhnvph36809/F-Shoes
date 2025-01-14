@@ -188,7 +188,7 @@
     "delivered": "Delivered",
     "returnProcessing": "Return Processing",
     "deniedReturn": "Denied Return",
-    "returned": "Returned",
+    "returned": "Refund",
 
     "accountDetails": "Account Details",
     "givenName": "Given Name",
