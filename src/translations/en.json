@@ -672,5 +672,7 @@
     "hide": "Hide",
     "no-product-in-category": "Not found any product.",
     "add_attriBute_word" : "Add Attribute",
-    "attribute_is_filter": "As a filter"
+    "attribute_is_filter": "As a filter",
+    "Delivery_Shipping": "Delivery/Shipping",
+    "End_date_must_be_in_future": "End date must be greater than the current time"
 }

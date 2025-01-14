@@ -23,7 +23,7 @@ const OrderVnpayComplete = () => {
 
     const { handleSetCookie } = useCookiesConfig(`order${orderId}`);
 
-    const { putPaymentOrder:putOrder  } = useOrder();
+    const { putPaymentOrder: putOrder } = useOrder();
 
     const queryParams = new URLSearchParams(location.search);
     const params: any = {

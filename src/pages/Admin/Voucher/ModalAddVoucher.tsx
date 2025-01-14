@@ -220,14 +220,24 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                                 ({ getFieldValue }) => ({
                                     validator(_, value) {
                                         const startDate = getFieldValue('date_start');
-                                        if (!value || !startDate) {
+                                        const now = dayjs();
+
+                                        if (!value) {
                                             return Promise.resolve();
                                         }
-                                        if (value.isBefore(startDate)) {
+
+                                        if (startDate && dayjs(value).isBefore(dayjs(startDate))) {
                                             return Promise.reject(
                                                 new Error(intl.formatMessage({ id: 'End_date_must' })),
                                             );
                                         }
+
+                                        if (dayjs(value).isBefore(now)) {
+                                            return Promise.reject(
+                                                new Error(intl.formatMessage({ id: 'End_date_must_be_in_future' })),
+                                            );
+                                        }
+
                                         return Promise.resolve();
                                     },
                                 }),
@@ -237,7 +247,7 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                                 placeholder={intl.formatMessage({ id: 'select_date_end' })}
                                 format="DD-MM-YYYY HH:mm:ss"
                                 showTime
-                                className={`w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                                className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             />
                         </Form.Item>
 
@@ -250,6 +260,7 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                         ></InputPrimary>
 
                         <InputPrimary
+                            disabled={isUpdate && isValid}
                             label={intl.formatMessage({ id: 'voucher.table.min_total_amount' })}
                             name="min_total_amount"
                             rules={[
@@ -273,6 +284,7 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                         ></InputPrimary>
 
                         <InputPrimary
+                            disabled={isUpdate && isValid}
                             label={intl.formatMessage({ id: 'voucher.table.max_total_amount' })}
                             name="max_total_amount"
                             rules={[
