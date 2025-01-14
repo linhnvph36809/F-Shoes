@@ -549,7 +549,7 @@
     "forgotPassword": "Forgotten password?",
     "Register": "Register",
 
-    "registerTitle": "Become a Nike member.",
+    "registerTitle": "Become a Fshoes member.",
     "verifyCodeRequired": "Please enter code!",
     "verifyCodePlaceholder": "Code",
     "givenNameRequired": "Please enter your given name!",
@@ -567,7 +567,7 @@
     "termsAndPrivacy": "By continuing, I accept the",
     "privacyPolicy": "Privacy Policy",
     "termsOfUse": "Terms of Use",
-    "of Nike.": "of Nike.",
+    "of Nike.": "of Fshoes.",
     "Order Detail": "Order Detail",
     "Ordering information": "Ordering information",
     "The_Order_is": "The Order is",
@@ -672,7 +672,7 @@
     "show": "Shows",
     "hide": "Hide",
     "no-product-in-category": "Not found any product.",
-    "add_attriBute_word" : "Add Attribute",
+    "add_attriBute_word": "Add Attribute",
     "attribute_is_filter": "As a filter",
     "Delivery_Shipping": "Delivery/Shipping",
     "End_date_must_be_in_future": "End date must be greater than the current time"

@@ -18,7 +18,7 @@ const ModalUser = ({ setUser }: any) => {
     const intl = useIntl();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [users, setUsers] = useState<IUser[]>([]);
-    
+
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
     const page = params.get('pageUser') || 1;
@@ -47,7 +47,6 @@ const ModalUser = ({ setUser }: any) => {
         params.delete('pageUser');
         navigate(`?${params.toString()}`, { replace: true });
     };
-    
 
     useEffect(() => {
         if (dataUser?.data.users.data) {
@@ -131,6 +130,14 @@ const ModalUser = ({ setUser }: any) => {
             },
         },
         {
+            title: <FormattedMessage id="phone" />,
+            dataIndex: 'phone',
+            key: 'phone',
+            render: (profile: any) => {
+                return <p>{formatTime(profile?.phone)}</p>;
+            },
+        },
+        {
             title: <FormattedMessage id="user.table.group" />,
             dataIndex: 'group',
             key: 'group',
@@ -200,8 +207,14 @@ const ModalUser = ({ setUser }: any) => {
                                         placeholder={intl.formatMessage({ id: 'user.User_Users_Input_section' })}
                                         value={search}
                                     />
-                                    <SearchXIcon onClick={handleRemoveSearch} className="absolute top-1/2 right-4 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
-                                    <Search onClick={handleSearch} className="absolute top-1/2 right-16 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global" />
+                                    <SearchXIcon
+                                        onClick={handleRemoveSearch}
+                                        className="absolute top-1/2 right-4 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global"
+                                    />
+                                    <Search
+                                        onClick={handleSearch}
+                                        className="absolute top-1/2 right-16 -translate-y-1/2 w-8 text-gray-500 hover:cursor-pointer hover:opacity-50 transition-global"
+                                    />
                                 </div>
                             </div>
                             <TableAdmin columns={columns} dataSource={users} pagination={false} />

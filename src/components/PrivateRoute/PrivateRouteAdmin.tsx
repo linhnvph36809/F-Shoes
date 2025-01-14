@@ -10,7 +10,6 @@ const PrivateRouteAdmin = ({ children }: { children: ReactNode }) => {
     const isAdmin = handleGetLocalStorage(INFO_AUTH.isAdmin);
     const adminName = handleGetLocalStorage(INFO_AUTH.userName);
     const groupId = handleGetLocalStorage(INFO_AUTH.groupId);
-
     return (
         <>
             <div>

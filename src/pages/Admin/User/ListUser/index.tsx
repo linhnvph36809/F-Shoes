@@ -17,6 +17,7 @@ import { formatTime, handleChangeMessage } from '../../../../utils';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PaginationComponent from '../../../../components/Pagination';
+import ModalFormUser from './ModalFormUser';
 
 const { Text } = Typography;
 
@@ -35,14 +36,14 @@ const ListUser = () => {
         const value = e.target.value;
         setSearchText(value);
     };
-    const { deleteUser, loadingDelete,restoreUser,loadingRestore } = useUser();
-    const [userBannedId, setUserBannedId] = useState<number|string>(0);
-    const [userRestoreId, setUserRestoreId] = useState<number|string>(0);
+    const { deleteUser, loadingDelete, restoreUser, loadingRestore } = useUser();
+    const [userBannedId, setUserBannedId] = useState<number | string>(0);
+    const [userRestoreId, setUserRestoreId] = useState<number | string>(0);
     useEffect(() => {
         if (userBannedId !== 0) {
             deleteUser(userBannedId);
         }
-        if(userRestoreId !== 0) {
+        if (userRestoreId !== 0) {
             restoreUser(userRestoreId);
         }
     }, [userBannedId, userRestoreId]);
@@ -53,7 +54,7 @@ const ListUser = () => {
         if (!loadingRestore && userRestoreId !== 0) {
             setUserRestoreId(0);
         }
-    }, [loadingDelete,loadingRestore]);
+    }, [loadingDelete, loadingRestore]);
     const [users, setUsers] = useState<IUser[]>([]);
     const { locale } = useContextGlobal();
     const { data: dataUser, isLoading } = useQueryConfig(
@@ -63,7 +64,7 @@ const ListUser = () => {
     const totalItems = dataUser?.data?.users?.paginator?.total_item || 0;
     const pageSize = dataUser?.data?.users?.paginator?.per_page || 10;
 
-    const handleDeleteUser = (id: number|string) => {
+    const handleDeleteUser = (id: number | string) => {
         showMessageActive(
             handleChangeMessage(
                 locale,
@@ -143,6 +144,14 @@ const ListUser = () => {
             },
         },
         {
+            title: <FormattedMessage id="phone" />,
+            dataIndex: 'phone',
+            key: 'phone',
+            render: (profile: any) => {
+                return <p>{formatTime(profile?.phone)}</p>;
+            },
+        },
+        {
             title: <FormattedMessage id="user.table.group" />,
             dataIndex: 'group',
             key: 'group',
@@ -166,14 +175,12 @@ const ListUser = () => {
             title: <FormattedMessage id="user.table.actions" />,
             key: 'actions',
             render: (_: any, values: IUser) => {
-               
-                
-                if(values?.group?.id === 1){
+                if (values?.group?.id === 1) {
                     return '';
                 }
-                let btnRestore =  (
+                let btnRestore = (
                     <Button onClick={() => handleRestoreUser(values.id)} className="w-[50px] h-[40px] font-medium">
-                       <Power />
+                        <Power />
                     </Button>
                 );
                 let btnBan = (
@@ -181,23 +188,23 @@ const ListUser = () => {
                         <Ban />
                     </Button>
                 );
-                if(loadingDelete && values?.id === userBannedId){
-                    btnBan = <ButtonDelete loading={true} />
-                }else if (loadingDelete && values?.id !== userBannedId){
-                    <Button  className="w-[50px] h-[40px] font-medium">
+                if (loadingDelete && values?.id === userBannedId) {
+                    btnBan = <ButtonDelete loading={true} />;
+                } else if (loadingDelete && values?.id !== userBannedId) {
+                    <Button className="w-[50px] h-[40px] font-medium">
                         <Power />
-                    </Button>
+                    </Button>;
                 }
-                if(loadingRestore && values?.id === userRestoreId){
-                    btnBan = <ButtonDelete loading={true} />
-                }else if (loadingRestore && values?.id !== userRestoreId){
-                    <Button  className="w-[50px] h-[40px] font-medium">
+                if (loadingRestore && values?.id === userRestoreId) {
+                    btnBan = <ButtonDelete loading={true} />;
+                } else if (loadingRestore && values?.id !== userRestoreId) {
+                    <Button className="w-[50px] h-[40px] font-medium">
                         <Power />
-                    </Button>
+                    </Button>;
                 }
                 return (
                     <div className="flex-row-center gap-x-5">
-                        <ButtonUpdate to={`/admin/update-user/${values.nickname}`}></ButtonUpdate>
+                        <ModalFormUser isUpdate={true} initialValues={values} />
                         {values.status === 'banned' ? btnRestore : btnBan}
                     </div>
                 );
@@ -296,7 +303,7 @@ const ListUser = () => {
                 ) : (
                     <section>
                         <div className="my-6 flex justify-between">
-                            <ButtonAdd to="/admin/add-user" title={intl.formatMessage({ id: 'user.add_user' })} />
+                            <ModalFormUser />
                             <div className="relative">
                                 <Input
                                     className={`w-[350px] h-[50px] border font-medium text-[16px] border-gray-300 rounded-[10px] px-5 focus:ring-2 focus:ring-blue-500 focus:outline-none`}

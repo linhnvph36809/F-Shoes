@@ -39,7 +39,7 @@ export const usePermissionContext = () => useContext(ContextAdmin);
 const LayoutAdmin: React.FC = () => {
     const [permissions, setPermissions] = useState<any>();
     const { locale, changeLanguage, user } = useContextGlobal();
-    const groupId = handleGetLocalStorage(INFO_AUTH.groupId);
+    const groupId = handleGetLocalStorage(INFO_AUTH.groupId) || 0;
     const { logoutAdmin } = useAuth();
 
     useEffect(() => {
@@ -127,9 +127,7 @@ const LayoutAdmin: React.FC = () => {
                                     <p className="text-[15px] font-medium">
                                         {handleGetLocalStorage(INFO_AUTH.userName)}
                                     </p>
-                                    <p className="text-[12px] color-gray">
-                                        {formatGroupName(user?.group?.id, user?.group?.group_name, locale)}
-                                    </p>
+                                    <p className="text-[12px] color-gray">{formatGroupName(+groupId, 'Lỗi', locale)}</p>
                                 </div>
                             </div>
                             <div
