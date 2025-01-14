@@ -551,8 +551,8 @@ const FormOrder = () => {
                                     <button
                                         onClick={() => setPaymentMethod(paymentMehtods.cash_on_delivery)}
                                         className={`px-5 py-3 rounded-lg ${paymentMethod === paymentMehtods.cash_on_delivery
-                                                ? 'bg-primary'
-                                                : 'bg-gray opacity-80'
+                                            ? 'bg-primary'
+                                            : 'bg-gray opacity-80'
                                             }  text-white flex items-center gap-x-5 font-medium
                                     transition-global`}
                                     >
@@ -563,8 +563,8 @@ const FormOrder = () => {
                                         <button
                                             onClick={() => setPaymentMethod(paymentMehtods.banking)}
                                             className={`px-5 py-3 rounded-lg ${paymentMethod === paymentMehtods.banking
-                                                    ? 'bg-primary'
-                                                    : 'bg-gray opacity-80'
+                                                ? 'bg-primary'
+                                                : 'bg-gray opacity-80'
                                                 } text-white flex items-center gap-x-5 font-medium
                                                                         transition-global`}
                                         >

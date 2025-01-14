@@ -44,7 +44,7 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
             if (status === 5) {
                 value = {
                     ...value,
-                    payment_method: 'paid',
+                    payment_status: 'paid',
                 };
             }
             await putOrder(orderDetail.orderDetail.id, value);
