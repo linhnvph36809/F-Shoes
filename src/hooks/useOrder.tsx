@@ -7,6 +7,7 @@ import { useQueryClient } from 'react-query';
 import { QUERY_KEY as QUERY_KEY_PRODUCT } from './useProduct';
 import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
+import { notification } from 'antd';
 export const API_ORDER = '/api/orders';
 export const QUERY_KEY = 'orders';
 export const QUERY_KEY_STATISTICS = 'statistics-orders';
@@ -31,13 +32,23 @@ const useOrder = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_STATISTICS] });
             navigate('/admin/orderlist');
         } catch (error) {
-            showMessageAdmin(
-                (error as any)?.response?.data?.message ||
-                handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                '',
-                'error',
-            );
-            console.log(error);
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
+            } else {
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                    '',
+                    'error',
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -51,27 +62,19 @@ const useOrder = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_STATISTICS] });
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
                     '',
                     'error',
                 );
@@ -79,37 +82,29 @@ const useOrder = () => {
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     const putPaymentOrder = async (id: string | number, order: any) => {
         try {
             setLoading(true);
-            await tokenManagerInstance('put',  `/api/order/update/payment-status/${id}`, order);
+            await tokenManagerInstance('put', `/api/order/update/payment-status/${id}`, order);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_STATISTICS] });
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
                     '',
                     'error',
                 );
@@ -130,27 +125,19 @@ const useOrder = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
+                showMessageAdmin(
+                    (error as any)?.response?.data?.message ||
+                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
                     '',
                     'error',
                 );
