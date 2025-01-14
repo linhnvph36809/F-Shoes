@@ -1,6 +1,6 @@
 import { Skeleton, Tag } from 'antd';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeftToLine } from 'lucide-react';
 
 import UseOrder from '../../../../hooks/profile/useOrder';
@@ -30,7 +30,7 @@ const OrderDetail = () => {
     const { loading: loadingPutOrder, putOrder } = useOrder();
     const location = useLocation();
     const prevUrl = location.state?.prevUrl;
-    
+
     const [loadingPaymentOn, setLoadingPaymentOn] = useState<string>('');
 
     const { cookies } = useCookiesConfig(`order${id}`);
@@ -55,12 +55,17 @@ const OrderDetail = () => {
 
     const handleBuyAgain = (id: string | number) => {
         showMessageActive(
-            handleChangeMessage(locale,'Buy Again','Mua lại'), 
-            handleChangeMessage(locale,'This will add the order items to your cart.Are you sure?','Thao tác này sẽ thêm tất cả các sản phẩm trong đơn hàng vào giỏ hàng của bạn.Bạn có chắc không?')
-            , 'warning', () => {
-            reOrder(id);
-            
-        });
+            handleChangeMessage(locale, 'Buy Again', 'Mua lại'),
+            handleChangeMessage(
+                locale,
+                'This will add the order items to your cart.Are you sure?',
+                'Thao tác này sẽ thêm tất cả các sản phẩm trong đơn hàng vào giỏ hàng của bạn.Bạn có chắc không?',
+            ),
+            'warning',
+            () => {
+                reOrder(id);
+            },
+        );
     };
 
     const handlePaymentAgain = (payment: 'vnpay' | 'momo' | 'cash_on_delivery') => {
@@ -77,8 +82,6 @@ const OrderDetail = () => {
                 );
                 break;
             case 'vnpay':
-                
-                
                 setLoadingPaymentOn(payment);
                 postVNPAY(
                     {
@@ -105,6 +108,14 @@ const OrderDetail = () => {
         }
     };
 
+    const subtotal = order?.order_details?.reduce((acc: number, cur: any) => +cur.total_amount + acc, 0) || 0;
+    const [discountVoucher,setDiscountVoucher] = useState<number>(0);
+    useEffect(() => {
+        if(order?.voucher_id){
+            
+        }
+    },[order]);
+   
     const status:
         | {
             className: string;
@@ -214,18 +225,7 @@ const OrderDetail = () => {
                                                     <FormattedMessage id="box.Cart.Subtotal" /> :
                                                 </p>
                                             </p>
-                                            <p className="font-medium">
-                                                {+order?.voucher_id?.discount
-                                                    ? order.total_amount <= 0
-                                                        ? 0
-                                                        : formatPrice(
-                                                            +order.total_amount /
-                                                            (1 - +order?.voucher_id?.discount / 100) -
-                                                            +order.shipping_cost,
-                                                        )
-                                                    : formatPrice(+order.total_amount - +order.shipping_cost)}
-                                                đ
-                                            </p>
+                                            <p className="font-medium">{formatPrice(subtotal)}đ</p>
                                         </div>
 
                                         <div className="flex justify-between pb-5 items-center mb-5 border-b text-[16px] color-gray">
@@ -262,7 +262,7 @@ const OrderDetail = () => {
                                                         -{formatPrice(order.voucher_id?.discount)}đ
                                                     </p>
                                                 ) : (
-                                                    <p className="font-medium">{order.voucher_id?.discount}%</p>
+                                                    <p className="font-medium">-{order.voucher_id?.discount}%</p>
                                                 )}
                                             </div>
                                         ) : (
@@ -345,15 +345,12 @@ const OrderDetail = () => {
                                             </p>
                                         </div>
                                         <div className="mt-10 flex justify-end items-center gap-x-5">
-                                            {order.status &&
-                                                order.status !== 0 &&
-                                                order.status < 4 &&
-                                                order.payment_method === 'cash_on_delivery' ? (
+                                            {order.status && order.status !== 0 && order.status < 3 ? (
                                                 <>
                                                     <button
                                                         onClick={() => handleCanCelOrder(order?.id)}
                                                         className="w-[140px] h-[50px] bg-red-500
-                                                        rounded-[30px] text-[16px] font-medium transition-global hover:opacity-70 text-white"
+                                                            rounded-[30px] text-[16px] font-medium transition-global hover:opacity-70 text-white"
                                                     >
                                                         <FormattedMessage id="button.cancel" />
                                                     </button>
@@ -364,7 +361,7 @@ const OrderDetail = () => {
                                                         refetch={refetch}
                                                     />
                                                 </>
-                                            ) : order.status > 3 ? (
+                                            ) : order.status > 2 ? (
                                                 <p className="text-[16px] font-medium text-red-500">
                                                     <span>
                                                         {' '}
@@ -374,26 +371,6 @@ const OrderDetail = () => {
                                             ) : (
                                                 ''
                                             )}
-                                            {order?.status === 1 ? (
-                                                <>
-                                                    <button
-                                                        onClick={() => handleCanCelOrder(order?.id)}
-                                                        className="w-[140px] h-[50px] bg-red-500
-                                                        rounded-[30px] text-[16px] font-medium transition-global hover:opacity-70 text-white"
-                                                    >
-                                                        <FormattedMessage id="button.cancel" />
-                                                    </button>
-                                                    <ModalCancel
-                                                        isModalOpen={isModalOpen}
-                                                        setIsModalOpen={setIsModalOpen}
-                                                        orderId={order.id}
-                                                        refetch={refetch}
-                                                    />
-                                                </>
-                                            ) : (
-                                                ''
-                                            )}
-
                                             {order?.status === 0 ? (
                                                 <ButtonPrimary
                                                     onClick={() => handleBuyAgain(order?.id)}
@@ -410,7 +387,6 @@ const OrderDetail = () => {
                                             ) : (
                                                 ''
                                             )}
-
                                             {order?.status === 1 && currentTime < givenTimePlusOneHour ? (
                                                 <div>
                                                     <div className="flex items-center gap-x-5">
@@ -532,8 +508,8 @@ const OrderDetail = () => {
                                                 {order.status > 4 ? (
                                                     <Link
                                                         to={`/detail/${orderDetail?.product?.slug
-                                                            ? orderDetail?.product?.slug
-                                                            : orderDetail?.variation?.product?.slug
+                                                                ? orderDetail?.product?.slug
+                                                                : orderDetail?.variation?.product?.slug
                                                             }`}
                                                     >
                                                         <button className="h-[36px] px-5 bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">

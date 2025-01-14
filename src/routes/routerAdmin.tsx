@@ -34,7 +34,6 @@ import UpdateAttribute from '../pages/Admin/Products/Attribute/UpdateAttribute';
 import { ACTIONS, PERMISSION } from '../constants';
 import PermissionPage from '../components/Permissions/PermissionPage';
 import ListGroups from '../pages/Admin/Groups/ListGroup';
-import AddVoucher from '../pages/Admin/Voucher/AddVoucher';
 
 const routerAdmin = [
     {
@@ -199,14 +198,6 @@ const routerAdmin = [
                 element: (
                     <PermissionPage keyName={PERMISSION.PERMISSION_VOUCHER} action={ACTIONS.ACTIONS_VIEW}>
                         <ListVouCher />
-                    </PermissionPage>
-                ),
-            },
-            {
-                path: 'add-voucher',
-                element: (
-                    <PermissionPage keyName={PERMISSION.PERMISSION_VOUCHER} action={ACTIONS.ACTIONS_ADD}>
-                        <AddVoucher />
                     </PermissionPage>
                 ),
             },

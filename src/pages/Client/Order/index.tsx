@@ -15,6 +15,9 @@ import {
 } from 'antd';
 import { Navigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
+import { CircleX } from 'lucide-react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { useForm } from 'antd/es/form/Form';
 
 import InputPrimary from '../../../components/Input';
 import useDelivery from '../../../hooks/useDelivery';
@@ -27,11 +30,8 @@ import useOnlinePayment from '../../../hooks/useOnlinePayment';
 import LoadingPage from '../../../components/Loading/LoadingPage';
 import useCookiesConfig from '../../../hooks/useCookiesConfig';
 import useQueryConfig from '../../../hooks/useQueryConfig';
-import { showMessageActive, showMessageClient } from '../../../utils/messages';
+import { showMessageClient } from '../../../utils/messages';
 import { FREE_SHIP } from '../../../constants';
-import { useForm } from 'antd/es/form/Form';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { CircleX } from 'lucide-react';
 
 const { Title, Text } = Typography;
 
@@ -117,26 +117,18 @@ const Order = () => {
             );
             setVoucher([]);
             return sum;
-        } else if (voucher?.max_total_amount < sum) {
-            showMessageClient(
-                handleChangeMessage(
-                    locale,
-                    `The order must be smaller than ${formatPrice(voucher.min_total_amount)}đ`,
-                    `Đơn hàng phải nhỏ hơn ${formatPrice(voucher.max_total_amount)}đ`,
-                ),
-                '',
-                'warning',
-            );
-            setVoucher([]);
-            return sum;
         } else if (voucher.discount && voucher?.type && voucher?.type === 'fixed') {
             if (sum - +voucher.discount > 0) {
                 return sum - +voucher.discount;
             }
             return 0;
         } else if (voucher?.type && voucher?.type === 'percentage') {
-            if (sum - (sum * +voucher.discount) / 100 > 0) {
-                return sum - (sum * +voucher.discount) / 100;
+            let amount1 = (sum * +voucher.discount) / 100;
+            if (amount1 > voucher?.max_total_amount) {
+                amount1 = voucher?.max_total_amount;
+            }
+            if (sum - amount1 > 0) {
+                return sum - amount1;
             }
             return 0;
         } else {
@@ -244,42 +236,20 @@ const Order = () => {
                 status: 2,
             });
         } else if (value.payment_method == 'vnpay') {
-            showMessageActive(
-                handleChangeMessage(
-                    locale,
-                    'When using the VNPAY payment method, you cannot cancel the order',
-                    'Khi sử dụng phương thức thanh toán VNPAY bạn không thể hủy đơn hàng ',
-                ),
-                '',
-                'warning',
-                () => {
-                    postVNPAY(
-                        {
-                            total: Math.round(totalAmount),
-                            url: `${window.location.origin}/order-vnpay-complete`,
-                        },
-                        newValues,
-                    );
+            postVNPAY(
+                {
+                    total: Math.round(totalAmount),
+                    url: `${window.location.origin}/order-vnpay-complete`,
                 },
+                newValues,
             );
         } else if (value.payment_method == 'momo') {
-            showMessageActive(
-                handleChangeMessage(
-                    locale,
-                    'When using the MOMO payment method, you cannot cancel the order',
-                    'Khi sử dụng phương thức thanh toán MOMO bạn không thể hủy đơn hàng ',
-                ),
-                '',
-                'warning',
-                () => {
-                    postMomo(
-                        {
-                            total: Math.round(totalAmount),
-                            url: `${window.location.origin}/order-momo-complete`,
-                        },
-                        newValues,
-                    );
+            postMomo(
+                {
+                    total: Math.round(totalAmount),
+                    url: `${window.location.origin}/order-momo-complete`,
                 },
+                newValues,
             );
         }
     };
@@ -594,7 +564,9 @@ const Order = () => {
                                                 marginBottom: '16px',
                                             }}
                                         >
-                                            <Text className="color-primary font-medium">Delivery/Shipping</Text>
+                                            <Text className="color-primary font-medium">
+                                                <FormattedMessage id="Delivery_Shipping" />
+                                            </Text>
                                             <Text className="color-gray font-medium">
                                                 {handleTotalPrice >= FREE_SHIP
                                                     ? 'Free Ship'
@@ -613,7 +585,9 @@ const Order = () => {
                                                 marginBottom: '16px',
                                             }}
                                         >
-                                            <Text className="color-primary font-medium">Voucher</Text>
+                                            <Text className="color-primary font-medium">
+                                                <FormattedMessage id="voucher" />
+                                            </Text>
                                             <Text className="color-primary font-medium flex items-center gap-x-1">
                                                 -
                                                 {voucher.type === 'fixed'
@@ -751,7 +725,7 @@ const Order = () => {
                                                             value="momo"
                                                             className="font-medium"
                                                             style={styles.radioButton}
-                                                            disabled={totalAmount <= 100000 || totalAmount > 50000000}
+                                                            disabled={totalAmount <= 10000 || totalAmount > 50000000}
                                                         >
                                                             <div className="text-[15px] flex items-center gap-x-3">
                                                                 <img
@@ -766,7 +740,7 @@ const Order = () => {
                                                             value="vnpay"
                                                             className="font-medium"
                                                             style={styles.radioButton}
-                                                            disabled={totalAmount <= 100000 || totalAmount > 50000000}
+                                                            disabled={totalAmount <= 10000 || totalAmount > 50000000}
                                                         >
                                                             <div className="text-[15px] flex items-center gap-x-3">
                                                                 <img
