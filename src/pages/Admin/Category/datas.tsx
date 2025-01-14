@@ -25,24 +25,8 @@ export const columns: any['columns'] = [
         dataIndex: 'name',
         key: 'name',
         render: (name: string, record: ICategory) => {
-            const { locale } = useContextGlobal();
             let categoryName = name;
-            switch (record.id) {
-                case 1:
-                    categoryName = locale === 'vi' ? 'Mới và Nổi bật' : 'New and Featured';
-                    break;
-                case 2:
-                    categoryName = locale === 'vi' ? 'Đàn Ông' : 'Men';
-                    break;
-                case 3:
-                    categoryName = locale === 'vi' ? 'Phụ Nữ' : 'Women';
-                    break;
-                case 4:
-                    categoryName = locale === 'vi' ? 'Trẻ Con' : 'Kids';
-                    break;
-                default: 
-                    categoryName = name;
-            }
+           
             if (record?.display || record.is_main) {
                 return (
                     <div className="flex space-x-2">

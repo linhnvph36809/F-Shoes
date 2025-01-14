@@ -26,7 +26,7 @@ const ListSale = () => {
     const page = urlQuery.get('page') || 1;
     const { data: dataCachingSale,isLoading } = useQueryConfig(
         [QUERY_KEY, `list/sales?page=${page}&search=${keySearch}&status=${keyStatus}`],
-        `api/sale?paginate=true&per_page=10&page=${page}&search=${keySearch}&status=${keyStatus}`,
+        `api/sale?paginate=true&per_page=5&page=${page}&search=${keySearch}&status=${keyStatus}`,
     );
     const [data, setData] = useState<ISale[]>([]);
 
