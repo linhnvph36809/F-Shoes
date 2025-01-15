@@ -2,11 +2,12 @@
 import { useState } from 'react';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { Input, Pagination } from 'antd';
+import { Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import useQueryConfig from '../../../hooks/useQueryConfig';
 import { API_POST, QUERY_KEY } from '../../../hooks/usePosts';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import PaginationComponent from '../../../components/Pagination';
 
 const Header = () => (
     <div className="bg-black text-white py-16">
@@ -51,7 +52,15 @@ const NewsList = () => {
     const params = new URLSearchParams(queryString);
     const page = params.get('page') || 1;
     const [current, setCurrent] = useState(1);
-
+    const totalItems = posts?.data?.paginator?.total_item || 0;
+    const pageSize = posts?.data?.paginator?.per_page || 10;
+    console.log(posts);
+     const navigate = useNavigate();
+    
+    const handlePageChange = (page: number) => {
+        params.set('page', `${page}`);
+        navigate(`?${params.toString()}`, { replace: true });
+    };
     const onPageChange = (page: any) => {
         setCurrent(page);
         // Xử lý phân trang hoặc tải dữ liệu mới ở đây nếu cần
@@ -60,7 +69,7 @@ const NewsList = () => {
     return (
         <div className="container  px-4 mt-4">
             <div className=" flex flex-wrap mx-4 px-4 ">
-                {posts?.data?.map((po: any) => (
+                {posts?.data?.data?.map((po: any) => (
                     <div key={po.id} className="w-full md:w-1/3 p-4">
                         <Link
                             to={`/post-detail/${po.slug}`}
@@ -79,13 +88,14 @@ const NewsList = () => {
                 ))}
             </div>
             <div className="flex justify-center mt-8">
-                <Pagination
-                    current={current}
-                    onChange={onPageChange}
-                    total={50} // Giả sử tổng số bài viết là 50
-                    pageSize={3} // Số bài viết mỗi trang
-                    showSizeChanger={false}
-                />
+            <div className="mt-8">
+                        <PaginationComponent
+                            page={page || (1 as any)}
+                            totalItems={totalItems}
+                            pageSize={pageSize}
+                            handlePageChange={handlePageChange}
+                        />
+                    </div>
             </div>
         </div>
     );
