@@ -46,8 +46,10 @@ const Header = () => (
 );
 
 const NewsList = () => {
-    const { data: posts } = useQueryConfig([QUERY_KEY, `list-posts`], API_POST);
-    console.log(posts);
+    const { data: posts } = useQueryConfig([QUERY_KEY, `list-posts`], API_POST+'?paginate=true&per_page=10&trashed=true');
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const page = params.get('page') || 1;
     const [current, setCurrent] = useState(1);
 
     const onPageChange = (page: any) => {
