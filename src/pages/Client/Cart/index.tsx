@@ -40,15 +40,15 @@ const Cart = () => {
             return newCarts?.reduce((sum: any, curr: any) => {
                 if (curr?.product?.price) {
                     if (isNumber(curr.product.sale_price)) {
-                        return (sum + +curr.product.sale_price) * +curr.quantity;
+                        return sum + (+curr.product.sale_price * +curr.quantity);
                     } else {
-                        return (sum + +curr.product.price) * +curr.quantity;
+                        return sum + (+curr.product.price * +curr.quantity);
                     }
                 } else if (curr?.product_variation?.price) {
                     if (isNumber(curr.product_variation.sale_price)) {
-                        return (sum + +curr.product_variation.sale_price) * +curr.quantity;
+                        return sum + (+curr.product_variation.sale_price * +curr.quantity);
                     } else {
-                        return (sum + +curr.product_variation.price) * +curr.quantity;
+                        return sum + (+curr.product_variation.price * +curr.quantity);
                     }
                 }
                 return sum;

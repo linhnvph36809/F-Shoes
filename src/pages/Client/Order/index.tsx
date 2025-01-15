@@ -91,15 +91,15 @@ const Order = () => {
         return carts?.reduce((sum: any, curr: any) => {
             if (curr?.product?.price) {
                 if (isNumber(curr.product.sale_price)) {
-                    return (sum + +curr.product.sale_price) * +curr.quantity;
+                    return sum + +curr.product.sale_price * +curr.quantity;
                 } else {
-                    return (sum + +curr.product.price) * +curr.quantity;
+                    return sum + +curr.product.price * +curr.quantity;
                 }
             } else if (curr?.product_variation?.price) {
                 if (isNumber(curr.product_variation.sale_price)) {
-                    return (sum + +curr.product_variation.sale_price) * +curr.quantity;
+                    return sum + +curr.product_variation.sale_price * +curr.quantity;
                 } else {
-                    return (sum + +curr.product_variation.price) * +curr.quantity;
+                    return sum + +curr.product_variation.price * +curr.quantity;
                 }
             }
             return sum;
@@ -241,7 +241,12 @@ const Order = () => {
         handleSetCookie(
             'order',
             {
-                voucher_cost: voucher.type == 'fixed' ? voucher.discount : voucher.max_total_amount,
+                voucher_cost: voucher.type === 'fixed'
+                    ? voucher.discount
+                    : (handleTotalPrice * +voucher.discount) / 100 >
+                        voucher.max_total_amount
+                        ? voucher.max_total_amount
+                        : (handleTotalPrice * +voucher.discount) / 100,
                 ...newValues,
             },
             new Date(Date.now() + 20 * 60 * 1000),
@@ -622,9 +627,20 @@ const Order = () => {
                                                 {formatPrice(
                                                     voucher.type === 'fixed'
                                                         ? voucher.discount
-                                                        : voucher.max_total_amount,
+                                                        : (handleTotalPrice * +voucher.discount) / 100 >
+                                                            voucher.max_total_amount
+                                                            ? voucher.max_total_amount
+                                                            : (handleTotalPrice * +voucher.discount) / 100,
                                                 )}
                                                 đ
+                                                {voucher?.type === 'percentage'
+                                                    ? `(${handleChangeMessage(locale, 'Voucher', 'Mã giảm')} ${voucher?.discount
+                                                    }% - ${handleChangeMessage(
+                                                        locale,
+                                                        'Max',
+                                                        'Tối đa',
+                                                    )} ${formatPrice(voucher?.max_total_amount)}đ)`
+                                                    : ''}
                                                 <CircleX
                                                     onClick={() => setVoucher([])}
                                                     className="w-6 hover:cursor-pointer hover:opacity-60 transition-global"
