@@ -106,7 +106,7 @@ const useSale = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             navigate('/admin/listsale');
             showMessageClient(
-                handleChangeMessage(locale, 'Sale created successfully', 'Bán hàng đã được tạo thành công'),
+                handleChangeMessage(locale, 'Sale created successfully', 'Đợt giảm giá đã được tạo thành công'),
                 '',
                 'success',
             );
