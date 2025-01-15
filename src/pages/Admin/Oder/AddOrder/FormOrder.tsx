@@ -131,30 +131,13 @@ const FormOrder = () => {
     }, [products]);
 
     const totalAmount = useMemo(() => {
-        let sum = 0;
-        if (handleTotalPrice >= FREE_SHIP) {
-            sum = handleTotalPrice;
-        } else {
-            sum = handleTotalPrice + (fee.total || 0);
-        }
-        if (voucher?.min_total_amount > sum) {
+        let sum = handleTotalPrice;
+        if (products.length && voucher?.min_total_amount > sum) {
             showMessageClient(
                 handleChangeMessage(
                     locale,
                     `The order must be larger than ${formatPrice(voucher.min_total_amount)}đ`,
                     `Đơn hàng phải lớn hơn ${formatPrice(voucher.min_total_amount)}đ`,
-                ),
-                '',
-                'warning',
-            );
-            setVoucher([]);
-            return sum;
-        } else if (voucher?.max_total_amount < sum) {
-            showMessageClient(
-                handleChangeMessage(
-                    locale,
-                    `The order must be smaller than ${formatPrice(voucher.min_total_amount)}đ`,
-                    `Đơn hàng phải nhỏ hơn ${formatPrice(voucher.max_total_amount)}đ`,
                 ),
                 '',
                 'warning',
@@ -167,19 +150,27 @@ const FormOrder = () => {
             }
             return 0;
         } else if (voucher?.type && voucher?.type === 'percentage') {
-            if (sum - (sum * +voucher.discount) / 100 > 0) {
-                return sum - (sum * +voucher.discount) / 100;
+            let amount1 = (sum * +voucher.discount) / 100;
+            if (amount1 > voucher?.max_total_amount) {
+                amount1 = voucher?.max_total_amount;
+            }
+            if (sum - amount1 > 0) {
+                return sum - amount1;
             }
             return 0;
         } else {
             return sum;
         }
-    }, [handleTotalPrice, fee, voucher, products]);
+    }, [handleTotalPrice, fee, voucher]);
 
     const onFinish = async (values: any) => {
         const newValues = {
             user_id: user?.id || 0,
-            total_amount: totalAmount,
+            total_amount: fee?.total
+                ? handleTotalPrice >= FREE_SHIP
+                    ? totalAmount
+                    : totalAmount + fee.total
+                : totalAmount,
             payment_method: infoShip ? paymentMethod : 'pay_at_the_counter',
             payment_status: infoShip ? 'not_yet_paid' : 'paid',
             shipping_method: infoShip ? 'standard_shipping' : null,
@@ -190,11 +181,12 @@ const FormOrder = () => {
             receiver_full_name: infoShip
                 ? values?.receiver_full_name
                 : user
-                    ? user.name
-                    : handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Retail customers', ' Khách lẻ'),
+                ? user.name
+                : handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Retail customers', ' Khách lẻ'),
             address: infoShip
-                ? `${values?.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
-                } - ${province}`
+                ? `${values?.address} - ${wards.find((ward: any) => ward.WardCode == wardCode)?.WardName} - ${
+                      districts.find((district: any) => district.DistrictID == districtId)?.DistrictName
+                  } - ${province}`
                 : handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'At the counter', 'Tại quầy'),
             city: infoShip
                 ? province
@@ -523,9 +515,22 @@ const FormOrder = () => {
                                         </h3>
                                         <p className="font-medium color-primary text-[16px] flex items-center gap-x-1">
                                             -
-                                            {voucher.type === 'fixed'
-                                                ? formatPrice(voucher.discount)
-                                                : `${voucher.discount}%`}
+                                            {formatPrice(
+                                                voucher.type === 'fixed'
+                                                    ? voucher.discount
+                                                    : (handleTotalPrice * +voucher.discount) / 100 >
+                                                      voucher.max_total_amount
+                                                    ? voucher.max_total_amount
+                                                    : (handleTotalPrice * +voucher.discount) / 100,
+                                            )}
+                                            đ
+                                            {voucher?.type === 'percentage'
+                                                ? `(${handleChangeMessage(locale, 'Voucher', 'Mã giảm')} ${
+                                                      voucher?.discount
+                                                  }% - ${handleChangeMessage(locale, 'Max', 'Tối đa')} ${formatPrice(
+                                                      voucher?.max_total_amount,
+                                                  )}đ)`
+                                                : ''}
                                             <CircleX
                                                 onClick={() => setVoucher([])}
                                                 className="w-6 hover:cursor-pointer hover:opacity-60 transition-global"
@@ -541,7 +546,7 @@ const FormOrder = () => {
                                             <FormattedMessage id="Shipping_Cost" /> :
                                         </h3>
                                         <p className="font-medium color-primary text-[16px]">
-                                            {totalAmount >= FREE_SHIP ? 'Free ship' : `${formatPrice(fee.total)}đ`}
+                                            {handleTotalPrice >= FREE_SHIP ? 'Free ship' : `${formatPrice(fee.total)}đ`}
                                         </p>
                                     </div>
                                 ) : (
@@ -551,17 +556,27 @@ const FormOrder = () => {
                                     <h3 className="font-medium color-primary text-[16px]">
                                         <FormattedMessage id="box.Cart.Total" /> :
                                     </h3>
-                                    <p className="font-medium text-red-500 text-[28px]">{formatPrice(totalAmount)}đ</p>
+                                    <p className="font-medium text-red-500 text-[28px]">
+                                        {formatPrice(
+                                            fee?.total
+                                                ? handleTotalPrice >= FREE_SHIP
+                                                    ? totalAmount
+                                                    : totalAmount + fee.total
+                                                : totalAmount,
+                                        )}
+                                        đ
+                                    </p>
                                 </div>
                             </div>
                             <div>
                                 <div className="flex justify-center gap-x-5 my-10">
                                     <button
                                         onClick={() => setPaymentMethod(paymentMehtods.cash_on_delivery)}
-                                        className={`px-5 py-3 rounded-lg ${paymentMethod === paymentMehtods.cash_on_delivery
-                                            ? 'bg-primary'
-                                            : 'bg-gray opacity-80'
-                                            }  text-white flex items-center gap-x-5 font-medium
+                                        className={`px-5 py-3 rounded-lg ${
+                                            paymentMethod === paymentMehtods.cash_on_delivery
+                                                ? 'bg-primary'
+                                                : 'bg-gray opacity-80'
+                                        }  text-white flex items-center gap-x-5 font-medium
                                     transition-global`}
                                     >
                                         <FormattedMessage id="Cash" />
@@ -570,10 +585,11 @@ const FormOrder = () => {
                                     {totalAmount > 10000 ? (
                                         <button
                                             onClick={() => setPaymentMethod(paymentMehtods.banking)}
-                                            className={`px-5 py-3 rounded-lg ${paymentMethod === paymentMehtods.banking
-                                                ? 'bg-primary'
-                                                : 'bg-gray opacity-80'
-                                                } text-white flex items-center gap-x-5 font-medium
+                                            className={`px-5 py-3 rounded-lg ${
+                                                paymentMethod === paymentMehtods.banking
+                                                    ? 'bg-primary'
+                                                    : 'bg-gray opacity-80'
+                                            } text-white flex items-center gap-x-5 font-medium
                                                                         transition-global`}
                                         >
                                             QR

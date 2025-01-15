@@ -6,6 +6,8 @@ import { useForm } from 'antd/es/form/Form';
 import TextArea from 'antd/es/input/TextArea';
 import useOrder from '../../../../../hooks/useOrder';
 import LoadingSmall from '../../../../../components/Loading/LoadingSmall';
+import PermissionElement from '../../../../../components/Permissions/PermissionElement';
+import { ACTIONS, PERMISSION } from '../../../../../constants';
 
 const ModalDeniedReturn = ({ orderId, handleCancelDetail }: any) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,13 +37,20 @@ const ModalDeniedReturn = ({ orderId, handleCancelDetail }: any) => {
 
     return (
         <>
-            <div onClick={showModal}>
-                <button className="px-8 py-3 bg-red-500 text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80">
-                    <FormattedMessage id="deniedReturn" />
-                </button>
-            </div>
+            <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
+
+                <div onClick={showModal}>
+                    <button className="px-8 py-3 bg-red-500 text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80">
+                        <FormattedMessage id="deniedReturn" />
+                    </button>
+                </div>
+            </PermissionElement>
             <Modal
-                title={<h3 className="text-[28px]"><FormattedMessage id="Reason_Denied_Return" /></h3>}
+                title={
+                    <h3 className="text-[28px]">
+                        <FormattedMessage id="Reason_Denied_Return" />
+                    </h3>
+                }
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
@@ -68,6 +77,7 @@ const ModalDeniedReturn = ({ orderId, handleCancelDetail }: any) => {
             >
                 <Form layout="vertical" form={form} onFinish={onFinish}>
                     <Form.Item
+                        label={<FormattedMessage id="Reason_Denied_Return" />}
                         className="font-medium"
                         name="reason_denied_return"
                         rules={[

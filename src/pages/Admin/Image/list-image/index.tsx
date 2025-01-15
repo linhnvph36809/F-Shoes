@@ -1,11 +1,13 @@
-import { Button, Image, Upload, UploadProps, Pagination } from 'antd';
+import { Image, Upload, UploadProps, Pagination } from 'antd';
 import { useState, useEffect } from 'react';
 import Heading from '../../components/Heading';
 import useQueryConfig from '../../../../hooks/useQueryConfig';
 import { IImage } from '../../../../interfaces/IImage';
-import LoadingBlock from '../../../../components/Loading/LoadingBlock';
 import useImage from '../../../../hooks/useImage';
 import { FormattedMessage } from 'react-intl';
+import SkeletonComponent from '../../components/Skeleton';
+import PermissionElement from '../../../../components/Permissions/PermissionElement';
+import { ACTIONS, PERMISSION } from '../../../../constants';
 
 const getBase64 = (file: any) =>
     new Promise((resolve, reject) => {
@@ -17,8 +19,11 @@ const getBase64 = (file: any) =>
 
 const MediaLibrary = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const { data, isFetching, refetch } = useQueryConfig('image-all', `/api/image?paginate=true&page=${currentPage}`);
-    const { postImage, deleteImage } = useImage();
+    const { data, isLoading, refetch } = useQueryConfig(
+        'image-all',
+        `/api/image?paginate=true&page=${currentPage}&per_page=55`,
+    );
+    const { loading, postImage, deleteImage } = useImage();
     const [fileList, setFileList] = useState<any>([]);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -55,7 +60,10 @@ const MediaLibrary = () => {
             }}
             type="button"
         >
-            +<div style={{ marginTop: 8 }}><FormattedMessage id="media.upload" /></div>
+            +
+            <div style={{ marginTop: 8 }}>
+                <FormattedMessage id="media.upload" />
+            </div>
         </button>
     );
 
@@ -81,11 +89,13 @@ const MediaLibrary = () => {
 
     return (
         <>
-            {isFetching ? (
-                <LoadingBlock />
+            {isLoading ? (
+                <SkeletonComponent />
             ) : (
                 <section>
-                    <Heading><FormattedMessage id="media.List_Media" /></Heading>
+                    <Heading>
+                        <FormattedMessage id="media.List_Media" />
+                    </Heading>
                     <Upload
                         action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                         listType="picture-card"
@@ -94,7 +104,9 @@ const MediaLibrary = () => {
                         onChange={handleChange}
                         onRemove={handleDeleteImage}
                     >
-                        {uploadButton}
+                        <PermissionElement keyName={PERMISSION.PERMISSION_MEDIA} action={ACTIONS.ACTIONS_ADD}>
+                            {uploadButton}
+                        </PermissionElement>
                     </Upload>
                     {previewImage && (
                         <Image

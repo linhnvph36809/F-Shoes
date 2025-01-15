@@ -233,7 +233,7 @@ const ModalFormUser = ({ initialValues, isUpdate }: any) => {
                             ]}
                         >
                             <DatePicker
-                                placeholder={intl.formatMessage({ id: 'select_date_end' })}
+                                placeholder={intl.formatMessage({ id: 'select_date_birth' })}
                                 format="DD-MM-YYYY"
                                 className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             />

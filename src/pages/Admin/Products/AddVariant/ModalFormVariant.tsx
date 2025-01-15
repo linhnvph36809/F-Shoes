@@ -61,7 +61,7 @@ const ModalFormVariant = ({ index, ids, setDatas, setError, setImages }: any) =>
             newValues[index] = {
                 ...value,
                 values: ids,
-                status: value.status,
+                status: value.status ? true : false,
             };
             return newValues;
         });

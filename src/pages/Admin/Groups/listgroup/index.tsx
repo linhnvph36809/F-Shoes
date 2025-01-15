@@ -59,11 +59,11 @@ const ListGroups = ({ initialValues }: any) => {
             key: '4',
             render: (_: any, group: IGroup) => (
                 <div className="flex gap-2">
-                    {
-                         group?.id === 1 || group?.id === 2 || group?.id === 3 ? '' 
-                         : <ModalAddGroup initialValues={group} isUpdate={true} />
-                        
-                    }
+                    {group?.id === 1 || group?.id === 2 || group?.id === 3 ? (
+                        ''
+                    ) : (
+                        <ModalAddGroup initialValues={group} isUpdate={true} />
+                    )}
                     {group.deleted_at ? (
                         ''
                     ) : (
@@ -88,10 +88,11 @@ const ListGroups = ({ initialValues }: any) => {
                             <CircleX />
                         </ButtonEdit>
                     )}
-                    {
-                        group?.id === 1 || group?.id === 2 || group?.id === 3 ? '' 
-                        : <ButtonDelete onClick={() => handleDeleteGroup(group.id)}></ButtonDelete>
-                    }
+                    {group?.id === 1 || group?.id === 2 || group?.id === 3 ? (
+                        ''
+                    ) : (
+                        <ButtonDelete onClick={() => handleDeleteGroup(group.id)}></ButtonDelete>
+                    )}
                 </div>
             ),
         },

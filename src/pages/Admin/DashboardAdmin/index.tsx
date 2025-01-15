@@ -26,8 +26,6 @@ const AdminDashboard = () => {
         date_end: '',
     });
 
-
-
     const { data, isFetching } = useQueryConfig(
         `statistics/overall/from=${dates.date_start}&to=$${dates.date_end}`,
         `/api/v1/statistics/overall?from=${dates.date_start}&to=$${dates.date_end}`,
@@ -83,17 +81,29 @@ const AdminDashboard = () => {
     };
     const UptoFrom = (
         <span>
-            {handleChangeMessage(locale, 'from', 'từ')} {dates.date_start ? formatTime(dayjs(dates.date_start).startOf('day').format("YYYY-MM-DD HH:mm:ss")) : handleChangeMessage(locale, '7 days ago', '7 ngày trước')} {handleChangeMessage(locale, 'to', 'đến')}{' '}
-            {dates.date_end ? formatTime(dayjs(dates.date_end).endOf('day').format("YYYY-MM-DD HH:mm:ss")) : handleChangeMessage(locale, 'present', 'hiện tại')}
+            {handleChangeMessage(locale, 'from', 'từ')}{' '}
+            {dates.date_start
+                ? formatTime(dayjs(dates.date_start).startOf('day').format('YYYY-MM-DD HH:mm:ss'))
+                : handleChangeMessage(locale, '7 days ago', '7 ngày trước')}{' '}
+            {handleChangeMessage(locale, 'to', 'đến')}{' '}
+            {dates.date_end
+                ? formatTime(dayjs(dates.date_end).endOf('day').format('YYYY-MM-DD HH:mm:ss'))
+                : handleChangeMessage(locale, 'present', 'hiện tại')}
         </span>
     );
-
 
     return (
         <Content>
             <div className="flex justify-between items-center">
                 <Heading>
-                    <FormattedMessage id="Statistics" /> {dates.date_start && dates.date_end ? `${handleChangeMessage(locale, 'From', 'Từ ngày')} ${dates.date_start} ${handleChangeMessage(locale, 'To', 'Đến ngày')} ${dates.date_end}` : handleChangeMessage(locale, '7 days ago', '7 ngày trước')}
+                    <FormattedMessage id="Statistics" />{' '}
+                    {dates.date_start && dates.date_end
+                        ? `${handleChangeMessage(locale, 'From', 'Từ ngày')} ${dates.date_start} ${handleChangeMessage(
+                            locale,
+                            'To',
+                            'Đến ngày',
+                        )} ${dates.date_end}`
+                        : handleChangeMessage(locale, '7 days ago', '7 ngày trước')}
                 </Heading>
                 <div className="flex gap-x-5 mb-10">
                     <RangePicker
@@ -298,11 +308,24 @@ const AdminDashboard = () => {
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-[16px] text-[#606060] font-medium">
-                                    <FormattedMessage id="admin.Total_Amount_Order" />
+                                    <FormattedMessage id="revenue" />
                                 </p>
                                 <h3 className="text-[30px] font-bold color-primary mt-5">
-                                    {formatPrice(overall?.total_amount_orders ? overall.total_amount_orders : 0)}đ
+                                    {formatPrice(
+                                        overall?.total_amount_orders
+                                            ? overall.total_amount_orders - overall?.total_return
+                                            : 0,
+                                    )}
+                                    đ
                                 </h3>
+                                <p className="mt-2">
+                                    <FormattedMessage id="admin.Total_Amount_Order" /> :{' '}
+                                    {formatPrice(overall?.total_amount_orders ? overall?.total_amount_orders : 0)}đ{' '}
+                                </p>
+                                <p className="mt-5 text-red-500">
+                                    <FormattedMessage id="Refund_amount" /> :{' '}
+                                    {formatPrice(overall?.total_return ? overall?.total_return : 0)}đ{' '}
+                                </p>
                             </div>
                             <div>
                                 <svg
@@ -345,7 +368,10 @@ const AdminDashboard = () => {
             </div>
             <div>
                 <h3 className="text-[18px] font-bold m-4 border-b-[1px]">
-                    <FormattedMessage id="admin.Annual_Revenue_Statistics_Chart" /> {yearOfRevenueChart == yearOfRevenueChart2 ? yearOfRevenueChart : `${yearOfRevenueChart} ${handleChangeMessage(locale, 'And', 'Và')} ${yearOfRevenueChart2} `}
+                    <FormattedMessage id="admin.Annual_Revenue_Statistics_Chart" />{' '}
+                    {yearOfRevenueChart == yearOfRevenueChart2
+                        ? yearOfRevenueChart
+                        : `${yearOfRevenueChart} ${handleChangeMessage(locale, 'And', 'Và')} ${yearOfRevenueChart2} `}
                 </h3>
                 <div className="flex justify-end my-4">
                     <DatePicker
@@ -361,7 +387,6 @@ const AdminDashboard = () => {
                         className="w-[20%] focus:border-none focus:outline-none"
                         format="YYYY"
                         onChange={onChangeYearOfRevenueStatisticsChart2}
-
                     />
                 </div>
                 <ColumnChart

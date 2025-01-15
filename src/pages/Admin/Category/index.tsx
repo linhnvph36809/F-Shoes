@@ -24,7 +24,7 @@ import { useContextGlobal } from '../../../contexts';
 
 const ListCategory = () => {
     const intl = useIntl();
-    const {locale} = useContextGlobal();
+    const { locale } = useContextGlobal();
     const navigate = useNavigate();
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
@@ -79,10 +79,19 @@ const ListCategory = () => {
     // DELETE CATEGORY
     const handleDeleteCategory = (id?: string | number) => {
         if (id) {
-            showMessageActive(handleChangeMessage(locale,'Are you sure you want to delete the Category?','Bạn có chắc muốn xóa danh mục này?'), '', 'warning', () => {
-                deleteCategory(id);
-                getAllCategory();
-            });
+            showMessageActive(
+                handleChangeMessage(
+                    locale,
+                    'Are you sure you want to delete the Category?',
+                    'Bạn có chắc muốn xóa danh mục này?',
+                ),
+                '',
+                'warning',
+                () => {
+                    deleteCategory(id);
+                    getAllCategory();
+                },
+            );
         }
     };
 
@@ -105,9 +114,8 @@ const ListCategory = () => {
             return (
                 <div className="flex-row-center gap-x-5">
                     <PermissionElement keyName={PERMISSION.PERMISSION_CATEGORY} action={ACTIONS.ACTIONS_EDIT}>
-                            <ButtonUpdate onClick={() => handleUpdate(values)}></ButtonUpdate>
-                        </PermissionElement>
-
+                        <ButtonUpdate onClick={() => handleUpdate(values)}></ButtonUpdate>
+                    </PermissionElement>
                     <PermissionElement
                         keyName={PERMISSION.PERMISSION_CATEGORY}
                         action={ACTIONS_CATEGORY.ACTIONS_ADD_PRODUCT}

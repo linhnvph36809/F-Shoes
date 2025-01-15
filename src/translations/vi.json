@@ -572,7 +572,7 @@
     "Variant": "Khác nhau",
     "Reason": "Lý do",
     "Enter_Reason": "Nhập lý do",
-    "Please enter reason for cancellation": "Vui lòng nhập lý do hủy",
+    "Please enter reason for cancellation": "Vui lòng nhập lý do từ chối",
     "Statistics": "Thống kê",
     "attribute.add_button": "Thêm thuộc tính",
     "attribute.attribute_name": "Tên thuộc tính",
@@ -674,5 +674,17 @@
     "Delivery_Shipping": "Giao hàng/Vận chuyển",
     "End_date_must_be_in_future": "Ngày kết thúc phải lớn hơn thời gian hiện tại",
     "Discount_must_be_at_least_1": "Giảm giá phải ít nhất là 1",
-    "choose_product_return": "Chọn sản phẩm trả hàng"
+    "choose_product_return": "Chọn sản phẩm trả hàng",
+    "validate_product_return": "VUi lòng chọn sản phẩm trả hàng",
+    "please_rate": "Vui lòng chọn sao",
+    "Please_enter_a_title_for_your_review": "Vui lòng nhập tiêu đề đánh giá",
+    "Enter_title_for_your_review": "Nhập tiêu đề",
+    "Please_enter_your_review": "Vui lòng nhập đánh giá",
+    "write_your_review_here": "Viết đánh giá của bạn",
+    "Choose_all": "Chọn tất cả",
+    "Please_select_a_payment_method": "Vui lòng chọn phương thức thanh toán",
+    "select_date_birth": "Nhập ngày sinh",
+    "Refund_amount": "Số tiền hoàn lại",
+    "Order_value": "Giá trị đơn hàng",
+    "revenue": "Tổng doanh thu"
 }

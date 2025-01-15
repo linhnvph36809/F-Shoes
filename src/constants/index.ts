@@ -1,3 +1,5 @@
+import { handleChangeMessage, handleGetLocalStorage } from '../utils';
+
 export const PATH_LIST_PRODUCT = '/admin/list-product';
 export const PATH_LIST_CATEGORY = '/admin/list-category';
 export const PATH_LIST_USER = '/admin/list-user';
@@ -21,6 +23,10 @@ export const PERMISSION = {
     PERMISSION_REVIEW: 'review',
     PERMISSION_SALE: 'sale',
 };
+
+export const LANGUAGE = 'language';
+export const LANGUAGE_EN = 'en';
+export const LANGUAGE_VI = 'vi';
 
 export const ACTIONS = {
     ACTIONS_VIEW: 'view',
@@ -50,10 +56,6 @@ export const STATUS_ORDER = [
 
 export const FREE_SHIP = 1000000;
 export const STREAM_SALE_LIST_URL = 'http://localhost:8000/api/sales/stream?column=id&sort=desc';
-
-export const LANGUAGE = 'language';
-export const LANGUAGE_EN = 'en';
-export const LANGUAGE_VI = 'vi';
 
 export const TOKENS = {
     ACCESS_TOKEN: 'accessToken',

@@ -35,8 +35,6 @@ const OrderDetail = () => {
 
     const { cookies } = useCookiesConfig(`order${id}`);
 
-
-
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -108,6 +106,7 @@ const OrderDetail = () => {
 
     const subtotal = order?.order_details?.reduce((acc: number, cur: any) => +cur.total_amount + acc, 0) || 0;
     const [discountVoucher, setDiscountVoucher] = useState<number>(0);
+
     useEffect(() => {
         if (order?.voucher_id) {
             if (order?.voucher_id?.type === 'fixed') {
@@ -134,9 +133,9 @@ const OrderDetail = () => {
 
     const status:
         | {
-            className: string;
-            text: string;
-        }
+              className: string;
+              text: string;
+          }
         | undefined = statusString(order?.status);
 
     const givenTime = new Date(order?.created_at || '');
@@ -279,8 +278,13 @@ const OrderDetail = () => {
                                                 <p className="font-medium">
                                                     -{formatPrice(discountVoucher)}đ{' '}
                                                     {order?.voucher_id?.type === 'percentage'
-                                                        ? `(${handleChangeMessage(locale, 'Voucher', 'Mã giảm')} ${order?.voucher_id?.discount
-                                                        }% - ${handleChangeMessage(locale, 'Max', 'Tối đa')} ${formatPrice(order?.voucher_id?.max_total_amount)}đ)`
+                                                        ? `(${handleChangeMessage(locale, 'Voucher', 'Mã giảm')} ${
+                                                              order?.voucher_id?.discount
+                                                          }% - ${handleChangeMessage(
+                                                              locale,
+                                                              'Max',
+                                                              'Tối đa',
+                                                          )} ${formatPrice(order?.voucher_id?.max_total_amount)}đ)`
                                                         : ''}
                                                 </p>
                                             </div>
@@ -346,6 +350,40 @@ const OrderDetail = () => {
                                                 <p className="font-medium text-red-500">
                                                     {' '}
                                                     {order.reason_denied_return}
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            ''
+                                        )}
+
+                                        {order?.reason_return ? (
+                                            <div className="flex justify-between pb-5 items-center mb-5 border-b text-[16px] color-gray">
+                                                <p>
+                                                    {' '}
+                                                    <p>
+                                                        <FormattedMessage id="orderDetail.reasonOrder" /> :
+                                                    </p>
+                                                </p>
+                                                <p className="font-medium text-red-500">
+                                                    {' '}
+                                                    {JSON.parse(order.reason_return)?.reason_return}
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            ''
+                                        )}
+
+                                        {order?.reason_return ? (
+                                            <div className="flex justify-between pb-5 items-center mb-5 border-b text-[16px] color-gray">
+                                                <p>
+                                                    {' '}
+                                                    <p>
+                                                        <FormattedMessage id="Refund_amount" /> :
+                                                    </p>
+                                                </p>
+                                                <p className="font-medium text-red-500">
+                                                    {' '}
+                                                    {formatPrice(JSON.parse(order.reason_return)?.return_price)}đ
                                                 </p>
                                             </div>
                                         ) : (
@@ -477,119 +515,84 @@ const OrderDetail = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='mt-10'>
-                                    <h3 className='text-[20px] mb-5'>Sản phẩm đã mua: </h3>
-                                    <div className="grid grid-cols-2 gap-10 border-t pt-10">
-                                        {order?.order_details.map((orderDetail: any) => (
-                                            <div
-                                                key={orderDetail.id}
-                                                className="flex justify-between items-center bg-white p-8 rounded-xl"
-                                            >
-                                                <div className="flex items-start gap-x-5">
-                                                    <div>
-                                                        <img
-                                                            src={
-                                                                orderDetail?.product
-                                                                    ? orderDetail?.product.image_url
-                                                                    : orderDetail?.variation?.image_url
-                                                            }
-                                                            alt=""
-                                                            className="w-[100px]"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <h3 className="font-medium text-[18px]">
-                                                            {orderDetail?.product
-                                                                ? orderDetail?.product.name
-                                                                : orderDetail?.variation?.name}
-                                                        </h3>
-                                                        {orderDetail?.detail_item ? (
-                                                            <p className="color-gray text-[13px] font-medium my-2">
-                                                                {Object.entries(
-                                                                    JSON.parse(orderDetail?.detail_item) || {},
-                                                                ).map(([key, value]: any) => (
-                                                                    <p className="color-gray text-[13px] font-medium">
-                                                                        {key}: {value}
-                                                                    </p>
-                                                                ))}
-                                                            </p>
-                                                        ) : (
-                                                            ''
-                                                        )}
-                                                    </div>
+                                <div className="grid grid-cols-2 gap-10 mt-20 pt-10 border-t">
+                                    {order?.order_details.map((orderDetail: any) => (
+                                        <div
+                                            key={orderDetail.id}
+                                            className="flex justify-between items-center bg-white p-8 rounded-xl"
+                                        >
+                                            <div className="flex items-start gap-x-5">
+                                                <div>
+                                                    <img
+                                                        src={
+                                                            orderDetail?.product
+                                                                ? orderDetail?.product.image_url
+                                                                : orderDetail?.variation?.image_url
+                                                        }
+                                                        alt=""
+                                                        className="w-[100px]"
+                                                    />
                                                 </div>
-                                                <div className="flex flex-col justify-between items-end h-full">
-                                                    <p className="font-medium text-[18px] text-red-500">
-                                                        {formatPrice(orderDetail?.total_amount)}đ
-                                                        <p className="font-medium color-gray text-[14px] text-end">
-                                                            x{orderDetail?.quantity}
+                                                <div>
+                                                    <h3 className="font-medium text-[18px]">
+                                                        {orderDetail?.product
+                                                            ? orderDetail?.product.name
+                                                            : orderDetail?.variation?.name}
+                                                    </h3>
+                                                    {orderDetail?.detail_item ? (
+                                                        <p className="color-gray text-[13px] font-medium my-2">
+                                                            {Object.entries(
+                                                                JSON.parse(orderDetail?.detail_item) || {},
+                                                            ).map(([key, value]: any) => (
+                                                                <p className="color-gray text-[13px] font-medium">
+                                                                    {key}: {value}
+                                                                </p>
+                                                            ))}
                                                         </p>
-                                                    </p>
-
-                                                    {order.status > 4 ? (
-                                                        <Link
-                                                            to={`/detail/${orderDetail?.product?.slug
-                                                                ? orderDetail?.product?.slug
-                                                                : orderDetail?.variation?.product?.slug
-                                                                }`}
-                                                        >
-                                                            <button className="h-[36px] px-5 bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">
-                                                                <FormattedMessage id="admin.review" />
-                                                            </button>
-                                                        </Link>
                                                     ) : (
                                                         ''
                                                     )}
                                                 </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                </div>
-                                {
-                                    order?.reason_return ?
-                                        <div className='mt-10'>
-                                            <h3 className='text-[20px] mb-5'>Sản phẩm hoàn trả: </h3>
-                                            <div className="grid grid-cols-2 gap-10 border-t pt-10">
-                                                {JSON.parse(order?.reason_return).return_detail.map((orderDetail: any) => (
-                                                    <div
-                                                        key={orderDetail.id}
-                                                        className="flex justify-between items-center bg-white p-8 rounded-xl"
+                                            <div className="flex flex-col justify-between items-end h-full">
+                                                <p className="font-medium text-[18px] text-red-500">
+                                                    {formatPrice(orderDetail?.total_amount)}đ
+                                                    <p className="font-medium color-gray text-[14px] text-end">
+                                                        x{orderDetail?.quantity}
+                                                    </p>
+                                                </p>
+                                                {order?.reason_return ? (
+                                                    <p className="text-[16px] text-red-500">
+                                                        {JSON.parse(order?.reason_return).return_detail.includes(
+                                                            orderDetail.id,
+                                                        ) ? (
+                                                            <FormattedMessage id="orderDetail.return" />
+                                                        ) : (
+                                                            ''
+                                                        )}
+                                                    </p>
+                                                ) : (
+                                                    ''
+                                                )}
+                                                {order.status > 4 ? (
+                                                    <Link
+                                                        to={`/detail/${
+                                                            orderDetail?.product?.slug
+                                                                ? orderDetail?.product?.slug
+                                                                : orderDetail?.variation?.product?.slug
+                                                        }`}
                                                     >
-                                                        <div className="flex items-start gap-x-5">
-                                                            <div>
-                                                                <img
-                                                                    src={
-                                                                        orderDetail?.product_image
-
-                                                                    }
-                                                                    alt=""
-                                                                    className="w-[100px]"
-                                                                />
-                                                            </div>
-                                                            <div>
-                                                                <h3 className="font-medium text-[18px]">
-                                                                    {orderDetail?.product_name}
-                                                                </h3>
-                                                                <h3 className="font-medium text-[12px] color-gray">
-                                                                    {orderDetail?.classify}
-                                                                </h3>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex flex-col justify-between items-end h-full">
-                                                            <p className="font-medium text-[18px] text-red-500">
-                                                                {formatPrice(orderDetail?.total_amount)}đ
-                                                                <p className="font-medium color-gray text-[14px] text-end">
-                                                                    x{orderDetail?.quantity}
-                                                                </p>
-                                                            </p>
-
-
-                                                        </div>
-                                                    </div>
-                                                ))}
+                                                        <button className="h-[36px] px-5 bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">
+                                                            <FormattedMessage id="admin.review" />
+                                                        </button>
+                                                    </Link>
+                                                ) : (
+                                                    ''
+                                                )}
                                             </div>
-                                        </div> : ""
-                                }
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
