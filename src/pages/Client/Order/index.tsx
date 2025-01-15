@@ -205,7 +205,11 @@ const Order = () => {
 
         const newValues = {
             user_id: user.id,
-            total_amount: totalAmount,
+            total_amount: fee?.total
+                ? handleTotalPrice >= FREE_SHIP
+                    ? totalAmount
+                    : totalAmount + fee.total
+                : totalAmount,
             payment_method: value.payment_method,
             payment_status: 'not_yet_paid',
             shipping_method: 'standard_shipping',
@@ -223,17 +227,21 @@ const Order = () => {
             status: 1,
             note: value.note,
             order_details,
-            amount_collected: value.payment_method !== 'cash on delivery' ? totalAmount : 0,
+            amount_collected:
+                value.payment_method !== 'cash on delivery'
+                    ? fee?.total
+                        ? handleTotalPrice >= FREE_SHIP
+                            ? totalAmount
+                            : totalAmount + fee.total
+                        : totalAmount
+                    : 0,
             cart_ids: orderId,
         };
 
         handleSetCookie(
             'order',
             {
-                voucher_cost:
-                    voucher.type == 'fixed'
-                        ? voucher.discount
-                        : voucher.max_total_amount,
+                voucher_cost: voucher.type == 'fixed' ? voucher.discount : voucher.max_total_amount,
                 ...newValues,
             },
             new Date(Date.now() + 20 * 60 * 1000),
@@ -247,7 +255,13 @@ const Order = () => {
         } else if (value.payment_method == 'vnpay') {
             postVNPAY(
                 {
-                    total: Math.round(totalAmount),
+                    total: Math.round(
+                        fee?.total
+                            ? handleTotalPrice >= FREE_SHIP
+                                ? totalAmount
+                                : totalAmount + fee.total
+                            : totalAmount,
+                    ),
                     url: `${window.location.origin}/order-vnpay-complete`,
                 },
                 newValues,
@@ -255,7 +269,13 @@ const Order = () => {
         } else if (value.payment_method == 'momo') {
             postMomo(
                 {
-                    total: Math.round(totalAmount),
+                    total: Math.round(
+                        fee?.total
+                            ? handleTotalPrice >= FREE_SHIP
+                                ? totalAmount
+                                : totalAmount + fee.total
+                            : totalAmount,
+                    ),
                     url: `${window.location.origin}/order-momo-complete`,
                 },
                 newValues,
@@ -603,7 +623,8 @@ const Order = () => {
                                                     voucher.type === 'fixed'
                                                         ? voucher.discount
                                                         : voucher.max_total_amount,
-                                                )}đ
+                                                )}
+                                                đ
                                                 <CircleX
                                                     onClick={() => setVoucher([])}
                                                     className="w-6 hover:cursor-pointer hover:opacity-60 transition-global"
@@ -643,10 +664,16 @@ const Order = () => {
                                             {<FormattedMessage id="box.Cart.Total" />}
                                         </Text>
                                         <Text className="color-primary font-medium text-[20px]">
-                                            {formatPrice(fee?.total ? totalAmount + fee.total : totalAmount)}đ
+                                            {formatPrice(
+                                                fee?.total
+                                                    ? handleTotalPrice >= FREE_SHIP
+                                                        ? totalAmount
+                                                        : totalAmount + fee.total
+                                                    : totalAmount,
+                                            )}
+                                            đ
                                         </Text>
                                     </div>
-
                                     <Divider />
                                     <div className="h-[500px] overflow-auto">
                                         {carts?.map((cart: any) => (
@@ -728,7 +755,9 @@ const Order = () => {
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: 'Please select a payment method',
+                                                            message: (
+                                                                <FormattedMessage id="Please_select_a_payment_method" />
+                                                            ),
                                                         },
                                                     ]}
                                                 >
@@ -737,7 +766,9 @@ const Order = () => {
                                                             value="momo"
                                                             className="font-medium"
                                                             style={styles.radioButton}
-                                                            disabled={totalAmount <= 10000 || totalAmount > 50000000}
+                                                            disabled={
+                                                                handleTotalPrice <= 10000 || handleTotalPrice > 50000000
+                                                            }
                                                         >
                                                             <div className="text-[15px] flex items-center gap-x-3">
                                                                 <img
@@ -752,7 +783,9 @@ const Order = () => {
                                                             value="vnpay"
                                                             className="font-medium"
                                                             style={styles.radioButton}
-                                                            disabled={totalAmount <= 10000 || totalAmount > 50000000}
+                                                            disabled={
+                                                                handleTotalPrice <= 10000 || handleTotalPrice > 50000000
+                                                            }
                                                         >
                                                             <div className="text-[15px] flex items-center gap-x-3">
                                                                 <img
