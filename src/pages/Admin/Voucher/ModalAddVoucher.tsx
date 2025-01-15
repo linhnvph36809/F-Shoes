@@ -43,7 +43,6 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
             type: typeVoucher,
             max_total_amount: typeVoucher === initTypeVoucher.fixed ? values.discount : values.max_total_amount,
         };
-        console.log(newValues);
 
         if (isUpdate) {
             await patchVoucher(initialValues.id, newValues);
@@ -147,8 +146,8 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                                     validator: (_, value) =>
                                         value && value < 1
                                             ? Promise.reject(
-                                                new Error(intl.formatMessage({ id: 'Discount_must_be_at_least_1' })),
-                                            )
+                                                  new Error(intl.formatMessage({ id: 'Discount_must_be_at_least_1' })),
+                                              )
                                             : Promise.resolve(),
                                 },
                                 ...validateType,
@@ -158,20 +157,22 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                                 <div className="absolute mb-3 flex gap-x-2 z-10 right-5 top-5">
                                     <Button
                                         disabled={isUpdate && isValid}
-                                        className={`${typeVoucher == initTypeVoucher.fixed
-                                            ? 'bg-[#111111] text-white'
-                                            : 'bg-white'
-                                            }`}
+                                        className={`${
+                                            typeVoucher == initTypeVoucher.fixed
+                                                ? 'bg-[#111111] text-white'
+                                                : 'bg-white'
+                                        }`}
                                         onClick={() => handleChangeType(initTypeVoucher.fixed)}
                                     >
                                         <FormattedMessage id="voucher.table.fixed" />
                                     </Button>
                                     <Button
                                         disabled={isUpdate && isValid}
-                                        className={`${typeVoucher == initTypeVoucher.percentage
-                                            ? 'bg-[#111111] text-white'
-                                            : 'bg-white'
-                                            }`}
+                                        className={`${
+                                            typeVoucher == initTypeVoucher.percentage
+                                                ? 'bg-[#111111] text-white'
+                                                : 'bg-white'
+                                        }`}
                                         onClick={() => handleChangeType(initTypeVoucher.percentage)}
                                     >
                                         <FormattedMessage id="voucher.percentage" />
@@ -289,25 +290,7 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                         ></InputPrimary>
 
                         {typeVoucher !== initTypeVoucher.percentage ? (
-                            <InputPrimary
-                                disabled={true}
-                                label={intl.formatMessage({ id: 'voucher.table.max_total_amount' })}
-                                name="max_total_amount"
-                                rules={[
-                                    {
-                                        validator: async (_: any, value: number) => {
-                                            if (value <= 0) {
-                                                return Promise.reject(
-                                                    intl.formatMessage({ id: 'Please_enter_a_value_greater_than_0' }),
-                                                );
-                                            }
-                                            return Promise.resolve();
-                                        },
-                                    },
-                                ]}
-                                className="font-medium"
-                                placeholder={intl.formatMessage({ id: 'voucher.table.max_total_amount' })}
-                            />
+                            ''
                         ) : typeVoucher !== initTypeVoucher.fixed ? (
                             <InputPrimary
                                 disabled={isUpdate && isValid}
