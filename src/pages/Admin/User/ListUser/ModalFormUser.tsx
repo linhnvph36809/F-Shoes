@@ -109,9 +109,9 @@ const ModalFormUser = ({ initialValues, isUpdate }: any) => {
     const validatePassword = initialValues
         ? null
         : [
-            { required: true, message: <FormattedMessage id="group.form_password.success" /> },
-            { min: 8, message: <FormattedMessage id="user.password_8" /> },
-        ];
+              { required: true, message: <FormattedMessage id="group.form_password.success" /> },
+              { min: 8, message: <FormattedMessage id="user.password_8" /> },
+          ];
 
     return (
         <>
