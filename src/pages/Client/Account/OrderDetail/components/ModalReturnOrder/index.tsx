@@ -31,7 +31,7 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
         setIsModalOpen(false);
     };
 
-    const return_detail = order?.order_details?.map((cart: any, index: any) => {
+    const return_detail = order?.order_details?.map((cart: any) => {
         if (cart?.variation) {
             return {
                 id: cart.id,
@@ -83,7 +83,9 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
                         reason_return: JSON.stringify({
                             reason_return: value.reason_return,
                             return_detail: idProductReturn,
-                            return_price: return_detail.filter((value: any) => idProductReturn.includes(value.id)).reduce((acc: any, items: any) => acc + items.total_amount, 0),
+                            return_price: return_detail
+                                .filter((value: any) => idProductReturn.includes(value.id))
+                                .reduce((acc: any, items: any) => acc + items.total_amount, 0),
                         }),
                     });
                     setIsModalOpen(false);

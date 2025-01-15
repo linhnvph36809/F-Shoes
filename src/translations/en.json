@@ -687,5 +687,7 @@
     "Choose_all": "Choose all",
     "Please_select_a_payment_method": "Please select a payment method",
     "select_date_birth": "Please enter date of birth",
-    "Refund_amount": "Refund amount"
+    "Refund_amount": "Refund amount",
+    "Order_value": "Order value",
+    "revenue": "Total revenue"
 }

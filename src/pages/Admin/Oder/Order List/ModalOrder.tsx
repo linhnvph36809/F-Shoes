@@ -1,5 +1,5 @@
 import { Modal, Tag } from 'antd';
-import { formatPrice, formatTime } from '../../../../utils';
+import { formatPrice, formatTime, handleChangeMessage } from '../../../../utils';
 import useOrder from '../../../../hooks/useOrder';
 import { FormattedMessage } from 'react-intl';
 import { paymentMethodString, paymentStatusString, shippingMessage, statusString } from '../../../../interfaces/IOrder';
@@ -21,6 +21,8 @@ import ModalReason from './components/ModalReason';
 import ModalDeniedReturn from './components/ModalDeniedReturn';
 import PermissionElement from '../../../../components/Permissions/PermissionElement';
 import { ACTIONS, PERMISSION } from '../../../../constants';
+import { useEffect, useState } from 'react';
+import { useContextGlobal } from '../../../../contexts';
 
 const statusColors: Record<string, string> = {
     '0': '#EF4444',
@@ -56,6 +58,35 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
 
     const color = statusColors[orderDetail?.orderDetail?.status + 1] || 'default';
     const colorStatus = statusColors[orderDetail?.orderDetail?.status] || 'default';
+
+    const subtotal =
+        orderDetail?.orderDetail?.order_details?.reduce((acc: number, cur: any) => +cur.total_amount + acc, 0) || 0;
+    const [discountVoucher, setDiscountVoucher] = useState<number>(0);
+    const { locale } = useContextGlobal();
+
+    useEffect(() => {
+        if (orderDetail?.orderDetail?.voucher_id) {
+            if (orderDetail?.orderDetail?.voucher_id?.type === 'fixed') {
+                if (orderDetail?.orderDetail?.voucher_id?.discount > subtotal) {
+                    setDiscountVoucher(subtotal || 0);
+                } else {
+                    setDiscountVoucher(orderDetail?.orderDetail?.voucher_id?.discount || 0);
+                }
+            } else {
+                const max = orderDetail?.orderDetail.voucher_id?.max_total_amount;
+                if (subtotal === 0) {
+                    setDiscountVoucher(0);
+                } else {
+                    const discount1 = (subtotal * orderDetail?.orderDetail.voucher_id?.discount) / 100;
+                    if (discount1 > max) {
+                        setDiscountVoucher(max);
+                    } else {
+                        setDiscountVoucher(discount1);
+                    }
+                }
+            }
+        }
+    }, [orderDetail, subtotal]);
 
     return (
         <>
@@ -210,15 +241,13 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     <p className="flex items-center color-gray gap-x-3 text-[14px]">
                                         <TicketPercent className="w-7" /> <FormattedMessage id="voucher" /> :
                                     </p>
-                                    {orderDetail?.orderDetail?.voucher_id?.type == 'fixed' ? (
-                                        <p className="font-medium color-gray">
-                                            -{formatPrice(orderDetail?.orderDetail?.voucher_id?.discount)}đ
-                                        </p>
-                                    ) : (
-                                        <p className="font-medium color-gray">
-                                            -{orderDetail?.orderDetail?.voucher_id?.discount}%
-                                        </p>
-                                    )}
+                                    -{formatPrice(discountVoucher)}đ{' '}
+                                    {orderDetail?.orderDetail?.voucher_id?.type === 'percentage'
+                                        ? `(${handleChangeMessage(locale, 'Voucher', 'Mã giảm')} ${orderDetail?.orderDetail?.voucher_id?.discount
+                                        }% - ${handleChangeMessage(locale, 'Max', 'Tối đa')} ${formatPrice(
+                                            orderDetail?.orderDetail?.voucher_id?.max_total_amount,
+                                        )}đ)`
+                                        : ''}
                                 </div>
                             ) : (
                                 ''
@@ -331,16 +360,16 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     </div>
                     <div className="flex justify-end items-center gap-x-5 mt-3">
                         {orderDetail?.orderDetail?.status &&
-                        orderDetail?.orderDetail?.status !== 0 &&
-                        orderDetail?.orderDetail?.status < 3 ? (
+                            orderDetail?.orderDetail?.status !== 0 &&
+                            orderDetail?.orderDetail?.status < 3 ? (
                             <ModalReason orderId={orderDetail?.orderDetail?.id} handleCancelDetail={handleCancel} />
                         ) : (
                             ''
                         )}
 
                         {orderDetail?.orderDetail?.status &&
-                        orderDetail?.orderDetail?.status > 1 &&
-                        orderDetail?.orderDetail?.status < 5 ? (
+                            orderDetail?.orderDetail?.status > 1 &&
+                            orderDetail?.orderDetail?.status < 5 ? (
                             <div>
                                 <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
                                     <button
