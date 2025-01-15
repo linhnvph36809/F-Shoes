@@ -5,31 +5,80 @@ import { useParams } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 import useGroups from '../../../../hooks/useGroup';
-import { ACTIONS, ACTIONS_CATEGORY, ACTIONS_LIST, INFO_AUTH, PERMISSION } from '../../../../constants';
+import {
+    ACTIONS_CATEGORY,
+    ACTIONS_LIST,
+    INFO_AUTH,
+    LANGUAGE,
+    LANGUAGE_VI,
+    PERMISSION,
+} from '../../../../constants';
 import LoadingPage from '../../../../components/Loading/LoadingPage';
 import ButtonSubmit from '../../components/Button/ButtonSubmit';
 import ButtonBack from '../../components/ButtonBack';
-import { handleGetLocalStorage } from '../../../../utils';
+import { handleChangeMessage, handleGetLocalStorage } from '../../../../utils';
 import NoAccess from '../../../../components/NotFound/NoAccess';
+import { ICON_STATUS_GROUP } from '../../../../constants/icons';
+import SkeletonComponent from '../../components/Skeleton';
 
 const { Title } = Typography;
 
 const permissionList = [
     {
-        name: 'Categories',
+        name: handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Categories', 'Danh mục'),
         key: PERMISSION.PERMISSION_CATEGORY,
         actions: [...ACTIONS_LIST, ACTIONS_CATEGORY.ACTIONS_ADD_PRODUCT],
     },
-    { name: 'Order', key: PERMISSION.PERMISSION_ORDER, actions: ACTIONS_LIST },
-    { name: 'Sale', key: PERMISSION.PERMISSION_SALE, actions: ACTIONS_LIST },
-    { name: 'Products', key: PERMISSION.PERMISSION_PRODUCT, actions: ACTIONS_LIST },
-    { name: 'Users', key: PERMISSION.PERMISSION_USER, actions: ACTIONS_LIST },
-    { name: 'Groups', key: PERMISSION.PERMISSION_GROUP, actions: ACTIONS_LIST },
-    { name: 'Topic', key: PERMISSION.PERMISSION_TOPIC, actions: ACTIONS_LIST },
-    { name: 'Post', key: PERMISSION.PERMISSION_POST, actions: ACTIONS_LIST },
-    { name: 'Media', key: PERMISSION.PERMISSION_MEDIA, actions: ACTIONS_LIST },
-    { name: 'Voucher', key: PERMISSION.PERMISSION_VOUCHER, actions: ACTIONS_LIST },
-    { name: 'Review', key: PERMISSION.PERMISSION_REVIEW, actions: ACTIONS_LIST },
+    {
+        name: handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Order', 'Đơn hàng'),
+        key: PERMISSION.PERMISSION_ORDER,
+        actions: ACTIONS_LIST,
+    },
+    {
+        name: handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Sale', 'Khuyến mãi'),
+        key: PERMISSION.PERMISSION_SALE,
+        actions: ACTIONS_LIST,
+    },
+    {
+        name: handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Products', 'Sản phẩm'),
+        key: PERMISSION.PERMISSION_PRODUCT,
+        actions: ACTIONS_LIST,
+    },
+    {
+        name: handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Users', 'Người dùng'),
+        key: PERMISSION.PERMISSION_USER,
+        actions: ACTIONS_LIST,
+    },
+    {
+        name: handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Groups', 'Nhóm'),
+        key: PERMISSION.PERMISSION_GROUP,
+        actions: ACTIONS_LIST,
+    },
+    {
+        name: handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Topic', 'Chủ đề'),
+        key: PERMISSION.PERMISSION_TOPIC,
+        actions: ACTIONS_LIST,
+    },
+    {
+        name: handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Posts', 'Bài viết'),
+        key: PERMISSION.PERMISSION_POST,
+        actions: ACTIONS_LIST,
+    },
+    {
+        name: handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Media', 'Thư viện'),
+        key: PERMISSION.PERMISSION_MEDIA,
+        actions: ACTIONS_LIST,
+    },
+    {
+        name: handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Voucher', 'Phiếu giảm giá'),
+        key: PERMISSION.PERMISSION_VOUCHER,
+        actions: ACTIONS_LIST,
+    },
+    {
+        name: handleChangeMessage(handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI, 'Review', 'Đánh giá'),
+        key: PERMISSION.PERMISSION_REVIEW,
+        actions: ACTIONS_LIST,
+    },
 ];
 
 const Authorization = () => {
@@ -125,7 +174,7 @@ const Authorization = () => {
                                                 checked={permissions?.[item.key]?.includes(action)}
                                                 onChange={(checked) => handleSwitchChange(checked, item.key, action)}
                                             />
-                                            <span style={{ marginLeft: 8 }}>{action}</span>
+                                            <span style={{ marginLeft: 8 }}>{ICON_STATUS_GROUP(action)}</span>
                                         </Col>
                                     ))
                                 ) : (
@@ -134,20 +183,20 @@ const Authorization = () => {
                                             checked={permissions?.[item.key]?.includes(item.actions)}
                                             onChange={(checked) => handleSwitchChange(checked, item.key, item.actions)}
                                         />
-                                        <span style={{ marginLeft: 8 }}>{item.actions}</span>
+                                        <span style={{ marginLeft: 8 }}>{ICON_STATUS_GROUP(item.actions)}</span>
                                     </Col>
                                 )}
                                 <Checkbox
                                     onChange={(e) => handleChooseAll(e.target.checked, item.key, item.actions)}
                                     className="font-medium text-[16px]"
                                 >
-                                    Choose all
+                                    <FormattedMessage id="Choose_all" />
                                 </Checkbox>
                             </Row>
                         </div>
                     ))
                 ) : (
-                    <LoadingPage />
+                    <SkeletonComponent />
                 )}
             </div>
             <ButtonSubmit loading={loadingDelete} onClick={handleSubmit} />

@@ -34,7 +34,7 @@ const ListProduct = () => {
     const { data: products, isFetching } = useQueryConfig(
         [QUERY_KEY, `all-product-admin-${page}-${search}`],
         API_PRODUCT +
-            `?paginate=true&per_page=10&page=${page}&search=${search}&per_page=5&include=categories,sale_price,variations,images`,
+        `?paginate=true&per_page=10&page=${page}&search=${search}&per_page=5&include=categories,sale_price,variations,images`,
     );
 
     const handlePageChange = (page: number) => {
@@ -60,11 +60,13 @@ const ListProduct = () => {
             return (
                 <div className="flex-row-center gap-x-3">
                     {values?.is_variant ? (
-                        <Link state={{ prevUrl: currentUrl }} to={`/admin/update-variant/${slug}`}>
-                            <ButtonEdit>
-                                <CopyPlus />
-                            </ButtonEdit>
-                        </Link>
+                        <PermissionElement keyName={PERMISSION.PERMISSION_PRODUCT} action={ACTIONS.ACTIONS_EDIT}>
+                            <Link state={{ prevUrl: currentUrl }} to={`/admin/update-variant/${slug}`}>
+                                <ButtonEdit>
+                                    <CopyPlus />
+                                </ButtonEdit>
+                            </Link>
+                        </PermissionElement>
                     ) : (
                         ''
                     )}
@@ -135,15 +137,15 @@ const ListProduct = () => {
                                                         <p>
                                                             {record?.status
                                                                 ? handleChangeMessage(
-                                                                      handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
-                                                                      'Selling',
-                                                                      'Đang bán',
-                                                                  )
+                                                                    handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
+                                                                    'Selling',
+                                                                    'Đang bán',
+                                                                )
                                                                 : handleChangeMessage(
-                                                                      handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
-                                                                      'Stop selling',
-                                                                      'Ngừng bán',
-                                                                  )}
+                                                                    handleGetLocalStorage(LANGUAGE) || LANGUAGE_VI,
+                                                                    'Stop selling',
+                                                                    'Ngừng bán',
+                                                                )}
                                                         </p>
                                                     </div>
                                                     {record?.short_description ? (
@@ -156,7 +158,7 @@ const ListProduct = () => {
                                                                     __html: record?.short_description,
                                                                 }}
                                                             >
-                                                                {}
+                                                                { }
                                                             </p>
                                                         </div>
                                                     ) : (
@@ -172,7 +174,7 @@ const ListProduct = () => {
                                                                     __html: record?.description,
                                                                 }}
                                                             >
-                                                                {}
+                                                                { }
                                                             </p>
                                                         </div>
                                                     ) : (
