@@ -55,7 +55,7 @@ const Policy = () => {
                         {openSections[1] && (
                             <div className="p-4 text-gray-600 space-y-2">
                                 <ul className="list-disc pl-6">
-                                    <li>Tuân thủ các quy định về giờ giấc.</li>
+                                    <li>Tuân thủ các quy định của website.</li>
                                     <li>Không sử dụng ngôn từ thô tục hoặc xúc phạm người khác.</li>
                                     
                                 </ul>

@@ -589,6 +589,7 @@
 
     "discount.delete": "Xóa",
     "discount.delete.success": "Bạn có chắc chắn muốn xóa không?",
+    "discount.success.delete": "Bạn có chắc muốn giữ lại những sản phẩm này và xóa những cái khác?",
     "discount.success": "Bạn có chắc chắn chỉ muốn giữ những sản phẩm này và xóa những sản phẩm khác không?",
     "Value is required": "Giá trị là bắt buộc.",
     "Value must be less than or equal to 100": "Giá trị phải nhỏ hơn hoặc bằng 100.",
