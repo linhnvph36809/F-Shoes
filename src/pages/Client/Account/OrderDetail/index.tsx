@@ -107,7 +107,6 @@ const OrderDetail = () => {
     const subtotal = order?.order_details?.reduce((acc: number, cur: any) => +cur.total_amount + acc, 0) || 0;
     const [discountVoucher, setDiscountVoucher] = useState<number>(0);
 
-    
     useEffect(() => {
         if (order?.voucher_id) {
             if (order?.voucher_id?.type === 'fixed') {
@@ -368,6 +367,23 @@ const OrderDetail = () => {
                                                 <p className="font-medium text-red-500">
                                                     {' '}
                                                     {JSON.parse(order.reason_return)?.reason_return}
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            ''
+                                        )}
+
+                                        {order?.reason_return ? (
+                                            <div className="flex justify-between pb-5 items-center mb-5 border-b text-[16px] color-gray">
+                                                <p>
+                                                    {' '}
+                                                    <p>
+                                                        <FormattedMessage id="Refund_amount" /> :
+                                                    </p>
+                                                </p>
+                                                <p className="font-medium text-red-500">
+                                                    {' '}
+                                                    {formatPrice(JSON.parse(order.reason_return)?.return_price)}đ
                                                 </p>
                                             </div>
                                         ) : (

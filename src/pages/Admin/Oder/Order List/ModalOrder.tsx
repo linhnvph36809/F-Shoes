@@ -294,6 +294,19 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                 ''
                             )}
 
+                            {orderDetail?.orderDetail?.reason_return ? (
+                                <div className="flex justify-between items-center py-2">
+                                    <p className="flex items-center color-gray gap-x-3 text-[14px]">
+                                        <FormattedMessage id="Refund_amount" /> :{' '}
+                                    </p>
+                                    <p className="color-gray text-[14px] font-medium text-red-500">
+                                        {formatPrice(JSON.parse(orderDetail.orderDetail.reason_return).return_price)}đ
+                                    </p>
+                                </div>
+                            ) : (
+                                ''
+                            )}
+
                             {orderDetail?.orderDetail?.reason_cancelled ? (
                                 <div className="flex justify-between items-center py-2">
                                     <p className="flex items-center color-gray gap-x-3 text-[14px]">
@@ -318,16 +331,16 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                     </div>
                     <div className="flex justify-end items-center gap-x-5 mt-3">
                         {orderDetail?.orderDetail?.status &&
-                            orderDetail?.orderDetail?.status !== 0 &&
-                            orderDetail?.orderDetail?.status < 3 ? (
+                        orderDetail?.orderDetail?.status !== 0 &&
+                        orderDetail?.orderDetail?.status < 3 ? (
                             <ModalReason orderId={orderDetail?.orderDetail?.id} handleCancelDetail={handleCancel} />
                         ) : (
                             ''
                         )}
 
                         {orderDetail?.orderDetail?.status &&
-                            orderDetail?.orderDetail?.status > 1 &&
-                            orderDetail?.orderDetail?.status < 5 ? (
+                        orderDetail?.orderDetail?.status > 1 &&
+                        orderDetail?.orderDetail?.status < 5 ? (
                             <div>
                                 <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
                                     <button
@@ -370,7 +383,6 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
 
                         {orderDetail?.orderDetail?.status && orderDetail?.orderDetail?.status === 7 ? (
                             <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
-
                                 <button
                                     onClick={() => handleChangeStatus(9)}
                                     className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"

@@ -686,5 +686,6 @@
     "write_your_review_here": "Write your review here",
     "Choose_all": "Choose all",
     "Please_select_a_payment_method": "Please select a payment method",
-    "select_date_birth": "Please enter date of birth"
+    "select_date_birth": "Please enter date of birth",
+    "Refund_amount": "Refund amount"
 }
