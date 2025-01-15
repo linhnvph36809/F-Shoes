@@ -83,6 +83,7 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
                         reason_return: JSON.stringify({
                             reason_return: value.reason_return,
                             return_detail: idProductReturn,
+                            return_price: return_detail.filter((value: any) => idProductReturn.includes(value.id)).reduce((acc: any, items: any) => acc + items.total_amount, 0),
                         }),
                     });
                     setIsModalOpen(false);
@@ -136,9 +137,7 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
                         label={<FormattedMessage id="choose_product_return" />}
                         className="font-medium mt-5"
                         labelCol={{ span: 24 }}
-                        rules={[
-                            { required: true, message: <FormattedMessage id="validate_product_return" /> },
-                        ]}
+                        rules={[{ required: true, message: <FormattedMessage id="validate_product_return" /> }]}
                     >
                         <>
                             <Checkbox.Group
