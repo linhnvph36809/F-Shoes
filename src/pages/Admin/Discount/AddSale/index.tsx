@@ -406,20 +406,27 @@ const AddSale = () => {
     }, [dataSourceProduct, dataSourceVariation]);
 
     const [error, setError] = useState({
+        name: '',
         value: '',
         start_date: '',
         end_date: '',
         empty: false,
     });
     const onChangeName = (e: any) => {
-        setDataSale({ ...dataSale, name: e.target.value });
+        if (e.target.value === '') {
+            setDataSale({ ...dataSale, name: e.target.value });
+            setError({ ...error, name: handleChangeMessage(locale,'Name is required','Tên là bắt buộc') });
+        } else {
+            setError({ ...error, name: '' });
+            setDataSale({ ...dataSale, name: e.target.value });
+        }
     };
 
     const onChangeValuePercent = (e: any) => {
         if (e.target.value === '') {
             setError({ ...error, value: intl.formatMessage({ id: 'Value is required' }) });
         } else if (parseInt(e.target.value) > 100) {
-            setError({ ...error, value: 'Value must be less than or equal to 100' });
+            setError({ ...error, value: handleChangeMessage(locale,'Value must be less than or equal to 100','Giá trị phải nhỏ hơn 100') });
         } else {
             setError({ ...error, value: '' });
         }
@@ -459,12 +466,13 @@ const AddSale = () => {
         } else if (dataSale.applyAll === false) {
             if (dataSourceProduct.length === 0 && dataSourceVariation.length === 0) {
                 setError({ ...error, empty: true });
-                showMessageAdmin('Warning', 'Please select a product!', 'warning', 5000);
+                showMessageAdmin('Warning', handleChangeMessage(locale,'Please select a product!','Hãy chọn ít nhất một sản phẩm'), 'warning', 5000);
                 hasError = true;
             }
         } else {
             hasError = false;
             setError({
+                name:'',
                 value: '',
                 start_date: '',
                 end_date: '',
@@ -515,7 +523,7 @@ const AddSale = () => {
                             onChange={onChangeName}
                             placeholder={intl.formatMessage({ id: 'Enter_the_sale_name' })}
                         />
-                        {/* {error.name ? <span className='text-red-600'>{error.name}</span> : ''} */}
+                        {error.name ? <span className='text-red-600'>{error.name}</span> : ''}
                     </div>
                     <div className="form-row my-4">
                         <span className="text-xl mb-4">

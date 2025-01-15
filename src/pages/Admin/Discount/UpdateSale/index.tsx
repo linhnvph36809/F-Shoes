@@ -374,8 +374,9 @@ const UpdateSale = () => {
     const onChangeName = (e: any) => {
         if (e.target.value === '') {
             setDataSale({ ...dataSale, name: e.target.value });
-            setError({ ...error, name: 'Name is required' });
+            setError({ ...error, name: handleChangeMessage(locale,'Name is required','Tên là bắt buộc') });
         } else {
+            setError({ ...error, name: '' });
             setDataSale({ ...dataSale, name: e.target.value });
         }
     };
