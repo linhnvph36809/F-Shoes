@@ -34,7 +34,7 @@ const Policy = () => {
                         {openSections[0] && (
                             <div className="p-4 text-gray-600">
                                 Chính sách này nhằm đảm bảo mọi người tuân thủ các quy định và hành xử đúng mực trong
-                                môi trường làm việc/chung.
+                                shop.
                             </div>
                         )}
                     </div>
@@ -57,7 +57,7 @@ const Policy = () => {
                                 <ul className="list-disc pl-6">
                                     <li>Tuân thủ các quy định về giờ giấc.</li>
                                     <li>Không sử dụng ngôn từ thô tục hoặc xúc phạm người khác.</li>
-                                    <li>Bảo quản tài sản chung của tập thể.</li>
+                                    
                                 </ul>
                             </div>
                         )}
@@ -110,7 +110,7 @@ const Policy = () => {
 
                 {/* Footer */}
                 <footer className="text-center text-sm text-gray-500 mt-8">
-                    © 2025 Công ty/Đơn vị của bạn. Mọi quyền được bảo lưu.
+                    © 2025 Fshoes. Mọi quyền được bảo lưu.
                 </footer>
             </div>
         </div>
