@@ -109,9 +109,9 @@ const ModalFormUser = ({ initialValues, isUpdate }: any) => {
     const validatePassword = initialValues
         ? null
         : [
-              { required: true, message: <FormattedMessage id="group.form_password.success" /> },
-              { min: 8, message: <FormattedMessage id="user.password_8" /> },
-          ];
+            { required: true, message: <FormattedMessage id="group.form_password.success" /> },
+            { min: 8, message: <FormattedMessage id="user.password_8" /> },
+        ];
 
     return (
         <>
@@ -233,7 +233,7 @@ const ModalFormUser = ({ initialValues, isUpdate }: any) => {
                             ]}
                         >
                             <DatePicker
-                                placeholder={intl.formatMessage({ id: 'select_date_end' })}
+                                placeholder={intl.formatMessage({ id: 'select_date_birth' })}
                                 format="DD-MM-YYYY"
                                 className="w-full h-[52px] border border-gray-300 rounded-lg px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             />
