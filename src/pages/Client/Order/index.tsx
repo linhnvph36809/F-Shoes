@@ -107,12 +107,7 @@ const Order = () => {
     }, [carts, user]);
 
     const totalAmount = useMemo(() => {
-        let sum = 0;
-        if (handleTotalPrice >= FREE_SHIP) {
-            sum = handleTotalPrice;
-        } else {
-            sum = handleTotalPrice + (fee.total || 0);
-        }
+        let sum = handleTotalPrice;
         if (voucher?.min_total_amount > sum) {
             showMessageClient(
                 handleChangeMessage(
@@ -235,11 +230,10 @@ const Order = () => {
         handleSetCookie(
             'order',
             {
-                voucher_cost: voucher?.type
-                    ? voucher.type == 'fixed'
-                        ? `${formatPrice(voucher.discount)}đ`
-                        : `${voucher.discount}%`
-                    : null,
+                voucher_cost:
+                    voucher.type == 'fixed'
+                        ? voucher.discount
+                        : voucher.max_total_amount,
                 ...newValues,
             },
             new Date(Date.now() + 20 * 60 * 1000),
@@ -605,9 +599,11 @@ const Order = () => {
                                             </Text>
                                             <Text className="color-primary font-medium flex items-center gap-x-1">
                                                 -
-                                                {voucher.type === 'fixed'
-                                                    ? formatPrice(voucher.discount)
-                                                    : `${voucher.discount}%`}
+                                                {formatPrice(
+                                                    voucher.type === 'fixed'
+                                                        ? voucher.discount
+                                                        : voucher.max_total_amount,
+                                                )}đ
                                                 <CircleX
                                                     onClick={() => setVoucher([])}
                                                     className="w-6 hover:cursor-pointer hover:opacity-60 transition-global"
@@ -647,7 +643,7 @@ const Order = () => {
                                             {<FormattedMessage id="box.Cart.Total" />}
                                         </Text>
                                         <Text className="color-primary font-medium text-[20px]">
-                                            {formatPrice(totalAmount)}đ
+                                            {formatPrice(fee?.total ? totalAmount + fee.total : totalAmount)}đ
                                         </Text>
                                     </div>
 

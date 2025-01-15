@@ -8,6 +8,7 @@ import { showMessageAdmin, showMessageClient } from '../utils/messages';
 import { QUERY_KEY as QUERY_KEY_PRODUCT } from './useProduct';
 import { handleChangeMessage } from '../utils';
 import { useContextGlobal } from '../contexts';
+import { notification } from 'antd';
 
 export const QUERY_KEY = 'variations';
 const useVariant = () => {
@@ -36,32 +37,36 @@ const useVariant = () => {
             navigate(PATH_LIST_PRODUCT);
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
-
         } catch (error) {
-            if ((error as any).response.data.message) {
-                showMessageClient((error as any)?.response?.data?.message, '', 'error');
-            } else if ((error as any)?.response?.data?.errors) {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something is missing.Please check again!',
-                        'Một số trường đã bị sót.Hãy kiểm tra lại',
-                    ),
-                    '',
-                    'error',
-                );
-            } else if ((error as any)?.response?.data?.error) {
-                showMessageClient((error as any)?.response?.data?.error, '', 'error');
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
             } else {
-                showMessageClient(
-                    handleChangeMessage(
-                        locale,
-                        'Something went wrong!',
-                        'Đã có lỗi gì đó xảy ra.Vui lòng thử lại sau!',
-                    ),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -81,12 +86,36 @@ const useVariant = () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY_PRODUCT] });
         } catch (error) {
-            showMessageAdmin(
-                (error as any)?.response?.data?.message ||
-                handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                '',
-                'error',
-            );
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
+            } else {
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
+            }
         } finally {
             setLoading(false);
         }
@@ -103,12 +132,36 @@ const useVariant = () => {
                 'success',
             );
         } catch (error) {
-            showMessageAdmin(
-                (error as any)?.response?.data?.message ||
-                handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                '',
-                'error',
-            );
+            const e = error as any;
+            if (e?.response?.data?.errors) {
+                const errs = Object.values(e.response?.data?.errors);
+                errs.map((m: any) => {
+                    notification.error({
+                        message: '',
+                        description: m[0],
+                    });
+                });
+            } else {
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
+            }
         } finally {
             setLoading(false);
         }

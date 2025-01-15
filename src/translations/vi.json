@@ -1,5 +1,5 @@
 {
-    "header.findAStore": "Tìm Cửa hàng",
+    "header.findAStore": "Chính sách",
     "header.help": "Hỗ trợ",
     "header.joinUs": "Tham gia cùng chúng tôi",
     "header.signin": "Đăng nhập",
@@ -31,7 +31,7 @@
     "box.Running": "Xem ngay",
 
     "footer.Resources": "Tài nguyên",
-    "footer.Resources.Find A Store": "Tìm cửa hàng",
+    "footer.Resources.Find A Store": "Chính sách",
     "footer.Resources.Become A Member": "Trở thành thành viên",
     "footer.Resources.Send Us Feedback": "Gửi phản hồi cho chúng tôi",
     "footer.Resources.Nike Journal": "Tạp chí Nike",
@@ -546,7 +546,7 @@
     "forgotPassword": "Quên mật khẩu?",
     "Register": "Đăng kí",
 
-    "registerTitle": "Trở thành thành viên của Nike.",
+    "registerTitle": "Trở thành thành viên của Fshoes.",
     "verifyCodeRequired": "Vui lòng nhập mã!",
     "verifyCodePlaceholder": "Mã",
     "givenNameRequired": "Vui lòng nhập tên của bạn!",
@@ -564,7 +564,7 @@
     "termsAndPrivacy": "Bằng cách tiếp tục, tôi chấp nhận",
     "privacyPolicy": "Chính sách bảo mật",
     "termsOfUse": "Điều khoản sử dụng",
-    "of Nike.": "của Nike",
+    "of Nike.": "của Fshoes",
     "Order Detail": "Chi tiết đơn hàng",
     "Ordering information": "Thông tin đặt hàng",
     "The_Order_is": "Đơn hàng",
@@ -671,5 +671,7 @@
     "add_attriBute_word": "Thêm thuộc tính",
     "attribute_is_filter": "Bộ lọc",
     "Delivery_Shipping": "Giao hàng/Vận chuyển",
-    "End_date_must_be_in_future": "Ngày kết thúc phải lớn hơn thời gian hiện tại"
+    "End_date_must_be_in_future": "Ngày kết thúc phải lớn hơn thời gian hiện tại",
+    "Discount_must_be_at_least_1": "Giảm giá phải ít nhất là 1",
+    "choose_product_return": "Chọn sản phẩm trả hàng"
 }

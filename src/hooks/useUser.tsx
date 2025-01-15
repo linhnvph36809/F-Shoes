@@ -21,7 +21,7 @@ const useUser = () => {
 
     // Function to fetch all users
 
-    const addUser = async (userData: IUser) => {
+    const addUser = async (userData: any) => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `${API_USER}`, userData, {
@@ -45,12 +45,25 @@ const useUser = () => {
                     });
                 });
             } else {
-                showMessageAdmin(
-                    (error as any)?.response?.data?.message ||
-                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);
@@ -79,12 +92,25 @@ const useUser = () => {
                     });
                 });
             } else {
-                showMessageAdmin(
-                    (error as any)?.response?.data?.message ||
-                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoadingDelete(false);
@@ -111,18 +137,31 @@ const useUser = () => {
                     });
                 });
             } else {
-                showMessageAdmin(
-                    (error as any)?.response?.data?.message ||
-                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoadingRestore(false);
         }
     };
-    const editUser = async (id: any, userData: IUser) => {
+    const editUser = async (id: any, userData: any) => {
         try {
             setLoading(true);
             await tokenManagerInstance('post', `${API_USER}/${id}`, userData, {
@@ -146,12 +185,25 @@ const useUser = () => {
                     });
                 });
             } else {
-                showMessageAdmin(
-                    (error as any)?.response?.data?.message ||
-                        handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
-                    '',
-                    'error',
-                );
+                if (e?.response?.data?.error) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.error,
+                    });
+                } else if (e?.response?.data?.message) {
+                    notification.error({
+                        message: '',
+                        description: e?.response?.data?.message,
+                    });
+                } else {
+                    showMessageAdmin(
+                        e?.response?.data?.error ||
+                            e?.response?.data?.message ||
+                            handleChangeMessage(locale, 'Something went wrong!', 'Đã xảy ra lỗi!'),
+                        '',
+                        'error',
+                    );
+                }
             }
         } finally {
             setLoading(false);

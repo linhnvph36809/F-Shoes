@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Modal } from 'antd';
+import { Checkbox, Form, Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 import { useForm } from 'antd/es/form/Form';
@@ -8,7 +8,7 @@ import useOrder from '../../../../../../hooks/useOrder';
 import LoadingSmall from '../../../../../../components/Loading/LoadingSmall';
 import { useContextGlobal } from '../../../../../../contexts';
 import { showMessageActive } from '../../../../../../utils/messages';
-import { handleChangeMessage, isNumber } from '../../../../../../utils';
+import { formatPrice, handleChangeMessage, isNumber } from '../../../../../../utils';
 import { useParams } from 'react-router-dom';
 
 const ModalReturnOrder = ({ order, refetch }: any) => {
@@ -17,6 +17,7 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
     const { loading, putOrder } = useOrder();
     const { locale } = useContextGlobal();
     const { id } = useParams();
+    const [productReturn, setProductReturn] = useState<any>([]);
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -30,9 +31,10 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
         setIsModalOpen(false);
     };
 
-    const return_detail = order?.order_details?.map((cart: any) => {
+    const return_detail = order?.order_details?.map((cart: any, index: any) => {
         if (cart?.variation) {
             return {
+                index: index,
                 product_variation_id: cart.product_variation_id,
                 product_image: cart?.variation?.image_url,
                 product_name: cart?.variation?.product?.name,
@@ -46,6 +48,7 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
             };
         } else if (cart?.product) {
             return {
+                index: index,
                 product_variation_id: null,
                 product_image: cart.product?.image_url,
                 product_name: cart.product.name,
@@ -59,6 +62,11 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
             };
         }
     });
+
+    const handleChangeProduct = (values: any) => {
+        const newValue = return_detail.filter((return_detail: any) => values.includes(return_detail.index));
+        setProductReturn([...newValue]);
+    };
 
     const onFinish = (value: { reason_return: string }) => {
         if (id) {
@@ -75,7 +83,7 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
                         status: 6,
                         reason_return: JSON.stringify({
                             reason_return: value.reason_return,
-                            return_detail,
+                            return_detail: productReturn,
                         }),
                     });
                     setIsModalOpen(false);
@@ -123,6 +131,39 @@ const ModalReturnOrder = ({ order, refetch }: any) => {
                 ]}
             >
                 <Form layout="vertical" form={form} onFinish={onFinish}>
+                    <Form.Item
+                        name="images"
+                        label={<FormattedMessage id="choose_product_return" />}
+                        className="font-medium"
+                        labelCol={{ span: 24 }}
+                        required={true}
+                    >
+                        <>
+                            <Checkbox.Group
+
+                                onChange={handleChangeProduct}
+                                options={return_detail.map((order_detail: any, index: number) => ({
+                                    label: (
+                                        <div>
+                                            <div className="w-[100px]">
+                                                <img
+                                                    className="w-[60px] h-[60px] object-cover"
+                                                    src={order_detail.product_image}
+                                                />
+                                                <p className="text-[12px]">{order_detail.product_name}</p>
+                                                <p className="text-[12px] text-red-500">
+                                                    {formatPrice(order_detail.price)}đ
+                                                </p>
+                                                <p className="text-[12px]">{order_detail.classify}</p>
+                                            </div>
+                                        </div>
+                                    ),
+                                    value: index,
+                                }))}
+                            />
+                        </>
+                    </Form.Item>
+
                     <Form.Item
                         label=""
                         className="font-medium"

@@ -117,9 +117,9 @@ const Header = () => {
                             </li>
                             <li className="color-primary font-medium">|</li>
                             <li>
-                                <a href="#" className="text-[11px] color-primary font-medium hover:opacity-70">
+                                <Link to="/policy" className="text-[11px] color-primary font-medium hover:opacity-70">
                                     <FormattedMessage id="header.findAStore" />
-                                </a>
+                                </Link>
                             </li>
                             <li className="color-primary font-medium">|</li>
                             <li>
@@ -209,7 +209,7 @@ const Header = () => {
                                             setHeadCates(categories[0]?.children);
                                         }}
                                     >
-                                       {categories[0]?.name || <FormattedMessage id="menu.New & Featured" />} 
+                                        {categories[0]?.name || <FormattedMessage id="menu.New & Featured" />}
                                     </Link>
                                 </li>
                                 <li>
@@ -224,8 +224,7 @@ const Header = () => {
                                             setHeadCates(categories[1]?.children);
                                         }}
                                     >
-                                        {categories[1]?.name ||  <FormattedMessage id="menu.Men" />} 
-                                       
+                                        {categories[1]?.name || <FormattedMessage id="menu.Men" />}
                                     </Link>
                                 </li>
                                 <li>
@@ -240,8 +239,7 @@ const Header = () => {
                                             setHeadCates(categories[2]?.children);
                                         }}
                                     >
-                                        {categories[2]?.name || <FormattedMessage id="menu.Women" />} 
-                                       
+                                        {categories[2]?.name || <FormattedMessage id="menu.Women" />}
                                     </Link>
                                 </li>
                                 <li>
@@ -256,8 +254,7 @@ const Header = () => {
                                             setHeadCates(categories[3]?.children);
                                         }}
                                     >
-                                        {categories[3]?.name ||  <FormattedMessage id="menu.Kids" />}
-                                       
+                                        {categories[3]?.name || <FormattedMessage id="menu.Kids" />}
                                     </Link>
                                 </li>
                             </ul>

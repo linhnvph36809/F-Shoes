@@ -41,6 +41,7 @@ const FormOrder = () => {
     const [infoShip, setInfoShip] = useState<boolean>(false);
     const [paymentMethod, setPaymentMethod] = useState<string>('cash_on_delivery');
     const { loading: loadingCheckOut, postOrderAdmin } = useOnlinePayment();
+    console.log(user);
 
     const handleSetProducts = (product: any) => {
         const index = products.findIndex((productIndex: any) => {
@@ -128,9 +129,6 @@ const FormOrder = () => {
             }
         }, 0);
     }, [products]);
-
-    console.log(products);
-
 
     const totalAmount = useMemo(() => {
         let sum = 0;
@@ -437,6 +435,16 @@ const FormOrder = () => {
                                             <p className="color-primary text-[16px]">
                                                 <span className="font-medium">Email</span> : {user?.email}
                                             </p>
+                                            {user?.profile?.phone ? (
+                                                <p className="color-primary text-[16px]">
+                                                    <span className="font-medium">
+                                                        <FormattedMessage id="phone" />
+                                                    </span>{' '}
+                                                    : {user?.profile?.phone}
+                                                </p>
+                                            ) : (
+                                                ''
+                                            )}
                                             <p className="color-primary text-[16px]">
                                                 <span className="font-medium">
                                                     <FormattedMessage id="admin.groups" />
