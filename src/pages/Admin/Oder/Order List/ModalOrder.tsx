@@ -19,6 +19,8 @@ import {
 import LoadingSmall from '../../../../components/Loading/LoadingSmall';
 import ModalReason from './components/ModalReason';
 import ModalDeniedReturn from './components/ModalDeniedReturn';
+import PermissionElement from '../../../../components/Permissions/PermissionElement';
+import { ACTIONS, PERMISSION } from '../../../../constants';
 
 const statusColors: Record<string, string> = {
     '0': '#EF4444',
@@ -327,19 +329,21 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                             orderDetail?.orderDetail?.status > 1 &&
                             orderDetail?.orderDetail?.status < 5 ? (
                             <div>
-                                <button
-                                    style={{
-                                        backgroundColor: color,
-                                    }}
-                                    onClick={() => handleChangeStatus(orderDetail.orderDetail.status + 1)}
-                                    className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
-                                >
-                                    {loading ? (
-                                        <LoadingSmall />
-                                    ) : (
-                                        statusString((orderDetail?.orderDetail?.status || 0) + 1).text || 'Trống'
-                                    )}
-                                </button>
+                                <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
+                                    <button
+                                        style={{
+                                            backgroundColor: color,
+                                        }}
+                                        onClick={() => handleChangeStatus(orderDetail.orderDetail.status + 1)}
+                                        className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
+                                    >
+                                        {loading ? (
+                                            <LoadingSmall />
+                                        ) : (
+                                            statusString((orderDetail?.orderDetail?.status || 0) + 1).text || 'Trống'
+                                        )}
+                                    </button>
+                                </PermissionElement>
                             </div>
                         ) : (
                             ''
@@ -351,24 +355,29 @@ const ModalOrder = ({ orderDetail, handleCancel }: { orderDetail: any; handleCan
                                     orderId={orderDetail?.orderDetail?.id}
                                     handleCancelDetail={handleCancel}
                                 />
-                                <button
-                                    onClick={() => handleChangeStatus(7)}
-                                    className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
-                                >
-                                    {loading ? <LoadingSmall /> : <FormattedMessage id="agree" />}
-                                </button>
+                                <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
+                                    <button
+                                        onClick={() => handleChangeStatus(7)}
+                                        className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
+                                    >
+                                        {loading ? <LoadingSmall /> : <FormattedMessage id="agree" />}
+                                    </button>
+                                </PermissionElement>
                             </div>
                         ) : (
                             ''
                         )}
 
                         {orderDetail?.orderDetail?.status && orderDetail?.orderDetail?.status === 7 ? (
-                            <button
-                                onClick={() => handleChangeStatus(9)}
-                                className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
-                            >
-                                {loading ? <LoadingSmall /> : <FormattedMessage id="returned" />}
-                            </button>
+                            <PermissionElement keyName={PERMISSION.PERMISSION_ORDER} action={ACTIONS.ACTIONS_EDIT}>
+
+                                <button
+                                    onClick={() => handleChangeStatus(9)}
+                                    className="px-8 py-3 bg-primary text-white rounded-[4px] text-[12px] font-medium transition-global hover:opacity-80"
+                                >
+                                    {loading ? <LoadingSmall /> : <FormattedMessage id="returned" />}
+                                </button>
+                            </PermissionElement>
                         ) : (
                             ''
                         )}

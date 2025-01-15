@@ -31,6 +31,7 @@ import UpdateAttribute from '../pages/Admin/Products/Attribute/UpdateAttribute';
 
 import { ACTIONS, PERMISSION } from '../constants';
 import PermissionPage from '../components/Permissions/PermissionPage';
+import ListGroups from '../pages/Admin/Groups/ListGroup';
 // import ListGroups from '../pages/Admin/Groups/ListGroup';
 
 const routerAdmin = [
@@ -89,7 +90,7 @@ const routerAdmin = [
             },
             {
                 path: 'add-attribute',
-                element: <Attribute />,
+                element: <PermissionPage keyName={PERMISSION.PERMISSION_PRODUCT} action={ACTIONS.ACTIONS_EDIT}><Attribute /></PermissionPage>,
             },
             {
                 path: 'update-attribute/:id',
@@ -105,15 +106,27 @@ const routerAdmin = [
             },
             {
                 path: 'listsale',
-                element: <ListSale />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_SALE} action={ACTIONS.ACTIONS_VIEW}>
+                        <ListSale />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'sale/update/:id?',
-                element: <UpdateSale />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_SALE} action={ACTIONS.ACTIONS_EDIT}>
+                        <UpdateSale />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'addsale',
-                element: <AddSale />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_SALE} action={ACTIONS.ACTIONS_ADD}>
+                        <AddSale />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'orderlist',
@@ -141,23 +154,39 @@ const routerAdmin = [
             },
             {
                 path: 'list-user',
-                element: <ListUser />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_USER} action={ACTIONS.ACTIONS_VIEW}>
+                        <ListUser />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'list-review',
-                element: <ListReview />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_REVIEW} action={ACTIONS.ACTIONS_VIEW}>
+                        <ListReview />
+                    </PermissionPage>
+                ),
             },
-            // {
-            //     path: 'groups',
-            //     element: <ListGroups />,
-            // },
+            {
+                path: 'groups',
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_GROUP} action={ACTIONS.ACTIONS_VIEW}>
+                        <ListGroups />
+                    </PermissionPage>
+                ),
+            },
             {
                 path: 'statistic',
                 element: <Statistic />,
             },
             {
                 path: 'permissions/:id',
-                element: <Authorization />,
+                element: (
+                    <PermissionPage keyName={PERMISSION.PERMISSION_GROUP} action={ACTIONS.ACTIONS_EDIT}>
+                        <Authorization />
+                    </PermissionPage>
+                ),
             },
             {
                 path: 'topic',
