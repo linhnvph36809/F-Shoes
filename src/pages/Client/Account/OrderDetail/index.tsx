@@ -106,6 +106,8 @@ const OrderDetail = () => {
 
     const subtotal = order?.order_details?.reduce((acc: number, cur: any) => +cur.total_amount + acc, 0) || 0;
     const [discountVoucher, setDiscountVoucher] = useState<number>(0);
+
+    
     useEffect(() => {
         if (order?.voucher_id) {
             if (order?.voucher_id?.type === 'fixed') {
@@ -132,9 +134,9 @@ const OrderDetail = () => {
 
     const status:
         | {
-            className: string;
-            text: string;
-        }
+              className: string;
+              text: string;
+          }
         | undefined = statusString(order?.status);
 
     const givenTime = new Date(order?.created_at || '');
@@ -277,8 +279,13 @@ const OrderDetail = () => {
                                                 <p className="font-medium">
                                                     -{formatPrice(discountVoucher)}đ{' '}
                                                     {order?.voucher_id?.type === 'percentage'
-                                                        ? `(${handleChangeMessage(locale, 'Voucher', 'Mã giảm')} ${order?.voucher_id?.discount
-                                                        }% - ${handleChangeMessage(locale, 'Max', 'Tối đa')} ${formatPrice(order?.voucher_id?.max_total_amount)}đ)`
+                                                        ? `(${handleChangeMessage(locale, 'Voucher', 'Mã giảm')} ${
+                                                              order?.voucher_id?.discount
+                                                          }% - ${handleChangeMessage(
+                                                              locale,
+                                                              'Max',
+                                                              'Tối đa',
+                                                          )} ${formatPrice(order?.voucher_id?.max_total_amount)}đ)`
                                                         : ''}
                                                 </p>
                                             </div>
@@ -553,10 +560,11 @@ const OrderDetail = () => {
                                                 )}
                                                 {order.status > 4 ? (
                                                     <Link
-                                                        to={`/detail/${orderDetail?.product?.slug
-                                                            ? orderDetail?.product?.slug
-                                                            : orderDetail?.variation?.product?.slug
-                                                            }`}
+                                                        to={`/detail/${
+                                                            orderDetail?.product?.slug
+                                                                ? orderDetail?.product?.slug
+                                                                : orderDetail?.variation?.product?.slug
+                                                        }`}
                                                     >
                                                         <button className="h-[36px] px-5 bg-gray-300 hover:bg-gray-200 transition-global rounded-xl color-primary font-medium text-[16px]">
                                                             <FormattedMessage id="admin.review" />

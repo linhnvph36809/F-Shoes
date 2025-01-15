@@ -159,8 +159,8 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                                     <Button
                                         disabled={isUpdate && isValid}
                                         className={`${typeVoucher == initTypeVoucher.fixed
-                                                ? 'bg-[#111111] text-white'
-                                                : 'bg-white'
+                                            ? 'bg-[#111111] text-white'
+                                            : 'bg-white'
                                             }`}
                                         onClick={() => handleChangeType(initTypeVoucher.fixed)}
                                     >
@@ -169,8 +169,8 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                                     <Button
                                         disabled={isUpdate && isValid}
                                         className={`${typeVoucher == initTypeVoucher.percentage
-                                                ? 'bg-[#111111] text-white'
-                                                : 'bg-white'
+                                            ? 'bg-[#111111] text-white'
+                                            : 'bg-white'
                                             }`}
                                         onClick={() => handleChangeType(initTypeVoucher.percentage)}
                                     >
@@ -294,10 +294,6 @@ const ModalAddVoucher = ({ initialValues, isUpdate }: any) => {
                                 label={intl.formatMessage({ id: 'voucher.table.max_total_amount' })}
                                 name="max_total_amount"
                                 rules={[
-                                    {
-                                        required: true,
-                                        message: <FormattedMessage id="voucher.required.max_total_amount" />,
-                                    },
                                     {
                                         validator: async (_: any, value: number) => {
                                             if (value <= 0) {
